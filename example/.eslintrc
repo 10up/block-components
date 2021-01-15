@@ -1,0 +1,3 @@
+{
+    "extends": "@wordpress/eslint-plugin"
+}
