@@ -30,9 +30,9 @@ function MyComponent( props ) {
 | `placeholder`    | `string`   | `''`                   | Renders placeholder text inside the Search Field.                      |
 | `postTypes`      | `array`    | `[ 'posts', 'pages' ]` | Names of the post types that should get searched                       |
 
-The `postTypes` will get used like this:
+The `postTypes` will get used in a Rest Request to the `search` endpoint as the `subtypes`:
 ```js
-wp.apiFetch( {
-    path: `/wp/v2/${postType}?search=${searchTerm}`
-} )
+apiFetch( {
+    path: `wp/v2/search/?search="${keyword}"&subtype="${postTypes.join(',')}"&type=post`
+} )...
 ```
