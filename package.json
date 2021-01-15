@@ -1,0 +1,27 @@
+{
+  "name": "10up-block-components",
+  "version": "0.1.0",
+  "description": "10up Components build for the WordPress Block Editor.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/10up/block-components.git"
+  },
+  "keywords": [
+    "gutenberg",
+    "WordPress",
+    "block-editor"
+  ],
+  "author": "Faian Kägy",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/10up/block-components.git/issues"
+  },
+  "homepage": "https://github.com/10up/block-components.git#readme",
+  "devDependencies": {
+    "@10up/eslint-config": "^2.2.0"
+  }
+}
