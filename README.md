@@ -4,7 +4,7 @@
 
 A simple Content Picker Component build with the core gutenberg components. This component does not include any build files and does not bundle the WordPress components. Therefore this needs to be used in an environemt where the [`Dependency Extraction Webpack Plugin`](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) is used and the `import { component } from '@wordpress/package';` is supported. 
 
-## Usage
+### Usage
 
 ```js
 import { ContentPicker } from '@10up/block-components';
@@ -21,7 +21,7 @@ function MyComponent( props ) {
 }
 ```
 
-### Props
+#### Props
 
 | Name             | Type       | Default               | Description                                                            |
 | ---------------- | ---------- | --------------------- | ---------------------------------------------------------------------- |
@@ -36,3 +36,29 @@ apiFetch( {
     path: `wp/v2/search/?search="${keyword}"&subtype="${postTypes.join(',')}"&type=post`
 } )...
 ```
+
+## IsAdmin
+
+A wrapper component that only renders child components if the current user has admin capabilities.
+
+### Usage
+```js
+import { IsAdmin } from '@10up/block-components';
+
+function MyComponent( props ) {
+
+    return (
+        <IsAdmin
+            fallback={ <p>Sorry, you are not allowed to do that</p> }
+        >
+            <p>Only Administrators can see what you put in here</p>
+        </IsAdmin>
+    )
+}
+```
+
+#### Props
+| Name       | Type              | Default  |  Description                                                   |
+| ---------- | ----------------- | -------- | -------------------------------------------------------------- |
+| `fallback` | `ReactElement`    | `null`   | Element that will be rendered if the user is no admin          |
+| `children` | `ReactElement(s)` | `'null'` | Child components that will be rendered if the user is an Admin |
