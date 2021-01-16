@@ -1,8 +1,8 @@
 # 10up Block Components
+A collection of simple Components for the Block Editor build with the core gutenberg components. These components do not include any build files and do not bundle the WordPress components. Therefore these need to be used in an environemt where the [`Dependency Extraction Webpack Plugin`](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) is used and the `import { component } from '@wordpress/package';` is supported. 
 
 ## ContentPicker
-
-A simple Content Picker Component build with the core gutenberg components. This component does not include any build files and does not bundle the WordPress components. Therefore this needs to be used in an environemt where the [`Dependency Extraction Webpack Plugin`](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) is used and the `import { component } from '@wordpress/package';` is supported. 
+A Content Picker component that allows you to pick posts and pages very easily.
 
 ### Usage
 
@@ -62,3 +62,11 @@ function MyComponent( props ) {
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
 | `fallback` | `ReactElement`    | `null`   | Element that will be rendered if the user is no admin          |
 | `children` | `ReactElement(s)` | `'null'` | Child components that will be rendered if the user is an Admin |
+
+## Support Level
+
+**Active:** 10up is actively working on this, and we expect to continue work for the foreseeable future including keeping tested up to the most recent version of WordPress.  Bug reports, feature requests, questions, and pull requests are welcome.
+
+## Like what you see?
+
+<a href="http://10up.com/contact/"><img src="https://10up.com/uploads/2016/10/10up-Github-Banner.png" alt="Work with 10up, we create amazing websites and tools that make content management simple and fun using open source tools and platforms"></a>
