@@ -9,9 +9,9 @@ import { useSelect } from '@wordpress/data';
  * @param {object} props react props
  */
 export function IsAdmin({ fallback = null, children }) {
-	const hasUploadPermissions = useSelect(
+	const hasAdminPermissions = useSelect(
 		(select) => select('core').canUser('read', 'users?roles=1'),
 		[],
 	);
-	return hasUploadPermissions ? children : fallback;
+	return hasAdminPermissions ? children : fallback;
 }
