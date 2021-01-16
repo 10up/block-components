@@ -36,3 +36,20 @@ apiFetch( {
     path: `wp/v2/search/?search="${keyword}"&subtype="${postTypes.join(',')}"&type=post`
 } )...
 ```
+
+## useHasSelectedInnerBlock
+
+Determine wether one of the inner blocks currently is selected.
+
+### Usage
+```js
+import { useHasSelectedInnerBlock } from '@10up/block-components';
+
+function BlockEdit( props ) {
+    const hasSelectedInnerBlock = useHasSelectedInnerBlock(props);
+
+    return (
+        <p>This block is currently { hasSelectedInnerBlock ? 'selected' : 'not selected' }.</p>
+    )
+}
+```
