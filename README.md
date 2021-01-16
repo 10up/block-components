@@ -4,7 +4,7 @@
 
 A simple Content Picker Component build with the core gutenberg components. This component does not include any build files and does not bundle the WordPress components. Therefore this needs to be used in an environemt where the [`Dependency Extraction Webpack Plugin`](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) is used and the `import { component } from '@wordpress/package';` is supported. 
 
-## Usage
+### Usage
 
 ```js
 import { ContentPicker } from '@10up/block-components';
@@ -21,7 +21,7 @@ function MyComponent( props ) {
 }
 ```
 
-### Props
+#### Props
 
 | Name             | Type       | Default               | Description                                                            |
 | ---------------- | ---------- | --------------------- | ---------------------------------------------------------------------- |
