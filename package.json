@@ -1,7 +1,10 @@
 {
-  "name": "10up-block-components",
+  "name": "@10up/block-components",
+  "publishConfig": {
+	  "access": "public"
+  },
   "version": "0.1.0",
-  "description": "10up Components build for the WordPress Block Editor.",
+  "description": "10up Components built for the WordPress Block Editor.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,8 +18,12 @@
     "WordPress",
     "block-editor"
   ],
-  "author": "Faian Kägy",
-  "license": "GPL-3.0-or-later",
+  "author": {
+	  "name": "10up",
+	  "email": "info@10up.com",
+	  "url": "https://10up.com"
+  },
+  "license": "GPL-2.0-or-later",
   "bugs": {
     "url": "https://github.com/10up/block-components.git/issues"
   },
