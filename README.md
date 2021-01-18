@@ -39,7 +39,7 @@ apiFetch( {
 
 ## useHasSelectedInnerBlock
 
-Determine wether one of the inner blocks currently is selected.
+Determine whether one of the inner blocks currently is selected.
 
 ### Usage
 ```js
