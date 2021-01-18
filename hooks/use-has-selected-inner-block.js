@@ -32,7 +32,7 @@ function hasSelectedInnerBlock(selectedBlock, clientId) {
  * Determine whether one of the inner blocks currently is selected
  *
  * @param {WPBlock} block Block object to with children
- * @return {boolean} wether or not any children are selected.
+ * @return {boolean} whether or not any children are selected.
  */
 export function useHasSelectedInnerBlock(block) {
 	try {
