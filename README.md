@@ -49,7 +49,9 @@ function BlockEdit( props ) {
     const hasSelectedInnerBlock = useHasSelectedInnerBlock(props);
 
     return (
-        <p>This block is currently { hasSelectedInnerBlock ? 'selected' : 'not selected' }.</p>
+        <div>
+            { hasSelectedInnerBlock ? 'InnerBlocks are selected' : 'InnerBlocks are not selected' }
+        </div>
     )
 }
 ```
