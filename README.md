@@ -37,6 +37,23 @@ apiFetch( {
 } )...
 ```
 
+## useHasSelectedInnerBlock
+
+Determine whether one of the inner blocks currently is selected.
+
+### Usage
+```js
+import { useHasSelectedInnerBlock } from '@10up/block-components';
+
+function BlockEdit( props ) {
+    const hasSelectedInnerBlock = useHasSelectedInnerBlock(props);
+
+    return (
+        <p>This block is currently { hasSelectedInnerBlock ? 'selected' : 'not selected' }.</p>
+    )
+}
+```
+
 ## IsAdmin
 
 A wrapper component that only renders child components if the current user has admin capabilities.
