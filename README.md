@@ -37,6 +37,23 @@ apiFetch( {
 } )...
 ```
 
+## useHasSelectedInnerBlock
+
+Determine whether one of the inner blocks currently is selected.
+
+### Usage
+```js
+import { useHasSelectedInnerBlock } from '@10up/block-components';
+
+function BlockEdit( props ) {
+    const hasSelectedInnerBlock = useHasSelectedInnerBlock(props);
+
+    return (
+        <p>This block is currently { hasSelectedInnerBlock ? 'selected' : 'not selected' }.</p>
+    )
+}
+```
+
 ## Support Level
 
 **Active:** 10up is actively working on this, and we expect to continue work for the foreseeable future including keeping tested up to the most recent version of WordPress.  Bug reports, feature requests, questions, and pull requests are welcome.
