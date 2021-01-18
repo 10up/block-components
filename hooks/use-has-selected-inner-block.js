@@ -5,7 +5,7 @@ import { useSelect } from '@wordpress/data';
  *
  * @param {WPBlock} selectedBlock Block object of the currently selected block
  * @param {string} clientId Client ID of the block to check
- * @return {boolean} Wether or not a child block is selected
+ * @return {boolean} Whether or not a child block is selected
  */
 function hasSelectedInnerBlock(selectedBlock, clientId) {
 	const { innerBlocks } = useSelect((select) =>
