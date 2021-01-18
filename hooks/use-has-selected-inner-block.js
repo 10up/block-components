@@ -1,7 +1,7 @@
 import { useSelect } from '@wordpress/data';
 
 /**
- * check wether the block to check has any children that match the clientID of the selected block
+ * check whether the block to check has any children that match the clientID of the selected block
  *
  * @param {WPBlock} selectedBlock Block object of the currently selected block
  * @param {string} clientId Client ID of the block to check
