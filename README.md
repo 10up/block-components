@@ -13,7 +13,7 @@ function MyComponent( props ) {
 
     return (
         <ContentPicker
-			onSelect={ (item, type) => { console.log(item) } }
+			onChange={ (pickedContent) => { console.log(pickedContent) } }
 			mode="post"
             label={ "Please select a Post or Page:" }
             contentTypes={ [ 'posts', 'pages' ] }
@@ -26,11 +26,14 @@ function MyComponent( props ) {
 
 | Name             | Type       | Default               | Description                                                            |
 | ---------------- | ---------- | --------------------- | ---------------------------------------------------------------------- |
-| `onSelect`   | `function` | `undefined`            | Callback function that gets called with the post or term object upon selection |
+| `onChange`   | `function` | `undefined`            | Callback function the list of picked content gets changed |
 | `label`          | `string`   | `''`                   | Renders a label for the Search Field.                                  |
 | `mode`           | `string`   | `'post'`               | Either `post` or `term`                                 |
 | `placeholder`    | `string`   | `''`                   | Renders placeholder text inside the Search Field.                      |
 | `contentTypes`      | `array`    | `[ 'posts', 'pages' ]` | Names of the post types or taxonomies that should get searched                       |
+| `isMulti`          | `bool`   | `false`                   | When true, will allow the user to select multiple items
+| `isOrderable`          | `bool`   | `false`                   | When true, will allow the user to order items. Must be used in conjunction with `isMulti`
+| `content`          | `array`   | `[]`                   | Array of items to prepopulate picker with. Must be in the format of: `[{id: 1, type: 'post'}, {id: 1, type: 'page'},... ]`. You cannot provide terms and posts to the same picker. Can also take the form `[1, 2, ...]` if only one `contentTypes` is provided.
 
 The `contentTypes` will get used in a Rest Request to the `search` endpoint as the `subtypes`:
 ```js

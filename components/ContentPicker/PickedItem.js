@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
-import { __ } from '@wordpress/i18n';
 import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
 /** @jsx jsx */
-import { jsx } from '@emotion/react';
+import { jsx } from '@emotion/react'; // eslint-disable-line no-unused-vars
+
+const { __ } = wp.i18n;
 
 /**
  * PickedItem
@@ -16,6 +17,7 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex }) => {
 		<div
 			css={{
 				cursor: isOrderable ? 'move' : 'default',
+				border: '2px dashed #ddd',
 				':hover': !isOrderable
 					? {
 							backgroundColor: 'transparent',

@@ -1,11 +1,13 @@
-import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
-import { TextControl, Button, Spinner, NavigableMenu } from '@wordpress/components';
 import PropTypes from 'prop-types';
 import arrayMove from 'array-move';
+import styled from '@emotion/styled';
 import SearchItem from './SearchItem';
 import SortableList from './SortableList';
+
+const { TextControl, Button, Spinner, NavigableMenu } = wp.components;
+const { useState } = wp.element;
+const { __ } = wp.i18n;
 
 const NAMESPACE = '10up-block-components';
 
@@ -33,11 +35,23 @@ const ContentPicker = ({
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [content, setContent] = useState(presetContent);
 
+	if (content.length && typeof content[0] !== 'object') {
+		for (let i = 0; i < content.length; i++) {
+			content[i] = {
+				id: content[i],
+				type: contentTypes[0],
+			};
+		}
+	}
+
 	function handleItemSelection(item) {
 		setSearchResults([]);
 		setSearchString('');
 
-		content.unshift(item.id);
+		content.unshift({
+			id: item.id,
+			type: item.type,
+		});
 
 		onChange(content);
 
@@ -97,6 +111,12 @@ const ContentPicker = ({
 	const hasSearchString = !!searchString.length;
 	const hasSearchResults = !!searchResults.length;
 
+	const StyleWrapper = styled('div')`
+		& .block-editor-link-control__search-item {
+			border: none;
+		}
+	`;
+
 	return (
 		<div className={`${NAMESPACE}`}>
 			{!content.length || (content.length && isMulti) ? (
@@ -154,12 +174,21 @@ const ContentPicker = ({
 				</NavigableMenu>
 			) : null}
 			{content.length ? (
-				<>
-					<span>{content.length > 1 ? multiPickedLabel : singlePickedLabel}</span>
+				<StyleWrapper>
+					<span
+						style={{
+							marginTop: '15px',
+							marginBottom: '2px',
+							display: 'block',
+						}}
+					>
+						{content.length > 1 ? multiPickedLabel : singlePickedLabel}
+					</span>
 
 					<SortableList
 						items={content}
 						isOrderable={isOrderable}
+						mode={mode}
 						handleItemDelete={handleItemDelete}
 						onSortEnd={({ oldIndex, newIndex }) => {
 							const newContent = [...arrayMove(content, oldIndex, newIndex)];
@@ -169,7 +198,7 @@ const ContentPicker = ({
 							setContent(newContent);
 						}}
 					/>
-				</>
+				</StyleWrapper>
 			) : null}
 		</div>
 	);

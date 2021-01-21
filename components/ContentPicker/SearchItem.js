@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
-import { Button, TextHighlight } from '@wordpress/components';
+
+const { Button, TextHighlight } = wp.components;
 
 /**
  * SearchItem

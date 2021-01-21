@@ -1,34 +1,9 @@
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import PickedItem from './PickedItem';
 
-const { useSelect } = wp.data;
+const { withSelect } = wp.data;
 
-const SortableList = SortableContainer(({ items, isOrderable, handleItemDelete }) => {
-	const preparedItems = useSelect((select) => {
-		if (items.length) {
-			const query = select('core').getEntityRecords('postType', 'post', {
-				include: items.join(','),
-				per_page: 100,
-			});
-
-			if (query && query.length) {
-				const queriedItems = [];
-
-				query.forEach((queriedItem) => {
-					queriedItems.push({
-						title: queriedItem.title.rendered,
-						url: '',
-						id: queriedItem.id,
-					});
-				});
-
-				return queriedItems;
-			}
-		}
-
-		return [];
-	}, items);
-
+const SortableList = SortableContainer(({ preparedItems, isOrderable, handleItemDelete }) => {
 	const ItemComponent = isOrderable ? SortableElement(PickedItem) : PickedItem;
 	return (
 		<div>
@@ -46,4 +21,51 @@ const SortableList = SortableContainer(({ items, isOrderable, handleItemDelete }
 	);
 });
 
-export default SortableList;
+export default withSelect((select, { items, mode }) => {
+	const type = mode === 'post' ? 'postType' : 'taxonomy';
+
+	const itemsByType = {};
+
+	const queries = [];
+
+	items.forEach((item) => {
+		if (!itemsByType[item.type]) {
+			itemsByType[item.type] = [];
+		}
+
+		itemsByType[item.type].push(item.id);
+	});
+
+	let startedQueries = 0;
+
+	Object.keys(itemsByType).forEach((itemType) => {
+		itemsByType[itemType].forEach((itemId) => {
+			const query = select('core').getEntityRecord(type, itemType, itemId);
+
+			startedQueries++;
+
+			queries.push(query);
+		});
+	});
+
+	const preparedItems = [];
+	let finishedQueries = 0;
+
+	queries.forEach((result) => {
+		if (typeof result === 'object') {
+			finishedQueries++;
+
+			preparedItems.push({
+				title: mode === 'post' ? result.title.rendered : result.name,
+				url: result.link,
+				id: result.id,
+			});
+		}
+	});
+
+	if (finishedQueries !== startedQueries) {
+		return { preparedItems: [] };
+	}
+
+	return { preparedItems };
+})(SortableList);
