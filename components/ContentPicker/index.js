@@ -1,13 +1,14 @@
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { TextControl, Button, Spinner, NavigableMenu } from '@wordpress/components';
 import PropTypes from 'prop-types';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import PickedItem from './PickedItem';
+import arrayMove from 'array-move';
 import SearchItem from './SearchItem';
+import SortableList from './SortableList';
 
 const NAMESPACE = '10up-block-components';
+
 /**
  * Content Picker
  *
@@ -19,7 +20,7 @@ const ContentPicker = ({
 	mode,
 	contentTypes,
 	placeholder,
-	onSelect,
+	onChange,
 	isMulti,
 	isOrderable,
 	singlePickedLabel,
@@ -29,68 +30,18 @@ const ContentPicker = ({
 	const [searchString, setSearchString] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
-	const { useSelect } = wp.data;
 	const [selectedItem, setSelectedItem] = useState(null);
-	const [content, setContent] = useState({
-		data: {},
-		picked: presetContent,
-	});
-
-	const unavailableItems = [];
-
-	content.picked.forEach((id) => {
-		if (!content.data[id]) {
-			unavailableItems.push(id);
-		}
-	});
-
-	useSelect((select) => {
-		if (unavailableItems.length) {
-			const query = select('core').getEntityRecords('postType', 'post', {
-				include: unavailableItems,
-				per_page: 20,
-			});
-
-			console.log(query);
-
-			const newContent = {
-				data: { ...content.data },
-				picked: [...content.picked],
-			};
-
-			if (query && query.length) {
-				query.forEach((queriedItem) => {
-					newContent.data[`${queriedItem.id}`] = {
-						title: queriedItem.title.rendered,
-						url: '',
-						id: queriedItem.id,
-					};
-				});
-			}
-
-			setContent(newContent);
-
-			return newContent;
-		}
-
-		return null;
-	}, unavailableItems);
+	const [content, setContent] = useState(presetContent);
 
 	function handleItemSelection(item) {
-		onSelect(item, item.type);
 		setSearchResults([]);
 		setSearchString('');
 
-		const newContent = {
-			data: { ...content.data },
-			picked: [...content.picked],
-		};
+		content.unshift(item.id);
 
-		newContent.data[`${item.id}`] = item;
+		onChange(content);
 
-		newContent.picked.unshift(item.id);
-
-		setContent(newContent);
+		setContent(content);
 	}
 
 	/**
@@ -133,39 +84,29 @@ const ContentPicker = ({
 		setSelectedItem(item);
 	}
 
-	function handleItemDelete(item) {}
+	function handleItemDelete(item, sortIndex) {
+		const newContent = [...content];
+
+		newContent.splice(sortIndex, 1);
+
+		onChange(newContent);
+
+		setContent(newContent);
+	}
 
 	const hasSearchString = !!searchString.length;
 	const hasSearchResults = !!searchResults.length;
 
-	const SortableList = SortableContainer(({ items }) => {
-		console.log(content.data);
-		const ItemComponent = isOrderable ? SortableElement(PickedItem) : PickedItem;
-		return (
-			<div>
-				{items.map((id, index) => (
-					<ItemComponent
-						isOrderable={isOrderable}
-						key={`item-${id}`}
-						index={index}
-						sortIndex={index}
-						item={content.data[`${id}`]}
-					/>
-				))}
-			</div>
-		);
-	});
-
 	return (
 		<div className={`${NAMESPACE}`}>
-			{!content.picked.length || (content.picked.length && isMulti) ? (
+			{!content.length || (content.length && isMulti) ? (
 				<NavigableMenu onNavigate={handleSelection} orientation="vertical">
 					<TextControl
 						label={label}
 						value={searchString}
 						onChange={handleSearchStringChange}
 						placeholder={placeholder}
-						autocomplete="off"
+						autoComplete="off"
 					/>
 					{hasSearchString ? (
 						<ul
@@ -212,14 +153,20 @@ const ContentPicker = ({
 					) : null}
 				</NavigableMenu>
 			) : null}
-			{content.picked.length ? (
+			{content.length ? (
 				<>
-					<span>{content.picked.length > 1 ? multiPickedLabel : singlePickedLabel}</span>
+					<span>{content.length > 1 ? multiPickedLabel : singlePickedLabel}</span>
 
 					<SortableList
-						items={content.picked}
+						items={content}
+						isOrderable={isOrderable}
+						handleItemDelete={handleItemDelete}
 						onSortEnd={({ oldIndex, newIndex }) => {
-							console.log('sort end');
+							const newContent = [...arrayMove(content, oldIndex, newIndex)];
+
+							onChange(newContent);
+
+							setContent(newContent);
 						}}
 					/>
 				</>
@@ -231,8 +178,8 @@ const ContentPicker = ({
 ContentPicker.defaultProps = {
 	label: '',
 	mode: 'post',
-	onSelect: (item, type) => {
-		console.log(item, type); // eslint-disable-line no-console
+	onChange: (ids) => {
+		console.log('Content picker list change', ids); // eslint-disable-line no-console
 	},
 	contentTypes: ['post', 'page'],
 	placeholder: '',
@@ -253,7 +200,7 @@ ContentPicker.propTypes = {
 	singlePickedLabel: PropTypes.string,
 	isMulti: PropTypes.bool,
 	isOrderable: PropTypes.bool,
-	onSelect: PropTypes.func,
+	onChange: PropTypes.func,
 };
 
 export { ContentPicker };

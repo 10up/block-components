@@ -32,6 +32,9 @@
     "@10up/eslint-config": "^2.2.0"
   },
   "dependencies": {
+    "@emotion/react": "^11.1.4",
+    "@emotion/styled": "^11.0.0",
+    "array-move": "^3.0.1",
     "react-sortable-hoc": "^1.11.0"
   }
 }
