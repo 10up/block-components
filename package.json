@@ -1,7 +1,7 @@
 {
   "name": "@10up/block-components",
   "publishConfig": {
-	  "access": "public"
+    "access": "public"
   },
   "version": "0.1.0",
   "description": "10up Components built for the WordPress Block Editor.",
@@ -19,9 +19,9 @@
     "block-editor"
   ],
   "author": {
-	  "name": "10up",
-	  "email": "info@10up.com",
-	  "url": "https://10up.com"
+    "name": "10up",
+    "email": "info@10up.com",
+    "url": "https://10up.com"
   },
   "license": "GPL-2.0-or-later",
   "bugs": {
@@ -30,5 +30,12 @@
   "homepage": "https://github.com/10up/block-components.git#readme",
   "devDependencies": {
     "@10up/eslint-config": "^2.2.0"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.1.4",
+    "@emotion/styled": "^11.0.0",
+    "array-move": "^3.0.1",
+    "prop-types": "^15.7.2",
+    "react-sortable-hoc": "^1.11.0"
   }
 }
