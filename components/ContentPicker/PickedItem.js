@@ -5,6 +5,7 @@ import { decodeEntities } from '@wordpress/html-entities';
 import { jsx } from '@emotion/react'; // eslint-disable-line no-unused-vars
 
 const { __ } = wp.i18n;
+const { useSelect } = wp.data;
 
 /**
  * PickedItem
@@ -12,8 +13,27 @@ const { __ } = wp.i18n;
  * @param {Object} props react props
  * @return {*} React JSX
  */
-const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex }) => {
-	return (
+const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode }) => {
+	const type = mode === 'post' ? 'postType' : 'taxonomy';
+
+	const preparedItem = useSelect(
+		(select) => {
+			const result = select('core').getEntityRecord(type, item.type, item.id);
+
+			if (result) {
+				return {
+					title: mode === 'post' ? result.title.rendered : result.name,
+					url: result.link,
+					id: result.id,
+				};
+			}
+
+			return null;
+		},
+		[item.id, type],
+	);
+
+	return preparedItem ? (
 		<div
 			css={{
 				cursor: isOrderable ? 'move' : 'default',
@@ -28,10 +48,10 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex }) => {
 		>
 			<span className="block-editor-link-control__search-item-header">
 				<span className="block-editor-link-control__search-item-title">
-					{decodeEntities(item.title)}
+					{decodeEntities(preparedItem.title)}
 				</span>
 				<span aria-hidden className="block-editor-link-control__search-item-info">
-					{filterURLForDisplay(safeDecodeURI(item.url)) || ''}
+					{filterURLForDisplay(safeDecodeURI(preparedItem.url)) || ''}
 				</span>
 			</span>
 			<button
@@ -49,13 +69,15 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex }) => {
 					},
 				}}
 				onClick={() => {
-					handleItemDelete(item, sortIndex);
+					handleItemDelete(preparedItem, sortIndex);
 				}}
 				aria-label={__('Delete item', '10up-block-components')}
 			>
 				&times;
 			</button>
 		</div>
+	) : (
+		''
 	);
 };
 
@@ -68,6 +90,7 @@ PickedItem.propTypes = {
 	isOrderable: PropTypes.bool,
 	handleItemDelete: PropTypes.func.isRequired,
 	sortIndex: PropTypes.number.isRequired,
+	mode: PropTypes.string.isRequired,
 };
 
 export default PickedItem;
