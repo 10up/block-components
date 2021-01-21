@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types';
 import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
+import { __ } from '@wordpress/i18n';
+import { useSelect } from '@wordpress/data';
 /** @jsx jsx */
 import { jsx } from '@emotion/react'; // eslint-disable-line no-unused-vars
-
-const { __ } = wp.i18n;
-const { useSelect } = wp.data;
 
 /**
  * PickedItem

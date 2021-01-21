@@ -2,12 +2,11 @@ import apiFetch from '@wordpress/api-fetch';
 import PropTypes from 'prop-types';
 import arrayMove from 'array-move';
 import styled from '@emotion/styled';
+import { TextControl, Button, Spinner, NavigableMenu } from '@wordpress/components';
+import { useState } from '@wordpress/element'; // eslint-disable-line
+import { __ } from '@wordpress/i18n';
 import SearchItem from './SearchItem';
 import SortableList from './SortableList';
-
-const { TextControl, Button, Spinner, NavigableMenu } = wp.components;
-const { useState } = wp.element;
-const { __ } = wp.i18n;
 
 const NAMESPACE = '10up-block-components';
 
