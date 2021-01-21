@@ -1,29 +1,96 @@
 import { __ } from '@wordpress/i18n';
-import { useState } from '@wordpress/element';
+import { useState, useEffect } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
-import { TextControl, Button, Spinner, TextHighlight, NavigableMenu } from '@wordpress/components';
-import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
-import { decodeEntities } from '@wordpress/html-entities';
+import { TextControl, Button, Spinner, NavigableMenu } from '@wordpress/components';
 import PropTypes from 'prop-types';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import PickedItem from './PickedItem';
+import SearchItem from './SearchItem';
 
 const NAMESPACE = '10up-block-components';
-
 /**
  * Content Picker
  *
  * @param {Object} props react props
  * @return {*} React JSX
  */
-const ContentPicker = ({ label, mode, contentTypes, placeholder, onSelect }) => {
+const ContentPicker = ({
+	label,
+	mode,
+	contentTypes,
+	placeholder,
+	onSelect,
+	isMulti,
+	isOrderable,
+	singlePickedLabel,
+	multiPickedLabel,
+	content: presetContent,
+}) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const { useSelect } = wp.data;
 	const [selectedItem, setSelectedItem] = useState(null);
+	const [content, setContent] = useState({
+		data: {},
+		picked: presetContent,
+	});
+
+	const unavailableItems = [];
+
+	content.picked.forEach((id) => {
+		if (!content.data[id]) {
+			unavailableItems.push(id);
+		}
+	});
+
+	useSelect((select) => {
+		if (unavailableItems.length) {
+			const query = select('core').getEntityRecords('postType', 'post', {
+				include: unavailableItems,
+				per_page: 20,
+			});
+
+			console.log(query);
+
+			const newContent = {
+				data: { ...content.data },
+				picked: [...content.picked],
+			};
+
+			if (query && query.length) {
+				query.forEach((queriedItem) => {
+					newContent.data[`${queriedItem.id}`] = {
+						title: queriedItem.title.rendered,
+						url: '',
+						id: queriedItem.id,
+					};
+				});
+			}
+
+			setContent(newContent);
+
+			return newContent;
+		}
+
+		return null;
+	}, unavailableItems);
 
 	function handleItemSelection(item) {
 		onSelect(item, item.type);
 		setSearchResults([]);
 		setSearchString('');
+
+		const newContent = {
+			data: { ...content.data },
+			picked: [...content.picked],
+		};
+
+		newContent.data[`${item.id}`] = item;
+
+		newContent.picked.unshift(item.id);
+
+		setContent(newContent);
 	}
 
 	/**
@@ -66,62 +133,97 @@ const ContentPicker = ({ label, mode, contentTypes, placeholder, onSelect }) => 
 		setSelectedItem(item);
 	}
 
+	function handleItemDelete(item) {}
+
 	const hasSearchString = !!searchString.length;
 	const hasSearchResults = !!searchResults.length;
 
+	const SortableList = SortableContainer(({ items }) => {
+		console.log(content.data);
+		const ItemComponent = isOrderable ? SortableElement(PickedItem) : PickedItem;
+		return (
+			<div>
+				{items.map((id, index) => (
+					<ItemComponent
+						isOrderable={isOrderable}
+						key={`item-${id}`}
+						index={index}
+						sortIndex={index}
+						item={content.data[`${id}`]}
+					/>
+				))}
+			</div>
+		);
+	});
+
 	return (
 		<div className={`${NAMESPACE}`}>
-			<NavigableMenu onNavigate={handleSelection} orientation="vertical">
-				<TextControl
-					label={label}
-					value={searchString}
-					onChange={handleSearchStringChange}
-					placeholder={placeholder}
-				/>
-				{hasSearchString ? (
-					<ul
-						className={`${NAMESPACE}-grid`}
-						style={{
-							marginTop: '0',
-							marginBottom: '0',
-							marginLeft: '0',
-							paddingLeft: '0',
-							listStyle: 'none',
-						}}
-					>
-						{isLoading && <Spinner />}
-						{!isLoading && !hasSearchResults && (
-							<li className={`${NAMESPACE}-grid-item`}>
-								<Button disabled>
-									{__('No Items found', '10up-block-components')}
-								</Button>
-							</li>
-						)}
-						{searchResults.map((item, index) => {
-							if (!item.title.length) {
-								return null;
-							}
-
-							return (
-								<li
-									key={item.id}
-									className={`${NAMESPACE}-grid-item`}
-									style={{
-										marginBottom: '0',
-									}}
-								>
-									<SearchItem
-										onClick={() => handleItemSelection(item)}
-										searchTerm={searchString}
-										suggestion={item}
-										isSelected={selectedItem === index + 1}
-									/>
+			{!content.picked.length || (content.picked.length && isMulti) ? (
+				<NavigableMenu onNavigate={handleSelection} orientation="vertical">
+					<TextControl
+						label={label}
+						value={searchString}
+						onChange={handleSearchStringChange}
+						placeholder={placeholder}
+						autocomplete="off"
+					/>
+					{hasSearchString ? (
+						<ul
+							className={`${NAMESPACE}-grid`}
+							style={{
+								marginTop: '0',
+								marginBottom: '0',
+								marginLeft: '0',
+								paddingLeft: '0',
+								listStyle: 'none',
+							}}
+						>
+							{isLoading && <Spinner />}
+							{!isLoading && !hasSearchResults && (
+								<li className={`${NAMESPACE}-grid-item`}>
+									<Button disabled>
+										{__('No Items found', '10up-block-components')}
+									</Button>
 								</li>
-							);
-						})}
-					</ul>
-				) : null}
-			</NavigableMenu>
+							)}
+							{searchResults.map((item, index) => {
+								if (!item.title.length) {
+									return null;
+								}
+
+								return (
+									<li
+										key={item.id}
+										className={`${NAMESPACE}-grid-item`}
+										style={{
+											marginBottom: '0',
+										}}
+									>
+										<SearchItem
+											onClick={() => handleItemSelection(item)}
+											searchTerm={searchString}
+											suggestion={item}
+											isSelected={selectedItem === index + 1}
+										/>
+									</li>
+								);
+							})}
+						</ul>
+					) : null}
+				</NavigableMenu>
+			) : null}
+			{content.picked.length ? (
+				<>
+					<span>{content.picked.length > 1 ? multiPickedLabel : singlePickedLabel}</span>
+
+					<SortableList
+						items={content.picked}
+						onSortEnd={({ oldIndex, newIndex }) => {
+							console.log('sort end');
+						}}
+					/>
+				</>
+			) : null}
 		</div>
 	);
 };
@@ -134,95 +236,24 @@ ContentPicker.defaultProps = {
 	},
 	contentTypes: ['post', 'page'],
 	placeholder: '',
+	content: [],
+	isMulti: false,
+	isOrderable: false,
+	multiPickedLabel: __('You have selected the following items:', '10up-block-components'),
+	singlePickedLabel: __('You have selected the following item:', '10up-block-components'),
 };
 
 ContentPicker.propTypes = {
 	contentTypes: PropTypes.array,
+	content: PropTypes.array,
 	placeholder: PropTypes.string,
 	mode: PropTypes.string,
 	label: PropTypes.string,
+	multiPickedLabel: PropTypes.string,
+	singlePickedLabel: PropTypes.string,
+	isMulti: PropTypes.bool,
+	isOrderable: PropTypes.bool,
 	onSelect: PropTypes.func,
 };
 
-/**
- * SelectedItemPreview
- *
- * @param {Object} props react props
- * @return {*} React JSX
- */
-const SelectedItemPreview = ({ item, label }) => {
-	const uniqueId = `${item.id}-preview`;
-
-	return (
-		<div
-			style={{
-				display: 'flex',
-				flexDirection: 'column',
-			}}
-		>
-			<label htmlFor={uniqueId}>{label}</label>
-			<SearchItem suggestion={item} onClick={null} id={uniqueId} />
-		</div>
-	);
-};
-
-SelectedItemPreview.defaultProps = {
-	label: '',
-};
-
-SelectedItemPreview.propTypes = {
-	label: PropTypes.string,
-	item: PropTypes.object.isRequired,
-};
-
-export { ContentPicker, SelectedItemPreview };
-
-/**
- * SearchItem
- *
- * @param {Object} props react props
- * @return {*} React JSX
- */
-const SearchItem = ({ suggestion, onClick, searchTerm, isSelected, id }) => {
-	return (
-		<Button
-			id={id}
-			onClick={onClick}
-			className={`block-editor-link-control__search-item is-entity ${
-				isSelected && 'is-selected'
-			}`}
-			style={{
-				borderRadius: '0',
-			}}
-		>
-			<span className="block-editor-link-control__search-item-header">
-				<span className="block-editor-link-control__search-item-title">
-					<TextHighlight text={decodeEntities(suggestion.title)} highlight={searchTerm} />
-				</span>
-				<span aria-hidden className="block-editor-link-control__search-item-info">
-					{filterURLForDisplay(safeDecodeURI(suggestion.url)) || ''}
-				</span>
-			</span>
-			{suggestion.type && (
-				<span className="block-editor-link-control__search-item-type">
-					{/* Rename 'post_tag' to 'tag'. Ideally, the API would return the localised CPT or taxonomy label. */}
-					{suggestion.type === 'post_tag' ? 'tag' : suggestion.type}
-				</span>
-			)}
-		</Button>
-	);
-};
-
-SearchItem.defaultProps = {
-	id: '',
-	searchTerm: '',
-	isSelected: false,
-};
-
-SearchItem.propTypes = {
-	id: PropTypes.string,
-	searchTerm: PropTypes.string,
-	suggestion: PropTypes.object.isRequired,
-	onClick: PropTypes.func.isRequired,
-	isSelected: PropTypes.bool,
-};
+export { ContentPicker };

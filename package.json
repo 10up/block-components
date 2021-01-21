@@ -30,5 +30,8 @@
   "homepage": "https://github.com/10up/block-components.git#readme",
   "devDependencies": {
     "@10up/eslint-config": "^2.2.0"
+  },
+  "dependencies": {
+    "react-sortable-hoc": "^1.11.0"
   }
 }
