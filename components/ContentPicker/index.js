@@ -49,7 +49,7 @@ const ContentPicker = ({
 
 		content.unshift({
 			id: item.id,
-			type: item.type,
+			type: item.subtype,
 		});
 
 		onChange(content);
