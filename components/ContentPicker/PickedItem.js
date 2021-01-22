@@ -76,7 +76,7 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode }) =>
 			</button>
 		</div>
 	) : (
-		''
+		<div />
 	);
 };
 
