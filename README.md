@@ -16,7 +16,7 @@ function MyComponent( props ) {
 			onChange={ (pickedContent) => { console.log(pickedContent) } }
 			mode="post"
             label={ "Please select a Post or Page:" }
-            contentTypes={ [ 'posts', 'pages' ] }
+            contentTypes={ [ 'post', 'page' ] }
         />
     )
 }
