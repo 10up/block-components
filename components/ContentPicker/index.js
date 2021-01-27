@@ -27,6 +27,7 @@ const ContentPicker = ({
 	singlePickedLabel,
 	multiPickedLabel,
 	content: presetContent,
+	uniqueContentItems,
 }) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
@@ -47,14 +48,16 @@ const ContentPicker = ({
 		setSearchResults([]);
 		setSearchString('');
 
-		content.unshift({
+		const newContent = [...content];
+
+		newContent.unshift({
 			id: item.id,
 			type: item.subtype,
 		});
 
-		onChange(content);
+		onChange(newContent);
 
-		setContent(content);
+		setContent(newContent);
 	}
 
 	/**
@@ -76,6 +79,20 @@ const ContentPicker = ({
 		apiFetch({
 			path: searchQuery,
 		}).then((results) => {
+			if (content.length && uniqueContentItems) {
+				results = results.filter((result) => {
+					let duplicate = false;
+
+					content.forEach((item) => {
+						if (item.id === result.id) {
+							duplicate = true;
+						}
+					});
+
+					return !duplicate;
+				});
+			}
+
 			setSearchResults(results);
 			setIsLoading(false);
 		});
@@ -213,6 +230,7 @@ ContentPicker.defaultProps = {
 	placeholder: '',
 	content: [],
 	maxContentItems: 1,
+	uniqueContentItems: true,
 	isOrderable: false,
 	multiPickedLabel: __('You have selected the following items:', '10up-block-components'),
 	singlePickedLabel: __('You have selected the following item:', '10up-block-components'),
@@ -228,6 +246,7 @@ ContentPicker.propTypes = {
 	singlePickedLabel: PropTypes.string,
 	isOrderable: PropTypes.bool,
 	onChange: PropTypes.func,
+	uniqueContentItems: PropTypes.bool,
 	maxContentItems: PropTypes.number,
 };
 
