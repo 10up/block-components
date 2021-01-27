@@ -14,6 +14,7 @@ const SortableList = SortableContainer(({ items, isOrderable, handleItemDelete, 
 					sortIndex={index}
 					item={item}
 					mode={mode}
+					totalItems={items.length}
 				/>
 			))}
 		</div>

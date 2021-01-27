@@ -12,7 +12,7 @@ import { jsx } from '@emotion/react'; // eslint-disable-line no-unused-vars
  * @param {Object} props react props
  * @return {*} React JSX
  */
-const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode }) => {
+const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode, totalItems }) => {
 	const type = mode === 'post' ? 'postType' : 'taxonomy';
 
 	const preparedItem = useSelect(
@@ -35,7 +35,7 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode }) =>
 	return preparedItem ? (
 		<div
 			css={{
-				cursor: isOrderable ? 'move' : 'default',
+				cursor: isOrderable && totalItems > 1 ? 'move' : 'default',
 				border: '2px dashed #ddd',
 				':hover': !isOrderable
 					? {
@@ -90,6 +90,7 @@ PickedItem.propTypes = {
 	handleItemDelete: PropTypes.func.isRequired,
 	sortIndex: PropTypes.number.isRequired,
 	mode: PropTypes.string.isRequired,
+	totalItems: PropTypes.number.isRequired,
 };
 
 export default PickedItem;

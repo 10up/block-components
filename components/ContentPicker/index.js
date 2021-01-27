@@ -22,7 +22,7 @@ const ContentPicker = ({
 	contentTypes,
 	placeholder,
 	onChange,
-	isMulti,
+	maxContentItems,
 	isOrderable,
 	singlePickedLabel,
 	multiPickedLabel,
@@ -118,7 +118,7 @@ const ContentPicker = ({
 
 	return (
 		<div className={`${NAMESPACE}`}>
-			{!content.length || (content.length && isMulti) ? (
+			{!content.length || (content.length && content.length < maxContentItems) ? (
 				<NavigableMenu onNavigate={handleSelection} orientation="vertical">
 					<TextControl
 						label={label}
@@ -212,7 +212,7 @@ ContentPicker.defaultProps = {
 	contentTypes: ['post', 'page'],
 	placeholder: '',
 	content: [],
-	isMulti: false,
+	maxContentItems: 1,
 	isOrderable: false,
 	multiPickedLabel: __('You have selected the following items:', '10up-block-components'),
 	singlePickedLabel: __('You have selected the following item:', '10up-block-components'),
@@ -226,9 +226,9 @@ ContentPicker.propTypes = {
 	label: PropTypes.string,
 	multiPickedLabel: PropTypes.string,
 	singlePickedLabel: PropTypes.string,
-	isMulti: PropTypes.bool,
 	isOrderable: PropTypes.bool,
 	onChange: PropTypes.func,
+	maxContentItems: PropTypes.number,
 };
 
 export { ContentPicker };
