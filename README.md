@@ -1,7 +1,15 @@
 # 10up Block Components
-A collection of simple Components for the Block Editor build with the core gutenberg components. These components do not include any build files and do not bundle the WordPress components. Therefore these need to be used in an environemt where the [`Dependency Extraction Webpack Plugin`](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) is used and the `import { component } from '@wordpress/package';` is supported. 
+
+A collection of simple components for the Block Editor build with the core gutenberg components. These components do not include any build files and do not bundle the WordPress components. Therefore these need to be used in an environemt where the [`Dependency Extraction Webpack Plugin`](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) is used and the `import { component } from '@wordpress/package';` is supported.
+
+## Installation
+
+1. Run `npm install --save @10up/block-components` within your WordPress theme or plugin.
+2. Within your block editor code, import the relevant component(s) e.g. `import { ContentPicker } from '@10up/block-components';`
+3. We highly recommend you use [@10up/scripts](https://github.com/10up/10up-scripts) to build your block files as it handles dependency extraction for you.
 
 ## ContentPicker
+
 A Content Picker component that allows you to pick posts and pages very easily.
 
 ### Usage
@@ -13,9 +21,10 @@ function MyComponent( props ) {
 
     return (
         <ContentPicker
-            handleSelect={ console.log }
+			onChange={ (pickedContent) => { console.log(pickedContent) } }
+			mode="post"
             label={ "Please select a Post or Page:" }
-            postTypes={ [ 'posts', 'pages' ] }
+            contentTypes={ [ 'post', 'page' ] }
         />
     )
 }
@@ -25,15 +34,23 @@ function MyComponent( props ) {
 
 | Name             | Type       | Default               | Description                                                            |
 | ---------------- | ---------- | --------------------- | ---------------------------------------------------------------------- |
-| `handleSelect`   | `function` | `undefined`            | Callback function that gets called with the post object upon selection |
+| `onChange`   | `function` | `undefined`            | Callback function the list of picked content gets changed |
 | `label`          | `string`   | `''`                   | Renders a label for the Search Field.                                  |
+| `mode`           | `string`   | `'post'`               | Either `post` or `term`                                 |
 | `placeholder`    | `string`   | `''`                   | Renders placeholder text inside the Search Field.                      |
-| `postTypes`      | `array`    | `[ 'posts', 'pages' ]` | Names of the post types that should get searched                       |
+| `contentTypes`      | `array`    | `[ 'post', 'page' ]` | Names of the post types or taxonomies that should get searched                       |
+| `maxContentItems`          | `number`   | `1`                   | Max number of items a user can select.
+| `isOrderable`          | `bool`   | `false`                   | When true, will allow the user to order items. Must be used in conjunction with `maxContentItems > 1`
+| `uniqueContentItems`          | `bool`   | `true`                   | Prevent duplicate items from being picked.
+| `excludeCurrentPost`          | `bool`   | `true`                   | Don't allow user to pick the current post.
+| `content`          | `array`   | `[]`                   | Array of items to prepopulate picker with. Must be in the format of: `[{id: 1, type: 'post'}, {id: 1, type: 'page'},... ]`. You cannot provide terms and posts to the same picker. Can also take the form `[1, 2, ...]` if only one `contentTypes` is provided.
 
-The `postTypes` will get used in a Rest Request to the `search` endpoint as the `subtypes`:
+__NOTE:__ Content picker cannot validate that posts you pass it via `content` prop actually exist. If a post does not exist, it will not render as one of the picked items but will still be passed back as picked items if new items are picked/sorted. Therefore, on save you need to validate that all the picked posts/terms actually exist.
+
+The `contentTypes` will get used in a Rest Request to the `search` endpoint as the `subtypes`:
 ```js
 apiFetch( {
-    path: `wp/v2/search/?search="${keyword}"&subtype="${postTypes.join(',')}"&type=post`
+    path: `wp/v2/search/?search="${keyword}"&subtype="${contentTypes.join(',')}"&type=${mode}`
 } )...
 ```
 
@@ -49,7 +66,9 @@ function BlockEdit( props ) {
     const hasSelectedInnerBlock = useHasSelectedInnerBlock(props);
 
     return (
-        <p>This block is currently { hasSelectedInnerBlock ? 'selected' : 'not selected' }.</p>
+        <div>
+            { hasSelectedInnerBlock ? 'InnerBlocks are selected' : 'InnerBlocks are not selected' }
+        </div>
     )
 }
 ```
