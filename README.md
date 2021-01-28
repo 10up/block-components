@@ -1,7 +1,15 @@
 # 10up Block Components
+
 A collection of simple Components for the Block Editor build with the core gutenberg components. These components do not include any build files and do not bundle the WordPress components. Therefore these need to be used in an environemt where the [`Dependency Extraction Webpack Plugin`](https://www.npmjs.com/package/@wordpress/dependency-extraction-webpack-plugin) is used and the `import { component } from '@wordpress/package';` is supported.
 
+## Installation
+
+1. Run `npm install --save @10up/block-components` within your WordPress theme or plugin.
+2. Within your block editor code, import the relevant component(s) e.g. `import { ContentPicker } from '@10up/block-components';`
+3. We highly recommend you use [@10up/scripts](https://github.com/10up/10up-scripts) to build your block files as it handles dependency extraction for you.
+
 ## ContentPicker
+
 A Content Picker component that allows you to pick posts and pages very easily.
 
 ### Usage
