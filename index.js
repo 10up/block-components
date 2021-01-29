@@ -1,3 +1,4 @@
 export { ContentPicker } from './components/content-picker';
 export { IsAdmin } from './components/is-admin';
 export { useHasSelectedInnerBlock } from './hooks/use-has-selected-inner-block';
+export { MediaToolbar } from './components/media-toolbar';
