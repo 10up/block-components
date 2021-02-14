@@ -7,7 +7,7 @@ const SortableList = SortableContainer(({ items, isOrderable, handleItemDelete, 
 		<div>
 			{items.map((item, index) => (
 				<ItemComponent
-					isOrderable={isOrderable}
+					isOrderable={isOrderable && items.length > 1 ? isOrderable : false}
 					key={`item-${item.id}`}
 					index={index}
 					handleItemDelete={handleItemDelete}

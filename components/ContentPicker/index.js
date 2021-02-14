@@ -139,9 +139,13 @@ const ContentPicker = ({
 	const hasSearchString = !!searchString.length;
 	const hasSearchResults = !!searchResults.length;
 
+	/**
+	 * Unfortunately, we had to use !important because on PickedItem we couldn't @emotion/styled css
+	 * as it was breaking sortability from react-sortable-hoc
+	 */
 	const StyleWrapper = styled('div')`
 		& .block-editor-link-control__search-item {
-			border: none;
+			border: none !important;
 		}
 	`;
 
@@ -215,6 +219,7 @@ const ContentPicker = ({
 
 					<SortableList
 						items={content}
+						useDragHandle
 						isOrderable={isOrderable}
 						mode={mode}
 						handleItemDelete={handleItemDelete}
