@@ -42,8 +42,7 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode, tota
 				border: '2px dashed #ddd',
 				paddingTop: '10px',
 				paddingBottom: '10px',
-				paddingLeft: isOrderable ? '3px' : '8px',
-				paddingRight: '3px'
+				paddingLeft: isOrderable ? '3px' : '8px'
 			}}
 			className="block-editor-link-control__search-item is-entity"
 		>

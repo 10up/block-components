@@ -146,6 +146,11 @@ const ContentPicker = ({
 	const StyleWrapper = styled('div')`
 		& .block-editor-link-control__search-item {
 			border: none !important;
+			cursor: default;
+
+			&:hover {
+				background: transparent;
+			}
 		}
 	`;
 
