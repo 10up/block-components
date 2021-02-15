@@ -78,7 +78,7 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode, tota
 				aria-label={__('Delete item', '10up-block-components')}
 			>
 				&times;
-			</button>
+			</button> 
 		</div>
 	) : (
 		<div />

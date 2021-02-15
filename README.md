@@ -21,7 +21,7 @@ function MyComponent( props ) {
 
     return (
         <ContentPicker
-			onChange={ (pickedContent) => { console.log(pickedContent) } }
+			onPickChange={ (pickedContent) => { console.log(pickedContent) } }
 			mode="post"
             label={ "Please select a Post or Page:" }
             contentTypes={ [ 'post', 'page' ] }
@@ -34,7 +34,7 @@ function MyComponent( props ) {
 
 | Name             | Type       | Default               | Description                                                            |
 | ---------------- | ---------- | --------------------- | ---------------------------------------------------------------------- |
-| `onChange`   | `function` | `undefined`            | Callback function the list of picked content gets changed |
+| `onPickChange`   | `function` | `undefined`            | Callback function the list of picked content gets changed |
 | `label`          | `string`   | `''`                   | Renders a label for the Search Field.                                  |
 | `mode`           | `string`   | `'post'`               | Either `post` or `term`                                 |
 | `placeholder`    | `string`   | `''`                   | Renders placeholder text inside the Search Field.                      |
@@ -53,6 +53,40 @@ apiFetch( {
     path: `wp/v2/search/?search="${keyword}"&subtype="${contentTypes.join(',')}"&type=${mode}`
 } )...
 ```
+## ContentSearch
+
+A component that lets you search through posts and pages. This component is used by Content Picker. This component provides only the searching functionality and does not maintain any list of chosen items.
+
+### Usage
+
+```js
+import { ContentSearch } from '@10up/block-components';
+
+function MyComponent( props ) {
+
+    return (
+        <ContentSearch
+			onSelectItem={ (item) => { console.log(item) } }
+			mode="post"
+            label={ "Please select a Post or Page:" }
+            contentTypes={ [ 'post', 'page' ] }
+        />
+    )
+}
+```
+
+#### Props
+
+| Name             | Type       | Default               | Description                                                            |
+| ---------------- | ---------- | --------------------- | ---------------------------------------------------------------------- |
+| `onSelectItem`   | `function` | `undefined`            | Function called when a searched item is clicke |
+| `label`          | `string`   | `''`                   | Renders a label for the Search Field.                                  |
+| `mode`           | `string`   | `'post'`               | Either `post` or `term`                                 |
+| `placeholder`    | `string`   | `''`                   | Renders placeholder text inside the Search Field.                      |
+| `contentTypes`      | `array`    | `[ 'post', 'page' ]` | Names of the post types or taxonomies that should get searched                       |
+| `excludeItems`      | `array`    | `[ { id: 1, type: 'post' ]` | Items to exclude from search |
+
+
 
 ## useHasSelectedInnerBlock
 
