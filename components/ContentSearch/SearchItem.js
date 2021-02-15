@@ -3,7 +3,7 @@ import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
 import { Button, TextHighlight } from '@wordpress/components';
 
-/**
+/** 
  * SearchItem
  *
  * @param {Object} props react props
