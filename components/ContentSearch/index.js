@@ -99,10 +99,8 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 				>
 					{isLoading && <Spinner />}
 					{!isLoading && !hasSearchResults && (
-						<li className={`${NAMESPACE}-grid-item`}>
-							<Button disabled>
-								{__('No Items found', '10up-block-components')}
-							</Button>
+						<li className={`${NAMESPACE}-grid-item components-button`} style={{color: 'inherit', cursor: 'default', paddingLeft: '3px'}}>
+							{__('Nothing found.', '10up-block-components')}
 						</li>
 					)}
 					{searchResults.map((item, index) => {
