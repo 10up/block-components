@@ -3,6 +3,7 @@ import apiFetch from '@wordpress/api-fetch';
 import { useState } from '@wordpress/element'; // eslint-disable-line
 import SearchItem from './SearchItem';
 import PropTypes from 'prop-types';
+import { __ } from '@wordpress/i18n';
 
 const NAMESPACE = '10up-block-components'; 
 
