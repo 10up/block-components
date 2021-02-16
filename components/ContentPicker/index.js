@@ -93,7 +93,7 @@ const ContentPicker = ({
 	return (
 		<div className={`${NAMESPACE}`}>
 			{!content.length || (content.length && content.length < maxContentItems) ? (
-				<ContentSearch excludeItem={excludeItems} onSelect={handleSelect} />
+				<ContentSearch excludeItem={excludeItems} onSelectItem={handleSelect} />
 			) : null}
 			{content.length ? (
 				<StyleWrapper>
