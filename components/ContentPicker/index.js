@@ -55,7 +55,7 @@ const ContentPicker = ({
 		onPickChange(newContent);
 
 		setContent(newContent);
-	} 
+	}
 
 	function handleItemDelete(item, sortIndex) {
 		const newContent = [...content];
@@ -93,7 +93,7 @@ const ContentPicker = ({
 	return (
 		<div className={`${NAMESPACE}`}>
 			{!content.length || (content.length && content.length < maxContentItems) ? (
-				<ContentSearch excludeItem={excludeItems} onSelectItem={handleSelect} />
+				<ContentSearch excludeItems={excludeItems} onSelectItem={handleSelect} />
 			) : null}
 			{content.length ? (
 				<StyleWrapper>
