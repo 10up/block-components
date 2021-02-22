@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "10up Components built for the WordPress Block Editor.",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/10up/block-components.git#readme",
   "devDependencies": {
-    "@10up/eslint-config": "^2.2.0"
+    "@10up/eslint-config": "^2.3.1"
   },
   "dependencies": {
     "@emotion/react": "^11.1.4",
