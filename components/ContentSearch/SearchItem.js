@@ -3,10 +3,15 @@ import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
 import { Button, TextHighlight } from '@wordpress/components';
 
-/** 
+/**
  * SearchItem
  *
  * @param {Object} props react props
+ * @param props.suggestion
+ * @param props.onClick
+ * @param props.searchTerm
+ * @param props.isSelected
+ * @param props.id
  * @return {*} React JSX
  */
 const SearchItem = ({ suggestion, onClick, searchTerm, isSelected, id }) => {

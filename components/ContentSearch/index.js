@@ -1,11 +1,11 @@
-import { TextControl, Button, Spinner, NavigableMenu } from '@wordpress/components';
+import { TextControl, Spinner, NavigableMenu } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { useState } from '@wordpress/element'; // eslint-disable-line
-import SearchItem from './SearchItem';
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
+import SearchItem from './SearchItem';
 
-const NAMESPACE = '10up-block-components'; 
+const NAMESPACE = '10up-block-components';
 
 const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, excludeItems }) => {
 	const [searchString, setSearchString] = useState('');
@@ -99,7 +99,10 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 				>
 					{isLoading && <Spinner />}
 					{!isLoading && !hasSearchResults && (
-						<li className={`${NAMESPACE}-grid-item components-button`} style={{color: 'inherit', cursor: 'default', paddingLeft: '3px'}}>
+						<li
+							className={`${NAMESPACE}-grid-item components-button`}
+							style={{ color: 'inherit', cursor: 'default', paddingLeft: '3px' }}
+						>
 							{__('Nothing found.', '10up-block-components')}
 						</li>
 					)}
@@ -139,7 +142,7 @@ ContentSearch.defaultProps = {
 	mode: 'post',
 	onSelectItem: () => {
 		console.log('Select!');
-	}
+	},
 };
 
 ContentSearch.propTypes = {

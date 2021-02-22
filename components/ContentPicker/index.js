@@ -1,8 +1,6 @@
-import apiFetch from '@wordpress/api-fetch';
 import PropTypes from 'prop-types';
 import arrayMove from 'array-move';
 import styled from '@emotion/styled';
-import { TextControl, Button, Spinner, NavigableMenu } from '@wordpress/components';
 import { select } from '@wordpress/data';
 import { useState } from '@wordpress/element'; // eslint-disable-line
 import { __ } from '@wordpress/i18n';
@@ -14,7 +12,19 @@ const NAMESPACE = '10up-block-components';
 /**
  * Content Picker
  *
- * @param {Object} props react props
+ * @param {Object} props React props
+ * @param props.label
+ * @param props.mode
+ * @param props.contentTypes
+ * @param props.placeholder
+ * @param props.onPickChange
+ * @param props.maxContentItems
+ * @param props.isOrderable
+ * @param props.singlePickedLabel
+ * @param props.multiPickedLabel
+ * @param props.content
+ * @param props.uniqueContentItems
+ * @param props.excludeCurrentPost
  * @return {*} React JSX
  */
 const ContentPicker = ({
@@ -82,7 +92,7 @@ const ContentPicker = ({
 		}
 	`;
 
-	const excludeItems = uniqueContentItems ? [ ...content ] : [];
+	const excludeItems = uniqueContentItems ? [...content] : [];
 
 	if (excludeCurrentPost && currentPostId) {
 		excludeItems.push({
@@ -93,7 +103,12 @@ const ContentPicker = ({
 	return (
 		<div className={`${NAMESPACE}`}>
 			{!content.length || (content.length && content.length < maxContentItems) ? (
-				<ContentSearch excludeItems={excludeItems} onSelectItem={handleSelect} />
+				<ContentSearch
+					placeholder={placeholder}
+					label={label}
+					excludeItems={excludeItems}
+					onSelectItem={handleSelect}
+				/>
 			) : null}
 			{content.length ? (
 				<StyleWrapper>
@@ -115,7 +130,7 @@ const ContentPicker = ({
 						handleItemDelete={handleItemDelete}
 						onSortEnd={({ oldIndex, newIndex }) => {
 							const newContent = [...arrayMove(content, oldIndex, newIndex)];
-and
+
 							onPickChange(newContent);
 
 							setContent(newContent);
