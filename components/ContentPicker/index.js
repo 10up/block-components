@@ -108,6 +108,7 @@ const ContentPicker = ({
 					label={label}
 					excludeItems={excludeItems}
 					onSelectItem={handleSelect}
+					contentTypes={contentTypes}
 				/>
 			) : null}
 			{content.length ? (
