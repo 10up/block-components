@@ -43,7 +43,7 @@ const ContentPicker = ({
 }) => {
 	const [content, setContent] = useState(presetContent);
 
-	const currentPostId = select('core/editor').getCurrentPostId();
+	const currentPostId = select('core/editor')?.getCurrentPostId();
 
 	if (content.length && typeof content[0] !== 'object') {
 		for (let i = 0; i < content.length; i++) {
