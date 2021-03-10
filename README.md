@@ -110,7 +110,7 @@ const MyComponent = ({clientId}) => {
 	<InnerBlocks
 		renderAppender={() => (
 			<CustomBlockAppender
-				className="accordion-item-appender"
+				className="custom-classname"
 				rootClientId={clientId}
 				icon="heavy-plus"
 				isTertiary

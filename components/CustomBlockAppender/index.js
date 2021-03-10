@@ -24,14 +24,26 @@ import { Button } from '@wordpress/components';
  * @param {string} [props.icon]       The icon to use.
  * @return {Function} The component.
  */
-const CustomBlockAppender = ({ rootClientId, buttonText, icon, ...buttonProps }) => {
+const CustomBlockAppender = ({
+	rootClientId,
+	buttonText,
+	icon,
+	className = 'custom-block-appender',
+	...buttonProps
+}) => {
 	return (
 		<Inserter
 			isAppender
 			rootClientId={rootClientId}
 			renderToggle={({ onToggle, disabled }) => (
 				<Fragment>
-					<Button onClick={onToggle} disabled={disabled} icon={icon} {...buttonProps}>
+					<Button
+						className={`tenup-${className}`}
+						onClick={onToggle}
+						disabled={disabled}
+						icon={icon}
+						{...buttonProps}
+					>
 						{buttonText}
 					</Button>
 				</Fragment>
@@ -45,12 +57,14 @@ CustomBlockAppender.propTypes = {
 	buttonText: PropTypes.string,
 	label: PropTypes.string,
 	icon: PropTypes.string,
+	className: PropTypes.string,
 };
 
 CustomBlockAppender.defaultProps = {
 	buttonText: '',
 	label: '',
 	icon: 'plus',
+	className: 'custom-block-appender',
 };
 
 export default CustomBlockAppender;
