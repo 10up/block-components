@@ -12,6 +12,8 @@ A collection of components built to be used in the block editor. These component
 
 A Content Picker component that allows you to pick posts and pages very easily.
 
+![Content picker in action](images/content-picker.gif)
+
 ### Usage
 
 ```js
