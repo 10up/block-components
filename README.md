@@ -23,8 +23,8 @@ function MyComponent( props ) {
 
     return (
         <ContentPicker
-			onPickChange={ (pickedContent) => { console.log(pickedContent) } }
-			mode="post"
+            onPickChange={ (pickedContent) => { console.log(pickedContent) } }
+            mode="post"
             label={ "Please select a Post or Page:" }
             contentTypes={ [ 'post', 'page' ] }
         />
@@ -68,8 +68,8 @@ function MyComponent( props ) {
 
     return (
         <ContentSearch
-			onSelectItem={ (item) => { console.log(item) } }
-			mode="post"
+            onSelectItem={ (item) => { console.log(item) } }
+            mode="post"
             label={ "Please select a Post or Page:" }
             contentTypes={ [ 'post', 'page' ] }
         />
