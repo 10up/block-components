@@ -112,7 +112,7 @@ const MyComponent = ({clientId}) => {
 			<CustomBlockAppender
 				className="accordion-item-appender"
 				rootClientId={clientId}
-				icon=
+				icon="heavy-plus"
 				isTertiary
 				showTooltip
 				label={__('Insert Accordion content', '10up-block-library')}
