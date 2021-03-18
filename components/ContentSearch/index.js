@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import SearchItem from './SearchItem';
 
-const NAMESPACE = '10up-block-components';
+const NAMESPACE = '10up-content-search';
 
 const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, excludeItems }) => {
 	const [searchString, setSearchString] = useState('');
@@ -88,7 +88,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 			/>
 			{hasSearchString ? (
 				<ul
-					className={`${NAMESPACE}-grid`}
+					className={`${NAMESPACE}-list`}
 					style={{
 						marginTop: '0',
 						marginBottom: '0',
@@ -100,7 +100,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 					{isLoading && <Spinner />}
 					{!isLoading && !hasSearchResults && (
 						<li
-							className={`${NAMESPACE}-grid-item components-button`}
+							className={`${NAMESPACE}-list-item components-button`}
 							style={{ color: 'inherit', cursor: 'default', paddingLeft: '3px' }}
 						>
 							{__('Nothing found.', '10up-block-components')}
@@ -114,7 +114,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 						return (
 							<li
 								key={item.id}
-								className={`${NAMESPACE}-grid-item`}
+								className={`${NAMESPACE}-list-item`}
 								style={{
 									marginBottom: '0',
 								}}
@@ -123,6 +123,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 									onClick={() => handleItemSelection(item)}
 									searchTerm={searchString}
 									suggestion={item}
+									contentTypes={contentTypes}
 									isSelected={selectedItem === index + 1}
 								/>
 							</li>
@@ -141,7 +142,7 @@ ContentSearch.defaultProps = {
 	excludeItems: [],
 	mode: 'post',
 	onSelectItem: () => {
-		console.log('Select!');
+		console.log('Select!'); // eslint-disable-line no-console
 	},
 };
 
