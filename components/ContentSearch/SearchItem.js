@@ -15,6 +15,8 @@ import { Button, TextHighlight } from '@wordpress/components';
  * @return {*} React JSX
  */
 const SearchItem = ({ suggestion, onClick, searchTerm, isSelected, id, contentTypes }) => {
+	const showType = suggestion.type && contentTypes.length > 1;
+
 	return (
 		<Button
 			id={id}
@@ -27,14 +29,25 @@ const SearchItem = ({ suggestion, onClick, searchTerm, isSelected, id, contentTy
 			}}
 		>
 			<span className="block-editor-link-control__search-item-header">
-				<span className="block-editor-link-control__search-item-title">
+				<span
+					className="block-editor-link-control__search-item-title"
+					style={{
+						paddingRight: !showType ? 0 : null,
+					}}
+				>
 					<TextHighlight text={decodeEntities(suggestion.title)} highlight={searchTerm} />
 				</span>
-				<span aria-hidden className="block-editor-link-control__search-item-info">
+				<span
+					aria-hidden
+					className="block-editor-link-control__search-item-info"
+					style={{
+						paddingRight: !showType ? 0 : null,
+					}}
+				>
 					{filterURLForDisplay(safeDecodeURI(suggestion.url)) || ''}
 				</span>
 			</span>
-			{suggestion.type && contentTypes.length > 1 && (
+			{showType && (
 				<span className="block-editor-link-control__search-item-type">
 					{/* Rename 'post_tag' to 'tag'. Ideally, the API would return the localised CPT or taxonomy label. */}
 					{suggestion.type === 'post_tag' ? 'tag' : suggestion.type}
