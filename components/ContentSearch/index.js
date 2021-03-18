@@ -7,6 +7,8 @@ import SearchItem from './SearchItem';
 
 const NAMESPACE = '10up-content-search';
 
+const searchCache = {};
+
 const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, excludeItems }) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
@@ -51,30 +53,37 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 		setSearchString(keyword);
 		setIsLoading(true);
 
-		const searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
-			',',
-		)}&type=${mode}`;
-
-		apiFetch({
-			path: searchQuery,
-		}).then((results) => {
-			const newResults = results.filter((result) => {
-				let keep = true;
-
-				if (excludeItems.length) {
-					excludeItems.forEach((item) => {
-						if (item.id === result.id) {
-							keep = false;
-						}
-					});
-				}
-
-				return keep;
-			});
-
-			setSearchResults(newResults);
+		if (searchCache[keyword]) {
+			setSearchResults(searchCache[keyword]);
 			setIsLoading(false);
-		});
+		} else {
+			const searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
+				',',
+			)}&type=${mode}`;
+
+			apiFetch({
+				path: searchQuery,
+			}).then((results) => {
+				const newResults = results.filter((result) => {
+					let keep = true;
+
+					if (excludeItems.length) {
+						excludeItems.forEach((item) => {
+							if (item.id === result.id) {
+								keep = false;
+							}
+						});
+					}
+
+					return keep;
+				});
+
+				searchCache[keyword] = newResults;
+
+				setSearchResults(newResults);
+				setIsLoading(false);
+			});
+		}
 	};
 
 	return (
