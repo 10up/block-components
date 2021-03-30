@@ -1,6 +1,6 @@
 import { TextControl, Spinner, NavigableMenu } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
-import { useState } from '@wordpress/element'; // eslint-disable-line
+import { useState, useRef, useEffect } from '@wordpress/element'; // eslint-disable-line
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import SearchItem from './SearchItem';
@@ -14,6 +14,8 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 	const [searchResults, setSearchResults] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [selectedItem, setSelectedItem] = useState(null);
+
+	const mounted = useRef(true);
 
 	/**
 	 * handleSelection
@@ -53,17 +55,21 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 		setSearchString(keyword);
 		setIsLoading(true);
 
-		if (searchCache[keyword]) {
-			setSearchResults(searchCache[keyword]);
+		const searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
+			',',
+		)}&type=${mode}`;
+
+		if (searchCache[searchQuery]) {
+			setSearchResults(searchCache[searchQuery]);
 			setIsLoading(false);
 		} else {
-			const searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
-				',',
-			)}&type=${mode}`;
-
 			apiFetch({
 				path: searchQuery,
 			}).then((results) => {
+				if (mounted.current === false) {
+					return;
+				}
+
 				const newResults = results.filter((result) => {
 					let keep = true;
 
@@ -78,13 +84,19 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 					return keep;
 				});
 
-				searchCache[keyword] = newResults;
+				searchCache[searchQuery] = newResults;
 
 				setSearchResults(newResults);
 				setIsLoading(false);
 			});
 		}
 	};
+
+	useEffect(() => {
+		return () => {
+			mounted.current = false;
+		};
+	}, []);
 
 	return (
 		<NavigableMenu onNavigate={handleSelection} orientation="vertical">
