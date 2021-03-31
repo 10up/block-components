@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 import { ContentSearch } from '../ContentSearch';
 import SortableList from './SortableList';
 
-const NAMESPACE = '10up-block-components';
+const NAMESPACE = '10up-content-picker';
 
 /**
  * Content Picker

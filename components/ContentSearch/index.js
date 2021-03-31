@@ -1,17 +1,21 @@
 import { TextControl, Spinner, NavigableMenu } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
-import { useState } from '@wordpress/element'; // eslint-disable-line
+import { useState, useRef, useEffect } from '@wordpress/element'; // eslint-disable-line
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import SearchItem from './SearchItem';
 
-const NAMESPACE = '10up-block-components';
+const NAMESPACE = '10up-content-search';
+
+const searchCache = {};
 
 const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, excludeItems }) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [selectedItem, setSelectedItem] = useState(null);
+
+	const mounted = useRef(true);
 
 	/**
 	 * handleSelection
@@ -55,27 +59,44 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 			',',
 		)}&type=${mode}`;
 
-		apiFetch({
-			path: searchQuery,
-		}).then((results) => {
-			const newResults = results.filter((result) => {
-				let keep = true;
-
-				if (excludeItems.length) {
-					excludeItems.forEach((item) => {
-						if (item.id === result.id) {
-							keep = false;
-						}
-					});
+		if (searchCache[searchQuery]) {
+			setSearchResults(searchCache[searchQuery]);
+			setIsLoading(false);
+		} else {
+			apiFetch({
+				path: searchQuery,
+			}).then((results) => {
+				if (mounted.current === false) {
+					return;
 				}
 
-				return keep;
-			});
+				const newResults = results.filter((result) => {
+					let keep = true;
 
-			setSearchResults(newResults);
-			setIsLoading(false);
-		});
+					if (excludeItems.length) {
+						excludeItems.forEach((item) => {
+							if (item.id === result.id) {
+								keep = false;
+							}
+						});
+					}
+
+					return keep;
+				});
+
+				searchCache[searchQuery] = newResults;
+
+				setSearchResults(newResults);
+				setIsLoading(false);
+			});
+		}
 	};
+
+	useEffect(() => {
+		return () => {
+			mounted.current = false;
+		};
+	}, []);
 
 	return (
 		<NavigableMenu onNavigate={handleSelection} orientation="vertical">
@@ -88,7 +109,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 			/>
 			{hasSearchString ? (
 				<ul
-					className={`${NAMESPACE}-grid`}
+					className={`${NAMESPACE}-list`}
 					style={{
 						marginTop: '0',
 						marginBottom: '0',
@@ -100,7 +121,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 					{isLoading && <Spinner />}
 					{!isLoading && !hasSearchResults && (
 						<li
-							className={`${NAMESPACE}-grid-item components-button`}
+							className={`${NAMESPACE}-list-item components-button`}
 							style={{ color: 'inherit', cursor: 'default', paddingLeft: '3px' }}
 						>
 							{__('Nothing found.', '10up-block-components')}
@@ -114,7 +135,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 						return (
 							<li
 								key={item.id}
-								className={`${NAMESPACE}-grid-item`}
+								className={`${NAMESPACE}-list-item`}
 								style={{
 									marginBottom: '0',
 								}}
@@ -123,6 +144,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 									onClick={() => handleItemSelection(item)}
 									searchTerm={searchString}
 									suggestion={item}
+									contentTypes={contentTypes}
 									isSelected={selectedItem === index + 1}
 								/>
 							</li>
@@ -141,7 +163,7 @@ ContentSearch.defaultProps = {
 	excludeItems: [],
 	mode: 'post',
 	onSelectItem: () => {
-		console.log('Select!');
+		console.log('Select!'); // eslint-disable-line no-console
 	},
 };
 
