@@ -25,7 +25,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 	 *
 	 * @param {*} item
 	 */
-	function handleSelection(item) {
+	function handleOnNavigate(item) {
 		if (item === 0) {
 			setSelectedItem(null);
 		}
@@ -99,7 +99,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 	}, []);
 
 	return (
-		<NavigableMenu onNavigate={handleSelection} orientation="vertical">
+		<NavigableMenu onNavigate={handleOnNavigate} orientation="vertical">
 			<TextControl
 				label={label}
 				value={searchString}
