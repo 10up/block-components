@@ -33,6 +33,14 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 		setSelectedItem(item);
 	}
 
+	/**
+	 * handleItemSelection
+	 *
+	 * reset the search input & item container
+	 * trigger the onSelectItem callback passed in via props
+	 *
+	 * @param {*} item
+	 */
 	function handleItemSelection(item) {
 		setSearchResults([]);
 		setSearchString('');
