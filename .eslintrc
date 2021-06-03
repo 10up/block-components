@@ -1,3 +1,6 @@
 {
-    "extends": ["@10up/eslint-config/wordpress"]
+    "extends": ["@10up/eslint-config/react"],
+    "rules": {
+        "import/no-unresolved": 0
+    }
 }
