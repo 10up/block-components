@@ -5,12 +5,13 @@ import { decodeEntities } from '@wordpress/html-entities';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { sortableHandle } from 'react-sortable-hoc';
+import { useEffect } from '@wordpress/element';
 
 /**
  * PickedItem
  *
- * @param {Object} props react props
- * @return {*} React JSX
+ * @param {object} props react props
+ * @returns {*} React JSX
  */
 
 const DragHandle = sortableHandle(() => (
@@ -49,7 +50,10 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode }) =>
 
 	const preparedItem = useSelect(
 		(select) => {
-			const result = select('core').getEntityRecord(type, item.type, item.id);
+			const { getEntityRecord, hasFinishedResolution } = select('core');
+
+			const getEntityRecordParameters = [type, item.type, item.id];
+			const result = getEntityRecord(...getEntityRecordParameters);
 
 			if (result) {
 				return {
@@ -59,10 +63,21 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode }) =>
 				};
 			}
 
-			return null;
+			if (hasFinishedResolution('getEntityRecord', getEntityRecordParameters)) {
+				return null;
+			}
+
+			return undefined;
 		},
 		[item.id, type],
 	);
+
+	// If `getEntityRecord` did not return an item, pass it to the delete
+	useEffect(() => {
+		if (preparedItem === null) {
+			handleItemDelete(item);
+		}
+	}, [item, handleItemDelete, preparedItem]);
 
 	return preparedItem ? (
 		<Wrapper
