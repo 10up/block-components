@@ -10,8 +10,8 @@ import { useEffect } from '@wordpress/element';
 /**
  * PickedItem
  *
- * @param {object} props react props
- * @returns {*} React JSX
+ * @param {Object} props react props
+ * @return {*} React JSX
  */
 
 const DragHandle = sortableHandle(() => (
@@ -45,9 +45,11 @@ const Wrapper = styled('div')`
 	}
 `;
 
-const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode }) => {
+const PickedItem = ({ item, isOrderable, handleItemDelete, mode }) => {
 	const type = mode === 'post' ? 'postType' : 'taxonomy';
 
+	// This will return undefined while the item data is being fetched. If the item comes back
+	// empty, it will return null, which is handled in the effect below.
 	const preparedItem = useSelect(
 		(select) => {
 			const { getEntityRecord, hasFinishedResolution } = select('core');
@@ -72,7 +74,7 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode }) =>
 		[item.id, type],
 	);
 
-	// If `getEntityRecord` did not return an item, pass it to the delete
+	// If `getEntityRecord` did not return an item, pass it to the delete callback.
 	useEffect(() => {
 		if (preparedItem === null) {
 			handleItemDelete(item);
@@ -102,7 +104,7 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode }) =>
 			<button
 				type="button"
 				onClick={() => {
-					handleItemDelete(preparedItem, sortIndex);
+					handleItemDelete(preparedItem);
 				}}
 				aria-label={__('Delete item', '10up-block-components')}
 			>
@@ -122,7 +124,6 @@ PickedItem.propTypes = {
 	item: PropTypes.object.isRequired,
 	isOrderable: PropTypes.bool,
 	handleItemDelete: PropTypes.func.isRequired,
-	sortIndex: PropTypes.number.isRequired,
 	mode: PropTypes.string.isRequired,
 };
 
