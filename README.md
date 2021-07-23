@@ -166,6 +166,29 @@ const MyComponent = ({clientId}) => {
 | `icon` | `string` | `'plus'` | Icon to display.  |
 | `..buttonProps` | `object` | `null'` | Any other props passed are spread onto the internal Button component. |
 
+## InnerBlockSlider
+This component creates a horizontal slider with inner blocks inside of it.
+
+### Usage
+```js
+import { InnerBlockSlider } from '@10up/block-components';
+const MyComponent = ({clientId}) => {
+	<InnerBlockSlider
+		allowedBlock="core/cover"
+		slidesPerPage={1}
+		parentBlockId={clientId}
+	/>
+}
+```
+
+#### Props
+| Name       | Type              | Default  |  Description                                                   |
+| ---------- | ----------------- | -------- | -------------------------------------------------------------- |
+| `allowedBlock` | `string`    | `''`   | Block type to be allowed inside ofthe slider         |
+| `slidesPerPage` | `integer` | `1` | Number of slides to show per page |
+| `parentBlockId` | `string` | `''` | Client ID of parent block. This is required.  |
+
+
 ## Support Level
 
 **Active:** 10up is actively working on this, and we expect to continue work for the foreseeable future including keeping tested up to the most recent version of WordPress.  Bug reports, feature requests, questions, and pull requests are welcome.
