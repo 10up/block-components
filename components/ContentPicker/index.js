@@ -59,7 +59,7 @@ const ContentPicker = ({
 
 		newContent.unshift({
 			id: item.id,
-			type: item.subtype,
+			type: 'subtype' in item ? item.subtype : item.type,
 		});
 
 		onPickChange(newContent);
