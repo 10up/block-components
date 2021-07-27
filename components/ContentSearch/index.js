@@ -57,7 +57,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 
 		const searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
 			',',
-		)}&type=${mode}`;
+		)}&type=${mode}&_embed`;
 
 		if (searchCache[searchQuery]) {
 			setSearchResults(searchCache[searchQuery]);
