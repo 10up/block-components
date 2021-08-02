@@ -23,6 +23,8 @@ const InnerBlockSlider = ({ parentBlockId, slidesPerPage, allowedBlock, template
 
 	const slides = useRef();
 
+	const slideCount = useRef();
+
 	const totalPages = Math.floor(slideBlocks.length / slidesPerPage);
 
 	const totalWidth = (100 / slidesPerPage) * slideBlocks.length;
@@ -60,6 +62,26 @@ const InnerBlockSlider = ({ parentBlockId, slidesPerPage, allowedBlock, template
 	useEffect(() => {
 		// adjustHeights();
 	}, [currentSlide]);
+
+	/**
+	 * If a slide is added, switch to the new slide. If one is deleted, make sure we don't
+	 * show a non-existent slide.
+	 */
+	useEffect(() => {
+		if (!slideCount.current) {
+			slideCount.current = slideBlocks.length;
+		} else if (slideBlocks.length > slideCount.current) {
+			slideCount.current = slideBlocks.length;
+
+			setCurrentSlide(slideBlocks.length);
+		} else if (slideBlocks.length < slideCount.current) {
+			slideCount.current = slideBlocks.length;
+
+			if (currentSlide > slideBlocks.length) {
+				setCurrentSlide(slideBlocks.length);
+			}
+		}
+	}, [slideBlocks.length]);
 
 	const slidesCSS = css`
 		/* stylelint-disable */
