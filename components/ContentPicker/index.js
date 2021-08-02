@@ -59,7 +59,7 @@ const ContentPicker = ({
 
 		newContent.unshift({
 			id: item.id,
-			type: item.subtype,
+			type: 'subtype' in item ? item.subtype : item.type,
 		});
 
 		onPickChange(newContent);
@@ -109,6 +109,7 @@ const ContentPicker = ({
 					excludeItems={excludeItems}
 					onSelectItem={handleSelect}
 					contentTypes={contentTypes}
+					mode={mode}
 				/>
 			) : null}
 			{content.length ? (
