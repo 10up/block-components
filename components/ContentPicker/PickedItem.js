@@ -5,6 +5,7 @@ import { decodeEntities } from '@wordpress/html-entities';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { sortableHandle } from 'react-sortable-hoc';
+import { useEffect } from '@wordpress/element';
 
 /**
  * PickedItem
@@ -44,12 +45,17 @@ const Wrapper = styled('div')`
 	}
 `;
 
-const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode }) => {
+const PickedItem = ({ item, isOrderable, handleItemDelete, mode }) => {
 	const type = mode === 'post' ? 'postType' : 'taxonomy';
 
+	// This will return undefined while the item data is being fetched. If the item comes back
+	// empty, it will return null, which is handled in the effect below.
 	const preparedItem = useSelect(
 		(select) => {
-			const result = select('core').getEntityRecord(type, item.type, item.id);
+			const { getEntityRecord, hasFinishedResolution } = select('core');
+
+			const getEntityRecordParameters = [type, item.type, item.id];
+			const result = getEntityRecord(...getEntityRecordParameters);
 
 			if (result) {
 				return {
@@ -59,10 +65,21 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode }) =>
 				};
 			}
 
-			return null;
+			if (hasFinishedResolution('getEntityRecord', getEntityRecordParameters)) {
+				return null;
+			}
+
+			return undefined;
 		},
 		[item.id, type],
 	);
+
+	// If `getEntityRecord` did not return an item, pass it to the delete callback.
+	useEffect(() => {
+		if (preparedItem === null) {
+			handleItemDelete(item);
+		}
+	}, [item, handleItemDelete, preparedItem]);
 
 	return preparedItem ? (
 		<Wrapper
@@ -87,7 +104,7 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode }) =>
 			<button
 				type="button"
 				onClick={() => {
-					handleItemDelete(preparedItem, sortIndex);
+					handleItemDelete(preparedItem);
 				}}
 				aria-label={__('Delete item', '10up-block-components')}
 			>
@@ -107,7 +124,6 @@ PickedItem.propTypes = {
 	item: PropTypes.object.isRequired,
 	isOrderable: PropTypes.bool,
 	handleItemDelete: PropTypes.func.isRequired,
-	sortIndex: PropTypes.number.isRequired,
 	mode: PropTypes.string.isRequired,
 };
 

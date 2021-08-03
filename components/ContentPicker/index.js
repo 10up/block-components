@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import arrayMove from 'array-move';
 import styled from '@emotion/styled';
 import { select } from '@wordpress/data';
-import { useState } from '@wordpress/element'; // eslint-disable-line
+import { useState, useEffect, useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { ContentSearch } from '../ContentSearch';
 import SortableList from './SortableList';
@@ -10,9 +10,24 @@ import SortableList from './SortableList';
 const NAMESPACE = '10up-content-picker';
 
 /**
+ * Unfortunately, we had to use !important because on PickedItem we couldn't @emotion/styled css
+ * as it was breaking sortability from react-sortable-hoc
+ */
+const StyleWrapper = styled('div')`
+	& .block-editor-link-control__search-item {
+		border: none !important;
+		cursor: default;
+
+		&:hover {
+			background: transparent;
+		}
+	}
+`;
+
+/**
  * Content Picker
  *
- * @param {Object} props React props
+ * @param {object} props React props
  * @param props.label
  * @param props.mode
  * @param props.contentTypes
@@ -25,7 +40,7 @@ const NAMESPACE = '10up-content-picker';
  * @param props.content
  * @param props.uniqueContentItems
  * @param props.excludeCurrentPost
- * @return {*} React JSX
+ * @returns {*} React JSX
  */
 const ContentPicker = ({
 	label,
@@ -54,55 +69,40 @@ const ContentPicker = ({
 		}
 	}
 
-	function handleSelect(item) {
-		const newContent = [...content];
+	// Run onPickChange callback when content changes.
+	useEffect(() => {
+		onPickChange(content);
+	}, [content, onPickChange]);
 
-		newContent.unshift({
-			id: item.id,
-			type: 'subtype' in item ? item.subtype : item.type,
-		});
+	const handleSelect = (item) => {
+		setContent((previousContent) => [
+			{
+				id: item.id,
+				type: 'subtype' in item ? item.subtype : item.type,
+			},
+			...previousContent,
+		]);
+	};
 
-		onPickChange(newContent);
+	const onDeleteItem = (deletedItem) => {
+		setContent((previousContent) => previousContent.filter(({ id }) => id !== deletedItem.id));
+	};
 
-		setContent(newContent);
-	}
+	const excludeItems = useMemo(() => {
+		const items = uniqueContentItems ? [...content] : [];
 
-	function handleItemDelete(item, sortIndex) {
-		const newContent = [...content];
-
-		newContent.splice(sortIndex, 1);
-
-		onPickChange(newContent);
-
-		setContent(newContent);
-	}
-
-	/**
-	 * Unfortunately, we had to use !important because on PickedItem we couldn't @emotion/styled css
-	 * as it was breaking sortability from react-sortable-hoc
-	 */
-	const StyleWrapper = styled('div')`
-		& .block-editor-link-control__search-item {
-			border: none !important;
-			cursor: default;
-
-			&:hover {
-				background: transparent;
-			}
+		if (excludeCurrentPost && currentPostId) {
+			items.push({
+				id: currentPostId,
+			});
 		}
-	`;
 
-	const excludeItems = uniqueContentItems ? [...content] : [];
-
-	if (excludeCurrentPost && currentPostId) {
-		excludeItems.push({
-			id: currentPostId,
-		});
-	}
+		return items;
+	}, [content, currentPostId, excludeCurrentPost, uniqueContentItems]);
 
 	return (
 		<div className={`${NAMESPACE}`}>
-			{!content.length || (content.length && content.length < maxContentItems) ? (
+			{(!content.length || (content.length && content.length < maxContentItems)) && (
 				<ContentSearch
 					placeholder={placeholder}
 					label={label}
@@ -111,8 +111,8 @@ const ContentPicker = ({
 					contentTypes={contentTypes}
 					mode={mode}
 				/>
-			) : null}
-			{content.length ? (
+			)}
+			{Boolean(content?.length) > 0 && (
 				<StyleWrapper>
 					<span
 						style={{
@@ -127,19 +127,17 @@ const ContentPicker = ({
 					<SortableList
 						items={content}
 						useDragHandle
+						handleItemDelete={onDeleteItem}
 						isOrderable={isOrderable}
 						mode={mode}
-						handleItemDelete={handleItemDelete}
 						onSortEnd={({ oldIndex, newIndex }) => {
 							const newContent = [...arrayMove(content, oldIndex, newIndex)];
-
-							onPickChange(newContent);
 
 							setContent(newContent);
 						}}
 					/>
 				</StyleWrapper>
-			) : null}
+			)}
 		</div>
 	);
 };
