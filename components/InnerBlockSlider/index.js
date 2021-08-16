@@ -6,7 +6,13 @@ import PropTypes from 'prop-types';
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react';
 
-const InnerBlockSlider = ({ parentBlockId, slidesPerPage, allowedBlock, template }) => {
+const InnerBlockSlider = ({
+	parentBlockId,
+	slidesPerPage,
+	allowedBlock,
+	template,
+	slideHeight,
+}) => {
 	const [currentSlide, setCurrentSlide] = useState(1);
 
 	let innerBlockTemplate = template;
@@ -87,6 +93,7 @@ const InnerBlockSlider = ({ parentBlockId, slidesPerPage, allowedBlock, template
 		/* stylelint-disable */
 		width: ${totalWidth}%;
 		transform: translate3d(-${moveOffset}%, 0px, 0px);
+		${slideHeight ? `height: ${slideHeight};` : ''}
 
 		.block-editor-block-list__layout > div {
 			width: ${slideSlotWidth}%;
@@ -174,6 +181,7 @@ const InnerBlockSlider = ({ parentBlockId, slidesPerPage, allowedBlock, template
 InnerBlockSlider.defaultProps = {
 	slidesPerPage: 1,
 	template: null,
+	slideHeight: null,
 };
 
 InnerBlockSlider.propTypes = {
@@ -181,6 +189,7 @@ InnerBlockSlider.propTypes = {
 	parentBlockId: PropTypes.string.isRequired,
 	allowedBlock: PropTypes.string.isRequired,
 	template: PropTypes.array,
+	slideHeight: PropTypes.string,
 };
 
 export { InnerBlockSlider };
