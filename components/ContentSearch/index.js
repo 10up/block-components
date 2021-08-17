@@ -88,6 +88,10 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 
 				setSearchResults(newResults);
 				setIsLoading(false);
+			}).catch( (error) => {
+				console.error(error);
+				setSearchResults([]);
+				setIsLoading(false);
 			});
 		}
 	};
