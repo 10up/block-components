@@ -40,6 +40,18 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 		onSelectItem(item);
 	}
 
+	function filterResults(results) {
+		return results.filter((result) => {
+			let keep = true;
+
+			if (excludeItems.length) {
+				keep = excludeItems.every((item) => item.id !== result.id);
+			}
+
+			return keep;
+		});
+	}
+
 	const hasSearchString = !!searchString.length;
 	const hasSearchResults = !!searchResults.length;
 
@@ -60,7 +72,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 		)}&type=${mode}&_embed`;
 
 		if (searchCache[searchQuery]) {
-			setSearchResults(searchCache[searchQuery]);
+			setSearchResults(filterResults(searchCache[searchQuery]));
 			setIsLoading(false);
 		} else {
 			apiFetch({
@@ -70,20 +82,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 					return;
 				}
 
-				const newResults = results.filter((result) => {
-					let keep = true;
-
-					if (excludeItems.length) {
-						excludeItems.forEach((item) => {
-							if (item.id === result.id) {
-								keep = false;
-							}
-						});
-					}
-
-					return keep;
-				});
-
+				const newResults = filterResults(results);
 				searchCache[searchQuery] = newResults;
 
 				setSearchResults(newResults);
