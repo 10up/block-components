@@ -82,10 +82,8 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 					return;
 				}
 
-				const newResults = filterResults(results);
-				searchCache[searchQuery] = newResults;
-
-				setSearchResults(newResults);
+				searchCache[searchQuery] = results;
+				setSearchResults(filterResults(results));
 				setIsLoading(false);
 			});
 		}
