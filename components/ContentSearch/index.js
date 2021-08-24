@@ -25,7 +25,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 	 *
 	 * @param {*} item
 	 */
-	function handleSelection(item) {
+	function handleOnNavigate(item) {
 		if (item === 0) {
 			setSelectedItem(null);
 		}
@@ -33,11 +33,31 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 		setSelectedItem(item);
 	}
 
+	/**
+	 * handleItemSelection
+	 *
+	 * reset the search input & item container
+	 * trigger the onSelectItem callback passed in via props
+	 *
+	 * @param {*} item
+	 */
 	function handleItemSelection(item) {
 		setSearchResults([]);
 		setSearchString('');
 
 		onSelectItem(item);
+	}
+
+	function filterResults(results) {
+		return results.filter((result) => {
+			let keep = true;
+
+			if (excludeItems.length) {
+				keep = excludeItems.every((item) => item.id !== result.id);
+			}
+
+			return keep;
+		});
 	}
 
 	const hasSearchString = !!searchString.length;
@@ -60,7 +80,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 		)}&type=${mode}&_embed`;
 
 		if (searchCache[searchQuery]) {
-			setSearchResults(searchCache[searchQuery]);
+			setSearchResults(filterResults(searchCache[searchQuery]));
 			setIsLoading(false);
 		} else {
 			apiFetch({
@@ -70,23 +90,8 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 					return;
 				}
 
-				const newResults = results.filter((result) => {
-					let keep = true;
-
-					if (excludeItems.length) {
-						excludeItems.forEach((item) => {
-							if (item.id === result.id) {
-								keep = false;
-							}
-						});
-					}
-
-					return keep;
-				});
-
-				searchCache[searchQuery] = newResults;
-
-				setSearchResults(newResults);
+				searchCache[searchQuery] = results;
+				setSearchResults(filterResults(results));
 				setIsLoading(false);
 			});
 		}
@@ -99,7 +104,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 	}, []);
 
 	return (
-		<NavigableMenu onNavigate={handleSelection} orientation="vertical">
+		<NavigableMenu onNavigate={handleOnNavigate} orientation="vertical">
 			<TextControl
 				label={label}
 				value={searchString}
