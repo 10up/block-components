@@ -146,7 +146,7 @@ const ExampleBockEdit = ({ className }) => {
 ```
 ## IsAdmin
 
-A wrapper component that only renders child components if the current user has admin capabilities. The usecase for this component is when you have a certain setting that should be restricted to administrators only. For example when you have a block that requires an API token or crenentials you might only want Administrators to edit these. See [10up/maps-block-apple](https://github.com/10up/maps-block-apple/blob/774c6509eabb7ac48dcebea551f32ac7ddc5d246/src/Settings/AuthenticationSettings.js) for a real world example.
+A wrapper component that only renders child components if the current user has admin capabilities. The use case for this component is when you have a certain setting that should be restricted to administrators only. For example when you have a block that requires an API token or credentials you might only want Administrators to edit these. See [10up/maps-block-apple](https://github.com/10up/maps-block-apple/blob/774c6509eabb7ac48dcebea551f32ac7ddc5d246/src/Settings/AuthenticationSettings.js) for a real world example.
 
 ### Usage
 ```js
