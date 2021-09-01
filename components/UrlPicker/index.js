@@ -14,9 +14,8 @@
    __experimentalLinkControl as LinkControl,
  } from '@wordpress/block-editor';
  import { rawShortcut } from '@wordpress/keycodes';
- import { debounce } from 'lodash';
- import { searchablePostTypes } from './helper';
- 
+ import { debounce } from 'lodash'; 
+
  export default function UrlPicker({
    url,
    opensInNewTab,
@@ -31,6 +30,12 @@
  }) {
    const [isURLPickerOpen, setIsURLPickerOpen] = useState(false);
    const [selected, setSelected] = useState(false);
+
+   const searchablePostTypes = [
+		'post',
+		'page',
+	];
+
    const openLinkControl = () => {
 	 setIsURLPickerOpen(true);
 	 return false; // prevents default behaviour for event
