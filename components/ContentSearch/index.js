@@ -14,6 +14,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 	const [searchResults, setSearchResults] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [selectedItem, setSelectedItem] = useState(null);
+	const abortControllerRef = useRef();
 
 	const mounted = useRef(true);
 
@@ -72,7 +73,21 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 	 * @param {string} keyword search query string
 	 */
 	const handleSearchStringChange = (keyword) => {
+		if (abortControllerRef.current) {
+			abortControllerRef.current.abort();
+		}
+
 		setSearchString(keyword);
+
+		if (keyword.trim() === '') {
+			setIsLoading(false);
+			setSearchResults([]);
+			abortControllerRef.current = null;
+			return;
+		}
+
+		abortControllerRef.current = new AbortController();
+
 		setIsLoading(true);
 
 		const searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
@@ -80,22 +95,32 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 		)}&type=${mode}&_embed&per_page=${perPage}`;
 
 		if (searchCache[searchQuery]) {
-			console.log('Setting search results for ' + keyword);
+			abortControllerRef.current = null;
+
 			setSearchResults(filterResults(searchCache[searchQuery]));
 			setIsLoading(false);
 		} else {
+
 			apiFetch({
 				path: searchQuery,
+				signal: abortControllerRef.current.signal
 			}).then((results) => {
 				if (mounted.current === false) {
 					return;
 				}
 
+				abortControllerRef.current = null;
+
 				searchCache[searchQuery] = results;
 
-				if (keyword === searchString) {
-					console.log('Setting search results for ' + keyword);
-					setSearchResults(filterResults(results));
+				setSearchResults(filterResults(results));
+
+				setIsLoading(false);
+			}).catch((error, code) => {
+				// fetch_error means the request was aborted
+				if (error.code !== 'fetch_error') {
+					setSearchResults([]);
+					abortControllerRef.current = null;
 					setIsLoading(false);
 				}
 			});
@@ -137,7 +162,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 							{__('Nothing found.', '10up-block-components')}
 						</li>
 					)}
-					{searchResults.map((item, index) => {
+					{!isLoading && searchResults.map((item, index) => {
 						if (!item.title.length) {
 							return null;
 						}
