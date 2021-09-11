@@ -55,6 +55,7 @@ const ContentPicker = ({
 	content: presetContent,
 	uniqueContentItems,
 	excludeCurrentPost,
+	perPage
 }) => {
 	const [content, setContent] = useState(presetContent);
 
@@ -110,6 +111,7 @@ const ContentPicker = ({
 					onSelectItem={handleSelect}
 					contentTypes={contentTypes}
 					mode={mode}
+					perPage={perPage}
 				/>
 			)}
 			{Boolean(content?.length) > 0 && (
@@ -151,6 +153,7 @@ ContentPicker.defaultProps = {
 	contentTypes: ['post', 'page'],
 	placeholder: '',
 	content: [],
+	perPage: 10,
 	maxContentItems: 1,
 	uniqueContentItems: true,
 	isOrderable: false,
@@ -172,6 +175,7 @@ ContentPicker.propTypes = {
 	uniqueContentItems: PropTypes.bool,
 	excludeCurrentPost: PropTypes.bool,
 	maxContentItems: PropTypes.number,
+	perPage: PropTypes.number,
 };
 
 export { ContentPicker };

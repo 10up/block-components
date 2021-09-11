@@ -9,7 +9,7 @@ const NAMESPACE = '10up-content-search';
 
 const searchCache = {};
 
-const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, excludeItems }) => {
+const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, excludeItems, perPage }) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
@@ -77,9 +77,10 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 
 		const searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
 			',',
-		)}&type=${mode}&_embed`;
+		)}&type=${mode}&_embed&per_page=${perPage}`;
 
 		if (searchCache[searchQuery]) {
+			console.log('Setting search results for ' + keyword);
 			setSearchResults(filterResults(searchCache[searchQuery]));
 			setIsLoading(false);
 		} else {
@@ -91,8 +92,12 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 				}
 
 				searchCache[searchQuery] = results;
-				setSearchResults(filterResults(results));
-				setIsLoading(false);
+
+				if (keyword === searchString) {
+					console.log('Setting search results for ' + keyword);
+					setSearchResults(filterResults(results));
+					setIsLoading(false);
+				}
 			});
 		}
 	};
@@ -164,6 +169,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 ContentSearch.defaultProps = {
 	contentTypes: ['post', 'page'],
 	placeholder: '',
+	perPage: 10,
 	label: '',
 	excludeItems: [],
 	mode: 'post',
@@ -179,6 +185,7 @@ ContentSearch.propTypes = {
 	placeholder: PropTypes.string,
 	excludeItems: PropTypes.array,
 	label: PropTypes.string,
+	perPage: PropTypes.number
 };
 
 export { ContentSearch };
