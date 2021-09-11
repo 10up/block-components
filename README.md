@@ -46,7 +46,7 @@ function MyComponent( props ) {
 | `uniqueContentItems`          | `bool`   | `true`                   | Prevent duplicate items from being picked.
 | `excludeCurrentPost`          | `bool`   | `true`                   | Don't allow user to pick the current post. Only applicable on the editor screen.
 | `content`          | `array`   | `[]`                   | Array of items to prepopulate picker with. Must be in the format of: `[{id: 1, type: 'post'}, {id: 1, type: 'page'},... ]`. You cannot provide terms and posts to the same picker. Can also take the form `[1, 2, ...]` if only one `contentTypes` is provided.
-| `perPage`           | `number`   | `10`               | Number of items to show during search
+| `perPage`           | `number`   | `50`               | Number of items to show during search
 __NOTE:__ Content picker cannot validate that posts you pass it via `content` prop actually exist. If a post does not exist, it will not render as one of the picked items but will still be passed back as picked items if new items are picked/sorted. Therefore, on save you need to validate that all the picked posts/terms actually exist.
 
 The `contentTypes` will get used in a Rest Request to the `search` endpoint as the `subtypes`:
@@ -87,7 +87,7 @@ function MyComponent( props ) {
 | `placeholder`    | `string`   | `''`                   | Renders placeholder text inside the Search Field.                      |
 | `contentTypes`      | `array`    | `[ 'post', 'page' ]` | Names of the post types or taxonomies that should get searched                       |
 | `excludeItems`      | `array`    | `[ { id: 1, type: 'post' ]` | Items to exclude from search |
-| `perPage`           | `number`   | `10`               | Number of items to show during search
+| `perPage`           | `number`   | `50`               | Number of items to show during search
 
 
 ## useHasSelectedInnerBlock

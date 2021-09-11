@@ -153,7 +153,7 @@ ContentPicker.defaultProps = {
 	contentTypes: ['post', 'page'],
 	placeholder: '',
 	content: [],
-	perPage: 10,
+	perPage: 50,
 	maxContentItems: 1,
 	uniqueContentItems: true,
 	isOrderable: false,

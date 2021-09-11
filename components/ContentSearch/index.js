@@ -92,7 +92,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 
 		const searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
 			',',
-		)}&type=${mode}&_embed&per_page=${perPage}`;
+		)}&type=${mode}&_embed&per_page=50`;
 
 		if (searchCache[searchQuery]) {
 			abortControllerRef.current = null;
@@ -151,6 +151,8 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 						marginLeft: '0',
 						paddingLeft: '0',
 						listStyle: 'none',
+						maxHeight: '350px',
+						overflowY: 'scroll'
 					}}
 				>
 					{isLoading && <Spinner />}
@@ -194,7 +196,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 ContentSearch.defaultProps = {
 	contentTypes: ['post', 'page'],
 	placeholder: '',
-	perPage: 10,
+	perPage: 50,
 	label: '',
 	excludeItems: [],
 	mode: 'post',
