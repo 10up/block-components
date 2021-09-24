@@ -4,8 +4,10 @@ import { useState, useRef, useEffect } from '@wordpress/element'; // eslint-disa
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import SearchItem from './SearchItem';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/react';
 
-const NAMESPACE = '10up-content-search';
+const NAMESPACE = 'tenup-content-search';
 
 const searchCache = {};
 
@@ -133,6 +135,12 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 		};
 	}, []);
 
+	const listCSS = css`
+		/* stylelint-disable */
+		max-height: 350px;
+		overflow-y: scroll;
+	`;
+
 	return (
 		<NavigableMenu onNavigate={handleOnNavigate} orientation="vertical">
 			<TextControl
@@ -151,9 +159,8 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 						marginLeft: '0',
 						paddingLeft: '0',
 						listStyle: 'none',
-						maxHeight: '350px',
-						overflowY: 'scroll'
 					}}
+					css={listCSS}
 				>
 					{isLoading && <Spinner />}
 					{!isLoading && !hasSearchResults && (
