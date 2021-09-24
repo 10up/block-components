@@ -82,6 +82,8 @@ function MyComponent( props ) {
 | Name             | Type       | Default               | Description                                                            |
 | ---------------- | ---------- | --------------------- | ---------------------------------------------------------------------- |
 | `onSelectItem`   | `function` | `undefined`            | Function called when a searched item is clicke |
+| `onError`        | `function` | `dispatch`             | Create an error notice using the `dispatch` function from `wp.data('core/notices')` |
+| `onClearError`   | `function` | `dispatch`             | Clear the previous created error created by default from the `core/notices` screen |
 | `label`          | `string`   | `''`                   | Renders a label for the Search Field.                                  |
 | `mode`           | `string`   | `'post'`               | Either `post` or `term`                                 |
 | `placeholder`    | `string`   | `''`                   | Renders placeholder text inside the Search Field.                      |

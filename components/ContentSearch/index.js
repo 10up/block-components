@@ -1,5 +1,6 @@
 import { TextControl, Spinner, NavigableMenu } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
+import { dispatch } from '@wordpress/data';
 import { useState, useRef, useEffect } from '@wordpress/element'; // eslint-disable-line
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
@@ -11,7 +12,7 @@ const NAMESPACE = 'tenup-content-search';
 
 const searchCache = {};
 
-const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, excludeItems, perPage }) => {
+const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, excludeItems, perPage, onError, onClearError }) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
@@ -111,20 +112,19 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 					return;
 				}
 
+				onClearError();
+
 				abortControllerRef.current = null;
 
 				searchCache[searchQuery] = results;
 
 				setSearchResults(filterResults(results));
-
-				setIsLoading(false);
 			}).catch((error, code) => {
-				// fetch_error means the request was aborted
-				if (error.code !== 'fetch_error') {
-					setSearchResults([]);
-					abortControllerRef.current = null;
-					setIsLoading(false);
-				}
+				setSearchResults([]);
+				abortControllerRef.current = null;
+				onError( error, code );
+			}).finally( () => {
+				setIsLoading(false);
 			});
 		}
 	};
@@ -210,12 +210,25 @@ ContentSearch.defaultProps = {
 	onSelectItem: () => {
 		console.log('Select!'); // eslint-disable-line no-console
 	},
+	onError: ( error, code ) => {
+		const message = error && 'message' in error ? error.message : error.toString();
+		dispatch( 'core/notices' ).createErrorNotice( message, {
+			id: NAMESPACE,
+			isDismissible: true,
+			explicitDismiss: true,
+		});
+	},
+	onClearError: () => {
+		dispatch( 'core/notices' ).removeNotice( NAMESPACE );
+	}
 };
 
 ContentSearch.propTypes = {
 	contentTypes: PropTypes.array,
 	mode: PropTypes.string,
 	onSelectItem: PropTypes.func,
+	onError: PropTypes.func,
+	onClearError: PropTypes.func,
 	placeholder: PropTypes.string,
 	excludeItems: PropTypes.array,
 	label: PropTypes.string,
