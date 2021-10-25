@@ -54,14 +54,31 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, mode }) => {
 		(select) => {
 			const { getEntityRecord, hasFinishedResolution } = select('core');
 
-			const getEntityRecordParameters = [type, item.type, item.id];
+			let itemId = item.id;
+
+			if (item?.duplicateOf === undefined) {
+				itemId = item.id;
+			} else if (item.duplicateOf > 0) {
+				itemId = item.duplicateOf;
+			}
+
+			const getEntityRecordParameters = [type, item.type, itemId];
+
 			const result = getEntityRecord(...getEntityRecordParameters);
 
 			if (result) {
+				let resultId = result.id;
+
+				if (item?.duplicateOf === undefined) {
+					resultId = result.id;
+				} else if (item.duplicateOf > 0) {
+					resultId = item.id;
+				}
+
 				return {
 					title: mode === 'post' ? result.title.rendered : result.name,
 					url: result.link,
-					id: result.id,
+					id: resultId,
 				};
 			}
 

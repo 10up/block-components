@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import arrayMove from 'array-move';
 import styled from '@emotion/styled';
 import { select } from '@wordpress/data';
-import { useState, useEffect, useMemo } from '@wordpress/element';
+import { useState, useEffect, useMemo, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { ContentSearch } from '../ContentSearch';
 import SortableList from './SortableList';
@@ -61,6 +61,11 @@ const ContentPicker = ({
 
 	const currentPostId = select('core/editor')?.getCurrentPostId();
 
+	/**
+	 * Maintains keys that are already used in a loop.
+	 */
+	const keyHash = useRef({});
+
 	if (content.length && typeof content[0] !== 'object') {
 		for (let i = 0; i < content.length; i++) {
 			content[i] = {
@@ -70,23 +75,53 @@ const ContentPicker = ({
 		}
 	}
 
+	/**
+	 * Returns a unique key name.
+	 *
+	 * For example:
+	 * If the current key is 8 which is already used, the
+	 * new key returned will be 8-8. If 8-8 is repeated then
+	 * the new key returned will be 8-8-8 and so on...
+	 *
+	 * @param {object} keyHash An object which maintains the keys already used.
+	 * @param {string} currentKey The key of the currently iterated item.
+	 * @param {string} previousKey The key that was first iterated.
+	 * @returns {Array} Returns a tuple of the first iterated key and the unique key returned.
+	 */
+	function getUniqueKey(keyHash = {}, currentKey = '', previousKey = '') {
+		const keyToCheck = !previousKey ? currentKey : `${previousKey}-${currentKey}`;
+		const firstKey = previousKey || currentKey;
+
+		if (!keyHash[keyToCheck]) {
+			keyHash[keyToCheck] = true;
+			return [firstKey, keyToCheck];
+		}
+
+		return getUniqueKey(keyHash, keyToCheck, firstKey);
+	}
+
 	// Run onPickChange callback when content changes.
 	useEffect(() => {
 		onPickChange(content);
 	}, [content, onPickChange]);
 
 	const handleSelect = (item) => {
-		setContent((previousContent) => [
-			{
-				id: item.id,
-				type: 'subtype' in item ? item.subtype : item.type,
-			},
-			...previousContent,
-		]);
+		setContent((previousContent) => {
+			const [key, uid] = getUniqueKey(keyHash.current, item.id);
+			return [
+				{
+					id: uid,
+					type: 'subtype' in item ? item.subtype : item.type,
+					duplicateOf: key !== uid ? key : 0,
+				},
+				...previousContent,
+			];
+		});
 	};
 
 	const onDeleteItem = (deletedItem) => {
 		setContent((previousContent) => previousContent.filter(({ id }) => id !== deletedItem.id));
+		delete keyHash.current[deletedItem.id];
 	};
 
 	const excludeItems = useMemo(() => {
