@@ -1,12 +1,24 @@
 const ChevronLeft = () => (
-	<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="none" viewBox="0 0 50 50">
-		<path stroke="#1E1E1E" strokeWidth="1.5" d="M8.167 3.792L5.25 7l2.917 3.208" />
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="40"
+		height="40"
+		fill="none"
+		viewBox="0 0 14.4 23.7"
+	>
+		<path stroke="currentColor" strokeWidth="3" d="M11.19,1.81l-9.12,10,9.12,10" />
 	</svg>
 );
 
 const ChevronRight = () => (
-	<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="none" viewBox="0 0 50 50">
-		<path stroke="#1E1E1E" strokeWidth="1.5" d="M5.833 10.208L8.75 7 5.833 3.792" />
+	<svg
+		xmlns="http://www.w3.org/2000/svg"
+		width="40"
+		height="40"
+		fill="none"
+		viewBox="0 0 14.4 23.7"
+	>
+		<path stroke="currentColor" strokeWidth="3" d="M2.1,21.9l9.1-10l-9.1-10" />
 	</svg>
 );
 
