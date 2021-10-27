@@ -5,6 +5,7 @@ import { InnerBlocks } from '@wordpress/block-editor';
 import PropTypes from 'prop-types';
 /** @jsx jsx */
 import { jsx, css } from '@emotion/react';
+import { ChevronLeft, ChevronRight } from './icons';
 
 const InnerBlockSlider = ({
 	parentBlockId,
@@ -158,7 +159,7 @@ const InnerBlockSlider = ({
 						}}
 						type="button"
 					>
-						&lt;
+						<ChevronLeft />
 					</button>
 				</div>
 				<div className={`next-container ${!nextEnabled ? 'disable' : ''}`}>
@@ -170,7 +171,7 @@ const InnerBlockSlider = ({
 						}}
 						type="button"
 					>
-						&gt;
+						<ChevronRight />
 					</button>
 				</div>
 			</div>

@@ -94,7 +94,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 
 		const searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
 			',',
-		)}&type=${mode}&_embed&per_page=50`;
+		)}&type=${mode}&_embed&per_page=${perPage}`;
 
 		if (searchCache[searchQuery]) {
 			abortControllerRef.current = null;
