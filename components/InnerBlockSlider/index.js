@@ -14,7 +14,7 @@ const InnerBlockSlider = ({
 	template,
 	slideHeight,
 }) => {
-	const [currentSlide, setCurrentSlide] = useState(1);
+	const [currentPage, setCurrentPage] = useState(1);
 
 	let innerBlockTemplate = template;
 
@@ -32,27 +32,13 @@ const InnerBlockSlider = ({
 
 	const slideCount = useRef();
 
-	const totalPages = Math.floor(slideBlocks.length / slidesPerPage);
+	const totalPages = Math.ceil(slideBlocks.length / slidesPerPage);
 
 	const totalWidth = (100 / slidesPerPage) * slideBlocks.length;
 
 	const slideSlotWidth = 100 / slideBlocks.length;
 
-	const moveOffset = slideSlotWidth * (currentSlide - 1);
-
-	const setPage = (page) => {
-		const slideNumber = page * slidesPerPage;
-
-		setCurrentSlide(slideNumber);
-	};
-
-	const getCurrentPage = () => {
-		if (slidesPerPage === 1) {
-			return currentSlide;
-		}
-
-		return Math.ceil(currentSlide / slidesPerPage);
-	};
+	const moveOffset = slideSlotWidth * (currentPage - 1) * slidesPerPage;
 
 	const addSlide = () => {
 		const created = createBlock(allowedBlock);
@@ -60,15 +46,11 @@ const InnerBlockSlider = ({
 	};
 
 	/**
-	 * Reset pag to 1 if slidesPerPage changes
+	 * Reset page to 1 if slidesPerPage changes
 	 */
 	useEffect(() => {
-		setCurrentSlide(1);
+		setCurrentPage(1);
 	}, [slidesPerPage]);
-
-	useEffect(() => {
-		// adjustHeights();
-	}, [currentSlide]);
 
 	/**
 	 * If a slide is added, switch to the new slide. If one is deleted, make sure we don't
@@ -78,14 +60,16 @@ const InnerBlockSlider = ({
 		if (!slideCount.current) {
 			slideCount.current = slideBlocks.length;
 		} else if (slideBlocks.length > slideCount.current) {
+			// Slide added
 			slideCount.current = slideBlocks.length;
 
-			setCurrentSlide(slideBlocks.length);
+			setCurrentPage(totalPages);
 		} else if (slideBlocks.length < slideCount.current) {
+			// Slide deleted
 			slideCount.current = slideBlocks.length;
 
-			if (currentSlide > slideBlocks.length) {
-				setCurrentSlide(slideBlocks.length);
+			if (currentPage > totalPages) {
+				setCurrentPage(totalPages);
 			}
 		}
 	}, [slideBlocks.length]);
@@ -101,15 +85,8 @@ const InnerBlockSlider = ({
 		}
 	`;
 
-	const prevEnabled = currentSlide > 1;
-
-	let nextEnabled = false;
-
-	if (slidesPerPage === 1) {
-		nextEnabled = currentSlide < slideBlocks.length;
-	} else {
-		nextEnabled = currentSlide <= slideBlocks.length - slidesPerPage;
-	}
+	const prevEnabled = currentPage > 1;
+	const nextEnabled = currentPage < totalPages;
 
 	return (
 		<div className="inner-block-slider">
@@ -128,11 +105,11 @@ const InnerBlockSlider = ({
 					<button
 						aria-label={`Slide ${i + 1}`}
 						onClick={() => {
-							setPage(i + 1);
+							setCurrentPage(i + 1);
 						}}
 						type="button"
 						key={i + 1}
-						className={`dot ${getCurrentPage() === i + 1 ? 'current' : ''}`}
+						className={`dot ${currentPage === i + 1 ? 'current' : ''}`}
 					/>
 				))}
 
@@ -154,7 +131,7 @@ const InnerBlockSlider = ({
 					<button
 						onClick={() => {
 							if (prevEnabled) {
-								setCurrentSlide(currentSlide - 1);
+								setCurrentPage(currentPage - 1);
 							}
 						}}
 						type="button"
@@ -166,7 +143,7 @@ const InnerBlockSlider = ({
 					<button
 						onClick={() => {
 							if (nextEnabled) {
-								setCurrentSlide(currentSlide + 1);
+								setCurrentPage(currentPage + 1);
 							}
 						}}
 						type="button"
