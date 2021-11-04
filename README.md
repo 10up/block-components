@@ -259,7 +259,7 @@ The `registerBlockExtention` api is a syntactical sugar wrapper to make it easie
 
 ### Usage
 ```js
-import { regierBlockOptions } from '@10up/block-components';
+import { registerBlockExtention } from '@10up/block-components';
 
 function BlockEdit() {...}
 function generateClassName() {...}
