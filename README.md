@@ -261,8 +261,28 @@ The `registerBlockExtention` api is a syntactical sugar wrapper to make it easie
 ```js
 import { registerBlockExtention } from '@10up/block-components';
 
-function BlockEdit() {...}
-function generateClassName() {...}
+/**
+ * BlockEdit
+ *
+ * a react component that will get mounted in the Editor when the block is
+ * selected. It is reccomended to use Slots like `BlockControls` or `InspectorControls`
+ * in here to put settings into the blocks toolbar or sidebar.
+ *
+ * @param {object} props block props
+ * @returns {JSX}
+ */
+function BlockEdit(props) {...}
+
+/**
+ * generateClassName
+ *
+ * a function to generate the new className string that should get added to
+ * the wrapping element of the block.
+ *
+ * @param {object} attributes block attributes
+ * @returns {string}
+ */
+function generateClassName(attributes) {...}
 
 registerBlockExtention(
 	'core/group',
