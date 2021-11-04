@@ -274,7 +274,7 @@ import { registerBlockExtention } from '@10up/block-components';
 function BlockEdit(props) {...}
 
 /**
- * generateClassName
+ * generateClassNames
  *
  * a function to generate the new className string that should get added to
  * the wrapping element of the block.
@@ -282,7 +282,7 @@ function BlockEdit(props) {...}
  * @param {object} attributes block attributes
  * @returns {string}
  */
-function generateClassName(attributes) {...}
+function generateClassNames(attributes) {...}
 
 registerBlockExtention(
 	'core/group',
@@ -302,7 +302,7 @@ registerBlockExtention(
 				default: 'green'
 			}
 		},
-		classNameGenerator: generateClassName,
+		classNameGenerator: generateClassNames,
 		Edit: BlockEdit,
 	}
 );
