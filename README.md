@@ -254,8 +254,8 @@ const MyComponent = ({clientId}) => {
 | `parentBlockId` | `string` | `''` | Client ID of parent block. This is required.  |
 
 
-## registerBlockOptions
-The `regiserBlockOptions` api is a syntactical sugar wrapper to make it easier to add custom settings that produce classnames to any blocks. The reason for this api is a limitation in custom block styles that mean that in many cases it is better to add new settings to blocks than it is to use block styles. This API is here to make that easier
+## registerBlockExtention
+The `registerBlockExtention` api is a syntactical sugar wrapper to make it easier to add custom settings that produce classnames to any blocks. The reason for this api is a limitation in custom block styles that mean that in many cases it is better to add new settings to blocks than it is to use block styles. This API is here to make that easier
 
 ### Usage
 ```js
@@ -264,11 +264,11 @@ import { regierBlockOptions } from '@10up/block-components';
 function BlockEdit() {...}
 function generateClassName() {...}
 
-registerBlockOptions(
+registerBlockExtention(
 	'core/group',
 	{
-		identifier: 'background-patterns',
-		newAttributes: {
+		extentionName: 'background-patterns',
+		attributes: {
 			hasBackgroundPattern: {
 				type: 'boolean',
 				default: false,
@@ -283,19 +283,19 @@ registerBlockOptions(
 			}
 		},
 		classNameGenerator: generateClassName,
-		BlockEditAdditions: BlockEdit,
+		Edit: BlockEdit,
 	}
 );
 ```
 
 ### Options
-| Name      | Type     | Description                                       |
-|-----------|----------|---------------------------------------------------|
-| blockName | `string` | Name of the block the options should get added to |
-| options.identifier | `string` | Unique Identifier of the option added    |
-| options.newAttributes | `object` | Block Attributes that should get added to the block |
+| Name                       | Type       | Description                                       |
+|----------------------------|------------|---------------------------------------------------|
+| blockName                  | `string`   | Name of the block the options should get added to |
+| options.extentionName      | `string`   | Unique Identifier of the option added    |
+| options.attributes         | `object`   | Block Attributes that should get added to the block |
 | options.classNameGenerator | `funciton` | Funciton that gets passed the attributes of the block to generate a class name string |
-| options.BlockEditAdditions | `funciton` | BlockEdit component like in `registerBlockType` only without the actual block. So onyl using slots like the `InspectorControls` is advised. |
+| options.Edit               | `funciton` | BlockEdit component like in `registerBlockType` only without the actual block. So onyl using slots like the `InspectorControls` is advised. |
 ## Support Level
 
 **Active:** 10up is actively working on this, and we expect to continue work for the foreseeable future including keeping tested up to the most recent version of WordPress.  Bug reports, feature requests, questions, and pull requests are welcome.
