@@ -58,11 +58,17 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, mode }) => {
 			const result = getEntityRecord(...getEntityRecordParameters);
 
 			if (result) {
-				return {
+				const newItem = {
 					title: mode === 'post' ? result.title.rendered : result.name,
 					url: result.link,
 					id: result.id,
 				};
+
+				if (item.uuid) {
+					newItem.uuid = item.uuid;
+				}
+
+				return newItem;
 			}
 
 			if (hasFinishedResolution('getEntityRecord', getEntityRecordParameters)) {

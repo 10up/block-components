@@ -10,10 +10,11 @@ const SortableList = SortableContainer(({ items, isOrderable, handleItemDelete, 
 					'-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif',
 			}}
 		>
-			{items.map((item, index) => (
-				<ItemComponent
+			{items.map((item, index) => {
+				const itemKey = item.uuid ? item.uuid : item.id;
+				return <ItemComponent
 					isOrderable={isOrderable && items.length > 1 ? isOrderable : false}
-					key={`item-${item.id}`}
+					key={`item-${itemKey}`}
 					index={index}
 					handleItemDelete={handleItemDelete}
 					sortIndex={index}
@@ -21,7 +22,7 @@ const SortableList = SortableContainer(({ items, isOrderable, handleItemDelete, 
 					mode={mode}
 					totalItems={items.length}
 				/>
-			))}
+			})}
 		</div>
 	);
 });
