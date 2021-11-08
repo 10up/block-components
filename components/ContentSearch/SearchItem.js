@@ -26,6 +26,7 @@ const SearchItem = ({ suggestion, onClick, searchTerm, isSelected, id, contentTy
 			}`}
 			style={{
 				borderRadius: '0',
+				boxSizing: 'border-box',
 			}}
 		>
 			<span className="block-editor-link-control__search-item-header">
