@@ -4,16 +4,19 @@ import { useState, useRef, useEffect } from '@wordpress/element'; // eslint-disa
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import SearchItem from './SearchItem';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/react';
 
-const NAMESPACE = '10up-content-search';
+const NAMESPACE = 'tenup-content-search';
 
 const searchCache = {};
 
-const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, excludeItems }) => {
+const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, excludeItems, perPage }) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	const [selectedItem, setSelectedItem] = useState(null);
+	const abortControllerRef = useRef();
 
 	const mounted = useRef(true);
 
@@ -72,27 +75,56 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 	 * @param {string} keyword search query string
 	 */
 	const handleSearchStringChange = (keyword) => {
+		if (abortControllerRef.current) {
+			abortControllerRef.current.abort();
+		}
+
 		setSearchString(keyword);
+
+		if (keyword.trim() === '') {
+			setIsLoading(false);
+			setSearchResults([]);
+			abortControllerRef.current = null;
+			return;
+		}
+
+		abortControllerRef.current = new AbortController();
+
 		setIsLoading(true);
 
 		const searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
 			',',
-		)}&type=${mode}&_embed`;
+		)}&type=${mode}&_embed&per_page=${perPage}`;
 
 		if (searchCache[searchQuery]) {
+			abortControllerRef.current = null;
+
 			setSearchResults(filterResults(searchCache[searchQuery]));
 			setIsLoading(false);
 		} else {
+
 			apiFetch({
 				path: searchQuery,
+				signal: abortControllerRef.current.signal
 			}).then((results) => {
 				if (mounted.current === false) {
 					return;
 				}
 
+				abortControllerRef.current = null;
+
 				searchCache[searchQuery] = results;
+
 				setSearchResults(filterResults(results));
+
 				setIsLoading(false);
+			}).catch((error, code) => {
+				// fetch_error means the request was aborted
+				if (error.code !== 'fetch_error') {
+					setSearchResults([]);
+					abortControllerRef.current = null;
+					setIsLoading(false);
+				}
 			});
 		}
 	};
@@ -102,6 +134,12 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 			mounted.current = false;
 		};
 	}, []);
+
+	const listCSS = css`
+		/* stylelint-disable */
+		max-height: 350px;
+		overflow-y: scroll;
+	`;
 
 	return (
 		<NavigableMenu onNavigate={handleOnNavigate} orientation="vertical">
@@ -122,6 +160,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 						paddingLeft: '0',
 						listStyle: 'none',
 					}}
+					css={listCSS}
 				>
 					{isLoading && <Spinner />}
 					{!isLoading && !hasSearchResults && (
@@ -132,7 +171,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 							{__('Nothing found.', '10up-block-components')}
 						</li>
 					)}
-					{searchResults.map((item, index) => {
+					{!isLoading && searchResults.map((item, index) => {
 						if (!item.title.length) {
 							return null;
 						}
@@ -164,6 +203,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 ContentSearch.defaultProps = {
 	contentTypes: ['post', 'page'],
 	placeholder: '',
+	perPage: 50,
 	label: '',
 	excludeItems: [],
 	mode: 'post',
@@ -179,6 +219,7 @@ ContentSearch.propTypes = {
 	placeholder: PropTypes.string,
 	excludeItems: PropTypes.array,
 	label: PropTypes.string,
+	perPage: PropTypes.number
 };
 
 export { ContentSearch };
