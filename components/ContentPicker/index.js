@@ -6,6 +6,7 @@ import { useState, useEffect, useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { ContentSearch } from '../ContentSearch';
 import SortableList from './SortableList';
+import { v4 as uuidv4 } from 'uuid';
 
 const NAMESPACE = '10up-content-picker';
 
@@ -61,6 +62,10 @@ const ContentPicker = ({
 
 	const currentPostId = select('core/editor')?.getCurrentPostId();
 
+	/**
+	 * This legacy code allows you to pass in only IDs to content like [ 1, 4, 5 ].
+	 * This really shouldn't be done as of version 1.5.0.
+	 */
 	if (content.length && typeof content[0] !== 'object') {
 		for (let i = 0; i < content.length; i++) {
 			content[i] = {
@@ -79,6 +84,7 @@ const ContentPicker = ({
 		setContent((previousContent) => [
 			{
 				id: item.id,
+				uuid: uuidv4(),
 				type: 'subtype' in item ? item.subtype : item.type,
 			},
 			...previousContent,
@@ -86,7 +92,15 @@ const ContentPicker = ({
 	};
 
 	const onDeleteItem = (deletedItem) => {
-		setContent((previousContent) => previousContent.filter(({ id }) => id !== deletedItem.id));
+		setContent((previousContent) => {
+			return previousContent.filter(({ id, uuid }) => {
+				if (deletedItem.uuid) {
+					return uuid !== deletedItem.uuid;
+				} else {
+					return id !== deletedItem.id;
+				}
+			});
+		});
 	};
 
 	const excludeItems = useMemo(() => {
@@ -94,7 +108,7 @@ const ContentPicker = ({
 
 		if (excludeCurrentPost && currentPostId) {
 			items.push({
-				id: currentPostId,
+				id: currentPostId
 			});
 		}
 

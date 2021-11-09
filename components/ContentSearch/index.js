@@ -138,7 +138,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 	const listCSS = css`
 		/* stylelint-disable */
 		max-height: 350px;
-		overflow-y: scroll;
+		overflow-y: auto;
 	`;
 
 	return (
