@@ -89,6 +89,7 @@ const Link = ({
 }) => {
 	const ref = useRef();
 	const [isLinkOpen, setIsLinkOpen] = useState(false);
+	console.log('isLinkOpen', isLinkOpen);
 
 	function onKeyDown(event) {
 		if (isKeyboardEvent.primary(event, 'k') || (!url && event.keyCode === ENTER)) {
@@ -100,15 +101,18 @@ const Link = ({
 	 * Focus the Link label text and select it.
 	 */
 	function selectLabelText() {
-		ref.current.focus();
-		const { ownerDocument } = ref.current;
-		const { defaultView } = ownerDocument;
-		const selection = defaultView.getSelection();
-		const range = ownerDocument.createRange();
-		// Get the range of the current ref contents so we can add this range to the selection.
-		range.selectNodeContents(ref.current);
-		selection.removeAllRanges();
-		selection.addRange(range);
+		// ref.current.focus();
+
+		console.log(ref.current);
+
+		// const { ownerDocument } = ref.current;
+		// const { defaultView } = ownerDocument;
+		// const selection = defaultView.getSelection();
+		// const range = ownerDocument.createRange();
+		// // Get the range of the current ref contents so we can add this range to the selection.
+		// range.selectNodeContents(ref.current);
+		// selection.removeAllRanges();
+		// selection.addRange(range);
 	}
 
 	const link = {
@@ -141,26 +145,28 @@ const Link = ({
 	useEffect(() => {
 		if (!isSelected) {
 			setIsLinkOpen(false);
+			console.log('setIsLinkOpen(false)');
 		}
 	}, [isSelected]);
 
 	// If the LinkControl popover is open and the URL has changed, close the LinkControl and focus the label text.
-	useEffect(() => {
-		if (isLinkOpen && url) {
-			// Does this look like a URL and have something TLD-ish?
-			if (isURL(prependHTTP(label)) && /^.+\.[a-z]+/.test(label)) {
-				// Focus and select the label text.
-				selectLabelText();
-			} else {
-				// Focus it (but do not select).
-				placeCaretAtHorizontalEdge(ref.current, true);
-			}
-		}
-	}, [isLinkOpen, label, url]);
+	// useEffect(() => {
+	// 	if (isLinkOpen && url) {
+	// 		// Does this look like a URL and have something TLD-ish?
+	// 		if (isURL(prependHTTP(label)) && /^.+\.[a-z]+/.test(label)) {
+	// 			// Focus and select the label text.
+	// 			selectLabelText();
+	// 		} else {
+	// 			// Focus it (but do not select).
+	// 			placeCaretAtHorizontalEdge(ref.current, true);
+	// 		}
+	// 	}
+	// }, [isLinkOpen, label, url]);
 
 	const linkStyle = {
 		textDecoration: 'underline',
 		color: 'var(--wp--style--color--link, var(--global--color-primary))',
+		position: 'relative',
 	};
 
 	return (
@@ -179,13 +185,13 @@ const Link = ({
 					withoutInteractiveFormatting
 					allowedFormats={['core/bold', 'core/italic', 'core/strikethrough']}
 					onClick={() => {
-						if (!url) setIsLinkOpen(true);
+						setIsLinkOpen(true);
 					}}
 				/>
 
 				{isLinkOpen && (
 					<Popover
-						position="bottom left"
+						position="top center"
 						onClose={() => setIsLinkOpen(false)}
 						anchorRef={ref.current}
 					>
