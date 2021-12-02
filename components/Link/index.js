@@ -10,13 +10,12 @@ import { __ } from '@wordpress/i18n';
 import { useState, useEffect, useRef } from '@wordpress/element';
 import { Popover } from '@wordpress/components';
 import { isKeyboardEvent, ENTER } from '@wordpress/keycodes';
-import { placeCaretAtHorizontalEdge } from '@wordpress/dom';
 import {
 	__experimentalLinkControl as LinkControl,
 	useBlockProps,
 	RichText,
+	useBlockEditContext,
 } from '@wordpress/block-editor';
-import { isURL, prependHTTP, safeDecodeURI } from '@wordpress/url';
 
 /**
  * Removes HTML from a given string.
@@ -71,13 +70,19 @@ function getSuggestionsQuery(type, kind) {
  * visuals in the block editor as a whole.
  *
  * @param props {object}
- * @param props.attributes {object}
- * @param props.setAttributes {function}
+ * @param props.value {string} 							The text to show inside the link
+ * @param props.type {string} 							Post or Page, used to autosuggest content for URL
+ * @param props.opensInNewTab {boolean} 				Should the link open in a new tab?
+ * @param props.url {string} 							The actual link to be set as href
+ * @param props.onLinkChange {onLinfunctionkChange} 	Callback when the URL is changed
+ * @param props.onTextChange {function} 				Callback when the link's text is changed
+ * @param props.kind {string} 							Page or Post
+ * @param props.placeholder {string} 					Text visible before actual value is inserted
  *
  * @returns JSX.Element
  */
 const Link = ({
-	label,
+	value,
 	type,
 	opensInNewTab,
 	url,
@@ -85,11 +90,10 @@ const Link = ({
 	onTextChange,
 	kind,
 	placeholder,
-	isSelected,
 }) => {
 	const ref = useRef();
 	const [isLinkOpen, setIsLinkOpen] = useState(false);
-	console.log('isLinkOpen', isLinkOpen);
+	const { isSelected } = useBlockEditContext();
 
 	function onKeyDown(event) {
 		if (isKeyboardEvent.primary(event, 'k') || (!url && event.keyCode === ENTER)) {
@@ -97,28 +101,10 @@ const Link = ({
 		}
 	}
 
-	/**
-	 * Focus the Link label text and select it.
-	 */
-	function selectLabelText() {
-		// ref.current.focus();
-
-		console.log(ref.current);
-
-		// const { ownerDocument } = ref.current;
-		// const { defaultView } = ownerDocument;
-		// const selection = defaultView.getSelection();
-		// const range = ownerDocument.createRange();
-		// // Get the range of the current ref contents so we can add this range to the selection.
-		// range.selectNodeContents(ref.current);
-		// selection.removeAllRanges();
-		// selection.addRange(range);
-	}
-
 	const link = {
 		url,
 		opensInNewTab,
-		title: label && navStripHTML(label), // don't allow HTML to display inside the <LinkControl>
+		title: value && navStripHTML(value), // don't allow HTML to display inside the <LinkControl>
 	};
 
 	const classes = classnames('wp-block-navigation-item__content', {
@@ -145,23 +131,8 @@ const Link = ({
 	useEffect(() => {
 		if (!isSelected) {
 			setIsLinkOpen(false);
-			console.log('setIsLinkOpen(false)');
 		}
 	}, [isSelected]);
-
-	// If the LinkControl popover is open and the URL has changed, close the LinkControl and focus the label text.
-	// useEffect(() => {
-	// 	if (isLinkOpen && url) {
-	// 		// Does this look like a URL and have something TLD-ish?
-	// 		if (isURL(prependHTTP(label)) && /^.+\.[a-z]+/.test(label)) {
-	// 			// Focus and select the label text.
-	// 			selectLabelText();
-	// 		} else {
-	// 			// Focus it (but do not select).
-	// 			placeCaretAtHorizontalEdge(ref.current, true);
-	// 		}
-	// 	}
-	// }, [isLinkOpen, label, url]);
 
 	const linkStyle = {
 		textDecoration: 'underline',
@@ -178,7 +149,7 @@ const Link = ({
 					ref={ref}
 					identifier="label"
 					className="wp-block-navigation-item__label"
-					value={label}
+					value={value}
 					onChange={onTextChange}
 					aria-label={__('Link text')}
 					placeholder={placeholder}
@@ -194,6 +165,7 @@ const Link = ({
 						position="top center"
 						onClose={() => setIsLinkOpen(false)}
 						anchorRef={ref.current}
+						focusOnMount={false}
 					>
 						<LinkControl
 							hasTextControl
