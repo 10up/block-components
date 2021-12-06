@@ -18,6 +18,11 @@ import {
 } from '@wordpress/block-editor';
 
 /**
+ * React Dependencies
+ */
+import PropTypes from 'prop-types';
+
+/**
  * Removes HTML from a given string.
  * Note the does not provide XSS protection or otherwise attempt
  * to filter strings with malicious intent.
@@ -182,6 +187,26 @@ const Link = ({
 			</a>
 		</span>
 	);
+};
+
+Link.defaultProps = {
+	type: '',
+	url: '',
+	kind: '',
+	value: '',
+	opensInNewTab: false,
+	placeholder: 'Link text ...',
+};
+
+Link.propTypes = {
+	value: PropTypes.string,
+	type: PropTypes.string,
+	kind: PropTypes.string,
+	opensInNewTab: PropTypes.bool,
+	url: PropTypes.string,
+	onLinkChange: PropTypes.func.isRequired,
+	onTextChange: PropTypes.func.isRequired,
+	placeholder: PropTypes.string,
 };
 
 export default Link;
