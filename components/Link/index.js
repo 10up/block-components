@@ -191,21 +191,19 @@ const Link = ({
 
 Link.defaultProps = {
 	type: '',
-	url: '',
 	kind: '',
-	value: '',
-	opensInNewTab: false,
 	placeholder: 'Link text ...',
 };
 
 Link.propTypes = {
-	value: PropTypes.string,
-	type: PropTypes.string,
-	kind: PropTypes.string,
-	opensInNewTab: PropTypes.bool,
-	url: PropTypes.string,
+	value: PropTypes.string.isRequired,
+	url: PropTypes.string.isRequired,
 	onLinkChange: PropTypes.func.isRequired,
 	onTextChange: PropTypes.func.isRequired,
+	opensInNewTab: PropTypes.bool.isRequired,
+
+	type: PropTypes.string,
+	kind: PropTypes.string,
 	placeholder: PropTypes.string,
 };
 
