@@ -2,13 +2,15 @@
  * External dependencies
  */
 import classnames from 'classnames';
+import styled from '@emotion/styled';
+import PropTypes from 'prop-types';
 
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { useState, useEffect, useRef } from '@wordpress/element';
-import { Popover } from '@wordpress/components';
+import { Popover, Icon, Tooltip } from '@wordpress/components';
 import { isKeyboardEvent, ENTER } from '@wordpress/keycodes';
 import {
 	__experimentalLinkControl as LinkControl,
@@ -16,11 +18,6 @@ import {
 	RichText,
 	useBlockEditContext,
 } from '@wordpress/block-editor';
-
-/**
- * React Dependencies
- */
-import PropTypes from 'prop-types';
 
 /**
  * Removes HTML from a given string.
@@ -68,23 +65,51 @@ function getSuggestionsQuery(type, kind) {
 	}
 }
 
+const LinkOutput = styled.a`
+	--color--warning: #f00;
+
+	color: var(--wp--style--color--link, var(--global--color-primary));
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5em;
+
+	/* This  holds the text URL input */
+	& > div {
+		text-decoration: underline;
+	}
+
+	.dashicon {
+		text-decoration: none;
+		font-size: 1em;
+		width: 1.5em;
+		height: 1.5em;
+		border-radius: 50%;
+		background: transparent;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--color--warning);
+	}
+`;
+
 /**
  * Link component that can be used inside other Gutenberg blocks for setting up URLs.
  *
  * The link should not be visible if the block is not focused. This will mainain nicer
  * visuals in the block editor as a whole.
  *
- * @param props {object}
- * @param props.value {string} 							The text to show inside the link
- * @param props.type {string} 							Post or Page, used to autosuggest content for URL
- * @param props.opensInNewTab {boolean} 				Should the link open in a new tab?
- * @param props.url {string} 							The actual link to be set as href
- * @param props.onLinkChange {onLinfunctionkChange} 	Callback when the URL is changed
- * @param props.onTextChange {function} 				Callback when the link's text is changed
- * @param props.kind {string} 							Page or Post
- * @param props.placeholder {string} 					Text visible before actual value is inserted
+ * @param {object} props								All properties passed to the component.
+ * @param {string} props.value 							The text to show inside the link
+ * @param {string} props.type 							Post or Page, used to autosuggest content for URL
+ * @param {boolean} props.opensInNewTab 				Should the link open in a new tab?
+ * @param {string} props.url 							The actual link to be set as href
+ * @param {Function} props.onLinkChange 				Callback when the URL is changed
+ * @param {Function} props.onTextChange 				Callback when the link's text is changed
+ * @param {string} props.kind 							Page or Post
+ * @param {string} props.placeholder 					Text visible before actual value is inserted
  *
- * @returns JSX.Element
+ * @returns {JSX}
  */
 const Link = ({
 	value,
@@ -98,6 +123,7 @@ const Link = ({
 }) => {
 	const ref = useRef();
 	const [isLinkOpen, setIsLinkOpen] = useState(false);
+	const [isValid, setIsValid] = useState(false);
 	const { isSelected } = useBlockEditContext();
 
 	function onKeyDown(event) {
@@ -111,10 +137,6 @@ const Link = ({
 		opensInNewTab,
 		title: value && navStripHTML(value), // don't allow HTML to display inside the <LinkControl>
 	};
-
-	const classes = classnames('wp-block-navigation-item__content', {
-		'wp-block-navigation-link__placeholder': !url,
-	});
 
 	const blockProps = useBlockProps({
 		ref,
@@ -139,17 +161,20 @@ const Link = ({
 		}
 	}, [isSelected]);
 
-	const linkStyle = {
-		textDecoration: 'underline',
-		color: 'var(--wp--style--color--link, var(--global--color-primary))',
-		position: 'relative',
-	};
+	/**
+	 * Check if the URL and Value are set. If yes, then the component is valid.
+	 * Otherwise, we will output a visual reminder to the editor that one of the
+	 * two needs to be set.
+	 */
+	useEffect(() => {
+		setIsValid(!!url && !!value);
+	}, [url, value]);
 
 	return (
 		// eslint-disable-next-line react/jsx-props-no-spreading
 		<span {...blockProps}>
 			{/* eslint-disable jsx-a11y/anchor-is-valid */}
-			<a style={linkStyle} className={classes}>
+			<LinkOutput>
 				<RichText
 					ref={ref}
 					identifier="label"
@@ -164,6 +189,12 @@ const Link = ({
 						setIsLinkOpen(true);
 					}}
 				/>
+
+				{!isValid && (
+					<Tooltip text="URL or Text has not been set">
+						<Icon icon="warning" />
+					</Tooltip>
+				)}
 
 				{isLinkOpen && (
 					<Popover
@@ -184,7 +215,7 @@ const Link = ({
 						/>
 					</Popover>
 				)}
-			</a>
+			</LinkOutput>
 		</span>
 	);
 };
@@ -192,6 +223,7 @@ const Link = ({
 Link.defaultProps = {
 	type: '',
 	kind: '',
+
 	placeholder: 'Link text ...',
 };
 
