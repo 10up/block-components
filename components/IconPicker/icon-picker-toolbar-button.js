@@ -4,6 +4,7 @@ import { __ } from '@wordpress/i18n';
 import { Dropdown, ToolbarButton } from '@wordpress/components';
 
 import { IconPicker } from './icon-picker';
+import { Icon } from '.';
 
 /**
  * IconPickerToolbarButton
@@ -21,7 +22,11 @@ export const IconPickerToolbarButton = (props) => {
 			contentClassName="component-icom-picker-toolbar-button__content"
 			position="bottom right"
 			renderToggle={({ isOpen, onToggle }) => (
-				<ToolbarButton onClick={onToggle} aria-expanded={isOpen}>
+				<ToolbarButton
+					onClick={onToggle}
+					aria-expanded={isOpen}
+					icon={<Icon name={props.value.name} iconSet={props.value.iconSet} />}
+				>
 					{props?.buttonLabel ?? __('Select Icon')}
 				</ToolbarButton>
 			)}
@@ -36,4 +41,5 @@ IconPickerToolbarButton.defaultProps = {
 
 IconPickerToolbarButton.propTypes = {
 	buttonLabel: PropTypes.string,
+	value: PropTypes.object.isRequired,
 };
