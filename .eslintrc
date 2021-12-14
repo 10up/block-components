@@ -1,6 +1,7 @@
 {
     "extends": ["@10up/eslint-config/react"],
     "rules": {
-        "import/no-unresolved": 0
+        "import/no-unresolved": 0,
+        "import/no-extraneous-dependencies": 0
     }
 }
