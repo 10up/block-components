@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import { __ } from '@wordpress/i18n';
 import {
 	Spinner,
@@ -6,9 +7,11 @@ import {
 	BaseControl,
 	NavigableMenu,
 	VisuallyHidden,
+	Dropdown,
+	ToolbarButton,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
-import { RawHTML, useState, useEffect } from '@wordpress/element';
+import { RawHTML, useState } from '@wordpress/element';
 import { useIcons, useIcon } from '../../hooks/use-icons';
 import { useFilteredList } from '../../hooks/use-filtered-list';
 
@@ -75,8 +78,20 @@ export const Icon = (props) => {
 	return <RawHTML>{icon.source}</RawHTML>;
 };
 
-export const IconPickerToolbarButton = () => {
-	return null;
+export const IconPickerToolbarButton = (props) => {
+	return (
+		<Dropdown
+			className="component-icom-picker-toolbar-button"
+			contentClassName="component-icom-picker-toolbar-button__content"
+			position="bottom right"
+			renderToggle={({ isOpen, onToggle }) => (
+				<ToolbarButton onClick={onToggle} aria-expanded={isOpen}>
+					{props?.buttonLabel ?? __('Select Icon')}
+				</ToolbarButton>
+			)}
+			renderContent={() => <IconPicker {...props} />}
+		/>
+	);
 };
 
 export const InlineIconPicker = () => {
