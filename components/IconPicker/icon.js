@@ -22,7 +22,7 @@ export const Icon = (props) => {
 		return <Spinner />;
 	}
 
-	return <RawHTML style={{ color: 'red' }}>{icon.source}</RawHTML>;
+	return <RawHTML>{icon.source}</RawHTML>;
 };
 
 Icon.propTypes = {
