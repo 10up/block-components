@@ -32,7 +32,15 @@ export const IconPicker = (props) => {
 				placeholder={__('Search for an Icon')}
 				className="component-icon-picker__search"
 			/>
-			<NavigableMenu orientation="vertical" className="component-icon-picker__list">
+			<NavigableMenu
+				orientation="vertical"
+				className="component-icon-picker__list"
+				style={{
+					display: 'grid',
+					gridTemplateColumns: 'repeat(4, 1fr)',
+					gap: '12px',
+				}}
+			>
 				{filteredIcons.map((icon) => {
 					const isChecked = value?.name === icon.name && value?.iconSet === icon.iconSet;
 					const Label = () => (
