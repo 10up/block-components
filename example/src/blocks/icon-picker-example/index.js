@@ -2,9 +2,17 @@ import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody } from '@wordpress/components';
-import {} from '@wordpress/icons';
+import { Icon as CoreIcon, search, edit, cloud, starFilled } from '@wordpress/icons';
+import { renderToString } from '@wordpress/element';
 
-import { IconPicker, Icon, IconPickerToolbarButton, InlineIconPicker, IconPickerSelectControl, registerIcons } from '@10up/block-components';
+import {
+    IconPicker,
+    Icon,
+    IconPickerToolbarButton,
+    InlineIconPicker,
+    IconPickerSelectControl,
+    registerIcons,
+} from '@10up/block-components';
 
 const NAMESPACE = 'example';
 
@@ -13,24 +21,24 @@ registerIcons({
     label: "Example",
     icons: [
         {
-            source: "...",
-            name: "test1",
-            label: "Test 1"
+            source: renderToString(<CoreIcon icon={search} />),
+            name: "search",
+            label: "Search"
         },
         {
-            source: "...",
-            name: "test2",
-            label: "Test 2"
+            source: renderToString(<CoreIcon icon={edit} />),
+            name: "edit",
+            label: "Edit"
         },
         {
-            source: "...",
-            name: "test3",
-            label: "Test 3"
+            source: renderToString(<CoreIcon icon={cloud} />),
+            name: "cloud",
+            label: "Cloud"
         },
         {
-            source: "...",
-            name: "test4",
-            label: "Test 4"
+            source: renderToString(<CoreIcon icon={starFilled} />),
+            name: "star-filled",
+            label: "Star Filled"
         },
     ]
 });
@@ -58,6 +66,7 @@ registerBlockType( `${ NAMESPACE }/icon-picker-example`, {
         return (
             <div {...blockProps}>
                 <h2>Hello World!</h2>
+                <IconPicker />
             </div>
         )
     },
