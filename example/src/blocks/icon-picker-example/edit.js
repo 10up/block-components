@@ -18,7 +18,7 @@ export function BlockEdit(props) {
 
     const { icon } = attributes;
     const blockProps = useBlockProps();
-    const IconPreview = () => icon?.name ? <Icon name={icon?.name} iconSet={icon?.iconSet} /> : null;
+    const IconPreview = () => icon?.name && icon?.iconSet ? <Icon name={icon?.name} iconSet={icon?.iconSet} /> : null;
     return (
         <>
             <BlockControls>
