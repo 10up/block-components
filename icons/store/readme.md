@@ -40,7 +40,13 @@ The data store for `tenup/icons` stores icons in this shape:
 ```
 
 ## Available selectors:
-You can access the Icons datastore using the `tenup/icons` namespace or by importing `isonStore` from `@10up/block-components`;
+You can access the Icons datastore using the `tenup/icons` namespace or by importing `iconStore` from `@10up/block-components`;
+```js
+import { iconStore } from '@10up/block-components';
+
+select(iconStore).getIconSets();
+```
+
 ### Get all available Icon Sets
 ```js
 select('tenup/icons').getIconSets();
