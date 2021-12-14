@@ -13,3 +13,4 @@ export {
 	IconPickerSelectControl,
 } from './components/IconPicker';
 export { registerIcons } from './icons/api/register';
+export { store as iconStore } from './icons/store';
