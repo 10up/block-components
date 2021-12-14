@@ -5,6 +5,7 @@ import {
 	TextControl,
 	BaseControl,
 	NavigableMenu,
+	VisuallyHidden,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
 import { RawHTML, useState, useEffect } from '@wordpress/element';
@@ -25,20 +26,27 @@ export const IconPicker = (props) => {
 	return (
 		<BaseControl label={label} id={id} className="component-icon-picker">
 			<TextControl
-				label={__('Search for an Icon')}
+				label={<VisuallyHidden>{__('Search for an Icon')}</VisuallyHidden>}
 				onChange={setSearchTerm}
 				value={searchTerm}
+				placeholder={__('Search for an Icon')}
 				className="component-icon-picker__search"
 			/>
 			<NavigableMenu orientation="vertical" className="component-icon-picker__list">
 				{filteredIcons.map((icon) => {
 					const isChecked = value?.name === icon.name && value?.iconSet === icon.iconSet;
+					const Label = () => (
+						<span>
+							<Icon key={icon.name} name={icon.name} iconSet={icon.iconSet} />
+							<VisuallyHidden>{icon.label}</VisuallyHidden>
+						</span>
+					);
 					return (
 						<CheckboxControl
 							key={icon.name}
-							label={<Icon key={icon.name} name={icon.name} iconSet={icon.iconSet} />}
+							label={<Label />}
 							checked={isChecked}
-							onChange={() => onChange}
+							onChange={() => onChange(icon)}
 							className="component-icon-picker__checkbox-control"
 						/>
 					);

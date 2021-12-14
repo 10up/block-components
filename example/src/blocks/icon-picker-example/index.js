@@ -52,7 +52,12 @@ registerBlockType( `${ NAMESPACE }/icon-picker-example`, {
     supports: {
         html: false
     },
-    attributes: {},
+    attributes: {
+        icon: {
+            type: 'object',
+            default: {}
+        }
+    },
     transforms: {},
     variations: [],
     edit: (props) => {
@@ -61,12 +66,15 @@ registerBlockType( `${ NAMESPACE }/icon-picker-example`, {
             setAttributes
         } = props;
 
+        const { icon } = attributes;
+
         const blockProps = useBlockProps();
 
+        const IconPreview = () => icon?.name ? <Icon name={icon?.name} iconSet={icon?.iconSet} /> : null;
         return (
             <div {...blockProps}>
-                <h2>Hello World!</h2>
-                <IconPicker />
+                <h2><IconPreview />Hello World!</h2>
+                <IconPicker value={icon} onChange={ value => setAttributes({icon: { name: value.name, iconSet: value.iconSet }}) } />
             </div>
         )
     },
