@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import { useState, useEffect, useRef } from '@wordpress/element';
 import { Popover, Icon, Tooltip } from '@wordpress/components';
-import { isKeyboardEvent, ENTER } from '@wordpress/keycodes';
+import { isKeyboardEvent, ENTER, ESCAPE } from '@wordpress/keycodes';
 import {
 	__experimentalLinkControl as LinkControl,
 	useBlockProps,
@@ -68,7 +68,7 @@ function getSuggestionsQuery(type, kind) {
 const LinkOutput = styled.a`
 	--color--warning: #f00;
 
-	color: var(--wp--style--color--link, var(--global--color-primary));
+	color: var(--wp--style--color--link);
 	position: relative;
 	display: inline-flex;
 	align-items: center;
@@ -126,12 +126,6 @@ const Link = ({
 	const [isValid, setIsValid] = useState(false);
 	const { isSelected } = useBlockEditContext();
 
-	function onKeyDown(event) {
-		if (isKeyboardEvent.primary(event, 'k') || (!url && event.keyCode === ENTER)) {
-			setIsLinkOpen(true);
-		}
-	}
-
 	const link = {
 		url,
 		opensInNewTab,
@@ -140,11 +134,10 @@ const Link = ({
 
 	const blockProps = useBlockProps({
 		ref,
-		className: classnames('wp-block-navigation-item', {
+		className: classnames('wp-block-link', {
 			'is-editing': isSelected,
 			'has-link': !!url,
 		}),
-		onKeyDown,
 	});
 
 	if (!url) {
@@ -187,6 +180,9 @@ const Link = ({
 					allowedFormats={['core/bold', 'core/italic', 'core/strikethrough']}
 					onClick={() => {
 						setIsLinkOpen(true);
+					}}
+					onBlur={() => {
+						setIsLinkOpen(false);
 					}}
 				/>
 
@@ -239,4 +235,4 @@ Link.propTypes = {
 	placeholder: PropTypes.string,
 };
 
-export default Link;
+export { Link };
