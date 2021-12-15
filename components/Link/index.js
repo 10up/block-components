@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect, useRef } from '@wordpress/element';
+import { useState, useEffect, useRef, Fragment } from '@wordpress/element';
 import { Popover, Icon, Tooltip } from '@wordpress/components';
 import { isKeyboardEvent, ENTER, ESCAPE } from '@wordpress/keycodes';
 import {
@@ -65,14 +65,19 @@ function getSuggestionsQuery(type, kind) {
 	}
 }
 
-const LinkOutput = styled.a`
+const LinkOutput = styled(RichText)`
 	--color--warning: #f00;
+
+	/* Reset margins for this block alone. */
+	--global--spacing-vertical: 0;
+	--global--spacing-vertical: 0;
 
 	color: var(--wp--style--color--link);
 	position: relative;
 	display: inline-flex;
 	align-items: center;
 	gap: 0.5em;
+	text-decoration: underline;
 
 	/* This  holds the text URL input */
 	& > div {
@@ -134,7 +139,7 @@ const Link = ({
 
 	const blockProps = useBlockProps({
 		ref,
-		className: classnames('wp-block-link', {
+		className: classnames('tenup-block-components-link', {
 			'is-editing': isSelected,
 			'has-link': !!url,
 		}),
@@ -164,55 +169,50 @@ const Link = ({
 	}, [url, value]);
 
 	return (
-		// eslint-disable-next-line react/jsx-props-no-spreading
-		<span {...blockProps}>
-			{/* eslint-disable jsx-a11y/anchor-is-valid */}
-			<LinkOutput>
-				<RichText
-					ref={ref}
-					identifier="label"
-					className="wp-block-navigation-item__label"
-					value={value}
-					onChange={onTextChange}
-					aria-label={__('Link text')}
-					placeholder={placeholder}
-					withoutInteractiveFormatting
-					allowedFormats={['core/bold', 'core/italic', 'core/strikethrough']}
-					onClick={() => {
-						setIsLinkOpen(true);
-					}}
-					onBlur={() => {
-						setIsLinkOpen(false);
-					}}
-				/>
+		<>
+			<LinkOutput
+				// eslint-disable-next-line react/jsx-props-no-spreading
+				{...blockProps}
+				tagName="a"
+				identifier="label"
+				className="tenup-block-components-link__label"
+				value={value}
+				onChange={onTextChange}
+				aria-label={__('Link text', '10up-block-components')}
+				placeholder={placeholder}
+				withoutInteractiveFormatting
+				allowedFormats={['core/bold', 'core/italic', 'core/strikethrough']}
+				onClick={() => {
+					setIsLinkOpen(true);
+				}}
+			/>
 
-				{!isValid && (
-					<Tooltip text="URL or Text has not been set">
-						<Icon icon="warning" />
-					</Tooltip>
-				)}
+			{!isValid && (
+				<Tooltip text={__('URL or Text has not been set', '10up-block-components')}>
+					<Icon icon="warning" />
+				</Tooltip>
+			)}
 
-				{isLinkOpen && (
-					<Popover
-						position="top center"
-						onClose={() => setIsLinkOpen(false)}
-						anchorRef={ref.current}
-						focusOnMount={false}
-					>
-						<LinkControl
-							hasTextControl
-							className="wp-block-navigation-link__inline-link-input"
-							value={link}
-							showInitialSuggestions
-							noDirectEntry={!!type}
-							noURLSuggestion={!!type}
-							suggestionsQuery={getSuggestionsQuery(type, kind)}
-							onChange={onLinkChange}
-						/>
-					</Popover>
-				)}
-			</LinkOutput>
-		</span>
+			{isLinkOpen && (
+				<Popover
+					position="top center"
+					onClose={() => setIsLinkOpen(false)}
+					anchorRef={ref.current}
+					focusOnMount={false}
+				>
+					<LinkControl
+						hasTextControl
+						className="tenup-block-components-link__link-control"
+						value={link}
+						showInitialSuggestions
+						noDirectEntry={!!type}
+						noURLSuggestion={!!type}
+						suggestionsQuery={getSuggestionsQuery(type, kind)}
+						onChange={onLinkChange}
+					/>
+				</Popover>
+			)}
+		</>
 	);
 };
 
@@ -220,7 +220,7 @@ Link.defaultProps = {
 	type: '',
 	kind: '',
 
-	placeholder: 'Link text ...',
+	placeholder: __('Link text ...', '10up-block-components'),
 };
 
 Link.propTypes = {
