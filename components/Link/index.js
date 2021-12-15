@@ -20,22 +20,6 @@ import {
 } from '@wordpress/block-editor';
 
 /**
- * Removes HTML from a given string.
- * Note the does not provide XSS protection or otherwise attempt
- * to filter strings with malicious intent.
- *
- * See also: https://github.com/WordPress/gutenberg/pull/35539
- *
- * @param {string} html the string from which HTML should be removed.
- * @returns {string} the "cleaned" string.
- */
-function navStripHTML(html) {
-	const doc = document.implementation.createHTMLDocument('');
-	doc.body.innerHTML = html;
-	return doc.body.textContent || '';
-}
-
-/**
  * Given the Link block's type attribute, return the query params to give to
  * /wp/v2/search.
  *
@@ -134,7 +118,7 @@ const Link = ({
 	const link = {
 		url,
 		opensInNewTab,
-		title: value && navStripHTML(value), // don't allow HTML to display inside the <LinkControl>
+		title: value, // don't allow HTML to display inside the <LinkControl>
 	};
 
 	const blockProps = useBlockProps({
@@ -181,6 +165,7 @@ const Link = ({
 				aria-label={__('Link text', '10up-block-components')}
 				placeholder={placeholder}
 				withoutInteractiveFormatting
+				__unstablePastePlainText
 				allowedFormats={['core/bold', 'core/italic', 'core/strikethrough']}
 				onClick={() => {
 					setIsLinkOpen(true);
