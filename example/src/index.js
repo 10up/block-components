@@ -3,14 +3,13 @@ import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, Placeholder } from '@wordpress/components';
 
-import { ContentPicker, SelectedPostPreview } from '@10up/block-components';
-import { Link } from '@10up/block-components';
+import {ContentPicker, SelectedPostPreview} from '@10up/block-components';
 
 const NAMESPACE = 'example';
 
-registerBlockType(`${NAMESPACE}/hello-world`, {
-    title: __('Hello World', NAMESPACE),
-    description: __('Example Block to show the Post Picker in usage', NAMESPACE),
+registerBlockType( `${ NAMESPACE }/hello-world`, {
+    title: __( 'Hello World', NAMESPACE ),
+    description: __( 'Example Block to show the Post Picker in usage', NAMESPACE ),
     icon: 'smiley',
     category: 'common',
     example: {},
@@ -18,40 +17,48 @@ registerBlockType(`${NAMESPACE}/hello-world`, {
         html: false
     },
     attributes: {
-        url: {
-            type: 'string',
-            default: '#'
-        },
-        opensInNewTab: {
-            type: 'boolean',
-            default: false
-        },
-        title: {
-            type: 'string',
-            default: 'link'
-        },
-        text: {
-            type: 'string'
-        },
+        selectedPost: {
+            type: 'object'
+        }
     },
     transforms: {},
     variations: [],
     edit: (props) => {
         const {
             className,
-            attributes: { url, opensInNewTab, title },
+            attributes: { selectedPost },
             setAttributes
         } = props;
 
-        const handleLinkChange = (link) => {
-            setAttributes({...link});
+        function handlePostSelection( post ) {
+            setAttributes( { selectedPost: post } )
         }
 
         return (
             <>
-                <Link onTextChange={(text) => { setAttributes({text}) }} opensInNewTab={opensInNewTab} onLinkChange={handleLinkChange} value={title} url={url} />
+            <InspectorControls>
+                <PanelBody title={ __( 'Post Picker', NAMESPACE ) }>
+                    { !!selectedPost &&
+                        <SelectedPostPreview
+                            label={ __( 'Currently Selected Post:', NAMESPACE ) }
+                            post={ selectedPost }
+                        />
+                    }
+                    <ContentPicker 
+                        label={ __( 'Select a Post or Page', NAMESPACE ) }
+                        handleSelect={ handlePostSelection }
+                    />
+                </PanelBody>
+            </InspectorControls>
+            <Placeholder label={ __( 'Post Picker', NAMESPACE ) } instructions={ __( 'Use the text field so search for a post', NAMESPACE) } className={ className }>
+                <ContentPicker 
+                    postTypes={ [ 'page', 'post' ] }
+                    label={ __( 'Select a Post or Page', NAMESPACE ) }
+                    handleSelect={ handlePostSelection }
+                />
+            </Placeholder>
             </>
         )
     },
     save: () => null
-});
+} );
