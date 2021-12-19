@@ -19,20 +19,23 @@ export function BlockEdit(props) {
     const { icon } = attributes;
     const blockProps = useBlockProps();
     const IconPreview = () => icon?.name && icon?.iconSet ? <Icon name={icon?.name} iconSet={icon?.iconSet} /> : null;
+
+    const handleIconSelection = value => setAttributes({icon: { name: value.name, iconSet: value.iconSet }});
+
     return (
         <>
             <BlockControls>
                 <ToolbarGroup>
-                    <IconPickerToolbarButton value={icon} onChange={ value => setAttributes({icon: { name: value.name, iconSet: value.iconSet }}) } />
+                    <IconPickerToolbarButton value={icon} onChange={handleIconSelection} />
                 </ToolbarGroup>
             </BlockControls>
             <InspectorControls>
                 <PanelBody title={__('Icon Settings')}>
-                    <InlineIconPicker value={icon} onChange={ value => setAttributes({icon: { name: value.name, iconSet: value.iconSet }}) } />
+                    <IconPicker value={icon} onChange={handleIconSelection} />
                 </PanelBody>
             </InspectorControls>
             <div {...blockProps}>
-                <h2><IconPreview />Hello World!</h2>
+                <h2><InlineIconPicker value={icon} onChange={handleIconSelection} />Hello World!</h2>
             </div>
         </>
     )

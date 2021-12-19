@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/no-danger */
 import PropTypes from 'prop-types';
 
@@ -15,7 +16,6 @@ import { useIcon } from '../../hooks/use-icons';
  * @returns {*}
  */
 export const Icon = (props) => {
-	console.log(props);
 	const { name, iconSet, onClick = () => {} } = props;
 	const icon = useIcon(iconSet, name);
 
@@ -35,9 +35,7 @@ export const Icon = (props) => {
 };
 
 Icon.defaultProps = {
-	onClick: () => {
-		console.log('Default');
-	},
+	onClick: () => {},
 };
 
 Icon.propTypes = {
