@@ -34,7 +34,6 @@ export const InlineIconPicker = (props) => {
 					iconSet={props.value.iconSet}
 					onClick={() => {
 						onToggle();
-						console.log('Testing');
 					}}
 				/>
 			)}
