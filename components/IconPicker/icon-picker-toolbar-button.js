@@ -1,10 +1,17 @@
+/** @jsx jsx */
 import PropTypes from 'prop-types';
 
 import { __ } from '@wordpress/i18n';
 import { Dropdown, ToolbarButton } from '@wordpress/components';
+import { css, jsx } from '@emotion/react'; /* eslint-disable-line no-unused-vars */
 
 import { IconPicker } from './icon-picker';
 import { Icon } from '.';
+
+const dropdownStyles = css`
+	margin: 6px;
+	width: 306px;
+`;
 
 /**
  * IconPickerToolbarButton
@@ -30,7 +37,7 @@ export const IconPickerToolbarButton = (props) => {
 					{props?.buttonLabel ?? __('Select Icon')}
 				</ToolbarButton>
 			)}
-			renderContent={() => <IconPicker {...props} />}
+			renderContent={() => <IconPicker css={dropdownStyles} {...props} />}
 		/>
 	);
 };

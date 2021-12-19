@@ -28,7 +28,7 @@ export function BlockEdit(props) {
             </BlockControls>
             <InspectorControls>
                 <PanelBody title={__('Icon Settings')}>
-                    <IconPicker value={icon} onChange={ value => setAttributes({icon: { name: value.name, iconSet: value.iconSet }}) } />
+                    <InlineIconPicker value={icon} onChange={ value => setAttributes({icon: { name: value.name, iconSet: value.iconSet }}) } />
                 </PanelBody>
             </InspectorControls>
             <div {...blockProps}>
