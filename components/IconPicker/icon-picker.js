@@ -112,7 +112,7 @@ const SearchControl = (props) => {
 				className="component-icon-picker__search"
 				type="text"
 				value={value}
-				onChange={onChange}
+				onChange={(event) => onChange(event.target.value)}
 				id={`${id}--search-field`}
 			/>
 		</BaseControl>
