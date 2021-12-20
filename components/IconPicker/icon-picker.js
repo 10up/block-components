@@ -53,6 +53,10 @@ const StyledIconButton = styled.div`
 	border-radius: 4px;
 	height: 34px;
 	width: 34px;
+
+	&:hover {
+		background-color: ${({ isSelected }) => (isSelected ? '#555D66' : '#f3f4f5')};
+	}
 `;
 
 /**
