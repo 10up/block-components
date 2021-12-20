@@ -258,6 +258,10 @@ const MyComponent = ({clientId}) => {
 
 **Active:** 10up is actively working on this, and we expect to continue work for the foreseeable future including keeping tested up to the most recent version of WordPress.  Bug reports, feature requests, questions, and pull requests are welcome.
 
+## Contributing
+
+Please read [CODE_OF_CONDUCT.md](https://github.com/10up/block-components/blob/develop/CODE_OF_CONDUCT.md) for details on our code of conduct and [CONTRIBUTING.md](https://github.com/10up/block-components/blob/develop/CONTRIBUTING.md) for details on the process for submitting pull requests to us.
+
 ## Like what you see?
 
 <a href="http://10up.com/contact/"><img src="https://10up.com/uploads/2016/10/10up-Github-Banner.png" alt="Work with 10up, we create amazing websites and tools that make content management simple and fun using open source tools and platforms"></a>
