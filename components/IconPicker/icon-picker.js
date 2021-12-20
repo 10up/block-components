@@ -81,12 +81,18 @@ export const IconPicker = (props) => {
 	const [searchTerm, setSearchTerm] = useState('');
 	const [filteredIcons] = useFilteredList(icons, searchTerm);
 
+	const hasIcons = !!filteredIcons.length;
+
 	return (
 		<BaseControl label={label} id={id} className="component-icon-picker" {...rest}>
 			<SearchControl value={searchTerm} onChange={setSearchTerm} id={id} />
-			<Scrollable style={{ maxHeight: 200 }}>
-				<IconGrid icons={filteredIcons} selectedIcon={value} onChange={onChange} />
-			</Scrollable>
+			{hasIcons ? (
+				<Scrollable style={{ maxHeight: 200 }}>
+					<IconGrid icons={filteredIcons} selectedIcon={value} onChange={onChange} />
+				</Scrollable>
+			) : (
+				<p>{__('No icons were found...')}</p>
+			)}
 		</BaseControl>
 	);
 };
