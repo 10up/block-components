@@ -20,7 +20,7 @@ import { Icon } from './icon';
 
 const iconGridStyles = css`
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(34px, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
 	gap: 12px;
 	align-items: center;
 	justify-content: center;
