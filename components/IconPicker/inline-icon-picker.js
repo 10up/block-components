@@ -4,7 +4,7 @@ import { Dropdown } from '@wordpress/components';
 import styled from '@emotion/styled';
 
 import { IconPicker } from './icon-picker';
-import { Icon } from '.';
+import { Icon } from './icon';
 
 const StyledIconPickerDropdown = styled(IconPicker)`
 	margin: 6px;

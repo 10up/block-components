@@ -6,7 +6,7 @@ import { Dropdown, ToolbarButton } from '@wordpress/components';
 import { css, jsx } from '@emotion/react'; /* eslint-disable-line no-unused-vars */
 
 import { IconPicker } from './icon-picker';
-import { Icon } from '.';
+import { Icon } from './icon';
 
 const dropdownStyles = css`
 	margin: 6px;
