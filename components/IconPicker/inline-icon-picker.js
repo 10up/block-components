@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
-
-import { Dropdown } from '@wordpress/components';
 import styled from '@emotion/styled';
+import { Dropdown } from '@wordpress/components';
 
 import { IconPicker } from './icon-picker';
 import { Icon } from './icon';

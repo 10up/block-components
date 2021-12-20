@@ -1,7 +1,4 @@
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-/* eslint-disable react/no-danger */
 import PropTypes from 'prop-types';
-
 import { Spinner } from '@wordpress/components';
 import { useIcon } from '../../hooks/use-icons';
 
@@ -23,8 +20,8 @@ export const Icon = (props) => {
 		return <Spinner />;
 	}
 
+	// only add interactive props to component if a onClick handler was provided
 	const iconProps = {};
-
 	if (typeof onClick === 'function') {
 		iconProps.role = 'button';
 		iconProps.tabIndex = 0;
@@ -32,6 +29,7 @@ export const Icon = (props) => {
 		iconProps.onClick = onClick;
 	}
 
+	// eslint-disable-next-line react/no-danger
 	return <div {...iconProps} dangerouslySetInnerHTML={{ __html: icon.source }} {...rest} />;
 };
 

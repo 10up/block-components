@@ -1,4 +1,3 @@
-/** @jsx jsx */
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { __ } from '@wordpress/i18n';
@@ -12,13 +11,13 @@ import {
 import { useInstanceId } from '@wordpress/compose';
 import { search, Icon as WordPressIcon } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
-import { css, jsx } from '@emotion/react'; /* eslint-disable-line no-unused-vars */
+
 import { useIcons } from '../../hooks/use-icons';
 import { useFilteredList } from '../../hooks/use-filtered-list';
 
 import { Icon } from './icon';
 
-const iconGridStyles = css`
+const StyledIconGrid = styled(NavigableMenu)`
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
 	gap: 12px;
@@ -35,7 +34,7 @@ const iconGridStyles = css`
 	}
 `;
 
-const searchBoxStyles = css`
+const StyledSearchControl = styled(BaseControl)`
 	position: relative;
 
 	.component-icon-picker__search {
@@ -132,10 +131,9 @@ const SearchControl = (props) => {
 	const { value, onChange, id } = props;
 
 	return (
-		<BaseControl
+		<StyledSearchControl
 			label={<VisuallyHidden>{__('Search for an Icon')}</VisuallyHidden>}
 			id={`${id}--search-field`}
-			css={searchBoxStyles}
 		>
 			<input
 				placeholder={__('Search for an Icon')}
@@ -146,7 +144,7 @@ const SearchControl = (props) => {
 				id={`${id}--search-field`}
 			/>
 			<WordPressIcon icon={search} className="component-icon-picker__search-icon" />
-		</BaseControl>
+		</StyledSearchControl>
 	);
 };
 
@@ -160,11 +158,7 @@ const IconGrid = (props) => {
 	const { icons, selectedIcon, onChange } = props;
 
 	return (
-		<NavigableMenu
-			orientation="vertical"
-			className="component-icon-picker__list"
-			css={iconGridStyles}
-		>
+		<StyledIconGrid orientation="vertical" className="component-icon-picker__list">
 			{icons.map((icon) => {
 				const isChecked =
 					selectedIcon?.name === icon.name && selectedIcon?.iconSet === icon.iconSet;
@@ -184,7 +178,7 @@ const IconGrid = (props) => {
 					/>
 				);
 			})}
-		</NavigableMenu>
+		</StyledIconGrid>
 	);
 };
 
