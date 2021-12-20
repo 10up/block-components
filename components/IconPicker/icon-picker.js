@@ -24,6 +24,10 @@ const iconGridStyles = css`
 	align-items: center;
 	justify-content: center;
 
+	.component-icon-picker__checkbox-control {
+		margin-bottom: 0;
+	}
+
 	.components-checkbox-control__input,
 	.components-checkbox-control__input-container {
 		display: none;
