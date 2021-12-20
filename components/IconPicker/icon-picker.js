@@ -10,6 +10,7 @@ import {
 	__experimentalScrollable as Scrollable,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
+import { search, Icon as WordPressIcon } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
 import { css, jsx } from '@emotion/react'; /* eslint-disable-line no-unused-vars */
 import { useIcons } from '../../hooks/use-icons';
@@ -35,12 +36,21 @@ const iconGridStyles = css`
 `;
 
 const searchBoxStyles = css`
+	position: relative;
+
 	.component-icon-picker__search {
 		background-color: #f3f4f5;
 		border: none;
 		border-radius: 2px;
-		padding: 10px 16px;
+		padding: 10px 36px 10px 16px;
 		width: 100%;
+	}
+
+	.component-icon-picker__search-icon {
+		position: absolute;
+		top: 50%;
+		right: 10px;
+		transform: translateY(-50%);
 	}
 `;
 
@@ -135,6 +145,7 @@ const SearchControl = (props) => {
 				onChange={(event) => onChange(event.target.value)}
 				id={`${id}--search-field`}
 			/>
+			<WordPressIcon icon={search} className="component-icon-picker__search-icon" />
 		</BaseControl>
 	);
 };
