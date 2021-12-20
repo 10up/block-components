@@ -18,7 +18,6 @@ export function BlockEdit(props) {
 
     const { icon } = attributes;
     const blockProps = useBlockProps();
-    const IconPreview = () => icon?.name && icon?.iconSet ? <Icon name={icon?.name} iconSet={icon?.iconSet} /> : null;
 
     const handleIconSelection = value => setAttributes({icon: { name: value.name, iconSet: value.iconSet }});
 
