@@ -35,7 +35,14 @@ export function BlockEdit(props) {
                 </PanelBody>
             </InspectorControls>
             <div {...blockProps}>
-                <h2><InlineIconPicker value={icon} onChange={handleIconSelection} />Hello World!</h2>
+                <style>
+                    {`.icon-preview > svg {
+                        height: 60px;
+                        width: 60px;
+                    }`}
+                </style>
+                <InlineIconPicker value={icon} onChange={handleIconSelection} className="icon-preview"/>
+                <h2 style={{marginTop: '0'}}>Hello World!</h2>
             </div>
         </>
     )
