@@ -21,9 +21,9 @@ const StyledIconPickerDropdown = styled(IconPicker)`
  * @returns {*}
  */
 export const InlineIconPicker = (props) => {
-	const { value } = props;
+	const { value, ...rest } = props;
 	const IconButton = ({ onToggle }) => (
-		<Icon name={value.name} iconSet={value.iconSet} onClick={onToggle} />
+		<Icon name={value.name} iconSet={value.iconSet} onClick={onToggle} {...rest} />
 	);
 
 	IconButton.propTypes = {
