@@ -16,26 +16,27 @@ import { useIcon } from '../../hooks/use-icons';
  * @returns {*}
  */
 export const Icon = (props) => {
-	const { name, iconSet, onClick = () => {} } = props;
+	const { name, iconSet, onClick } = props;
 	const icon = useIcon(iconSet, name);
 
 	if (!icon) {
 		return <Spinner />;
 	}
 
-	return (
-		<div
-			onClick={onClick}
-			role="button"
-			tabIndex="0"
-			aria-label="Change Icon"
-			dangerouslySetInnerHTML={{ __html: icon.source }}
-		/>
-	);
+	const iconProps = {};
+
+	if (typeof onClick === 'function') {
+		iconProps.role = 'button';
+		iconProps.tabIndex = 0;
+		iconProps.ariaLabel = 'Change Icon';
+		iconProps.onClick = onClick;
+	}
+
+	return <div {...iconProps} dangerouslySetInnerHTML={{ __html: icon.source }} />;
 };
 
 Icon.defaultProps = {
-	onClick: () => {},
+	onClick: undefined,
 };
 
 Icon.propTypes = {
