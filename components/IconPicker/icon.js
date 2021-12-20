@@ -16,7 +16,7 @@ import { useIcon } from '../../hooks/use-icons';
  * @returns {*}
  */
 export const Icon = (props) => {
-	const { name, iconSet, onClick } = props;
+	const { name, iconSet, onClick, ...rest } = props;
 	const icon = useIcon(iconSet, name);
 
 	if (!icon) {
@@ -32,7 +32,7 @@ export const Icon = (props) => {
 		iconProps.onClick = onClick;
 	}
 
-	return <div {...iconProps} dangerouslySetInnerHTML={{ __html: icon.source }} />;
+	return <div {...iconProps} dangerouslySetInnerHTML={{ __html: icon.source }} {...rest} />;
 };
 
 Icon.defaultProps = {
