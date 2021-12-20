@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import PropTypes from 'prop-types';
-
+import styled from '@emotion/styled';
 import { __ } from '@wordpress/i18n';
 import {
 	CheckboxControl,
@@ -30,11 +30,6 @@ const iconGridStyles = css`
 	}
 `;
 
-const selectedIconStyles = css`
-	background: black;
-	color: white;
-`;
-
 const searchBoxStyles = css`
 	.component-icon-picker__search {
 		background-color: #f3f4f5;
@@ -43,6 +38,17 @@ const searchBoxStyles = css`
 		padding: 10px 16px;
 		width: 100%;
 	}
+`;
+
+const StyledIconButton = styled.div`
+	background-color: ${({ isSelected }) => (isSelected ? 'black' : 'white')};
+	color: ${({ isSelected }) => (isSelected ? 'white' : 'black')};
+	fill: ${({ isSelected }) => (isSelected ? 'white' : 'black')};
+	padding: 5px;
+	border: none;
+	border-radius: 4px;
+	height: 34px;
+	width: 34px;
 `;
 
 /**
@@ -138,10 +144,10 @@ const IconGrid = (props) => {
 				const isChecked =
 					selectedIcon?.name === icon.name && selectedIcon?.iconSet === icon.iconSet;
 				const Label = () => (
-					<div css={isChecked ? selectedIconStyles : null}>
+					<StyledIconButton isSelected={isChecked}>
 						<Icon key={icon.name} name={icon.name} iconSet={icon.iconSet} />
 						<VisuallyHidden>{icon.label}</VisuallyHidden>
-					</div>
+					</StyledIconButton>
 				);
 				return (
 					<CheckboxControl
