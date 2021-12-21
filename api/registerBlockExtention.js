@@ -33,7 +33,7 @@ function registerBlockExtention(
 	 */
 	const addAttributesToBlock = (settings, name) => {
 		// return early from the block mofification
-		if (!name === blockName) {
+		if (name !== blockName) {
 			return settings;
 		}
 
@@ -88,7 +88,7 @@ function registerBlockExtention(
 			const { name, attributes } = props;
 
 			// return early from the block mofification
-			if (!name === blockName) {
+			if (name !== blockName) {
 				return <BlockEdit {...props} />;
 			}
 
@@ -123,7 +123,7 @@ function registerBlockExtention(
 	 */
 	const saveSpacingAttributes = (props, block, attributes) => {
 		// return early from the block mofification
-		if (!block.name === blockName) {
+		if (block.name !== blockName) {
 			return props;
 		}
 
