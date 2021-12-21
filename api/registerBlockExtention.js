@@ -61,7 +61,7 @@ function registerBlockExtention(
 			const { name, isSelected } = props;
 
 			// return early from the block mofification
-			if (!name === blockName) {
+			if (name !== blockName) {
 				return <BlockEdit {...props} />;
 			}
 
