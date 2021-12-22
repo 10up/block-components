@@ -4,9 +4,10 @@ export { InnerBlockSlider } from './components/InnerBlockSlider';
 export { IsAdmin } from './components/is-admin';
 export { useHasSelectedInnerBlock } from './hooks/use-has-selected-inner-block';
 export { useRequestData } from './hooks/use-request-data';
+export { default as CustomBlockAppender } from './components/CustomBlockAppender';
+export { registerBlockExtention } from './api/registerBlockExtention';
 export { useIcons, useIcon } from './hooks/use-icons';
 export { useFilteredList } from './hooks/use-filtered-list';
-export { default as CustomBlockAppender } from './components/CustomBlockAppender';
 export {
 	IconPicker,
 	Icon,
