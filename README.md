@@ -254,9 +254,76 @@ const MyComponent = ({clientId}) => {
 | `parentBlockId` | `string` | `''` | Client ID of parent block. This is required.  |
 
 
+## registerBlockExtention
+The `registerBlockExtention` API is a wrapper to make it easier to add custom settings which produce classnames to any blocks. There are a few problems with using block styles for customisations. For one an editor cannot combine block styles. So you very quickly land in a sittuation where you need to add many block styles just to give an editor the ability to choose exactly the combination of options they want. That leads to a bad user experience though as the previews take up a ton of space and also make the editor slower due to the overhead of the iframes it creates. So in many cases it is nicer to extend a bock with custom settings to achive the same goal. The process of registering your own attributes, modifying the blocks edit function, adding the new classname to the editor listing and also adding it to the frontend is rather cumbersome though. That is where this API comes in. It is a wrapper for the underlying filters that improves the editorial experience and reduces the amount of code that needs to get maintained in order to extend blocks.
+
+
+### Usage
+```js
+import { registerBlockExtention } from '@10up/block-components';
+
+/**
+ * BlockEdit
+ *
+ * a react component that will get mounted in the Editor when the block is
+ * selected. It is reccomended to use Slots like `BlockControls` or `InspectorControls`
+ * in here to put settings into the blocks toolbar or sidebar.
+ *
+ * @param {object} props block props
+ * @returns {JSX}
+ */
+function BlockEdit(props) {...}
+
+/**
+ * generateClassNames
+ *
+ * a function to generate the new className string that should get added to
+ * the wrapping element of the block.
+ *
+ * @param {object} attributes block attributes
+ * @returns {string}
+ */
+function generateClassNames(attributes) {...}
+
+registerBlockExtention(
+	'core/group',
+	{
+		extentionName: 'background-patterns',
+		attributes: {
+			hasBackgroundPattern: {
+				type: 'boolean',
+				default: false,
+			},
+			backgroundPatternShape: {
+				type: 'string',
+				default: 'dots',
+			},
+			backgroundPatternColor: {
+				type: 'string',
+				default: 'green'
+			}
+		},
+		classNameGenerator: generateClassNames,
+		Edit: BlockEdit,
+	}
+);
+```
+
+### Options
+| Name                       | Type       | Description                                       |
+|----------------------------|------------|---------------------------------------------------|
+| blockName                  | `string`   | Name of the block the options should get added to |
+| options.extentionName      | `string`   | Unique Identifier of the option added    |
+| options.attributes         | `object`   | Block Attributes that should get added to the block |
+| options.classNameGenerator | `funciton` | Funciton that gets passed the attributes of the block to generate a class name string |
+| options.Edit               | `funciton` | BlockEdit component like in `registerBlockType` only without the actual block. So onyl using slots like the `InspectorControls` is advised. |
 ## Support Level
 
 **Active:** 10up is actively working on this, and we expect to continue work for the foreseeable future including keeping tested up to the most recent version of WordPress.  Bug reports, feature requests, questions, and pull requests are welcome.
+
+## Contributing
+
+Please read [CODE_OF_CONDUCT.md](https://github.com/10up/block-components/blob/develop/CODE_OF_CONDUCT.md) for details on our code of conduct and [CONTRIBUTING.md](https://github.com/10up/block-components/blob/develop/CONTRIBUTING.md) for details on the process for submitting pull requests to us.
 
 ## Like what you see?
 

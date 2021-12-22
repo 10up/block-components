@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "10up Components built for the WordPress Block Editor.",
   "main": "index.js",
   "scripts": {
@@ -32,6 +32,7 @@
   "dependencies": {
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.0.0",
+    "@wordpress/icons": "^6.1.1",
     "array-move": "^3.0.1",
     "prop-types": "^15.7.2",
     "react-sortable-hoc": "^1.11.0",
