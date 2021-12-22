@@ -4,9 +4,9 @@
     "description": "Example plugin to show the Content Picker in usage.",
     "main": "index.js",
     "scripts": {
-      "build": "wp-scripts build",
-      "start": "wp-scripts start",
-      "wp-env": "wp-env"
+        "build": "wp-scripts build",
+        "start": "wp-scripts start",
+        "wp-env": "wp-env"
     },
     "keywords": [],
     "author": "",
@@ -17,7 +17,7 @@
         "@wordpress/scripts": "^19.2.2"
     },
     "dependencies": {
-      "@10up/block-components": "file:../"
+        "@10up/block-components": "file:../",
+        "@wordpress/icons": "^6.1.1"
     }
-  }
-  
+}
