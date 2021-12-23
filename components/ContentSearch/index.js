@@ -1,21 +1,32 @@
-import { TextControl, Spinner, NavigableMenu } from '@wordpress/components';
+import { TextControl, Spinner, NavigableMenu, Button } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { useState, useRef, useEffect } from '@wordpress/element'; // eslint-disable-line
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
-import SearchItem from './SearchItem';
-/** @jsx jsx */
 import { jsx, css } from '@emotion/react';
+import SearchItem from './SearchItem';
+import SortableList from '../ContentPicker/SortableList';
+/** @jsx jsx */
 
 const NAMESPACE = 'tenup-content-search';
 
 const searchCache = {};
 
-const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, excludeItems, perPage }) => {
+const ContentSearch = ({
+	onSelectItem,
+	placeholder,
+	label,
+	contentTypes,
+	mode,
+	excludeItems,
+	perPage,
+}) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
+	const [lessThanPerPage, setLessThanPerPage] = useState(false);
 	const [selectedItem, setSelectedItem] = useState(null);
+	const [currentPage, setCurrentPage] = useState(1);
 	const abortControllerRef = useRef();
 
 	const mounted = useRef(true);
@@ -51,18 +62,6 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 		onSelectItem(item);
 	}
 
-	function filterResults(results) {
-		return results.filter((result) => {
-			let keep = true;
-
-			if (excludeItems.length) {
-				keep = excludeItems.every((item) => item.id !== result.id);
-			}
-
-			return keep;
-		});
-	}
-
 	const hasSearchString = !!searchString.length;
 	const hasSearchResults = !!searchResults.length;
 
@@ -79,54 +78,22 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 			abortControllerRef.current.abort();
 		}
 
-		setSearchString(keyword);
-
 		if (keyword.trim() === '') {
 			setIsLoading(false);
 			setSearchResults([]);
+			setSearchString(keyword);
+
 			abortControllerRef.current = null;
 			return;
 		}
 
 		abortControllerRef.current = new AbortController();
+		setSearchString(keyword);
+	};
 
-		setIsLoading(true);
-
-		const searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
-			',',
-		)}&type=${mode}&_embed&per_page=${perPage}`;
-
-		if (searchCache[searchQuery]) {
-			abortControllerRef.current = null;
-
-			setSearchResults(filterResults(searchCache[searchQuery]));
-			setIsLoading(false);
-		} else {
-
-			apiFetch({
-				path: searchQuery,
-				signal: abortControllerRef.current.signal
-			}).then((results) => {
-				if (mounted.current === false) {
-					return;
-				}
-
-				abortControllerRef.current = null;
-
-				searchCache[searchQuery] = results;
-
-				setSearchResults(filterResults(results));
-
-				setIsLoading(false);
-			}).catch((error, code) => {
-				// fetch_error means the request was aborted
-				if (error.code !== 'fetch_error') {
-					setSearchResults([]);
-					abortControllerRef.current = null;
-					setIsLoading(false);
-				}
-			});
-		}
+	const handleLoadMore = () => {
+		setCurrentPage(currentPage + 1);
+		handleSearchStringChange(searchString);
 	};
 
 	useEffect(() => {
@@ -134,6 +101,61 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 			mounted.current = false;
 		};
 	}, []);
+
+	useEffect(() => {
+		if (abortControllerRef.current === undefined || abortControllerRef.current === null) return;
+
+		const filterResults = (results) =>
+			results.filter((result) => {
+				let keep = true;
+
+				if (excludeItems.length) {
+					keep = excludeItems.every((item) => item.id !== result.id);
+				}
+
+				return keep;
+			});
+
+		setIsLoading(true);
+
+		// Paginate search so we have "load more" functionality.
+		const searchQuery = `wp/v2/search/?search=${searchString}&subtype=${contentTypes.join(
+			',',
+		)}&type=${mode}&_embed&per_page=${perPage}&page=${currentPage}`;
+
+		if (searchCache[searchQuery]) {
+			abortControllerRef.current = null;
+
+			setSearchResults(filterResults(searchCache[searchQuery]));
+			setIsLoading(false);
+		} else {
+			apiFetch({
+				path: searchQuery,
+				signal: abortControllerRef.current.signal,
+			})
+				.then((results) => {
+					if (mounted.current === false) {
+						return;
+					}
+
+					abortControllerRef.current = null;
+
+					searchCache[searchQuery] = results;
+
+					setLessThanPerPage(results.length < perPage);
+					setSearchResults([...searchResults, ...filterResults(results)]);
+					setIsLoading(false);
+				})
+				.catch((error, code) => {
+					// fetch_error means the request was aborted
+					if (error.code !== 'fetch_error') {
+						setSearchResults([]);
+						abortControllerRef.current = null;
+						setIsLoading(false);
+					}
+				});
+		}
+	}, [contentTypes, currentPage, excludeItems, mode, perPage, searchString]);
 
 	const listCSS = css`
 		/* stylelint-disable */
@@ -150,51 +172,68 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 				placeholder={placeholder}
 				autoComplete="off"
 			/>
-			{hasSearchString ? (
-				<ul
-					className={`${NAMESPACE}-list`}
-					style={{
-						marginTop: '0',
-						marginBottom: '0',
-						marginLeft: '0',
-						paddingLeft: '0',
-						listStyle: 'none',
-					}}
-					css={listCSS}
-				>
-					{isLoading && <Spinner />}
-					{!isLoading && !hasSearchResults && (
-						<li
-							className={`${NAMESPACE}-list-item components-button`}
-							style={{ color: 'inherit', cursor: 'default', paddingLeft: '3px' }}
-						>
-							{__('Nothing found.', '10up-block-components')}
-						</li>
-					)}
-					{!isLoading && searchResults.map((item, index) => {
-						if (!item.title.length) {
-							return null;
-						}
 
-						return (
+			{hasSearchString ? (
+				<>
+					<ul
+						className={`${NAMESPACE}-list`}
+						style={{
+							marginTop: '0',
+							marginBottom: '0',
+							marginLeft: '0',
+							paddingLeft: '0',
+							listStyle: 'none',
+						}}
+						css={listCSS}
+					>
+						{isLoading && currentPage === 1 && <Spinner />}
+
+						{!isLoading && !hasSearchResults && (
 							<li
-								key={item.id}
-								className={`${NAMESPACE}-list-item`}
-								style={{
-									marginBottom: '0',
-								}}
+								className={`${NAMESPACE}-list-item components-button`}
+								style={{ color: 'inherit', cursor: 'default', paddingLeft: '3px' }}
 							>
-								<SearchItem
-									onClick={() => handleItemSelection(item)}
-									searchTerm={searchString}
-									suggestion={item}
-									contentTypes={contentTypes}
-									isSelected={selectedItem === index + 1}
-								/>
+								{__('Nothing found.', '10up-block-components')}
 							</li>
-						);
-					})}
-				</ul>
+						)}
+						{(!isLoading || currentPage > 1) &&
+							searchResults.map((item, index) => {
+								if (!item.title.length) {
+									return null;
+								}
+
+								return (
+									<li
+										key={item.id}
+										className={`${NAMESPACE}-list-item`}
+										style={{
+											marginBottom: '0',
+										}}
+									>
+										<SearchItem
+											onClick={() => handleItemSelection(item)}
+											searchTerm={searchString}
+											suggestion={item}
+											contentTypes={contentTypes}
+											isSelected={selectedItem === index + 1}
+										/>
+									</li>
+								);
+							})}
+					</ul>
+
+					{!isLoading && hasSearchResults && !lessThanPerPage && (
+						<Button onClick={handleLoadMore} type="button">
+							{__('Load more', '10up-block-components')}
+						</Button>
+					)}
+
+					{isLoading && (
+						<Button disabled onClick={handleLoadMore} type="button">
+							{__('Loading ...', '10up-block-components')}
+						</Button>
+					)}
+				</>
 			) : null}
 		</NavigableMenu>
 	);
@@ -203,7 +242,7 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 ContentSearch.defaultProps = {
 	contentTypes: ['post', 'page'],
 	placeholder: '',
-	perPage: 50,
+	perPage: 20,
 	label: '',
 	excludeItems: [],
 	mode: 'post',
@@ -219,7 +258,7 @@ ContentSearch.propTypes = {
 	placeholder: PropTypes.string,
 	excludeItems: PropTypes.array,
 	label: PropTypes.string,
-	perPage: PropTypes.number
+	perPage: PropTypes.number,
 };
 
 export { ContentSearch };

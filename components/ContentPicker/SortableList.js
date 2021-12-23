@@ -12,16 +12,18 @@ const SortableList = SortableContainer(({ items, isOrderable, handleItemDelete, 
 		>
 			{items.map((item, index) => {
 				const itemKey = item.uuid ? item.uuid : item.id;
-				return <ItemComponent
-					isOrderable={isOrderable && items.length > 1 ? isOrderable : false}
-					key={`item-${itemKey}`}
-					index={index}
-					handleItemDelete={handleItemDelete}
-					sortIndex={index}
-					item={item}
-					mode={mode}
-					totalItems={items.length}
-				/>
+				return (
+					<ItemComponent
+						isOrderable={isOrderable && items.length > 1 ? isOrderable : false}
+						key={`item-${itemKey}`}
+						index={index}
+						handleItemDelete={handleItemDelete}
+						sortIndex={index}
+						item={item}
+						mode={mode}
+						totalItems={items.length}
+					/>
+				);
 			})}
 		</div>
 	);
