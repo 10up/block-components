@@ -1,6 +1,7 @@
 /**
  * External dependencies
  */
+import classNames from 'classnames';
 import styled from '@emotion/styled';
 import PropTypes from 'prop-types';
 
@@ -16,7 +17,9 @@ import {
 	useBlockEditContext,
 } from '@wordpress/block-editor';
 
-import classNames from 'classnames';
+/**
+ * Internal Dependencies
+ */
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 
 /**
