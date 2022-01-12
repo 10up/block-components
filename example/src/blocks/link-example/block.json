@@ -1,0 +1,23 @@
+{
+    "name": "example/link-example",
+    "title": "Link Example",
+    "description": "Example Block to show the Link Component in usage",
+    "icon": "smiley",
+    "category": "common",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "url": {
+            "type": "string"
+        },
+        "text": {
+            "type": "string"
+        },
+        "opensInNewTab": {
+            "type": "boolean",
+            "default": false
+        }
+    }
+}
