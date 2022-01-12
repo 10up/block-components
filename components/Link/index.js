@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classNames from 'classnames';
+import classnames from 'classnames';
 import styled from '@emotion/styled';
 import PropTypes from 'prop-types';
 
@@ -152,7 +152,7 @@ const Link = ({
 			<LinkOutput
 				tagName="a"
 				identifier="label"
-				className={classNames('tenup-block-components-link__label', className)}
+				className={classnames('tenup-block-components-link__label', className)}
 				value={value}
 				onChange={onTextChange}
 				aria-label={__('Link text', '10up-block-components')}
