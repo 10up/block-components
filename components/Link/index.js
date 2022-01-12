@@ -179,7 +179,7 @@ const Link = ({
 				>
 					<LinkControl
 						hasTextControl
-						className="mconnect-block-components-link__link-control"
+						className="tenup-block-components-link__link-control"
 						value={link}
 						showInitialSuggestions
 						noDirectEntry={!!type}
