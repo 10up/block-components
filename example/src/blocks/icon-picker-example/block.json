@@ -1,0 +1,17 @@
+{
+    "name": "example/icon-picker-example",
+    "title": "Icon Picker Example",
+    "description": "Example Block to show the Icon Picker in usage",
+    "icon": "smiley",
+    "category": "common",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "icon": {
+            "type": "object",
+            "default": {}
+        }
+    }
+}

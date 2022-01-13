@@ -1,28 +1,54 @@
-import apiFetch from '@wordpress/api-fetch';
 import PropTypes from 'prop-types';
 import arrayMove from 'array-move';
 import styled from '@emotion/styled';
-import { TextControl, Button, Spinner, NavigableMenu } from '@wordpress/components';
 import { select } from '@wordpress/data';
-import { useState } from '@wordpress/element'; // eslint-disable-line
+import { useState, useEffect, useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import SearchItem from './SearchItem';
+import { ContentSearch } from '../ContentSearch';
 import SortableList from './SortableList';
+import { v4 as uuidv4 } from 'uuid';
 
-const NAMESPACE = '10up-block-components';
+const NAMESPACE = '10up-content-picker';
+
+/**
+ * Unfortunately, we had to use !important because on PickedItem we couldn't @emotion/styled css
+ * as it was breaking sortability from react-sortable-hoc
+ */
+const StyleWrapper = styled('div')`
+	& .block-editor-link-control__search-item {
+		border: none !important;
+		cursor: default;
+
+		&:hover {
+			background: transparent;
+		}
+	}
+`;
 
 /**
  * Content Picker
  *
- * @param {Object} props react props
- * @return {*} React JSX
+ * @param {object} props React props
+ * @param props.label
+ * @param props.mode
+ * @param props.contentTypes
+ * @param props.placeholder
+ * @param props.onPickChange
+ * @param props.maxContentItems
+ * @param props.isOrderable
+ * @param props.singlePickedLabel
+ * @param props.multiPickedLabel
+ * @param props.content
+ * @param props.uniqueContentItems
+ * @param props.excludeCurrentPost
+ * @returns {*} React JSX
  */
 const ContentPicker = ({
 	label,
 	mode,
 	contentTypes,
 	placeholder,
-	onChange,
+	onPickChange,
 	maxContentItems,
 	isOrderable,
 	singlePickedLabel,
@@ -30,15 +56,16 @@ const ContentPicker = ({
 	content: presetContent,
 	uniqueContentItems,
 	excludeCurrentPost,
+	perPage
 }) => {
-	const [searchString, setSearchString] = useState('');
-	const [searchResults, setSearchResults] = useState([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [selectedItem, setSelectedItem] = useState(null);
 	const [content, setContent] = useState(presetContent);
 
-	const currentPostId = select('core/editor').getCurrentPostId();
+	const currentPostId = select('core/editor')?.getCurrentPostId();
 
+	/**
+	 * This legacy code allows you to pass in only IDs to content like [ 1, 4, 5 ].
+	 * This really shouldn't be done as of version 1.5.0.
+	 */
 	if (content.length && typeof content[0] !== 'object') {
 		for (let i = 0; i < content.length; i++) {
 			content[i] = {
@@ -48,160 +75,60 @@ const ContentPicker = ({
 		}
 	}
 
-	function handleItemSelection(item) {
-		setSearchResults([]);
-		setSearchString('');
+	// Run onPickChange callback when content changes.
+	useEffect(() => {
+		onPickChange(content);
+	}, [content, onPickChange]);
 
-		const newContent = [...content];
+	const handleSelect = (item) => {
+		setContent((previousContent) => [
+			{
+				id: item.id,
+				uuid: uuidv4(),
+				type: 'subtype' in item ? item.subtype : item.type,
+			},
+			...previousContent,
+		]);
+	};
 
-		newContent.unshift({
-			id: item.id,
-			type: item.subtype,
-		});
-
-		onChange(newContent);
-
-		setContent(newContent);
-	}
-
-	/**
-	 * handleSearchStringChange
-	 *
-	 * Using the keyword and the list of tags that are linked to the parent block
-	 * search for posts/terms that match and return them to the autocomplete component.
-	 *
-	 * @param {string} keyword search query string
-	 */
-	const handleSearchStringChange = (keyword) => {
-		setSearchString(keyword);
-		setIsLoading(true);
-
-		const searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
-			',',
-		)}&type=${mode}`;
-
-		apiFetch({
-			path: searchQuery,
-		}).then((results) => {
-			const newResults = results.filter((result) => {
-				let keep = true;
-
-				if (content.length && uniqueContentItems) {
-					content.forEach((item) => {
-						if (item.id === result.id) {
-							keep = false;
-						}
-					});
+	const onDeleteItem = (deletedItem) => {
+		setContent((previousContent) => {
+			return previousContent.filter(({ id, uuid }) => {
+				if (deletedItem.uuid) {
+					return uuid !== deletedItem.uuid;
+				} else {
+					return id !== deletedItem.id;
 				}
-
-				if (
-					excludeCurrentPost &&
-					currentPostId &&
-					parseInt(result.id, 10) === parseInt(currentPostId, 10)
-				) {
-					keep = false;
-				}
-
-				return keep;
 			});
-
-			setSearchResults(newResults);
-			setIsLoading(false);
 		});
 	};
 
-	/**
-	 * handleSelection
-	 *
-	 * update the selected item in state to either the selected item or null if the
-	 * selected item does not have a valid id
-	 *
-	 * @param {*} item
-	 */
-	function handleSelection(item) {
-		if (item === 0) {
-			setSelectedItem(null);
+	const excludeItems = useMemo(() => {
+		const items = uniqueContentItems ? [...content] : [];
+
+		if (excludeCurrentPost && currentPostId) {
+			items.push({
+				id: currentPostId
+			});
 		}
 
-		setSelectedItem(item);
-	}
-
-	function handleItemDelete(item, sortIndex) {
-		const newContent = [...content];
-
-		newContent.splice(sortIndex, 1);
-
-		onChange(newContent);
-
-		setContent(newContent);
-	}
-
-	const hasSearchString = !!searchString.length;
-	const hasSearchResults = !!searchResults.length;
-
-	const StyleWrapper = styled('div')`
-		& .block-editor-link-control__search-item {
-			border: none;
-		}
-	`;
+		return items;
+	}, [content, currentPostId, excludeCurrentPost, uniqueContentItems]);
 
 	return (
 		<div className={`${NAMESPACE}`}>
-			{!content.length || (content.length && content.length < maxContentItems) ? (
-				<NavigableMenu onNavigate={handleSelection} orientation="vertical">
-					<TextControl
-						label={label}
-						value={searchString}
-						onChange={handleSearchStringChange}
-						placeholder={placeholder}
-						autoComplete="off"
-					/>
-					{hasSearchString ? (
-						<ul
-							className={`${NAMESPACE}-grid`}
-							style={{
-								marginTop: '0',
-								marginBottom: '0',
-								marginLeft: '0',
-								paddingLeft: '0',
-								listStyle: 'none',
-							}}
-						>
-							{isLoading && <Spinner />}
-							{!isLoading && !hasSearchResults && (
-								<li className={`${NAMESPACE}-grid-item`}>
-									<Button disabled>
-										{__('No Items found', '10up-block-components')}
-									</Button>
-								</li>
-							)}
-							{searchResults.map((item, index) => {
-								if (!item.title.length) {
-									return null;
-								}
-
-								return (
-									<li
-										key={item.id}
-										className={`${NAMESPACE}-grid-item`}
-										style={{
-											marginBottom: '0',
-										}}
-									>
-										<SearchItem
-											onClick={() => handleItemSelection(item)}
-											searchTerm={searchString}
-											suggestion={item}
-											isSelected={selectedItem === index + 1}
-										/>
-									</li>
-								);
-							})}
-						</ul>
-					) : null}
-				</NavigableMenu>
-			) : null}
-			{content.length ? (
+			{(!content.length || (content.length && content.length < maxContentItems)) && (
+				<ContentSearch
+					placeholder={placeholder}
+					label={label}
+					excludeItems={excludeItems}
+					onSelectItem={handleSelect}
+					contentTypes={contentTypes}
+					mode={mode}
+					perPage={perPage}
+				/>
+			)}
+			{Boolean(content?.length) > 0 && (
 				<StyleWrapper>
 					<span
 						style={{
@@ -215,19 +142,18 @@ const ContentPicker = ({
 
 					<SortableList
 						items={content}
+						useDragHandle
+						handleItemDelete={onDeleteItem}
 						isOrderable={isOrderable}
 						mode={mode}
-						handleItemDelete={handleItemDelete}
 						onSortEnd={({ oldIndex, newIndex }) => {
 							const newContent = [...arrayMove(content, oldIndex, newIndex)];
-
-							onChange(newContent);
 
 							setContent(newContent);
 						}}
 					/>
 				</StyleWrapper>
-			) : null}
+			)}
 		</div>
 	);
 };
@@ -235,12 +161,13 @@ const ContentPicker = ({
 ContentPicker.defaultProps = {
 	label: '',
 	mode: 'post',
-	onChange: (ids) => {
+	onPickChange: (ids) => {
 		console.log('Content picker list change', ids); // eslint-disable-line no-console
 	},
 	contentTypes: ['post', 'page'],
 	placeholder: '',
 	content: [],
+	perPage: 50,
 	maxContentItems: 1,
 	uniqueContentItems: true,
 	isOrderable: false,
@@ -258,10 +185,11 @@ ContentPicker.propTypes = {
 	multiPickedLabel: PropTypes.string,
 	singlePickedLabel: PropTypes.string,
 	isOrderable: PropTypes.bool,
-	onChange: PropTypes.func,
+	onPickChange: PropTypes.func,
 	uniqueContentItems: PropTypes.bool,
 	excludeCurrentPost: PropTypes.bool,
 	maxContentItems: PropTypes.number,
+	perPage: PropTypes.number,
 };
 
 export { ContentPicker };

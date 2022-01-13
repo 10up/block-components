@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
+import styled from '@emotion/styled';
 import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
-/** @jsxImportSource @emotion/react */
-import { jsx } from '@emotion/react'; // eslint-disable-line no-unused-vars
+import { sortableHandle } from 'react-sortable-hoc';
+import { useEffect } from '@wordpress/element';
 
 /**
  * PickedItem
@@ -12,39 +13,91 @@ import { jsx } from '@emotion/react'; // eslint-disable-line no-unused-vars
  * @param {Object} props react props
  * @return {*} React JSX
  */
-const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode, totalItems }) => {
+
+const DragHandle = sortableHandle(() => (
+	<svg
+		style={{ marginRight: '5px', cursor: 'grab', flexShrink: 0 }}
+		width="18"
+		height="18"
+		xmlns="http://www.w3.org/2000/svg"
+		viewBox="0 0 18 18"
+		role="img"
+		aria-hidden="true"
+		focusable="false"
+	>
+		<path d="M5 4h2V2H5v2zm6-2v2h2V2h-2zm-6 8h2V8H5v2zm6 0h2V8h-2v2zm-6 6h2v-2H5v2zm6 0h2v-2h-2v2z" />
+	</svg>
+));
+
+const Wrapper = styled('div')`
+	button {
+		display: block;
+		padding: 2px 8px 6px 8px;
+		margin-left: auto;
+		font-size: 2em;
+		cursor: pointer;
+		border: none;
+		background-color: transparent;
+
+		&:hover {
+			background-color: #ccc;
+		}
+	}
+`;
+
+const PickedItem = ({ item, isOrderable, handleItemDelete, mode }) => {
 	const type = mode === 'post' ? 'postType' : 'taxonomy';
 
+	// This will return undefined while the item data is being fetched. If the item comes back
+	// empty, it will return null, which is handled in the effect below.
 	const preparedItem = useSelect(
 		(select) => {
-			const result = select('core').getEntityRecord(type, item.type, item.id);
+			const { getEntityRecord, hasFinishedResolution } = select('core');
+
+			const getEntityRecordParameters = [type, item.type, item.id];
+			const result = getEntityRecord(...getEntityRecordParameters);
 
 			if (result) {
-				return {
+				const newItem = {
 					title: mode === 'post' ? result.title.rendered : result.name,
 					url: result.link,
 					id: result.id,
 				};
+
+				if (item.uuid) {
+					newItem.uuid = item.uuid;
+				}
+
+				return newItem;
 			}
 
-			return null;
+			if (hasFinishedResolution('getEntityRecord', getEntityRecordParameters)) {
+				return null;
+			}
+
+			return undefined;
 		},
 		[item.id, type],
 	);
 
+	// If `getEntityRecord` did not return an item, pass it to the delete callback.
+	useEffect(() => {
+		if (preparedItem === null) {
+			handleItemDelete(item);
+		}
+	}, [item, handleItemDelete, preparedItem]);
+
 	return preparedItem ? (
-		<div
-			css={{
-				cursor: isOrderable && totalItems > 1 ? 'move' : 'default',
+		<Wrapper
+			style={{
 				border: '2px dashed #ddd',
-				':hover': !isOrderable
-					? {
-							backgroundColor: 'transparent',
-					  }
-					: '',
+				paddingTop: '10px',
+				paddingBottom: '10px',
+				paddingLeft: isOrderable ? '3px' : '8px',
 			}}
 			className="block-editor-link-control__search-item is-entity"
 		>
+			{isOrderable ? <DragHandle /> : ''}
 			<span className="block-editor-link-control__search-item-header">
 				<span className="block-editor-link-control__search-item-title">
 					{decodeEntities(preparedItem.title)}
@@ -53,28 +106,17 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, sortIndex, mode, tota
 					{filterURLForDisplay(safeDecodeURI(preparedItem.url)) || ''}
 				</span>
 			</span>
+
 			<button
 				type="button"
-				css={{
-					display: 'block',
-					padding: '2px 8px 6px 8px;',
-					marginLeft: 'auto',
-					fontSize: '2em',
-					cursor: 'pointer',
-					border: 'none',
-					backgroundColor: 'transparent',
-					':hover': {
-						backgroundColor: '#ccc',
-					},
-				}}
 				onClick={() => {
-					handleItemDelete(preparedItem, sortIndex);
+					handleItemDelete(preparedItem);
 				}}
 				aria-label={__('Delete item', '10up-block-components')}
 			>
 				&times;
 			</button>
-		</div>
+		</Wrapper>
 	) : (
 		<div />
 	);
@@ -88,9 +130,7 @@ PickedItem.propTypes = {
 	item: PropTypes.object.isRequired,
 	isOrderable: PropTypes.bool,
 	handleItemDelete: PropTypes.func.isRequired,
-	sortIndex: PropTypes.number.isRequired,
 	mode: PropTypes.string.isRequired,
-	totalItems: PropTypes.number.isRequired,
 };
 
 export default PickedItem;

@@ -3,11 +3,12 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.0.0",
+  "version": "1.6.0",
   "description": "10up Components built for the WordPress Block Editor.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "10up-toolkit lint-js",
+    "test": "10up-toolkit test-unit-jest"
   },
   "repository": {
     "type": "git",
@@ -28,14 +29,16 @@
     "url": "https://github.com/10up/block-components.git/issues"
   },
   "homepage": "https://github.com/10up/block-components.git#readme",
-  "devDependencies": {
-    "@10up/eslint-config": "^2.2.0"
-  },
   "dependencies": {
-    "@emotion/react": "^11.1.4",
+    "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.0.0",
+    "@wordpress/icons": "^6.1.1",
     "array-move": "^3.0.1",
     "prop-types": "^15.7.2",
-    "react-sortable-hoc": "^1.11.0"
+    "react-sortable-hoc": "^1.11.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "10up-toolkit": "^1.0.6"
   }
 }
