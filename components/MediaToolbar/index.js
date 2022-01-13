@@ -1,7 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { MediaReplaceFlow, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
-const NAMESPACE = '10up-block-components';
+import { useMedia } from '../../hooks/use-media';
 
 /**
  * MediaToolbar
@@ -11,33 +11,29 @@ const NAMESPACE = '10up-block-components';
  *
  * This should be used on components that have optional images.
  *
- * @param {Object} props options
- * @return {Object} markup of the ToolbarGroup
+ * @param {object} props options
+ * @returns {object} markup of the ToolbarGroup
  */
-export function MediaToolbar(props) {
-	const {
-        onSelect,
-        onRemove,
-        isOptional = false,
-        image,
-    } = props;
+export const MediaToolbar = (props) => {
+	const { onSelect, onRemove, isOptional = false, id } = props;
 
-    const hasImage = image?.url?.length;
+	const hasImage = !!id;
+	const { media } = useMedia(id);
 
 	return (
 		<ToolbarGroup>
 			{hasImage ? (
 				<>
 					<MediaReplaceFlow
-						mediaUrl={image.url}
+						mediaUrl={media?.source_url}
 						onSelect={onSelect}
-						name={__('Replace Image', NAMESPACE)}
+						name={__('Replace Image', '10up-block-components')}
 					/>
-                    { !!isOptional (
-                        <ToolbarButton onClick={onRemove}>
-                            {__('Remove Image', NAMESPACE)}
-                        </ToolbarButton>
-                    ) }
+					{!!isOptional && (
+						<ToolbarButton onClick={onRemove}>
+							{__('Remove Image', '10up-block-components')}
+						</ToolbarButton>
+					)}
 				</>
 			) : (
 				<MediaUploadCheck>
@@ -45,7 +41,7 @@ export function MediaToolbar(props) {
 						onSelect={onSelect}
 						render={({ open }) => (
 							<ToolbarButton onClick={open}>
-								{__('Add Image', NAMESPACE)}
+								{__('Add Image', '10up-block-components')}
 							</ToolbarButton>
 						)}
 					/>
@@ -53,4 +49,4 @@ export function MediaToolbar(props) {
 			)}
 		</ToolbarGroup>
 	);
-}
+};

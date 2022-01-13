@@ -1,0 +1,16 @@
+{
+    "name": "example/image-example",
+    "title": "Image Example",
+    "description": "Example Block to show the Image in usage",
+    "icon": "smiley",
+    "category": "common",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "imageId": {
+            "type": "number"
+        }
+    }
+}
