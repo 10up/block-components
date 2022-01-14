@@ -11,11 +11,7 @@ import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import { useState, useEffect, useRef } from '@wordpress/element';
 import { Popover, Icon, Tooltip } from '@wordpress/components';
-import {
-	__experimentalLinkControl as LinkControl,
-	RichText,
-	useBlockEditContext,
-} from '@wordpress/block-editor';
+import { __experimentalLinkControl as LinkControl, RichText } from '@wordpress/block-editor';
 
 /**
  * Internal Dependencies
@@ -118,7 +114,6 @@ const Link = ({
 	const ref = useRef();
 	const [isLinkOpen, setIsLinkOpen] = useState(false);
 	const [isValid, setIsValid] = useState(false);
-	const { isSelected } = useBlockEditContext();
 	const openPopover = () => setIsLinkOpen(true);
 	const closePopover = () => setIsLinkOpen(false);
 
@@ -129,14 +124,6 @@ const Link = ({
 		opensInNewTab,
 		title: value, // don't allow HTML to display inside the <LinkControl>
 	};
-
-	/**
-	 * The hook shouldn't be necessary but due to a focus loss happening
-	 * when selecting a suggestion in the link popover, we force close on block un-selection.
-	 */
-	useEffect(() => {
-		if (!isSelected) closePopover();
-	}, [isSelected]);
 
 	/**
 	 * Check if the URL and Value are set. If yes, then the component is valid.
