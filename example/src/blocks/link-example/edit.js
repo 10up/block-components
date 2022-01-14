@@ -23,17 +23,15 @@ export function BlockEdit(props) {
     return (
         <div {...blockProps}>
             <h2>Hello World!</h2>
-            <div>
-                <Link 
-                    value={text}
-                    url={url}
-                    opensInNewTab={opensInNewTab}
-                    onTextChange={handleTextChange}
-                    onLinkChange={handleLinkChange}
-                    className='example-classname'
-                    placeholder='Enter Link Text here...'
-                />
-            </div>
+            <Link 
+                value={text}
+                url={url}
+                opensInNewTab={opensInNewTab}
+                onTextChange={handleTextChange}
+                onLinkChange={handleLinkChange}
+                className='example-classname'
+                placeholder='Enter Link Text here...'
+            />
         </div>
     )
 }
