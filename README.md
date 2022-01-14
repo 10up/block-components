@@ -44,7 +44,7 @@ function MyComponent( props ) {
 | ---------------- | ---------- | --------------------- | ---------------------------------------------------------------------- |
 | `onPickChange`   | `function` | `undefined`            | Callback function the list of picked content gets changed |
 | `label`          | `string`   | `''`                   | Renders a label for the Search Field.                                  |
-| `mode`           | `string`   | `'post'`               | Either `post` or `term`                                 |
+| `mode`           | `string`   | `'post'`               | One of: `post`, `user`, `term`                                 |
 | `placeholder`    | `string`   | `''`                   | Renders placeholder text inside the Search Field.                      |
 | `contentTypes`      | `array`    | `[ 'post', 'page' ]` | Names of the post types or taxonomies that should get searched                       |
 | `maxContentItems`          | `number`   | `1`                   | Max number of items a user can select.
@@ -89,7 +89,7 @@ function MyComponent( props ) {
 | ---------------- | ---------- | --------------------- | ---------------------------------------------------------------------- |
 | `onSelectItem`   | `function` | `undefined`            | Function called when a searched item is clicke |
 | `label`          | `string`   | `''`                   | Renders a label for the Search Field.                                  |
-| `mode`           | `string`   | `'post'`               | Either `post` or `term`                                 |
+| `mode`           | `string`   | `'post'`               | One of: `post`, `user`, `term`                                 |
 | `placeholder`    | `string`   | `''`                   | Renders placeholder text inside the Search Field.                      |
 | `contentTypes`      | `array`    | `[ 'post', 'page' ]` | Names of the post types or taxonomies that should get searched                       |
 | `excludeItems`      | `array`    | `[ { id: 1, type: 'post' ]` | Items to exclude from search |
