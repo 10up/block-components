@@ -67,6 +67,30 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 	const hasSearchResults = !!searchResults.length;
 
 	/**
+	 * Depending on the mode value, this method normalizes the format
+	 * of the result array.
+	 *
+	 * @param {string} mode ContentPicker mode.
+	 * @param {Array} result The array to be normalized.
+	 * @returns {Array} The normalizes array.
+	 */
+	const normalizeResults = (mode = 'post', result = []) => {
+		if (mode === 'user') {
+			return result.map((item) => {
+				return {
+					id: item.id,
+					subtype: mode,
+					title: item.name,
+					type: mode,
+					url: item.link,
+				};
+			});
+		}
+
+		return result;
+	};
+
+	/**
 	 * handleSearchStringChange
 	 *
 	 * Using the keyword and the list of tags that are linked to the parent block
@@ -92,9 +116,18 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 
 		setIsLoading(true);
 
-		const searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
-			',',
-		)}&type=${mode}&_embed&per_page=${perPage}`;
+		let searchQuery;
+
+		switch (mode) {
+			case 'user':
+				searchQuery = `wp/v2/users/?search=${keyword}`;
+				break;
+			default:
+				searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
+					',',
+				)}&type=${mode}&_embed&per_page=${perPage}`;
+				break;
+		}
 
 		if (searchCache[searchQuery]) {
 			abortControllerRef.current = null;
@@ -113,9 +146,10 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, e
 
 				abortControllerRef.current = null;
 
-				searchCache[searchQuery] = results;
+				const normalizedResults = normalizeResults(mode, results);
+				searchCache[searchQuery] = normalizedResults;
 
-				setSearchResults(filterResults(results));
+				setSearchResults(filterResults(normalizedResults));
 
 				setIsLoading(false);
 			}).catch((error, code) => {
