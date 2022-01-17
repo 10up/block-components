@@ -253,6 +253,33 @@ const MyComponent = ({clientId}) => {
 | `slidesPerPage` | `integer` | `1` | Number of slides to show per page |
 | `parentBlockId` | `string` | `''` | Client ID of parent block. This is required.  |
 
+## Optional
+A component that takes care of the logic of rendering nodes only when it is selected.
+
+### Usage
+```js
+const BlockEdit = (props) => {
+    const { attributes, setAttributes, isSelected } = props;
+    const { title } = attributes;
+
+    const blockProps = useBlockProps();
+
+    return (
+        <div {...blockProps}>
+            <Optional value={ title }>
+                <RichText tagName="h2" value={ title } onChange={ value => setAttributes({ title: value }) } />
+           </Optional>
+        </div>
+    )
+}
+```
+
+The `<RichText>` node will only render when BlockEdit is selected.
+
+#### Props
+| Name       | Type              | Default  |  Description                                                   |
+| ---------- | ----------------- | -------- | -------------------------------------------------------------- |
+| `value` | `string`    | `''`   | The value that will be consumed by the children. If the value is falsey the component will only be rendered if the block is selected. |
 
 ## registerBlockExtention
 The `registerBlockExtention` API is a wrapper to make it easier to add custom settings which produce classnames to any blocks. There are a few problems with using block styles for customisations. For one an editor cannot combine block styles. So you very quickly land in a sittuation where you need to add many block styles just to give an editor the ability to choose exactly the combination of options they want. That leads to a bad user experience though as the previews take up a ton of space and also make the editor slower due to the overhead of the iframes it creates. So in many cases it is nicer to extend a bock with custom settings to achive the same goal. The process of registering your own attributes, modifying the blocks edit function, adding the new classname to the editor listing and also adding it to the frontend is rather cumbersome though. That is where this API comes in. It is a wrapper for the underlying filters that improves the editorial experience and reduces the amount of code that needs to get maintained in order to extend blocks.
