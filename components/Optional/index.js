@@ -3,7 +3,7 @@ import { useBlockEditContext } from '@wordpress/block-editor';
 
 export const Optional = ({ value, children }) => {
 	const { isSelected } = useBlockEditContext();
-	return !!value && isSelected && children;
+	return (isSelected || !!value) && children;
 };
 
 Optional.defaultProps = {
