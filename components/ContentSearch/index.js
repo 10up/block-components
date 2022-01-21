@@ -31,6 +31,8 @@ const ContentSearch = ({
 
 	const mounted = useRef(true);
 
+	const listMinHeight = '46px';
+
 	/**
 	 * handleSelection
 	 *
@@ -163,6 +165,23 @@ const ContentSearch = ({
 		overflow-y: auto;
 	`;
 
+	const loadingCSS = css`
+		/* Custom styles to reduce jumping while loading the results */
+		min-height: ${listMinHeight};
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	`;
+
+	const loadMoreCSS = css`
+		/* To increase thew specificity over other UI styles form the editor. */
+		&&& {
+			display: flex;
+			justify-content: center;
+			margin-top: 1em;
+		}
+	`;
+
 	return (
 		<NavigableMenu onNavigate={handleOnNavigate} orientation="vertical">
 			<TextControl
@@ -186,7 +205,11 @@ const ContentSearch = ({
 						}}
 						css={listCSS}
 					>
-						{isLoading && currentPage === 1 && <Spinner />}
+						{isLoading && currentPage === 1 && (
+							<div css={loadingCSS}>
+								<Spinner />
+							</div>
+						)}
 
 						{!isLoading && !hasSearchResults && (
 							<li
@@ -223,15 +246,28 @@ const ContentSearch = ({
 					</ul>
 
 					{!isLoading && hasSearchResults && !lessThanPerPage && (
-						<Button onClick={handleLoadMore} type="button">
-							{__('Load more', '10up-block-components')}
-						</Button>
+						<div css={loadMoreCSS}>
+							<Button
+								onClick={handleLoadMore}
+								type="button"
+								className="components-button is-secondary"
+							>
+								{__('Load more', '10up-block-components')}
+							</Button>
+						</div>
 					)}
 
-					{isLoading && (
-						<Button disabled onClick={handleLoadMore} type="button">
-							{__('Loading ...', '10up-block-components')}
-						</Button>
+					{isLoading && currentPage > 1 && (
+						<div css={loadMoreCSS}>
+							<Button
+								disabled
+								onClick={handleLoadMore}
+								type="button"
+								className="components-button is-secondary"
+							>
+								{__('Loading ...', '10up-block-components')}
+							</Button>
+						</div>
 					)}
 				</>
 			) : null}

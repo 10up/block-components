@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ContentSearch } from '../ContentSearch';
 import SortableList from './SortableList';
 
-const NAMESPACE = '10up-content-picker';
+const NAMESPACE = 'tenup-content-picker';
 
 /**
  * Unfortunately, we had to use !important because on PickedItem we couldn't @emotion/styled css
@@ -23,6 +23,14 @@ const StyleWrapper = styled('div')`
 			background: transparent;
 		}
 	}
+`;
+
+/**
+ * Without this, the flex parents will limit the width of the picker. Fixes view when the results
+ * all have short titles.
+ */
+const ContentPickerWrapper = styled('div')`
+	width: 100%;
 `;
 
 /**
@@ -41,6 +49,7 @@ const StyleWrapper = styled('div')`
  * @param props.content
  * @param props.uniqueContentItems
  * @param props.excludeCurrentPost
+ * @param props.perPage
  * @returns {*} React JSX
  */
 const ContentPicker = ({
@@ -115,7 +124,7 @@ const ContentPicker = ({
 	}, [content, currentPostId, excludeCurrentPost, uniqueContentItems]);
 
 	return (
-		<div className={`${NAMESPACE}`}>
+		<ContentPickerWrapper className={`${NAMESPACE}`}>
 			{(!content.length || (content.length && content.length < maxContentItems)) && (
 				<ContentSearch
 					placeholder={placeholder}
@@ -154,7 +163,7 @@ const ContentPicker = ({
 					/>
 				</StyleWrapper>
 			)}
-		</div>
+		</ContentPickerWrapper>
 	);
 };
 
