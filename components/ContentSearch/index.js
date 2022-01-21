@@ -4,13 +4,24 @@ import { useState, useRef, useEffect } from '@wordpress/element'; // eslint-disa
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import { jsx, css } from '@emotion/react';
+import { search } from '@wordpress/icons';
 import SearchItem from './SearchItem';
 import SortableList from '../ContentPicker/SortableList';
 /** @jsx jsx */
 
 const NAMESPACE = 'tenup-content-search';
 
-const searchCache = {};
+/**
+ * Store each search QUERY with it's response values. Then, on next search
+ * if the new query matches one of the saved queries, we will not run a fetch
+ * request but just output the stored results in this array.
+ *
+ * Structure in each object of the array:
+ * results: array
+ * totalPages: number
+ * currentPage: number
+ */
+const searchCache = [];
 
 const ContentSearch = ({
 	onSelectItem,
@@ -27,11 +38,14 @@ const ContentSearch = ({
 	const [showLoadMore, setShowLoadMore] = useState(false);
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [currentPage, setCurrentPage] = useState(1);
-	const [totalPages, setTotalPages] = useState(1);
 	const abortControllerRef = useRef();
 
 	const mounted = useRef(true);
 
+	const hasSearchString = !!searchString.length;
+	const hasSearchResults = !!searchResults.length;
+
+	// Equzlie height of list icons to match loader in order to reduce jumping.
 	const listMinHeight = '46px';
 
 	/**
@@ -65,9 +79,6 @@ const ContentSearch = ({
 		onSelectItem(item);
 	}
 
-	const hasSearchString = !!searchString.length;
-	const hasSearchResults = !!searchResults.length;
-
 	/**
 	 * handleSearchStringChange
 	 *
@@ -85,6 +96,7 @@ const ContentSearch = ({
 			setIsLoading(false);
 			setSearchResults([]);
 			setSearchString(keyword);
+			setCurrentPage(1);
 
 			abortControllerRef.current = null;
 			return;
@@ -92,11 +104,6 @@ const ContentSearch = ({
 
 		abortControllerRef.current = new AbortController();
 		setSearchString(keyword);
-
-		if (searchString !== keyword) {
-			setCurrentPage(1);
-			setTotalPages(0);
-		}
 	};
 
 	const handleLoadMore = () => {
@@ -131,38 +138,46 @@ const ContentSearch = ({
 			',',
 		)}&type=${mode}&_embed&per_page=${perPage}&page=${currentPage}`;
 
-		if (searchCache[searchQuery]) {
+		const cachedResults = searchCache.find((obj) => obj.query === searchQuery);
+
+		if (cachedResults) {
 			abortControllerRef.current = null;
 
-			setSearchResults(filterResults(searchCache[searchQuery]));
+			setSearchResults(cachedResults.results);
+			setCurrentPage(cachedResults.currentPage);
+			setShowLoadMore(currentPage < cachedResults.totalPages);
+
 			setIsLoading(false);
 		} else {
-			apiFetch.use((options, next) => {
-				const result = next({ ...options, parse: false });
-				result.then((res) => {
-					setTotalPages((res.headers && res.headers.get('X-WP-TotalPages')) || 0);
-				});
-
-				return result;
-			});
-
 			apiFetch({
 				path: searchQuery,
 				signal: abortControllerRef.current.signal,
+				parse: false,
 			})
 				.then((results) => {
+					const totalPages = parseInt(
+						results.headers && results.headers.get('X-WP-TotalPages'),
+						10,
+					);
+
 					// Parse, because we set parse to false to get the headers.
 					results.json().then((results) => {
 						if (mounted.current === false) {
 							return;
 						}
 
+						const mergedResults = [...searchResults, ...filterResults(results)];
+
+						searchCache.push({
+							query: searchQuery,
+							results: mergedResults,
+							currentPage,
+							totalPages,
+						});
+
 						abortControllerRef.current = null;
-
-						searchCache[searchQuery] = results;
-
+						setSearchResults(mergedResults);
 						setShowLoadMore(currentPage < totalPages);
-						setSearchResults([...searchResults, ...filterResults(results)]);
 						setIsLoading(false);
 					});
 				})
@@ -175,16 +190,7 @@ const ContentSearch = ({
 					}
 				});
 		}
-	}, [
-		contentTypes,
-		currentPage,
-		excludeItems,
-		mode,
-		perPage,
-		searchResults,
-		searchString,
-		totalPages,
-	]);
+	}, [contentTypes, currentPage, excludeItems, mode, perPage, searchResults, searchString]);
 
 	const listCSS = css`
 		/* stylelint-disable */
