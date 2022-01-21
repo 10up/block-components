@@ -24,9 +24,10 @@ const ContentSearch = ({
 	const [searchString, setSearchString] = useState('');
 	const [searchResults, setSearchResults] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
-	const [lessThanPerPage, setLessThanPerPage] = useState(false);
+	const [showLoadMore, setShowLoadMore] = useState(false);
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [totalPages, setTotalPages] = useState(1);
 	const abortControllerRef = useRef();
 
 	const mounted = useRef(true);
@@ -91,6 +92,11 @@ const ContentSearch = ({
 
 		abortControllerRef.current = new AbortController();
 		setSearchString(keyword);
+
+		if (searchString !== keyword) {
+			setCurrentPage(1);
+			setTotalPages(0);
+		}
 	};
 
 	const handleLoadMore = () => {
@@ -131,22 +137,34 @@ const ContentSearch = ({
 			setSearchResults(filterResults(searchCache[searchQuery]));
 			setIsLoading(false);
 		} else {
+			apiFetch.use((options, next) => {
+				const result = next({ ...options, parse: false });
+				result.then((res) => {
+					setTotalPages((res.headers && res.headers.get('X-WP-TotalPages')) || 0);
+				});
+
+				return result;
+			});
+
 			apiFetch({
 				path: searchQuery,
 				signal: abortControllerRef.current.signal,
 			})
 				.then((results) => {
-					if (mounted.current === false) {
-						return;
-					}
+					// Parse, because we set parse to false to get the headers.
+					results.json().then((results) => {
+						if (mounted.current === false) {
+							return;
+						}
 
-					abortControllerRef.current = null;
+						abortControllerRef.current = null;
 
-					searchCache[searchQuery] = results;
+						searchCache[searchQuery] = results;
 
-					setLessThanPerPage(results.length < perPage);
-					setSearchResults([...searchResults, ...filterResults(results)]);
-					setIsLoading(false);
+						setShowLoadMore(currentPage < totalPages);
+						setSearchResults([...searchResults, ...filterResults(results)]);
+						setIsLoading(false);
+					});
 				})
 				.catch((error, code) => {
 					// fetch_error means the request was aborted
@@ -157,12 +175,27 @@ const ContentSearch = ({
 					}
 				});
 		}
-	}, [contentTypes, currentPage, excludeItems, mode, perPage, searchString]);
+	}, [
+		contentTypes,
+		currentPage,
+		excludeItems,
+		mode,
+		perPage,
+		searchResults,
+		searchString,
+		totalPages,
+	]);
 
 	const listCSS = css`
 		/* stylelint-disable */
 		max-height: 350px;
 		overflow-y: auto;
+
+		&& {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
 	`;
 
 	const loadingCSS = css`
@@ -174,11 +207,13 @@ const ContentSearch = ({
 	`;
 
 	const loadMoreCSS = css`
-		/* To increase thew specificity over other UI styles form the editor. */
-		&&& {
-			display: flex;
-			justify-content: center;
-			margin-top: 1em;
+		display: flex;
+		justify-content: center;
+		margin-top: 1em;
+
+		button {
+			/* Reduce the jumping of the width when text changes to "Loading" */
+			min-width: 90px;
 		}
 	`;
 
@@ -194,17 +229,7 @@ const ContentSearch = ({
 
 			{hasSearchString ? (
 				<>
-					<ul
-						className={`${NAMESPACE}-list`}
-						style={{
-							marginTop: '0',
-							marginBottom: '0',
-							marginLeft: '0',
-							paddingLeft: '0',
-							listStyle: 'none',
-						}}
-						css={listCSS}
-					>
+					<ul className={`${NAMESPACE}-list`} css={listCSS}>
 						{isLoading && currentPage === 1 && (
 							<div css={loadingCSS}>
 								<Spinner />
@@ -245,7 +270,7 @@ const ContentSearch = ({
 							})}
 					</ul>
 
-					{!isLoading && hasSearchResults && !lessThanPerPage && (
+					{!isLoading && hasSearchResults && showLoadMore && (
 						<div css={loadMoreCSS}>
 							<Button
 								onClick={handleLoadMore}
@@ -273,28 +298,6 @@ const ContentSearch = ({
 			) : null}
 		</NavigableMenu>
 	);
-};
-
-ContentSearch.defaultProps = {
-	contentTypes: ['post', 'page'],
-	placeholder: '',
-	perPage: 20,
-	label: '',
-	excludeItems: [],
-	mode: 'post',
-	onSelectItem: () => {
-		console.log('Select!'); // eslint-disable-line no-console
-	},
-};
-
-ContentSearch.propTypes = {
-	contentTypes: PropTypes.array,
-	mode: PropTypes.string,
-	onSelectItem: PropTypes.func,
-	placeholder: PropTypes.string,
-	excludeItems: PropTypes.array,
-	label: PropTypes.string,
-	perPage: PropTypes.number,
 };
 
 export { ContentSearch };
