@@ -276,6 +276,11 @@ const BlockEdit = (props) => {
 
 The `<RichText>` node will only render when BlockEdit is selected.
 
+#### Props
+| Name       | Type              | Default  |  Description                                                   |
+| ---------- | ----------------- | -------- | -------------------------------------------------------------- |
+| `value` | `string`    | `''`   | The value that will be consumed by the children. If the value is falsey the component will only be rendered if the block is selected. |
+
 ## ClipboardButton
 This button component receives a string and copies it to the clipboard on click.
 
@@ -289,7 +294,7 @@ const MyComponent = () => {
 			<ClipboardButton
 				text="The string to be copied to the clipboard"
 				onSuccess={ ()=> { console.log( 'String copied!' ) } }
-				label={(hasCopied) => hasCopied ? 'Copied!' : 'Click to copy'}
+				labels={{copy: 'Copy text', copied: 'Text copied!'}}
 				disabled={false}
 			>
 		</div>
@@ -302,13 +307,8 @@ const MyComponent = () => {
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
 | `text` | `string`    | `''`   | The text to be copied to the clipboard         |
 | `onSuccess` | `function` | `undefined` | Callback function that runs after text is copied to the clipboard |
-| `label` | `function` | `undefined` | A callback that passes the state of the clipboard as a function argument and returns the button label based on the state. |
+| `labels` | `object` | `{}` | Prop to assign labels to the button before and after copying the text. Set the properties `copy` and `copied` on the object to replace the default "Copy" and "Copied" text. |
 | `disabled` | `bool` | `false` | Prop to enable/disable the button |
-
-#### Props
-| Name       | Type              | Default  |  Description                                                   |
-| ---------- | ----------------- | -------- | -------------------------------------------------------------- |
-| `value` | `string`    | `''`   | The value that will be consumed by the children. If the value is falsey the component will only be rendered if the block is selected. |
 
 ## registerBlockExtention
 The `registerBlockExtention` API is a wrapper to make it easier to add custom settings which produce classnames to any blocks. There are a few problems with using block styles for customisations. For one an editor cannot combine block styles. So you very quickly land in a sittuation where you need to add many block styles just to give an editor the ability to choose exactly the combination of options they want. That leads to a bad user experience though as the previews take up a ton of space and also make the editor slower due to the overhead of the iframes it creates. So in many cases it is nicer to extend a bock with custom settings to achive the same goal. The process of registering your own attributes, modifying the blocks edit function, adding the new classname to the editor listing and also adding it to the frontend is rather cumbersome though. That is where this API comes in. It is a wrapper for the underlying filters that improves the editorial experience and reduces the amount of code that needs to get maintained in order to extend blocks.

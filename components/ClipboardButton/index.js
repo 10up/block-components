@@ -5,9 +5,10 @@ import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 export const ClipboardButton = (props) => {
-	const { text, disabled, onSuccess, label } = props;
+	const { text, disabled, onSuccess, labels } = props;
 	const [hasCopied, setHasCopied] = useState(false);
-	const buttonLabel = label(hasCopied);
+	const copy = labels.copy ? labels.copy : __('Copy');
+	const copied = labels.copied ? labels.copied : __('Copied');
 
 	useEffect(() => {
 		if (hasCopied) {
@@ -34,7 +35,7 @@ export const ClipboardButton = (props) => {
 
 	return (
 		<Button disabled={disabled} ref={ref}>
-			{buttonLabel}
+			{hasCopied ? copied : copy}
 		</Button>
 	);
 };
@@ -43,12 +44,12 @@ ClipboardButton.defaultProps = {
 	text: '',
 	disabled: false,
 	onSuccess: () => {},
-	label: (hasCopied) => (hasCopied ? __('Copied') : __('Copy')),
+	labels: {},
 };
 
 ClipboardButton.propTypes = {
 	text: PropTypes.string,
 	disabled: PropTypes.bool,
 	onSuccess: PropTypes.func,
-	label: PropTypes.func,
+	labels: PropTypes.object,
 };
