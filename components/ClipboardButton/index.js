@@ -11,11 +11,19 @@ export const ClipboardButton = (props) => {
 	const copied = labels.copied ? labels.copied : __('Copied');
 
 	useEffect(() => {
+		let timerId;
+
 		if (hasCopied) {
-			setTimeout(() => {
+			timerId = setTimeout(() => {
 				setHasCopied(false);
 			}, 3000);
 		}
+
+		return () => {
+			if (timerId) {
+				clearTimeout(timerId);
+			}
+		};
 	}, [hasCopied]);
 
 	function successfullyCopied() {
