@@ -1,4 +1,4 @@
-import { registerBlockExtention } from "@10up/block-components";
+import { registerBlockExtension } from "@10up/block-components";
 import { BlockEdit } from "./edit";
 
 const BACKGROUND_ATTRIBUTES = {
@@ -39,10 +39,10 @@ return `has-background-pattern ${backgroundPatternColorClassName} ${backgroundPa
 
 }
  
-registerBlockExtention(
+registerBlockExtension(
     'core/group',
     {
-        extentionName: 'background-patterns',
+        extensionName: 'background-patterns',
         attributes: BACKGROUND_ATTRIBUTES,
         classNameGenerator: generateClassNames,
         Edit: BlockEdit,

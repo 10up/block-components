@@ -5,24 +5,24 @@ import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 
 /**
- * registerBlockExtention
+ * registerBlockExtension
  *
  * A helper function that allows you to add custom settings to any block.
- * Unter the hood it filters the blocks registerBlockType, BlockEdit, BlockListBlock
+ * Under the hood it filters the blocks registerBlockType, BlockEdit, BlockListBlock
  * and getSaveContent.extraProps filters.
  *
  * @typedef BlockOptionOptions
  * @property {object}   attributes         object for new attributes that should get added to the block
  * @property {Function} classNameGenerator function that gets passed the attributes and should return a string for the classname
- * @property {Function} Edit               block edit extention function. Will only get rendered when the block is selected
- * @property {string}   extentionName      unique indentifier used for the name of the addFilter calls
+ * @property {Function} Edit               block edit extension function. Will only get rendered when the block is selected
+ * @property {string}   extensionName      unique identifier used for the name of the addFilter calls
  *
  * @param {string}             blockName name of the block
  * @param {BlockOptionOptions} options   configuration options
  */
-function registerBlockExtention(
+function registerBlockExtension(
 	blockName,
-	{ attributes, classNameGenerator, Edit, extentionName },
+	{ attributes, classNameGenerator, Edit, extensionName },
 ) {
 	/**
 	 * addAttributesToBlock
@@ -32,7 +32,7 @@ function registerBlockExtention(
 	 * @returns {Array}
 	 */
 	const addAttributesToBlock = (settings, name) => {
-		// return early from the block mofification
+		// return early from the block modification
 		if (name !== blockName) {
 			return settings;
 		}
@@ -49,7 +49,7 @@ function registerBlockExtention(
 
 	addFilter(
 		'blocks.registerBlockType',
-		`namespace/${blockName}/${extentionName}/addAttributesToBlock`,
+		`namespace/${blockName}/${extensionName}/addAttributesToBlock`,
 		addAttributesToBlock,
 	);
 
@@ -60,7 +60,7 @@ function registerBlockExtention(
 		return (props) => {
 			const { name, isSelected } = props;
 
-			// return early from the block mofification
+			// return early from the block modification
 			if (name !== blockName) {
 				return <BlockEdit {...props} />;
 			}
@@ -76,30 +76,30 @@ function registerBlockExtention(
 
 	addFilter(
 		'editor.BlockEdit',
-		`namespace/${blockName}/${extentionName}/addSettingsToBlock`,
+		`namespace/${blockName}/${extensionName}/addSettingsToBlock`,
 		addSettingsToBlock,
 	);
 
 	/**
 	 * addClassNameInEditor
 	 */
-	const addClassNameInEditor = createHigherOrderComponent((BlockEdit) => {
+	const addClassNameInEditor = createHigherOrderComponent((BlockList) => {
 		return (props) => {
 			const { name, attributes } = props;
 
-			// return early from the block mofification
+			// return early from the block modification
 			if (name !== blockName) {
-				return <BlockEdit {...props} />;
+				return <BlockList {...props} />;
 			}
 
 			const additionalClassName = classNameGenerator(attributes);
 
 			if (!additionalClassName) {
-				return <BlockEdit {...props} />;
+				return <BlockList {...props} />;
 			}
 
 			return (
-				<BlockEdit
+				<BlockList
 					{...props}
 					className={`${attributes.className || ''} ${additionalClassName}`}
 				/>
@@ -109,7 +109,7 @@ function registerBlockExtention(
 
 	addFilter(
 		'editor.BlockListBlock',
-		`namespace/${blockName}/${extentionName}/addClassNameInEditor`,
+		`namespace/${blockName}/${extensionName}/addClassNameInEditor`,
 		addClassNameInEditor,
 	);
 
@@ -122,7 +122,7 @@ function registerBlockExtention(
 	 * @returns {object}
 	 */
 	const saveSpacingAttributes = (props, block, attributes) => {
-		// return early from the block mofification
+		// return early from the block modification
 		if (block.name !== blockName) {
 			return props;
 		}
@@ -138,9 +138,9 @@ function registerBlockExtention(
 
 	addFilter(
 		'blocks.getSaveContent.extraProps',
-		`namespace/${blockName}/${extentionName}/saveSpacingAttributes`,
+		`namespace/${blockName}/${extensionName}/saveSpacingAttributes`,
 		saveSpacingAttributes,
 	);
 }
 
-export { registerBlockExtention };
+export { registerBlockExtension };
