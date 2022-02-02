@@ -87,7 +87,7 @@ const ContentPicker = ({
 	// Run onPickChange callback when content changes.
 	useEffect(() => {
 		onPickChange(content);
-	}, [content, onPickChange]);
+	}, [content]);
 
 	const handleSelect = (item) => {
 		setContent((previousContent) => [
