@@ -16,7 +16,7 @@ import { useEffect } from '@wordpress/element';
 
 const DragHandle = sortableHandle(() => (
 	<svg
-		style={{ marginRight: '5px', cursor: 'grab', flexShrink: 0 }}
+		style={{ marginRight: '10px', cursor: 'grab', flexShrink: 0 }}
 		width="18"
 		height="18"
 		xmlns="http://www.w3.org/2000/svg"
@@ -93,6 +93,8 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, mode }) => {
 				border: '2px dashed #ddd',
 				paddingTop: '10px',
 				paddingBottom: '10px',
+				display: 'flex',
+				alignItems: 'center',
 				paddingLeft: isOrderable ? '3px' : '8px',
 			}}
 			className="block-editor-link-control__search-item is-entity"

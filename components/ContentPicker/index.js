@@ -67,7 +67,11 @@ const ContentPicker = ({
 	excludeCurrentPost,
 	perPage,
 }) => {
-	const [content, setContent] = useState(presetContent);
+	const [content, setContent] = useState([]);
+
+	useEffect(() => {
+		setContent(presetContent);
+	}, [presetContent]);
 
 	const currentPostId = select('core/editor')?.getCurrentPostId();
 
