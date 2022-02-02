@@ -23,6 +23,9 @@ const NAMESPACE = 'tenup-content-search';
  */
 const searchCache = [];
 
+// Equalize height of list icons to match loader in order to reduce jumping.
+const listMinHeight = '46px';
+
 const ContentSearch = ({
 	onSelectItem,
 	placeholder,
@@ -44,9 +47,6 @@ const ContentSearch = ({
 
 	const hasSearchString = !!searchString.length;
 	const hasSearchResults = !!searchResults.length;
-
-	// Equzlie height of list icons to match loader in order to reduce jumping.
-	const listMinHeight = '46px';
 
 	/**
 	 * handleSelection
@@ -290,14 +290,7 @@ const ContentSearch = ({
 
 					{isLoading && currentPage > 1 && (
 						<div css={loadMoreCSS}>
-							<Button
-								disabled
-								onClick={handleLoadMore}
-								type="button"
-								className="components-button is-secondary"
-							>
-								{__('Loading ...', '10up-block-components')}
-							</Button>
+							<Spinner />
 						</div>
 					)}
 				</>
