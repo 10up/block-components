@@ -133,7 +133,7 @@ function registerBlockExtension(
 			return props;
 		}
 
-		return { ...props, className: `${attributes.className || ''} ${additionalClassName}` };
+		return { ...props, className: `${props.className || ''} ${additionalClassName}` };
 	};
 
 	addFilter(
