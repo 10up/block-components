@@ -46,7 +46,19 @@ const Wrapper = styled('div')`
 `;
 
 const PickedItem = ({ item, isOrderable, handleItemDelete, mode }) => {
-	const type = mode === 'post' ? 'postType' : 'taxonomy';
+	let type;
+
+	switch (mode) {
+		case 'post':
+			type = 'postType';
+			break;
+		case 'user':
+			type = 'root';
+			break;
+		default:
+			type = 'taxonomy';
+			break;
+	}
 
 	// This will return undefined while the item data is being fetched. If the item comes back
 	// empty, it will return null, which is handled in the effect below.
