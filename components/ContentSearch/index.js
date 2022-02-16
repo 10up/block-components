@@ -80,6 +80,30 @@ const ContentSearch = ({
 	}
 
 	/**
+	 * Depending on the mode value, this method normalizes the format
+	 * of the result array.
+	 *
+	 * @param {string} mode ContentPicker mode.
+	 * @param {Array} result The array to be normalized.
+	 * @returns {Array} The normalizes array.
+	 */
+	const normalizeResults = (mode = 'post', result = []) => {
+		if (mode === 'user') {
+			return result.map((item) => {
+				return {
+					id: item.id,
+					subtype: mode,
+					title: item.name,
+					type: mode,
+					url: item.link,
+				};
+			});
+		}
+
+		return result;
+	};
+
+	/**
 	 * handleSearchStringChange
 	 *
 	 * Using the keyword and the list of tags that are linked to the parent block
@@ -133,10 +157,18 @@ const ContentSearch = ({
 
 		setIsLoading(true);
 
-		// Paginate search so we have "load more" functionality.
-		const searchQuery = `wp/v2/search/?search=${searchString}&subtype=${contentTypes.join(
-			',',
-		)}&type=${mode}&_embed&per_page=${perPage}&page=${currentPage}`;
+		let searchQuery;
+
+		switch (mode) {
+			case 'user':
+				searchQuery = `wp/v2/users/?search=${searchString}`;
+				break;
+			default:
+				searchQuery = `wp/v2/search/?search=${searchString}&subtype=${contentTypes.join(
+					',',
+				)}&type=${mode}&_embed&per_page=${perPage}&page=${currentPage}`;
+				break;
+		}
 
 		const cachedResults = searchCache.find((obj) => obj.query === searchQuery);
 
@@ -165,6 +197,13 @@ const ContentSearch = ({
 						if (mounted.current === false) {
 							return;
 						}
+
+						abortControllerRef.current = null;
+
+						const normalizedResults = normalizeResults(mode, results);
+						searchCache[searchQuery] = normalizedResults;
+
+						setSearchResults(filterResults(normalizedResults));
 
 						const mergedResults = [...searchResults, ...filterResults(results)];
 

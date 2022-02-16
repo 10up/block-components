@@ -129,7 +129,7 @@ const ContentPicker = ({
 
 	return (
 		<ContentPickerWrapper className={`${NAMESPACE}`}>
-			{(!content.length || (content.length && content.length < maxContentItems)) && (
+			{!content.length || (content.length && content.length < maxContentItems) ? (
 				<ContentSearch
 					placeholder={placeholder}
 					label={label}
@@ -139,6 +139,16 @@ const ContentPicker = ({
 					mode={mode}
 					perPage={perPage}
 				/>
+			) : (
+				label && (
+					<div
+						style={{
+							'margin-bottom': '8px',
+						}}
+					>
+						{label}
+					</div>
+				)
 			)}
 
 			{Boolean(content?.length) > 0 && (
