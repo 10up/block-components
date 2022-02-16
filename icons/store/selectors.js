@@ -24,7 +24,7 @@ export function getIconSet(state, name) {
 	const {
 		iconSets: { iconSets },
 	} = state;
-	const iconSet = iconSets[name];
+	const iconSet = iconSets[name] ?? [];
 	return iconSet;
 }
 
@@ -40,7 +40,7 @@ export function getIcons(state, name) {
 	const {
 		iconSets: { iconSets },
 	} = state;
-	return iconSets[name].icons;
+	return iconSets[name]?.icons ?? [];
 }
 
 /**
@@ -56,5 +56,5 @@ export function getIcon(state, name, iconName) {
 	const {
 		iconSets: { iconSets },
 	} = state;
-	return iconSets[name].icons.find((item) => item.name === iconName);
+	return iconSets[name]?.icons?.find((item) => item.name === iconName) ?? undefined;
 }

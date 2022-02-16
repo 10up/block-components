@@ -6,22 +6,26 @@ function transformIcons(iconSet) {
 }
 
 export function useIcons(iconSet = false) {
-	return useSelect(
+	const icons = useSelect(
 		(select) => {
 			const { getIconSet, getIconSets } = select(iconStore);
 
 			if (iconSet) {
-				const sets = getIconSet(iconSet);
-				return transformIcons(sets);
+				return getIconSet(iconSet);
 			}
 
-			const sets = getIconSets();
-			return Object.values(sets).reduce(
-				(icons, iconSet) => [...icons, ...transformIcons(iconSet)],
-				[],
-			);
+			return getIconSets();
 		},
 		[iconSet],
+	);
+
+	if (iconSet) {
+		return transformIcons(icons);
+	}
+
+	return Object.values(icons).reduce(
+		(icons, iconSet) => [...icons, ...transformIcons(iconSet)],
+		[],
 	);
 }
 
