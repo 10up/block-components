@@ -1,4 +1,5 @@
 {
+    "projectId": "dnr1ke",
     "baseUrl": "http://localhost:8889",
     "env": {
         "username": "admin",
