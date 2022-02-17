@@ -1,7 +1,8 @@
 name: Publish @next version to NPM
 on:
   push:
-    branch: [ develop ]
+    branches:
+      - 'develop'
 jobs:
   build:
     runs-on: ubuntu-latest
