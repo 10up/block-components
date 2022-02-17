@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install Dependencies
-        run: cd example/ && npm ci
+        run: npm install && cd example/ && npm install
       - name: Build Plugin Assets
         run: cd example/ && npm run build
       - name: Start WordPress Instance
