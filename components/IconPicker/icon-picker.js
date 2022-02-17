@@ -7,9 +7,9 @@ import {
 	NavigableMenu,
 	VisuallyHidden,
 	__experimentalScrollable as Scrollable,
+	SearchControl,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
-import { search, Icon as WordPressIcon } from '@wordpress/icons';
 import { useState } from '@wordpress/element';
 
 import { useIcons } from '../../hooks/use-icons';
@@ -31,25 +31,6 @@ const StyledIconGrid = styled(NavigableMenu)`
 	.components-checkbox-control__input,
 	.components-checkbox-control__input-container {
 		display: none;
-	}
-`;
-
-const StyledSearchControl = styled(BaseControl)`
-	position: relative;
-
-	.component-icon-picker__search {
-		background-color: #f3f4f5;
-		border: none;
-		border-radius: 2px;
-		padding: 10px 36px 10px 16px;
-		width: 100%;
-	}
-
-	.component-icon-picker__search-icon {
-		position: absolute;
-		top: 50%;
-		right: 10px;
-		transform: translateY(-50%);
 	}
 `;
 
@@ -114,44 +95,6 @@ IconPicker.propTypes = {
 	value: PropTypes.object.isRequired,
 	onChange: PropTypes.func.isRequired,
 	label: PropTypes.string,
-};
-
-/**
- * SeachControl
- *
- * @typedef SearchControlProps
- * @property {string} value value
- * @property {Function} onChange change handler
- * @property {string} id identifier
- *
- * @param {SearchControlProps} props SearchControl Props
- * @returns {*} React Element
- */
-const SearchControl = (props) => {
-	const { value, onChange, id } = props;
-
-	return (
-		<StyledSearchControl
-			label={<VisuallyHidden>{__('Search for an Icon')}</VisuallyHidden>}
-			id={`${id}--search-field`}
-		>
-			<input
-				placeholder={__('Search for an Icon')}
-				className="component-icon-picker__search"
-				type="text"
-				value={value}
-				onChange={(event) => onChange(event.target.value)}
-				id={`${id}--search-field`}
-			/>
-			<WordPressIcon icon={search} className="component-icon-picker__search-icon" />
-		</StyledSearchControl>
-	);
-};
-
-SearchControl.propTypes = {
-	value: PropTypes.string.isRequired,
-	onChange: PropTypes.func.isRequired,
-	id: PropTypes.string.isRequired,
 };
 
 const IconGrid = (props) => {
