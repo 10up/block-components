@@ -24,10 +24,12 @@ jobs:
         uses: actions/checkout@v2
       - name: Install Dependencies
         run: cd example/ && npm ci
+      - name: Build Plugin Assets
+        run: cd example/ && npm run build
       - name: Start WordPress Instance
         run: cd example/ && npm run wp-env start
       - name: Run Cypress E2E Tests
-        uses: cypress-io/github-action@v2.9.7
+        uses: cypress-io/github-action@v3.0.2
         with:
           # Sends test results to Cypress Dashboard
           record: true
