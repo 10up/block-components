@@ -12,7 +12,6 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-      - run: npm version prerelease --preid=next
-      - run: npm publish --tag next
+      - run: npm version prerelease --preid=next && npm publish --tag next
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
