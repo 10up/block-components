@@ -12,14 +12,15 @@ export default function reducer(state = { iconSets: {} }, action) {
 			return {
 				...state,
 				iconSets: {
+					...state.iconSets,
 					[action.iconSet.name]: action.iconSet,
 				},
 			};
 		case 'REMOVE_ICON_SET':
 			// eslint-disable-next-line no-prototype-builtins
-			if (state.iconSet.hasOwnProperty(action.name)) {
+			if (state.iconSets.hasOwnProperty(action.name)) {
 				const newState = { ...state };
-				delete newState.iconSet[action.name];
+				delete newState.iconSets[action.name];
 				return newState;
 			}
 			return state;
