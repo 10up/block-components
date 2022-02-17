@@ -25,7 +25,7 @@ jobs:
       - name: Install Dependencies
         run: cd example/ && npm ci
       - name: Start WordPress Instance
-        run: npm run wp-env start
+        run: cd example/ && npm run wp-env start
       - name: Run Cypress E2E Tests
         uses: cypress-io/github-action@v2.9.7
         with:
