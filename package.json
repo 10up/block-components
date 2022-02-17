@@ -1,9 +1,9 @@
 {
-  "name": "@10up/block-components",
+  "name": "fabiankaegy-block-components-test",
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.7.0",
+  "version": "1.0.0",
   "description": "10up Components built for the WordPress Block Editor.",
   "main": "index.js",
   "scripts": {
