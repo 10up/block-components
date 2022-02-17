@@ -1,9 +1,4 @@
 /**
- * WordPress dependencies
- */
-import { combineReducers } from '@wordpress/data';
-
-/**
  * Reducer managing the block style variations.
  *
  * @param {object} state  Current state.
@@ -11,13 +6,12 @@ import { combineReducers } from '@wordpress/data';
  *
  * @returns {object} Updated state.
  */
-export function iconSets(state = { iconSets: {} }, action) {
+export default function reducer(state = { iconSets: {} }, action) {
 	switch (action.type) {
 		case 'REGISTER_ICON_SET':
 			return {
 				...state,
 				iconSets: {
-					...state.iconSets,
 					[action.iconSet.name]: action.iconSet,
 				},
 			};
@@ -33,7 +27,3 @@ export function iconSets(state = { iconSets: {} }, action) {
 			return state;
 	}
 }
-
-export default combineReducers({
-	iconSets,
-});
