@@ -1,10 +1,12 @@
 name: Publish @next version to NPM
 on:
-  push:
+  pull_request:
     branches:
       - 'develop'
+    types: [closed]
 jobs:
   build:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -13,6 +15,15 @@ jobs:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
       - run: npm ci
-      - run: npm version prerelease --preid=next && npm publish --tag next
+      
+      - name: Configure git user name and email
+        run: |
+            git config user.name "10up Bot"
+            git config user.email "pr@10up.com"
+
+      - name: npm update version and release
+        run: |
+          npm version prerelease --preid=next
+          npm publish --tag next
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
