@@ -34,4 +34,4 @@ jobs:
           # Whether or not to load balance tests using multiple containers
           parallel: false
         env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
