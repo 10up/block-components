@@ -41,7 +41,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "10up-toolkit": "^1.0.6",
+    "10up-toolkit": "^2.1.1",
     "cypress-localstorage-commands": "^1.6.1"
   }
 }
