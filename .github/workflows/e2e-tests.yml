@@ -35,6 +35,7 @@ jobs:
           record: true
           # Whether or not to load balance tests using multiple containers
           parallel: false
+          env: video=false
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
