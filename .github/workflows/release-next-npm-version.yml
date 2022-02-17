@@ -27,3 +27,6 @@ jobs:
           npm publish --tag next
         env:
            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
+      - name: push release commit to repo
+        run: git push
