@@ -7,7 +7,7 @@
  */
 export function getIconSets(state) {
 	const {
-		iconSets: { iconSets },
+		iconSets,
 	} = state;
 	return Object.values(iconSets);
 }
@@ -22,7 +22,7 @@ export function getIconSets(state) {
  */
 export function getIconSet(state, name) {
 	const {
-		iconSets: { iconSets },
+		iconSets,
 	} = state;
 	const iconSet = iconSets[name] ?? [];
 	return iconSet;
@@ -38,9 +38,9 @@ export function getIconSet(state, name) {
  */
 export function getIcons(state, name) {
 	const {
-		iconSets: { iconSets },
+		iconSets,
 	} = state;
-	return iconSets[name]?.icons ?? [];
+	return iconSets?.hasOwnProperty(name) ? iconSets[name]?.icons ?? [] : [];
 }
 
 /**
@@ -54,7 +54,7 @@ export function getIcons(state, name) {
  */
 export function getIcon(state, name, iconName) {
 	const {
-		iconSets: { iconSets },
+		iconSets,
 	} = state;
-	return iconSets[name]?.icons?.find((item) => item.name === iconName) ?? undefined;
+	return iconSets?.hasOwnProperty(name) ? iconSets[name]?.icons?.find((item) => item.name === iconName) ?? [] : undefined;
 }
