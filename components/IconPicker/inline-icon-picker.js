@@ -40,8 +40,8 @@ export const IconPickerDropdown = (props) => {
 	const { renderToggle, ...iconPickerProps } = props;
 	return (
 		<Dropdown
-			className="component-icom-picker-toolbar-button"
-			contentClassName="component-icom-picker-toolbar-button__content"
+			className="component-icon-picker-toolbar-button"
+			contentClassName="component-icon-picker-toolbar-button__content"
 			position="bottom right"
 			renderToggle={renderToggle}
 			renderContent={() => <StyledIconPickerDropdown {...iconPickerProps} />}
