@@ -12,6 +12,7 @@ jobs:
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: npm ci
       
       - name: npm update version and release
