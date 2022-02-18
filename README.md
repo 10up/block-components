@@ -12,7 +12,7 @@ A collection of components built to be used in the block editor. These component
 
 1. Run `npm install --save @10up/block-components` within your WordPress theme or plugin.
 2. Within your block editor code, import the relevant component(s) e.g. `import { ContentPicker } from '@10up/block-components';`
-3. We highly recommend you use [@10up/scripts](https://github.com/10up/10up-scripts) to build your block files as it handles dependency extraction for you.
+3. We highly recommend you use [10up-toolkit](https://github.com/10up/10up-toolkit) to build your block files as it handles dependency extraction for you.
 
 ## ContentPicker
 
@@ -56,11 +56,13 @@ function MyComponent( props ) {
 __NOTE:__ Content picker cannot validate that posts you pass it via `content` prop actually exist. If a post does not exist, it will not render as one of the picked items but will still be passed back as picked items if new items are picked/sorted. Therefore, on save you need to validate that all the picked posts/terms actually exist.
 
 The `contentTypes` will get used in a Rest Request to the `search` endpoint as the `subtypes`:
+
 ```js
 apiFetch( {
     path: `wp/v2/search/?search="${keyword}"&subtype="${contentTypes.join(',')}"&type=${mode}`
 } )...
 ```
+
 ## ContentSearch
 
 A component that lets you search through posts and pages. This component is used by Content Picker. This component provides only the searching functionality and does not maintain any list of chosen items.
@@ -95,12 +97,12 @@ function MyComponent( props ) {
 | `excludeItems`      | `array`    | `[ { id: 1, type: 'post' ]` | Items to exclude from search |
 | `perPage`           | `number`   | `50`               | Number of items to show during search
 
-
 ## useHasSelectedInnerBlock
 
 Determine whether one of the inner blocks currently is selected.
 
 ### Usage
+
 ```js
 import { useHasSelectedInnerBlock } from '@10up/block-components';
 
@@ -114,71 +116,81 @@ function BlockEdit( props ) {
     )
 }
 ```
+
 ## useRequestData
+
 Custom hook to to make a request using `getEntityRecords` or `getEntityRecord` that provides `data`, `isLoading` and `invalidator` function. The hook determines which selector to use based on the query parameter. If a number is passed, it will use `getEntityRecord` to retrieve a single item. If an object is passed, it will use that as the query for `getEntityRecords` to retrieve multiple pieces of data.
 
 The `invalidator` function, when dispatched, will tell the datastore to invalidate the resolver associated with the request made by getEntityRecords. This will trigger the request to be re-run as if it was being requested for the first time. This is not always needed but is very useful for components that need to update the data after an event. For example, displaying a list of uploaded media after a new item has been uploaded.
 
 Parameters:
+
 * `{string}` entity The entity to retrieve. ie. postType
 * `{string}` kind   The entity kind to retrieve. ie. posts
 * `{Object|Number}` Optional. Query to pass to the geEntityRecords request. Defaults to an empty object. If a number is passed, it is used as the ID of the entity to retrieve via getEntityRecord.
 
 Returns:
+
 * `{Array}`
-    * `{Array} `   Array containing the requested entity kind.
-    * `{Boolean}`  Representing if the request is resolving
-    * `{Function}` This function will invalidate the resolver and re-run the query.
+  * `{Array}`   Array containing the requested entity kind.
+  * `{Boolean}`  Representing if the request is resolving
+  * `{Function}` This function will invalidate the resolver and re-run the query.
+
 ### Usage
 
-#### Multiple pieces of data.
+#### Multiple pieces of data
+
 ```js
 const ExampleBockEdit = ({ className }) => {
-	const [data, isLoading, invalidateRequest ] = useRequestData('postType', 'post', { per_page: 5 });
+ const [data, isLoading, invalidateRequest ] = useRequestData('postType', 'post', { per_page: 5 });
 
-	if (isLoading) {
-		return <h3>Loading...</h3>;
-	}
-	return (
-		<div className={className}>
-			<ul>
-				{data &&
-					data.map(({ title: { rendered: postTitle } }) => {
-						return <li>{postTitle}</li>;
-					})}
-			</ul>
-			<button type="button" onClick={invalidateRequest}>
-				Refresh list
-			</button>
-		</div>
-	);
+ if (isLoading) {
+  return <h3>Loading...</h3>;
+ }
+ return (
+  <div className={className}>
+   <ul>
+    {data &&
+     data.map(({ title: { rendered: postTitle } }) => {
+      return <li>{postTitle}</li>;
+     })}
+   </ul>
+   <button type="button" onClick={invalidateRequest}>
+    Refresh list
+   </button>
+  </div>
+ );
 };
 ```
+
 #### Single piece of data
+
 ```js
 const ExampleBockEdit = ({ className }) => {
-	const [data, isLoading, invalidateRequest ] = useRequestData('postType', 'post', 59);
+ const [data, isLoading, invalidateRequest ] = useRequestData('postType', 'post', 59);
 
-	if (isLoading) {
-		return <h3>Loading...</h3>;
-	}
-	return (
-		<div className={className}>
+ if (isLoading) {
+  return <h3>Loading...</h3>;
+ }
+ return (
+  <div className={className}>
 
-				{data &&( <div>{data.title.rendered}</div>)}
+    {data &&( <div>{data.title.rendered}</div>)}
 
-			<button type="button" onClick={invalidateRequest}>
-				Refresh list
-			</button>
-		</div>
-	);
+   <button type="button" onClick={invalidateRequest}>
+    Refresh list
+   </button>
+  </div>
+ );
 };
 ```
+
 ## IsAdmin
 
 A wrapper component that only renders child components if the current user has admin capabilities. The use case for this component is when you have a certain setting that should be restricted to administrators only. For example when you have a block that requires an API token or credentials you might only want Administrators to edit these. See [10up/maps-block-apple](https://github.com/10up/maps-block-apple/blob/774c6509eabb7ac48dcebea551f32ac7ddc5d246/src/Settings/AuthenticationSettings.js) for a real world example.
 
 ### Usage
+
 ```js
 import { IsAdmin } from '@10up/block-components';
 
@@ -195,35 +207,38 @@ function MyComponent( props ) {
 ```
 
 #### Props
+
 | Name       | Type              | Default  |  Description                                                   |
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
 | `fallback` | `ReactElement`    | `null`   | Element that will be rendered if the user is no admin          |
 | `children` | `ReactElement(s)` | `'null'` | Child components that will be rendered if the user is an Admin |
 
-
 ## CustomBlockInserter
+
 This component is passed to an `InnerBlocks` instance to as it's `renderAppender` to provide a customized button that opens the Block Inserter.
 
 ### Usage
+
 ```js
 import { CustomBlockAppender } from '@10up/block-components';
 const MyComponent = ({clientId}) => {
-	<InnerBlocks
-		renderAppender={() => (
-			<CustomBlockAppender
-				className="custom-classname"
-				rootClientId={clientId}
-				icon="heavy-plus"
-				isTertiary
-				showTooltip
-				label={__('Insert Accordion content', '10up-block-library')}
-			/>
-		)}
-	/>
+ <InnerBlocks
+  renderAppender={() => (
+   <CustomBlockAppender
+    className="custom-classname"
+    rootClientId={clientId}
+    icon="heavy-plus"
+    isTertiary
+    showTooltip
+    label={__('Insert Accordion content', '10up-block-library')}
+   />
+  )}
+ />
 }
 ```
 
 #### Props
+
 | Name       | Type              | Default  |  Description                                                   |
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
 | `rootClientId` | `string`    | `''`   | Client it of the block         |
@@ -232,21 +247,24 @@ const MyComponent = ({clientId}) => {
 | `..buttonProps` | `object` | `null'` | Any other props passed are spread onto the internal Button component. |
 
 ## InnerBlockSlider
+
 This component creates a horizontal slider with inner blocks inside of it.
 
 ### Usage
+
 ```js
 import { InnerBlockSlider } from '@10up/block-components';
 const MyComponent = ({clientId}) => {
-	<InnerBlockSlider
-		allowedBlock="core/cover"
-		slidesPerPage={1}
-		parentBlockId={clientId}
-	/>
+ <InnerBlockSlider
+  allowedBlock="core/cover"
+  slidesPerPage={1}
+  parentBlockId={clientId}
+ />
 }
 ```
 
 #### Props
+
 | Name       | Type              | Default  |  Description                                                   |
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
 | `allowedBlock` | `string`    | `''`   | Block type to be allowed inside ofthe slider         |
@@ -254,9 +272,11 @@ const MyComponent = ({clientId}) => {
 | `parentBlockId` | `string` | `''` | Client ID of parent block. This is required.  |
 
 ## Optional
+
 A component that takes care of the logic of rendering nodes only when it is selected.
 
 ### Usage
+
 ```js
 const BlockEdit = (props) => {
     const { attributes, setAttributes, isSelected } = props;
@@ -277,15 +297,17 @@ const BlockEdit = (props) => {
 The `<RichText>` node will only render when BlockEdit is selected.
 
 #### Props
+
 | Name       | Type              | Default  |  Description                                                   |
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
 | `value` | `string`    | `''`   | The value that will be consumed by the children. If the value is falsey the component will only be rendered if the block is selected. |
 
 ## registerBlockExtension
+
 The `registerBlockExtension` API is a wrapper to make it easier to add custom settings which produce classnames to any blocks. There are a few problems with using block styles for customisations. For one an editor cannot combine block styles. So you very quickly land in a sittuation where you need to add many block styles just to give an editor the ability to choose exactly the combination of options they want. That leads to a bad user experience though as the previews take up a ton of space and also make the editor slower due to the overhead of the iframes it creates. So in many cases it is nicer to extend a bock with custom settings to achive the same goal. The process of registering your own attributes, modifying the blocks edit function, adding the new classname to the editor listing and also adding it to the frontend is rather cumbersome though. That is where this API comes in. It is a wrapper for the underlying filters that improves the editorial experience and reduces the amount of code that needs to get maintained in order to extend blocks.
 
-
 ### Usage
+
 ```js
 import { registerBlockExtension } from '@10up/block-components';
 
@@ -313,30 +335,31 @@ function BlockEdit(props) {...}
 function generateClassNames(attributes) {...}
 
 registerBlockExtension(
-	'core/group',
-	{
-		extensionName: 'background-patterns',
-		attributes: {
-			hasBackgroundPattern: {
-				type: 'boolean',
-				default: false,
-			},
-			backgroundPatternShape: {
-				type: 'string',
-				default: 'dots',
-			},
-			backgroundPatternColor: {
-				type: 'string',
-				default: 'green'
-			}
-		},
-		classNameGenerator: generateClassNames,
-		Edit: BlockEdit,
-	}
+ 'core/group',
+ {
+  extensionName: 'background-patterns',
+  attributes: {
+   hasBackgroundPattern: {
+    type: 'boolean',
+    default: false,
+   },
+   backgroundPatternShape: {
+    type: 'string',
+    default: 'dots',
+   },
+   backgroundPatternColor: {
+    type: 'string',
+    default: 'green'
+   }
+  },
+  classNameGenerator: generateClassNames,
+  Edit: BlockEdit,
+ }
 );
 ```
 
 ### Options
+
 | Name                       | Type       | Description                                       |
 |----------------------------|------------|---------------------------------------------------|
 | blockName                  | `string`   | Name of the block the options should get added to |
@@ -344,9 +367,10 @@ registerBlockExtension(
 | options.attributes         | `object`   | Block Attributes that should get added to the block |
 | options.classNameGenerator | `funciton` | Funciton that gets passed the attributes of the block to generate a class name string |
 | options.Edit               | `funciton` | BlockEdit component like in `registerBlockType` only without the actual block. So onyl using slots like the `InspectorControls` is advised. |
+
 ## Support Level
 
-**Active:** 10up is actively working on this, and we expect to continue work for the foreseeable future including keeping tested up to the most recent version of WordPress.  Bug reports, feature requests, questions, and pull requests are welcome.
+__Active:__ 10up is actively working on this, and we expect to continue work for the foreseeable future including keeping tested up to the most recent version of WordPress.  Bug reports, feature requests, questions, and pull requests are welcome.
 
 ## Contributing
 
