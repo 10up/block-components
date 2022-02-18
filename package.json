@@ -5,10 +5,12 @@
   },
   "version": "1.7.0",
   "description": "10up Components built for the WordPress Block Editor.",
-  "main": "index.js",
+  "main": "./dist/index.js",
+  "source": "index.js",
   "scripts": {
     "lint": "10up-toolkit lint-js",
-    "test": "10up-toolkit test-unit-jest"
+    "test": "10up-toolkit test-unit-jest",
+    "build": "10up-toolkit build"
   },
   "repository": {
     "type": "git",
@@ -39,6 +41,25 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "10up-toolkit": "^1.0.6"
-  }
+    "10up-toolkit": "^2.1.1"
+  },
+  "peerDependencies": {
+    "@wordpress/components": "^19.4.0",
+    "@wordpress/compose": "^5.1.1",
+    "@wordpress/data": "^6.2.1",
+    "@wordpress/i18n": "^4.3.1",
+    "@wordpress/plugins": "^4.1.1",
+    "@wordpress/viewport": "^4.1.1",
+    "@wordpress/editor": "^12.2.0",
+    "@wordpress/block-editor": "^8.1.1",
+    "@wordpress/blocks": "^11.2.1",
+    "@wordpress/element": "^4.1.1",
+    "@wordpress/api-fetch": "^6.0.1",
+    "@wordpress/html-entities": "^3.3.1",
+    "@wordpress/url": "^3.4.1",
+    "@wordpress/hooks": "^3.3.1"
+  },
+  "10up-toolkit": {
+    "libraryName": "@10up/block-components"
+}
 }
