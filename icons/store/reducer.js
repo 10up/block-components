@@ -1,9 +1,4 @@
 /**
- * WordPress dependencies
- */
-import { combineReducers } from '@wordpress/data';
-
-/**
  * Reducer managing the block style variations.
  *
  * @param {object} state  Current state.
@@ -11,7 +6,7 @@ import { combineReducers } from '@wordpress/data';
  *
  * @returns {object} Updated state.
  */
-export function iconSets(state = { iconSets: {} }, action) {
+export default function reducer(state = { iconSets: {} }, action) {
 	switch (action.type) {
 		case 'REGISTER_ICON_SET':
 			return {
@@ -23,9 +18,9 @@ export function iconSets(state = { iconSets: {} }, action) {
 			};
 		case 'REMOVE_ICON_SET':
 			// eslint-disable-next-line no-prototype-builtins
-			if (state.iconSet.hasOwnProperty(action.name)) {
+			if (state.iconSets.hasOwnProperty(action.name)) {
 				const newState = { ...state };
-				delete newState.iconSet[action.name];
+				delete newState.iconSets[action.name];
 				return newState;
 			}
 			return state;
@@ -33,7 +28,3 @@ export function iconSets(state = { iconSets: {} }, action) {
 			return state;
 	}
 }
-
-export default combineReducers({
-	iconSets,
-});
