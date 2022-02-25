@@ -1,6 +1,6 @@
 import { TextControl, Spinner, NavigableMenu, Button } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
-import { useState, useRef, useEffect } from '@wordpress/element'; // eslint-disable-line
+import { useState, useRef, useEffect, useCallback } from '@wordpress/element'; // eslint-disable-line
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import { jsx, css } from '@emotion/react';
@@ -10,18 +10,6 @@ import SortableList from '../ContentPicker/SortableList';
 /** @jsx jsx */
 
 const NAMESPACE = 'tenup-content-search';
-
-/**
- * Store each search QUERY with it's response values. Then, on next search
- * if the new query matches one of the saved queries, we will not run a fetch
- * request but just output the stored results in this array.
- *
- * Structure in each object of the array:
- * results: array
- * totalPages: number
- * currentPage: number
- */
-const searchCache = [];
 
 // Equalize height of list icons to match loader in order to reduce jumping.
 const listMinHeight = '46px';
@@ -36,17 +24,11 @@ const ContentSearch = ({
 	perPage,
 }) => {
 	const [searchString, setSearchString] = useState('');
-	const [searchResults, setSearchResults] = useState([]);
-	const [isLoading, setIsLoading] = useState(false);
-	const [showLoadMore, setShowLoadMore] = useState(false);
+	const [searchQueries, setSearchQueries] = useState({});
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [currentPage, setCurrentPage] = useState(1);
-	const abortControllerRef = useRef();
 
 	const mounted = useRef(true);
-
-	const hasSearchString = !!searchString.length;
-	const hasSearchResults = !!searchResults.length;
 
 	/**
 	 * handleSelection
@@ -73,11 +55,28 @@ const ContentSearch = ({
 	 * @param {*} item
 	 */
 	function handleItemSelection(item) {
-		setSearchResults([]);
 		setSearchString('');
 
 		onSelectItem(item);
 	}
+
+	const prepareSearchQuery = useCallback((keyword, page) => {
+		let searchQuery;
+
+		switch (mode) {
+			case 'user':
+				searchQuery = `wp/v2/users/?search=${keyword}`;
+				break;
+			default:
+				searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
+					',',
+				)}&type=${mode}&_embed&per_page=${perPage}&page=${page}`;
+				break;
+		}
+
+		return searchQuery;
+	}, [perPage, contentTypes]);
+
 
 	/**
 	 * Depending on the mode value, this method normalizes the format
@@ -87,7 +86,7 @@ const ContentSearch = ({
 	 * @param {Array} result The array to be normalized.
 	 * @returns {Array} The normalizes array.
 	 */
-	const normalizeResults = (mode = 'post', result = []) => {
+	const normalizeResults = useCallback((result = []) => {
 		if (mode === 'user') {
 			return result.map((item) => {
 				return {
@@ -101,7 +100,19 @@ const ContentSearch = ({
 		}
 
 		return result;
-	};
+	}, [mode]);
+
+	const filterResults = useCallback((results) => {
+		return results.filter((result) => {
+			let keep = true;
+
+			if (excludeItems.length) {
+				keep = excludeItems.every((item) => item.id !== result.id);
+			}
+
+			return keep;
+		});
+	}, [excludeItems]);
 
 	/**
 	 * handleSearchStringChange
@@ -111,28 +122,46 @@ const ContentSearch = ({
 	 *
 	 * @param {string} keyword search query string
 	 */
-	const handleSearchStringChange = (keyword) => {
-		if (abortControllerRef.current) {
-			abortControllerRef.current.abort();
-		}
+	const handleSearchStringChange = (keyword, page) => {
 
 		if (keyword.trim() === '') {
-			setIsLoading(false);
-			setSearchResults([]);
 			setSearchString(keyword);
 			setCurrentPage(1);
-
-			abortControllerRef.current = null;
 			return;
 		}
 
-		abortControllerRef.current = new AbortController();
+		const preparedQuery = prepareSearchQuery(keyword, page);
+
+		// Only do query if not cached or previously errored/cancelled
+		if (!searchQueries[preparedQuery] || searchQueries[preparedQuery].controller === 1) {
+			setSearchQueries((queries) => {
+				const newQueries = {};
+
+				// Remove errored or cancelled queries
+				for (const query in queries) {
+					if (queries[query].controller !== 1) {
+						newQueries[query] = queries[query];
+					}
+				}
+
+				newQueries[preparedQuery] = {
+					results: null,
+					controller: null,
+					currentPage: page,
+					totalPages: null
+				}
+
+				return newQueries;
+			});
+		}
+
+		setCurrentPage(page);
+
 		setSearchString(keyword);
 	};
 
 	const handleLoadMore = () => {
-		setCurrentPage(currentPage + 1);
-		handleSearchStringChange(searchString);
+		handleSearchStringChange(searchString, currentPage + 1);
 	};
 
 	useEffect(() => {
@@ -142,94 +171,108 @@ const ContentSearch = ({
 	}, []);
 
 	useEffect(() => {
-		if (abortControllerRef.current === undefined || abortControllerRef.current === null) return;
 
-		const filterResults = (results) =>
-			results.filter((result) => {
-				let keep = true;
+		Object.keys(searchQueries).forEach((searchQueryString) => {
+			const searchQuery = searchQueries[searchQueryString];
 
-				if (excludeItems.length) {
-					keep = excludeItems.every((item) => item.id !== result.id);
+			if (searchQueryString !== prepareSearchQuery(searchString, currentPage)) {
+				if (searchQuery.controller && typeof searchQuery.controller === 'object') {
+					searchQuery.controller.abort();
 				}
+			} else {
+				if (searchQuery.results === null && searchQuery.controller === null) {
+					const controller = new AbortController();
 
-				return keep;
-			});
+					apiFetch({
+						path: searchQueryString,
+						signal: controller.signal,
+						parse: false,
+					})
+						.then((results) => {
+							const totalPages = parseInt(
+								results.headers && results.headers.get('X-WP-TotalPages'),
+								10,
+							);
 
-		setIsLoading(true);
+							// Parse, because we set parse to false to get the headers.
+							results.json().then((results) => {
+								if (mounted.current === false) {
+									return;
+								}
+								const normalizedResults = normalizeResults(results);
 
-		let searchQuery;
+								setSearchQueries((queries) => {
+									const newQueries = { ...queries };
 
-		switch (mode) {
-			case 'user':
-				searchQuery = `wp/v2/users/?search=${searchString}`;
-				break;
-			default:
-				searchQuery = `wp/v2/search/?search=${searchString}&subtype=${contentTypes.join(
-					',',
-				)}&type=${mode}&_embed&per_page=${perPage}&page=${currentPage}`;
-				break;
-		}
+									newQueries[searchQueryString].results = normalizedResults;
+									newQueries[searchQueryString].totalPages = totalPages;
+									newQueries[searchQueryString].controller = 0;
 
-		const cachedResults = searchCache.find((obj) => obj.query === searchQuery);
+									return newQueries;
+								});
+							});
+						})
+						.catch((error, code) => {
+							// fetch_error means the request was aborted
+							if (error.code !== 'fetch_error') {
+								setSearchQueries((queries) => {
+									const newQueries = { ...queries };
 
-		if (cachedResults) {
-			abortControllerRef.current = null;
+									newQueries[searchQueryString].controller = 1;
+									newQueries[searchQueryString].results = [];
 
-			setSearchResults(cachedResults.results);
-			setCurrentPage(cachedResults.currentPage);
-			setShowLoadMore(currentPage < cachedResults.totalPages);
-
-			setIsLoading(false);
-		} else {
-			apiFetch({
-				path: searchQuery,
-				signal: abortControllerRef.current.signal,
-				parse: false,
-			})
-				.then((results) => {
-					const totalPages = parseInt(
-						results.headers && results.headers.get('X-WP-TotalPages'),
-						10,
-					);
-
-					// Parse, because we set parse to false to get the headers.
-					results.json().then((results) => {
-						if (mounted.current === false) {
-							return;
-						}
-
-						abortControllerRef.current = null;
-
-						const normalizedResults = normalizeResults(mode, results);
-						searchCache[searchQuery] = normalizedResults;
-
-						setSearchResults(filterResults(normalizedResults));
-
-						const mergedResults = [...searchResults, ...filterResults(results)];
-
-						searchCache.push({
-							query: searchQuery,
-							results: mergedResults,
-							currentPage,
-							totalPages,
+									return newQueries;
+								});
+							}
 						});
 
-						abortControllerRef.current = null;
-						setSearchResults(mergedResults);
-						setShowLoadMore(currentPage < totalPages);
-						setIsLoading(false);
+					setSearchQueries((queries) => {
+						const newQueries = { ...queries };
+
+						newQueries[searchQueryString].controller = controller;
+
+						return newQueries;
 					});
-				})
-				.catch((error, code) => {
-					// fetch_error means the request was aborted
-					if (error.code !== 'fetch_error') {
-						setSearchResults([]);
-						abortControllerRef.current = null;
-						setIsLoading(false);
+				}
+			}
+		});
+
+	}, [searchQueries, searchString, currentPage]);
+
+	let searchResults = null;
+	let isLoading = true;
+	let showLoadMore = false;
+
+	for (let i = 1; i <= currentPage; i++) {
+		for (const searchQueryString in searchQueries) {
+			const searchQuery = searchQueries[searchQueryString];
+
+			if (searchQueryString === prepareSearchQuery(searchString, i)) {
+				if (searchQuery.results !== null) {
+					if (searchResults === null) {
+						searchResults = [];
 					}
-				});
+
+					searchResults = searchResults.concat(searchQuery.results);
+
+					// If on last page, maybe show load more button
+					if (i === currentPage) {
+						isLoading = false;
+
+						if (searchQuery.totalPages > searchQuery.currentPage) {
+							showLoadMore = true;
+						}
+					}
+				} else if (searchQuery.controller === 1 && i === currentPage) {
+					isLoading = false;
+					showLoadMore = false;
+				}
+			}
 		}
-	}, [contentTypes, currentPage, excludeItems, mode, perPage, searchResults, searchString]);
+	}
+
+	const hasSearchString = !!searchString.length;
+	const hasSearchResults = searchResults && !!searchResults.length;
 
 	const listCSS = css`
 		/* stylelint-disable */
@@ -267,7 +310,9 @@ const ContentSearch = ({
 			<TextControl
 				label={label}
 				value={searchString}
-				onChange={handleSearchStringChange}
+				onChange={(newSearchString) => {
+					handleSearchStringChange(newSearchString, 1);
+				}}
 				placeholder={placeholder}
 				autoComplete="off"
 			/>
