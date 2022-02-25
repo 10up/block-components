@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, Placeholder } from '@wordpress/components';
 
-import {ContentPicker, SelectedPostPreview} from '@10up/block-components';
+import {ContentPicker} from '@10up/block-components';
 
 const NAMESPACE = 'example';
 
@@ -39,10 +39,7 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
             <InspectorControls>
                 <PanelBody title={ __( 'Post Picker', NAMESPACE ) }>
                     { !!selectedPost &&
-                        <SelectedPostPreview
-                            label={ __( 'Currently Selected Post:', NAMESPACE ) }
-                            post={ selectedPost }
-                        />
+                        <div>selected post</div>
                     }
                     <ContentPicker 
                         label={ __( 'Select a Post or Page', NAMESPACE ) }
@@ -55,6 +52,7 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
                     postTypes={ [ 'page', 'post' ] }
                     label={ __( 'Select a Post or Page', NAMESPACE ) }
                     handleSelect={ handlePostSelection }
+                    perPage={3}
                 />
             </Placeholder>
             </>
