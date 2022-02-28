@@ -4,11 +4,11 @@ import styled from '@emotion/styled';
 import { select } from '@wordpress/data';
 import { useState, useEffect, useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { v4 as uuidv4 } from 'uuid';
 import { ContentSearch } from '../ContentSearch';
 import SortableList from './SortableList';
-import { v4 as uuidv4 } from 'uuid';
 
-const NAMESPACE = '10up-content-picker';
+const NAMESPACE = 'tenup-content-picker';
 
 /**
  * Unfortunately, we had to use !important because on PickedItem we couldn't @emotion/styled css
@@ -23,6 +23,14 @@ const StyleWrapper = styled('div')`
 			background: transparent;
 		}
 	}
+`;
+
+/**
+ * Without this, the flex parents will limit the width of the picker. Fixes view when the results
+ * all have short titles.
+ */
+const ContentPickerWrapper = styled('div')`
+	width: 100%;
 `;
 
 /**
@@ -41,6 +49,7 @@ const StyleWrapper = styled('div')`
  * @param props.content
  * @param props.uniqueContentItems
  * @param props.excludeCurrentPost
+ * @param props.perPage
  * @returns {*} React JSX
  */
 const ContentPicker = ({
@@ -56,9 +65,13 @@ const ContentPicker = ({
 	content: presetContent,
 	uniqueContentItems,
 	excludeCurrentPost,
-	perPage
+	perPage,
 }) => {
-	const [content, setContent] = useState(presetContent);
+	const [content, setContent] = useState([]);
+
+	useEffect(() => {
+		setContent(presetContent);
+	}, [presetContent]);
 
 	const currentPostId = select('core/editor')?.getCurrentPostId();
 
@@ -78,7 +91,7 @@ const ContentPicker = ({
 	// Run onPickChange callback when content changes.
 	useEffect(() => {
 		onPickChange(content);
-	}, [content, onPickChange]);
+	}, [content]);
 
 	const handleSelect = (item) => {
 		setContent((previousContent) => [
@@ -96,9 +109,8 @@ const ContentPicker = ({
 			return previousContent.filter(({ id, uuid }) => {
 				if (deletedItem.uuid) {
 					return uuid !== deletedItem.uuid;
-				} else {
-					return id !== deletedItem.id;
 				}
+				return id !== deletedItem.id;
 			});
 		});
 	};
@@ -108,7 +120,7 @@ const ContentPicker = ({
 
 		if (excludeCurrentPost && currentPostId) {
 			items.push({
-				id: currentPostId
+				id: currentPostId,
 			});
 		}
 
@@ -116,8 +128,8 @@ const ContentPicker = ({
 	}, [content, currentPostId, excludeCurrentPost, uniqueContentItems]);
 
 	return (
-		<div className={`${NAMESPACE}`}>
-			{(!content.length || (content.length && content.length < maxContentItems)) ? (
+		<ContentPickerWrapper className={`${NAMESPACE}`}>
+			{!content.length || (content.length && content.length < maxContentItems) ? (
 				<ContentSearch
 					placeholder={placeholder}
 					label={label}
@@ -138,6 +150,7 @@ const ContentPicker = ({
 					</div>
 				)
 			)}
+
 			{Boolean(content?.length) > 0 && (
 				<StyleWrapper>
 					<span
@@ -164,7 +177,7 @@ const ContentPicker = ({
 					/>
 				</StyleWrapper>
 			)}
-		</div>
+		</ContentPickerWrapper>
 	);
 };
 
@@ -177,7 +190,7 @@ ContentPicker.defaultProps = {
 	contentTypes: ['post', 'page'],
 	placeholder: '',
 	content: [],
-	perPage: 50,
+	perPage: 20,
 	maxContentItems: 1,
 	uniqueContentItems: true,
 	isOrderable: false,

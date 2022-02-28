@@ -4,10 +4,8 @@ import { InspectorControls, BlockControls, useBlockProps } from '@wordpress/bloc
 
 import {
     IconPicker,
-    Icon,
     IconPickerToolbarButton,
     InlineIconPicker,
-    IconPickerSelectControl,
 } from '@10up/block-components';
 
 export function BlockEdit(props) {

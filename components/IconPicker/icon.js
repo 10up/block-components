@@ -25,7 +25,7 @@ export const Icon = (props) => {
 	if (typeof onClick === 'function') {
 		iconProps.role = 'button';
 		iconProps.tabIndex = 0;
-		iconProps.ariaLabel = 'Change Icon';
+		iconProps['aria-label'] = 'Change Icon';
 		iconProps.onClick = onClick;
 	}
 
