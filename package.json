@@ -46,8 +46,5 @@
     "@wordpress/dependency-extraction-webpack-plugin": "^3.3.1",
     "10up-toolkit": "^2.1.1",
     "cypress-localstorage-commands": "^1.6.1"
-  },
-  "10up-toolkit": {
-    "libraryName": "@10up/block-components"
   }
 }
