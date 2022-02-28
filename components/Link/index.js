@@ -9,15 +9,14 @@ import PropTypes from 'prop-types';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect, useRef, Fragment } from '@wordpress/element';
+import { useState, useEffect, useRef } from '@wordpress/element';
 import { Popover, Icon, Tooltip } from '@wordpress/components';
-import { isKeyboardEvent, ENTER, ESCAPE } from '@wordpress/keycodes';
-import {
-	__experimentalLinkControl as LinkControl,
-	useBlockProps,
-	RichText,
-	useBlockEditContext,
-} from '@wordpress/block-editor';
+import { __experimentalLinkControl as LinkControl, RichText } from '@wordpress/block-editor';
+
+/**
+ * Internal Dependencies
+ */
+import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 
 /**
  * Given the Link block's type attribute, return the query params to give to
@@ -63,7 +62,7 @@ const LinkOutput = styled(RichText)`
 	gap: 0.5em;
 	text-decoration: underline;
 
-	/* This  holds the text URL input */
+	/* This holds the text URL input */
 	& > div {
 		text-decoration: underline;
 	}
@@ -97,6 +96,7 @@ const LinkOutput = styled(RichText)`
  * @param {Function} props.onTextChange 				Callback when the link's text is changed
  * @param {string} props.kind 							Page or Post
  * @param {string} props.placeholder 					Text visible before actual value is inserted
+ * @param {string} props.className 					    html class to be applied to the anchor element
  *
  * @returns {JSX}
  */
@@ -109,39 +109,21 @@ const Link = ({
 	onTextChange,
 	kind,
 	placeholder,
+	className,
 }) => {
 	const ref = useRef();
 	const [isLinkOpen, setIsLinkOpen] = useState(false);
 	const [isValid, setIsValid] = useState(false);
-	const { isSelected } = useBlockEditContext();
+	const openPopover = () => setIsLinkOpen(true);
+	const closePopover = () => setIsLinkOpen(false);
+
+	const popoverRef = useOnClickOutside(closePopover);
 
 	const link = {
 		url,
 		opensInNewTab,
 		title: value, // don't allow HTML to display inside the <LinkControl>
 	};
-
-	const blockProps = useBlockProps({
-		ref,
-		className: classnames('tenup-block-components-link', {
-			'is-editing': isSelected,
-			'has-link': !!url,
-		}),
-	});
-
-	if (!url) {
-		blockProps.onClick = () => setIsLinkOpen(true);
-	}
-
-	/**
-	 * The hook shouldn't be necessary but due to a focus loss happening
-	 * when selecting a suggestion in the link popover, we force close on block unselection.
-	 */
-	useEffect(() => {
-		if (!isSelected) {
-			setIsLinkOpen(false);
-		}
-	}, [isSelected]);
 
 	/**
 	 * Check if the URL and Value are set. If yes, then the component is valid.
@@ -155,21 +137,17 @@ const Link = ({
 	return (
 		<>
 			<LinkOutput
-				// eslint-disable-next-line react/jsx-props-no-spreading
-				{...blockProps}
 				tagName="a"
 				identifier="label"
-				className="tenup-block-components-link__label"
+				className={classnames('tenup-block-components-link__label', className)}
 				value={value}
 				onChange={onTextChange}
 				aria-label={__('Link text', '10up-block-components')}
 				placeholder={placeholder}
-				withoutInteractiveFormatting
 				__unstablePastePlainText
 				allowedFormats={['core/bold', 'core/italic', 'core/strikethrough']}
-				onClick={() => {
-					setIsLinkOpen(true);
-				}}
+				onFocusCapture={openPopover}
+				ref={ref}
 			/>
 
 			{!isValid && (
@@ -181,9 +159,10 @@ const Link = ({
 			{isLinkOpen && (
 				<Popover
 					position="top center"
-					onClose={() => setIsLinkOpen(false)}
 					anchorRef={ref.current}
+					ref={popoverRef}
 					focusOnMount={false}
+					noArrow={false}
 				>
 					<LinkControl
 						hasTextControl
@@ -194,6 +173,12 @@ const Link = ({
 						noURLSuggestion={!!type}
 						suggestionsQuery={getSuggestionsQuery(type, kind)}
 						onChange={onLinkChange}
+						settings={[
+							{
+								id: 'opensInNewTab',
+								title: __('Open in new tab', '10up-block-components'),
+							},
+						]}
 					/>
 				</Popover>
 			)}
@@ -202,21 +187,23 @@ const Link = ({
 };
 
 Link.defaultProps = {
+	value: undefined,
+	url: undefined,
+	className: undefined,
 	type: '',
 	kind: '',
-
 	placeholder: __('Link text ...', '10up-block-components'),
 };
 
 Link.propTypes = {
-	value: PropTypes.string.isRequired,
-	url: PropTypes.string.isRequired,
+	value: PropTypes.string,
+	url: PropTypes.string,
 	onLinkChange: PropTypes.func.isRequired,
 	onTextChange: PropTypes.func.isRequired,
 	opensInNewTab: PropTypes.bool.isRequired,
-
 	type: PropTypes.string,
 	kind: PropTypes.string,
+	className: PropTypes.string,
 	placeholder: PropTypes.string,
 };
 
