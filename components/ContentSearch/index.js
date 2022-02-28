@@ -386,4 +386,26 @@ const ContentSearch = ({
 	);
 };
 
+ContentSearch.defaultProps = {
+	contentTypes: ['post', 'page'],
+	placeholder: '',
+	perPage: 20,
+	label: '',
+	excludeItems: [],
+	mode: 'post',
+	onSelectItem: () => {
+		console.log('Select!'); // eslint-disable-line no-console
+	},
+};
+
+ContentSearch.propTypes = {
+	contentTypes: PropTypes.array,
+	mode: PropTypes.string,
+	onSelectItem: PropTypes.func,
+	placeholder: PropTypes.string,
+	excludeItems: PropTypes.array,
+	label: PropTypes.string,
+	perPage: PropTypes.number
+};
+
 export { ContentSearch };
