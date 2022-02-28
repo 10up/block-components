@@ -18,11 +18,11 @@ import { Button } from '@wordpress/components';
  * Provide a Button component to trigger the inserter.
  * Any undocumented props are spread onto the Button component.
  *
- * @param {Object} props              All props sent to this component.
+ * @param {object} props              All props sent to this component.
  * @param {string} props.rootClientId Client ID of the block where this is being used.
  * @param {string} [props.buttonText] Text to display in the Button.
  * @param {string} [props.icon]       The icon to use.
- * @return {Function} The component.
+ * @returns {Function} The component.
  */
 const CustomBlockAppender = ({
 	rootClientId,
@@ -36,17 +36,15 @@ const CustomBlockAppender = ({
 			isAppender
 			rootClientId={rootClientId}
 			renderToggle={({ onToggle, disabled }) => (
-				<Fragment>
-					<Button
-						className={`tenup-${className}`}
-						onClick={onToggle}
-						disabled={disabled}
-						icon={icon}
-						{...buttonProps}
-					>
-						{buttonText}
-					</Button>
-				</Fragment>
+				<Button
+					className={`tenup-${className}`}
+					onClick={onToggle}
+					disabled={disabled}
+					icon={icon}
+					{...buttonProps}
+				>
+					{buttonText}
+				</Button>
 			)}
 		/>
 	);

@@ -1,6 +1,6 @@
 import { useSelect } from '@wordpress/data';
-import { store as iconStore } from '../icons/store';
 import { useState, useEffect } from '@wordpress/element';
+import { store as iconStore } from '../icons/store';
 
 function transformIcons(iconSet) {
 	return iconSet.icons.map((icon) => ({ ...icon, iconSet: iconSet.name }));
@@ -25,22 +25,26 @@ const useIcons = (iconSet = false) => {
 		if (iconSet) {
 			setIcons(transformIcons(rawIcons));
 		}
-	
-		setIcons(Object.values(rawIcons).reduce(
-			(rawIcons, iconSet) => [...rawIcons, ...transformIcons(iconSet)],
-			[],
-		));
+
+		setIcons(
+			Object.values(rawIcons).reduce(
+				(rawIcons, iconSet) => [...rawIcons, ...transformIcons(iconSet)],
+				[],
+			),
+		);
 	}, [rawIcons, iconSet]);
 
-	return icons
+	return icons;
 };
-
 
 const useIcon = (iconSet, name) => {
 	const [icon, setIcon] = useState(null);
-	const rawIcon = useSelect((select) => {
-		return select(iconStore).getIcon(iconSet, name);
-	}, [iconSet, name]);
+	const rawIcon = useSelect(
+		(select) => {
+			return select(iconStore).getIcon(iconSet, name);
+		},
+		[iconSet, name],
+	);
 
 	useEffect(() => {
 		setIcon(rawIcon);

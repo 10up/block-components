@@ -17,7 +17,7 @@
         "@wordpress/scripts": "^19.2.2"
     },
     "dependencies": {
-        "@10up/block-components": "file:../",
+        "@10up/block-components": "file:../dist/index.js",
         "@wordpress/icons": "^6.1.1"
     }
 }

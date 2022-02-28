@@ -10,8 +10,8 @@ import { useEffect } from '@wordpress/element';
 /**
  * PickedItem
  *
- * @param {Object} props react props
- * @return {*} React JSX
+ * @param {object} props react props
+ * @returns {*} React JSX
  */
 
 const DragHandle = sortableHandle(() => (

@@ -60,23 +60,25 @@ const ContentSearch = ({
 		onSelectItem(item);
 	}
 
-	const prepareSearchQuery = useCallback((keyword, page) => {
-		let searchQuery;
+	const prepareSearchQuery = useCallback(
+		(keyword, page) => {
+			let searchQuery;
 
-		switch (mode) {
-			case 'user':
-				searchQuery = `wp/v2/users/?search=${keyword}`;
-				break;
-			default:
-				searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
-					',',
-				)}&type=${mode}&_embed&per_page=${perPage}&page=${page}`;
-				break;
-		}
+			switch (mode) {
+				case 'user':
+					searchQuery = `wp/v2/users/?search=${keyword}`;
+					break;
+				default:
+					searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
+						',',
+					)}&type=${mode}&_embed&per_page=${perPage}&page=${page}`;
+					break;
+			}
 
-		return searchQuery;
-	}, [perPage, contentTypes]);
-
+			return searchQuery;
+		},
+		[perPage, contentTypes],
+	);
 
 	/**
 	 * Depending on the mode value, this method normalizes the format
@@ -86,33 +88,39 @@ const ContentSearch = ({
 	 * @param {Array} result The array to be normalized.
 	 * @returns {Array} The normalizes array.
 	 */
-	const normalizeResults = useCallback((result = []) => {
-		if (mode === 'user') {
-			return result.map((item) => {
-				return {
-					id: item.id,
-					subtype: mode,
-					title: item.name,
-					type: mode,
-					url: item.link,
-				};
-			});
-		}
-
-		return result;
-	}, [mode]);
-
-	const filterResults = useCallback((results) => {
-		return results.filter((result) => {
-			let keep = true;
-
-			if (excludeItems.length) {
-				keep = excludeItems.every((item) => item.id !== result.id);
+	const normalizeResults = useCallback(
+		(result = []) => {
+			if (mode === 'user') {
+				return result.map((item) => {
+					return {
+						id: item.id,
+						subtype: mode,
+						title: item.name,
+						type: mode,
+						url: item.link,
+					};
+				});
 			}
 
-			return keep;
-		});
-	}, [excludeItems]);
+			return result;
+		},
+		[mode],
+	);
+
+	const filterResults = useCallback(
+		(results) => {
+			return results.filter((result) => {
+				let keep = true;
+
+				if (excludeItems.length) {
+					keep = excludeItems.every((item) => item.id !== result.id);
+				}
+
+				return keep;
+			});
+		},
+		[excludeItems],
+	);
 
 	/**
 	 * handleSearchStringChange
@@ -123,7 +131,6 @@ const ContentSearch = ({
 	 * @param {string} keyword search query string
 	 */
 	const handleSearchStringChange = (keyword, page) => {
-
 		if (keyword.trim() === '') {
 			setSearchString(keyword);
 			setCurrentPage(1);
@@ -148,8 +155,8 @@ const ContentSearch = ({
 					results: null,
 					controller: null,
 					currentPage: page,
-					totalPages: null
-				}
+					totalPages: null,
+				};
 
 				return newQueries;
 			});
@@ -171,7 +178,6 @@ const ContentSearch = ({
 	}, []);
 
 	useEffect(() => {
-
 		Object.keys(searchQueries).forEach((searchQueryString) => {
 			const searchQuery = searchQueries[searchQueryString];
 
@@ -179,64 +185,61 @@ const ContentSearch = ({
 				if (searchQuery.controller && typeof searchQuery.controller === 'object') {
 					searchQuery.controller.abort();
 				}
-			} else {
-				if (searchQuery.results === null && searchQuery.controller === null) {
-					const controller = new AbortController();
+			} else if (searchQuery.results === null && searchQuery.controller === null) {
+				const controller = new AbortController();
 
-					apiFetch({
-						path: searchQueryString,
-						signal: controller.signal,
-						parse: false,
-					})
-						.then((results) => {
-							const totalPages = parseInt(
-								results.headers && results.headers.get('X-WP-TotalPages'),
-								10,
-							);
+				apiFetch({
+					path: searchQueryString,
+					signal: controller.signal,
+					parse: false,
+				})
+					.then((results) => {
+						const totalPages = parseInt(
+							results.headers && results.headers.get('X-WP-TotalPages'),
+							10,
+						);
 
-							// Parse, because we set parse to false to get the headers.
-							results.json().then((results) => {
-								if (mounted.current === false) {
-									return;
-								}
-								const normalizedResults = normalizeResults(results);
-
-								setSearchQueries((queries) => {
-									const newQueries = { ...queries };
-
-									newQueries[searchQueryString].results = normalizedResults;
-									newQueries[searchQueryString].totalPages = totalPages;
-									newQueries[searchQueryString].controller = 0;
-
-									return newQueries;
-								});
-							});
-						})
-						.catch((error, code) => {
-							// fetch_error means the request was aborted
-							if (error.code !== 'fetch_error') {
-								setSearchQueries((queries) => {
-									const newQueries = { ...queries };
-
-									newQueries[searchQueryString].controller = 1;
-									newQueries[searchQueryString].results = [];
-
-									return newQueries;
-								});
+						// Parse, because we set parse to false to get the headers.
+						results.json().then((results) => {
+							if (mounted.current === false) {
+								return;
 							}
+							const normalizedResults = normalizeResults(results);
+
+							setSearchQueries((queries) => {
+								const newQueries = { ...queries };
+
+								newQueries[searchQueryString].results = normalizedResults;
+								newQueries[searchQueryString].totalPages = totalPages;
+								newQueries[searchQueryString].controller = 0;
+
+								return newQueries;
+							});
 						});
+					})
+					.catch((error, code) => {
+						// fetch_error means the request was aborted
+						if (error.code !== 'fetch_error') {
+							setSearchQueries((queries) => {
+								const newQueries = { ...queries };
 
-					setSearchQueries((queries) => {
-						const newQueries = { ...queries };
+								newQueries[searchQueryString].controller = 1;
+								newQueries[searchQueryString].results = [];
 
-						newQueries[searchQueryString].controller = controller;
-
-						return newQueries;
+								return newQueries;
+							});
+						}
 					});
-				}
+
+				setSearchQueries((queries) => {
+					const newQueries = { ...queries };
+
+					newQueries[searchQueryString].controller = controller;
+
+					return newQueries;
+				});
 			}
 		});
-
 	}, [searchQueries, searchString, currentPage]);
 
 	let searchResults = null;
