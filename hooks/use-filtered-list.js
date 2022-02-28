@@ -8,7 +8,7 @@ import { useState, useEffect, useCallback } from '@wordpress/element';
  * @param {string?} property name of the prop
  * @returns {Array} filtered list
  */
-export function useFilteredList(list, searchTerm, property = 'name') {
+export function useFilteredList(list = [], searchTerm = '', property = 'name') {
 	const [filteredList, setFilteredList] = useState(list);
 
 	const filterList = useCallback(
@@ -19,8 +19,10 @@ export function useFilteredList(list, searchTerm, property = 'name') {
 	);
 
 	useEffect(() => {
+		const hasListItems = !!list?.length;
 		const hasSearchTerm = searchTerm !== '';
-		const newFilteredList = hasSearchTerm ? filterList(searchTerm) : list;
+		const canFilter = hasSearchTerm && hasListItems;
+		const newFilteredList = canFilter ? filterList(searchTerm) : list;
 		setFilteredList(newFilteredList);
 	}, [searchTerm, filterList, list]);
 

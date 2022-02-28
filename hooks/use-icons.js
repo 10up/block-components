@@ -1,32 +1,56 @@
 import { useSelect } from '@wordpress/data';
+import { useState, useEffect } from '@wordpress/element';
 import { store as iconStore } from '../icons/store';
 
 function transformIcons(iconSet) {
 	return iconSet.icons.map((icon) => ({ ...icon, iconSet: iconSet.name }));
 }
 
-export function useIcons(iconSet = false) {
-	return useSelect(
+const useIcons = (iconSet = false) => {
+	const [icons, setIcons] = useState([]);
+	const rawIcons = useSelect(
 		(select) => {
 			const { getIconSet, getIconSets } = select(iconStore);
 
 			if (iconSet) {
-				const sets = getIconSet(iconSet);
-				return transformIcons(sets);
+				return getIconSet(iconSet);
 			}
 
-			const sets = getIconSets();
-			return Object.values(sets).reduce(
-				(icons, iconSet) => [...icons, ...transformIcons(iconSet)],
-				[],
-			);
+			return getIconSets();
 		},
 		[iconSet],
 	);
-}
 
-export function useIcon(iconSet, name) {
-	return useSelect((select) => {
-		return select(iconStore).getIcon(iconSet, name);
-	});
-}
+	useEffect(() => {
+		if (iconSet) {
+			setIcons(transformIcons(rawIcons));
+		}
+
+		setIcons(
+			Object.values(rawIcons).reduce(
+				(rawIcons, iconSet) => [...rawIcons, ...transformIcons(iconSet)],
+				[],
+			),
+		);
+	}, [rawIcons, iconSet]);
+
+	return icons;
+};
+
+const useIcon = (iconSet, name) => {
+	const [icon, setIcon] = useState(null);
+	const rawIcon = useSelect(
+		(select) => {
+			return select(iconStore).getIcon(iconSet, name);
+		},
+		[iconSet, name],
+	);
+
+	useEffect(() => {
+		setIcon(rawIcon);
+	}, [rawIcon]);
+
+	return icon;
+};
+
+export { useIcons, useIcon };
