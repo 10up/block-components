@@ -23,13 +23,13 @@ const ButtonStyled = styled(Button)`
 /**
  * SearchItem
  *
- * @param {Object} props react props
+ * @param {object} props react props
  * @param props.suggestion
  * @param props.onClick
  * @param props.searchTerm
  * @param props.isSelected
  * @param props.id
- * @return {*} React JSX
+ * @returns {*} React JSX
  */
 const SearchItem = ({ suggestion, onClick, searchTerm, isSelected, id, contentTypes }) => {
 	const showType = suggestion.type && contentTypes.length > 1;
@@ -54,7 +54,10 @@ const SearchItem = ({ suggestion, onClick, searchTerm, isSelected, id, contentTy
 							paddingRight: !showType ? 0 : null,
 						}}
 					>
-						<TextHighlight text={decodeEntities(suggestion.title)} highlight={searchTerm} />
+						<TextHighlight
+							text={decodeEntities(suggestion.title)}
+							highlight={searchTerm}
+						/>
 					</span>
 					<span
 						aria-hidden
