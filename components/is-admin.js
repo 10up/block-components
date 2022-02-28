@@ -7,7 +7,7 @@ import { useSelect } from '@wordpress/data';
  * and only returns the child omponents if the user is an admin. You can pass a
  * fallback component via the fallback prop.
  *
- * @param {Object} props react props
+ * @param {object} props react props
  * @param props.fallback
  * @param props.children
  */
