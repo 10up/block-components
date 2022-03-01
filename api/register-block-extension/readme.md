@@ -8,6 +8,24 @@ The `registerBlockExtension` API is a wrapper to make it easier to add custom se
 import { registerBlockExtension } from '@10up/block-components';
 
 /**
+ * additional block attributes object
+ */
+const additionalAttributes = {
+    hasBackgroundPattern: {
+        type: 'boolean',
+        default: false,
+    },
+    backgroundPatternShape: {
+        type: 'string',
+        default: 'dots',
+    },
+    backgroundPatternColor: {
+        type: 'string',
+        default: 'green'
+    }
+}
+
+/**
  * BlockEdit
  *
  * a react component that will get mounted in the Editor when the block is
@@ -34,20 +52,7 @@ registerBlockExtension(
  'core/group',
  {
   extensionName: 'background-patterns',
-  attributes: {
-   hasBackgroundPattern: {
-    type: 'boolean',
-    default: false,
-   },
-   backgroundPatternShape: {
-    type: 'string',
-    default: 'dots',
-   },
-   backgroundPatternColor: {
-    type: 'string',
-    default: 'green'
-   }
-  },
+  attributes: additionalAttributes,
   classNameGenerator: generateClassNames,
   Edit: BlockEdit,
  }
