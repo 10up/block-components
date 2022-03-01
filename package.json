@@ -11,6 +11,7 @@
     "lint": "10up-toolkit lint-js",
     "test": "10up-toolkit test-unit-jest",
     "build": "10up-toolkit build",
+    "start": "10up-toolkit start",
     "test:e2e": "cypress open"
   },
   "repository": {
