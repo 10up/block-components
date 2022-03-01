@@ -18,6 +18,7 @@ A collection of components built to be used in the block editor. These component
 ## APIs
 
 - [registerBlockExtension](./api/register-block-extension/)
+- [registerIcons](./api/register-icons/)
 
 ## Components
 
@@ -37,6 +38,10 @@ A collection of components built to be used in the block editor. These component
 - [useHasSelectedInnerBlock](./hooks/use-has-selected-inner-block/)
 - [useIcons](./hooks/use-icons/)
 - [useRequestData](./hooks/use-request-data/)
+
+## Stores
+
+- [iconStore](./stores/icons)
 
 ## Support Level
 
