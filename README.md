@@ -15,6 +15,10 @@ A collection of components built to be used in the block editor. These component
 2. Within your block editor code, import the relevant component(s) e.g. `import { ContentPicker } from '@10up/block-components';`
 3. We highly recommend you use [10up-toolkit](https://github.com/10up/10up-toolkit) to build your block files as it handles dependency extraction for you.
 
+## APIs
+
+- [registerBlockExtension](./api/register-block-extension/)
+
 ## Components
 
 - [ClipboardButton](./components/clipboard-button/)
@@ -26,6 +30,13 @@ A collection of components built to be used in the block editor. These component
 - [InnerBlockSlider](./components/inner-block-slider/)
 - [IsAdmin](./components//is-admin/)
 - [Optional](./components/optional/)
+
+## Hooks
+
+- [useFilteredList](./hooks/use-filtered-list)
+- [useHasSelectedInnerBlock](./hooks/use-has-selected-inner-block/)
+- [useIcons](./hooks/use-icons/)
+- [useRequestData](./hooks/use-request-data/)
 
 ## Support Level
 

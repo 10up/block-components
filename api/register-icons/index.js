@@ -1,6 +1,6 @@
 import { dispatch } from '@wordpress/data';
 
-import { store as iconStore } from '../store/index';
+import { iconStore } from '../../stores';
 
 export function registerIcons(options) {
 	dispatch(iconStore).registerIconSet(options);

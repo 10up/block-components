@@ -1,10 +1,8 @@
-# APIs
-
-## registerBlockExtension
+# registerBlockExtension
 
 The `registerBlockExtension` API is a wrapper to make it easier to add custom settings which produce classnames to any blocks. There are a few problems with using block styles for customizations. For one an editor cannot combine block styles. So you very quickly land in a situation where you need to add many block styles just to give an editor the ability to choose exactly the combination of options they want. That leads to a bad user experience though as the previews take up a ton of space and also make the editor slower due to the overhead of the iframes it creates. So in many cases it is nicer to extend a bock with custom settings to achieve the same goal. The process of registering your own attributes, modifying the blocks edit function, adding the new classname to the editor listing and also adding it to the frontend is rather cumbersome though. That is where this API comes in. It is a wrapper for the underlying filters that improves the editorial experience and reduces the amount of code that needs to get maintained in order to extend blocks.
 
-### Usage
+## Usage
 
 ```js
 import { registerBlockExtension } from '@10up/block-components';
@@ -56,7 +54,7 @@ registerBlockExtension(
 );
 ```
 
-### Options
+## Options
 
 | Name                       | Type       | Description                                       |
 |----------------------------|------------|---------------------------------------------------|

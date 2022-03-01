@@ -1,6 +1,6 @@
 import { useSelect } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
-import { store as iconStore } from '../icons/store';
+import { iconStore } from '../../stores';
 
 function transformIcons(iconSet) {
 	return iconSet.icons.map((icon) => ({ ...icon, iconSet: iconSet.name }));

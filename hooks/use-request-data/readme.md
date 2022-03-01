@@ -1,26 +1,4 @@
-# Hooks
-
-## useHasSelectedInnerBlock
-
-Determine whether one of the inner blocks currently is selected.
-
-### Usage
-
-```js
-import { useHasSelectedInnerBlock } from '@10up/block-components';
-
-function BlockEdit( props ) {
-    const hasSelectedInnerBlock = useHasSelectedInnerBlock(props);
-
-    return (
-        <div>
-            { hasSelectedInnerBlock ? 'InnerBlocks are selected' : 'InnerBlocks are not selected' }
-        </div>
-    )
-}
-```
-
-## useRequestData
+# useRequestData
 
 Custom hook to to make a request using `getEntityRecords` or `getEntityRecord` that provides `data`, `isLoading` and `invalidator` function. The hook determines which selector to use based on the query parameter. If a number is passed, it will use `getEntityRecord` to retrieve a single item. If an object is passed, it will use that as the query for `getEntityRecords` to retrieve multiple pieces of data.
 
@@ -39,9 +17,9 @@ Returns:
   * `{Boolean}`  Representing if the request is resolving
   * `{Function}` This function will invalidate the resolver and re-run the query.
 
-### Usage
+## Usage
 
-#### Multiple pieces of data
+## Multiple pieces of data
 
 ```js
 const ExampleBockEdit = ({ className }) => {
@@ -66,7 +44,7 @@ const ExampleBockEdit = ({ className }) => {
 };
 ```
 
-#### Single piece of data
+## Single piece of data
 
 ```js
 const ExampleBockEdit = ({ className }) => {
