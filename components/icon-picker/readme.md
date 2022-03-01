@@ -1,5 +1,0 @@
-# Icon Picker
-
-## Usage
-
-## Props
