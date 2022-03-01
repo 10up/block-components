@@ -65,4 +65,4 @@ CustomBlockAppender.defaultProps = {
 	className: 'custom-block-appender',
 };
 
-export default CustomBlockAppender;
+export { CustomBlockAppender };
