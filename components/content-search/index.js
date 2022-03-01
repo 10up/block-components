@@ -1,12 +1,10 @@
 import { TextControl, Spinner, NavigableMenu, Button } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
-import { useState, useRef, useEffect, useCallback } from '@wordpress/element'; // eslint-disable-line
+import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import { jsx, css } from '@emotion/react';
-import { search } from '@wordpress/icons';
 import SearchItem from './SearchItem';
-import SortableList from '../ContentPicker/SortableList';
 /** @jsx jsx */
 
 const NAMESPACE = 'tenup-content-search';
@@ -405,7 +403,7 @@ ContentSearch.propTypes = {
 	placeholder: PropTypes.string,
 	excludeItems: PropTypes.array,
 	label: PropTypes.string,
-	perPage: PropTypes.number
+	perPage: PropTypes.number,
 };
 
 export { ContentSearch };

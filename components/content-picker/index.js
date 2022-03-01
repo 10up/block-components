@@ -5,7 +5,7 @@ import { select } from '@wordpress/data';
 import { useState, useEffect, useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { v4 as uuidv4 } from 'uuid';
-import { ContentSearch } from '../ContentSearch';
+import { ContentSearch } from '../content-search';
 import SortableList from './SortableList';
 
 const NAMESPACE = 'tenup-content-picker';
