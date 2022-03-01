@@ -144,7 +144,7 @@ const ContentPicker = ({
 				label && (
 					<div
 						style={{
-							'margin-bottom': '8px',
+							marginBottom: '8px',
 						}}
 					>
 						{label}
