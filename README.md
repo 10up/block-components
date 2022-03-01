@@ -98,6 +98,43 @@ function MyComponent( props ) {
 | `excludeItems`      | `array`    | `[ { id: 1, type: 'post' ]` | Items to exclude from search |
 | `perPage`           | `number`   | `50`               | Number of items to show during search
 
+## ColorSetting
+
+A component that lets you add a `label`, `help` text and all the existing options from the core `ColorPalette` compopnent. This component can be used by any other Bock Component or a Block. This component calls the `onChange` callback with the value of the selected color and does not add/update any CSS classes.
+
+### Usage
+
+```js
+import { ColorSetting } from '@10up/block-components';
+
+function MyComponent( props ) {
+
+    return (
+        <ColorSetting
+            label={ __( 'Color Setting - Label', NAMESPACE ) }
+            help={ __( 'Color Setting - Help Text', NAMESPACE ) }
+            colors={ colors }
+            value={ color }
+            onChange={ ( color ) => setColor( color ) }
+        />
+    )
+}
+```
+
+#### Props
+
+| Name             | Type       | Default   | isRequired     | Description                                                            |
+| ---------------- | ---------- | ---------- | --------------------- | ---------------------------------------------------------------------- |
+| `label`   | `string` | `''`            | `No` |  If this property is added, a label will be generated using label property as the content. |
+| `hideLabelFromVision`          | `bool`   | `false`                   | `No` | If true, the label will only be visible to screen readers.                                  |
+| `help`           | `string`   | `''`               | `No` | If this property is added, a help text will be generated using help property as the content.                                 |
+| `className`    | `string`   | `''`                   | `No` | If no className is passed only components-base-control is used.                      |
+| `disableCustomColors`      | `bool`    | `false` | `No` | Whether to allow custom color or not.                      |
+| `value`      | `string`    | `''` | `No` | Currently active value. |
+| `clearable`           | `bool`   | `true`               | `No` | Whether the palette should have a clearing button or not.
+| `colors`           | `array`   | `[]`               | `Yes` | Array with the colors to be shown.
+| `onChange`           | `function`   | `undefined`               | `Yes` |  Callback called when a color is selected.
+
 ## useHasSelectedInnerBlock
 
 Determine whether one of the inner blocks currently is selected.
@@ -303,36 +340,37 @@ The `<RichText>` node will only render when BlockEdit is selected.
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
 | `value` | `string`    | `''`   | The value that will be consumed by the children. If the value is falsey the component will only be rendered if the block is selected. |
 
-
 ## ClipboardButton
+
 This button component receives a string and copies it to the clipboard on click.
 
 ### Usage
+
 ```js
 import { ClipboardButton } from '@10up/block-components';
 
 const MyComponent = () => {
-	return (
-		<div>
-			<ClipboardButton
-				text="The string to be copied to the clipboard"
-				onSuccess={ ()=> { console.log( 'String copied!' ) } }
-				labels={{copy: 'Copy text', copied: 'Text copied!'}}
-				disabled={false}
-			>
-		</div>
-	);
+ return (
+  <div>
+   <ClipboardButton
+    text="The string to be copied to the clipboard"
+    onSuccess={ ()=> { console.log( 'String copied!' ) } }
+    labels={{copy: 'Copy text', copied: 'Text copied!'}}
+    disabled={false}
+   >
+  </div>
+ );
 };
 ```
 
 #### Props
+
 | Name       | Type              | Default  |  Description                                                   |
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
 | `text` | `string`    | `''`   | The text to be copied to the clipboard         |
 | `onSuccess` | `function` | `undefined` | Callback function that runs after text is copied to the clipboard |
 | `labels` | `object` | `{}` | Prop to assign labels to the button before and after copying the text. Set the properties `copy` and `copied` on the object to replace the default "Copy" and "Copied" text. |
 | `disabled` | `bool` | `false` | Prop to enable/disable the button |
-
 
 ## registerBlockExtension
 
