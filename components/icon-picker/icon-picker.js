@@ -10,7 +10,7 @@ import {
 	SearchControl,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
-import { useState } from '@wordpress/element';
+import { useState, memo } from '@wordpress/element';
 
 import { useIcons } from '../../hooks/use-icons';
 import { useFilteredList } from '../../hooks/use-filtered-list';
@@ -105,12 +105,12 @@ const IconGrid = (props) => {
 			{icons.map((icon) => {
 				const isChecked =
 					selectedIcon?.name === icon.name && selectedIcon?.iconSet === icon.iconSet;
-				const Label = () => (
+				const Label = memo(() => (
 					<StyledIconButton isSelected={isChecked}>
 						<Icon key={icon.name} name={icon.name} iconSet={icon.iconSet} />
 						<VisuallyHidden>{icon.label}</VisuallyHidden>
 					</StyledIconButton>
-				);
+				));
 				return (
 					<CheckboxControl
 						key={icon.name}

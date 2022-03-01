@@ -37,19 +37,19 @@ const ContentPickerWrapper = styled('div')`
  * Content Picker
  *
  * @param {object} props React props
- * @param props.label
- * @param props.mode
- * @param props.contentTypes
- * @param props.placeholder
- * @param props.onPickChange
- * @param props.maxContentItems
- * @param props.isOrderable
- * @param props.singlePickedLabel
- * @param props.multiPickedLabel
- * @param props.content
- * @param props.uniqueContentItems
- * @param props.excludeCurrentPost
- * @param props.perPage
+ * @param {string} props.label label for the picker
+ * @param {string} props.mode mode of the picker
+ * @param {Array} props.contentTypes array of content types to filter by
+ * @param {string} props.placeholder placeholder text for the search input
+ * @param {Function} props.onPickChange callback for when the picker changes
+ * @param {number} props.maxContentItems max number of items to show in the picker
+ * @param {boolean} props.isOrderable whether or not the picker is sortable
+ * @param {string} props.singlePickedLabel label for the single picked item
+ * @param {string} props.multiPickedLabel label for the multi picked item
+ * @param {Array} props.content items to show in the picker
+ * @param {boolean} props.uniqueContentItems whether or not the picker should only show unique items
+ * @param {boolean} props.excludeCurrentPost whether or not to exclude the current post from the picker
+ * @param {number} props.perPage number of items to show per page
  * @returns {*} React JSX
  */
 const ContentPicker = ({
@@ -91,6 +91,7 @@ const ContentPicker = ({
 	// Run onPickChange callback when content changes.
 	useEffect(() => {
 		onPickChange(content);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [content]);
 
 	const handleSelect = (item) => {

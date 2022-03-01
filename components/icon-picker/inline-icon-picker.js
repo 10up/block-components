@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { Dropdown } from '@wordpress/components';
+import { memo } from '@wordpress/element';
 
 import { IconPicker } from './icon-picker';
 import { Icon } from './icon';
@@ -21,9 +22,9 @@ const StyledIconPickerDropdown = styled(IconPicker)`
  */
 export const InlineIconPicker = (props) => {
 	const { value, ...rest } = props;
-	const IconButton = ({ onToggle }) => (
+	const IconButton = memo(({ onToggle }) => (
 		<Icon name={value.name} iconSet={value.iconSet} onClick={onToggle} {...rest} />
-	);
+	));
 
 	IconButton.propTypes = {
 		onToggle: PropTypes.func.isRequired,

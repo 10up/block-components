@@ -4,6 +4,7 @@ import { createBlock } from '@wordpress/blocks';
 import { InnerBlocks } from '@wordpress/block-editor';
 import PropTypes from 'prop-types';
 /** @jsx jsx */
+// eslint-disable-next-line no-unused-vars
 import { jsx, css } from '@emotion/react';
 import { ChevronLeft, ChevronRight } from './icons';
 
@@ -72,6 +73,7 @@ const InnerBlockSlider = ({
 				setCurrentPage(totalPages);
 			}
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [slideBlocks.length]);
 
 	const slidesCSS = css`

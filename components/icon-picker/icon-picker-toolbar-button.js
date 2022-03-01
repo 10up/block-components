@@ -21,18 +21,23 @@ const StyledIconPickerDropdown = styled(IconPicker)`
  * @returns {*}
  */
 export const IconPickerToolbarButton = (props) => {
+	const {
+		value: { name, iconSet },
+		buttonLabel,
+	} = props;
+
 	return (
 		<Dropdown
-			className="component-icom-picker-toolbar-button"
-			contentClassName="component-icom-picker-toolbar-button__content"
+			className="component-icon-picker-toolbar-button"
+			contentClassName="component-icon-picker-toolbar-button__content"
 			position="bottom right"
 			renderToggle={({ isOpen, onToggle }) => (
 				<ToolbarButton
 					onClick={onToggle}
 					aria-expanded={isOpen}
-					icon={<Icon name={props.value.name} iconSet={props.value.iconSet} />}
+					icon={<Icon name={name} iconSet={iconSet} />}
 				>
-					{props?.buttonLabel ?? __('Select Icon')}
+					{buttonLabel ?? __('Select Icon')}
 				</ToolbarButton>
 			)}
 			renderContent={() => <StyledIconPickerDropdown {...props} />}

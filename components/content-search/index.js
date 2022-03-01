@@ -1,8 +1,12 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable react/jsx-no-bind */
 import { TextControl, Spinner, NavigableMenu, Button } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
+// eslint-disable-next-line no-unused-vars
 import { jsx, css } from '@emotion/react';
 import SearchItem from './SearchItem';
 /** @jsx jsx */
@@ -12,15 +16,7 @@ const NAMESPACE = 'tenup-content-search';
 // Equalize height of list icons to match loader in order to reduce jumping.
 const listMinHeight = '46px';
 
-const ContentSearch = ({
-	onSelectItem,
-	placeholder,
-	label,
-	contentTypes,
-	mode,
-	excludeItems,
-	perPage,
-}) => {
+const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, perPage }) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchQueries, setSearchQueries] = useState({});
 	const [selectedItem, setSelectedItem] = useState(null);
@@ -34,7 +30,7 @@ const ContentSearch = ({
 	 * update the selected item in state to either the selected item or null if the
 	 * selected item does not have a valid id
 	 *
-	 * @param {*} item
+	 * @param {*} item item
 	 */
 	function handleOnNavigate(item) {
 		if (item === 0) {
@@ -50,7 +46,7 @@ const ContentSearch = ({
 	 * reset the search input & item container
 	 * trigger the onSelectItem callback passed in via props
 	 *
-	 * @param {*} item
+	 * @param {*} item item
 	 */
 	function handleItemSelection(item) {
 		setSearchString('');
@@ -75,6 +71,7 @@ const ContentSearch = ({
 
 			return searchQuery;
 		},
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[perPage, contentTypes],
 	);
 
@@ -105,21 +102,6 @@ const ContentSearch = ({
 		[mode],
 	);
 
-	const filterResults = useCallback(
-		(results) => {
-			return results.filter((result) => {
-				let keep = true;
-
-				if (excludeItems.length) {
-					keep = excludeItems.every((item) => item.id !== result.id);
-				}
-
-				return keep;
-			});
-		},
-		[excludeItems],
-	);
-
 	/**
 	 * handleSearchStringChange
 	 *
@@ -127,6 +109,7 @@ const ContentSearch = ({
 	 * search for posts/terms that match and return them to the autocomplete component.
 	 *
 	 * @param {string} keyword search query string
+	 * @param {string} page page query string
 	 */
 	const handleSearchStringChange = (keyword, page) => {
 		if (keyword.trim() === '') {
@@ -215,7 +198,7 @@ const ContentSearch = ({
 							});
 						});
 					})
-					.catch((error, code) => {
+					.catch((error) => {
 						// fetch_error means the request was aborted
 						if (error.code !== 'fetch_error') {
 							setSearchQueries((queries) => {
@@ -238,6 +221,7 @@ const ContentSearch = ({
 				});
 			}
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [searchQueries, searchString, currentPage]);
 
 	let searchResults = null;
@@ -389,7 +373,6 @@ ContentSearch.defaultProps = {
 	placeholder: '',
 	perPage: 20,
 	label: '',
-	excludeItems: [],
 	mode: 'post',
 	onSelectItem: () => {
 		console.log('Select!'); // eslint-disable-line no-console
@@ -401,7 +384,6 @@ ContentSearch.propTypes = {
 	mode: PropTypes.string,
 	onSelectItem: PropTypes.func,
 	placeholder: PropTypes.string,
-	excludeItems: PropTypes.array,
 	label: PropTypes.string,
 	perPage: PropTypes.number,
 };

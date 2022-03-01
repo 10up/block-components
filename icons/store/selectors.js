@@ -1,3 +1,4 @@
+/* eslint-disable no-prototype-builtins */
 /**
  * Returns all icons sets
  *
@@ -16,7 +17,7 @@ export function getIconSets(state) {
  * @param {object} state Data state.
  * @param {string} name Name of the Icon Set.
  *
- * @returns {?object} Icon Set.
+ * @returns {object?} Icon Set.
  */
 export function getIconSet(state, name) {
 	const { iconSets } = state;
@@ -44,7 +45,7 @@ export function getIcons(state, name) {
  * @param {string} name Name of the Icon Set.
  * @param {string} iconName Name of the iconName.
  *
- * @returns {Icon?} List of Icons.
+ * @returns {object?} Icon.
  */
 export function getIcon(state, name, iconName) {
 	const { iconSets } = state;

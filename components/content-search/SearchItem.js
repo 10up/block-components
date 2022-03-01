@@ -24,11 +24,12 @@ const ButtonStyled = styled(Button)`
  * SearchItem
  *
  * @param {object} props react props
- * @param props.suggestion
- * @param props.onClick
- * @param props.searchTerm
- * @param props.isSelected
- * @param props.id
+ * @param {object} props.suggestion suggestion object
+ * @param {Array} props.contentTypes array of content types
+ * @param {Function} props.onClick callback for when the item is clicked
+ * @param {string} props.searchTerm the search term
+ * @param {boolean} props.isSelected whether the item is selected
+ * @param {string} props.id the id of the item
  * @returns {*} React JSX
  */
 const SearchItem = ({ suggestion, onClick, searchTerm, isSelected, id, contentTypes }) => {
