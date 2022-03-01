@@ -15,6 +15,18 @@ A collection of components built to be used in the block editor. These component
 2. Within your block editor code, import the relevant component(s) e.g. `import { ContentPicker } from '@10up/block-components';`
 3. We highly recommend you use [10up-toolkit](https://github.com/10up/10up-toolkit) to build your block files as it handles dependency extraction for you.
 
+## Components
+
+- [ClipboardButton](./components/clipboard-button/)
+- [ColorSettings](./components//clipboard-button/)
+- [ContentPicker](./components//content-picker/)
+- [ContentSearch](./components/content-search/)
+- [CustomBlockAppender](./components/custom-block-appender/)
+- [IconPicker](./components/icon-picker/)
+- [InnerBlockSlider](./components/inner-block-slider/)
+- [IsAdmin](./components//is-admin/)
+- [Optional](./components/optional/)
+
 ## Support Level
 
 __Active:__ 10up is actively working on this, and we expect to continue work for the foreseeable future including keeping tested up to the most recent version of WordPress.  Bug reports, feature requests, questions, and pull requests are welcome.
