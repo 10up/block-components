@@ -22,3 +22,4 @@ export {
 export { registerIcons } from './icons/api/register';
 export { store as iconStore } from './icons/store';
 export { ColorSetting } from './components/ColorSetting';
+export { TermPicker } from './components/TermPicker';
