@@ -8,15 +8,15 @@ The MediaToolbar component is build to quickly add a complete media editing expe
 import { MediaToolbar } from '@10up/block-components';
 
 function BlockEdit(props) {
-
-    const { attributes: { image }, setAttributes } = props;
+    const { attributes, setAttributes } = props;
+    const { imageId } = attributes;
 
     function handleImageSelect( image ) {
-        setAttributes({image: image});
+        setAttributes({imageId: image.id});
     }
 
     function handleImageRemove() {
-        setAttributes({image: null})
+        setAttributes({imageId: null})
     }
 
     return (
@@ -24,7 +24,7 @@ function BlockEdit(props) {
             <BlockControls>
                 <MediaToolbar
                     isOptional
-                    image={ image }
+                    id={ imageId }
                     onSelect={ handleImageSelect }
                     onRemove={ handleImageRemove }
                 />
@@ -39,7 +39,7 @@ function BlockEdit(props) {
 
 | Name       | Type              | Default  |  Description                                                   |
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
-| `image` | `object`    | `null`   | image attribute          |
+| `id` | `number`    | `null`   | image id          |
 | `onSelect` | `Function` | `null` | Callback that gets called with the new image when one is selected |
 | `onRemove` | `Function` | `null` | Callback that gets called when the remove image button is clicked |
 | `isOptional` | `boolean` | `false` | Wether or not the Remove Image button should be shown |
