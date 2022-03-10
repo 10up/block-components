@@ -1,4 +1,3 @@
-import { ToolbarGroup, PanelBody } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { BlockControls, useBlockProps } from '@wordpress/block-editor';
 
