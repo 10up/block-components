@@ -1,6 +1,7 @@
 import { __ } from '@wordpress/i18n';
 import { MediaReplaceFlow, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
+import PropTypes from 'prop-types';
 import { useMedia } from '../../hooks/use-media';
 
 /**
@@ -49,4 +50,15 @@ export const MediaToolbar = (props) => {
 			)}
 		</ToolbarGroup>
 	);
+};
+
+MediaToolbar.defaultProps = {
+	isOptional: false,
+};
+
+MediaToolbar.propTypes = {
+	id: PropTypes.number.isRequired,
+	onSelect: PropTypes.func.isRequired,
+	onRemove: PropTypes.func.isRequired,
+	isOptional: PropTypes.bool,
 };
