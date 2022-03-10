@@ -11,7 +11,10 @@
     "attributes": {
         "icon": {
             "type": "object",
-            "default": {}
+            "default": {
+                "iconSet": "example/theme",
+                "name": "cloud"
+            }
         }
     }
 }
