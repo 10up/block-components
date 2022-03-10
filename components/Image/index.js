@@ -1,5 +1,6 @@
 import { MediaPlaceholder } from '@wordpress/block-editor';
 import { Spinner } from '@wordpress/components';
+import PropTypes from 'prop-types';
 
 import { useMedia } from '../../hooks/use-media';
 
@@ -23,3 +24,13 @@ const Image = (props) => {
 };
 
 export { Image };
+
+Image.defaultProps = {
+	size: 'large',
+};
+
+Image.propTypes = {
+	id: PropTypes.number.isRequired,
+	size: PropTypes.string,
+	onSelect: PropTypes.func.isRequired,
+};
