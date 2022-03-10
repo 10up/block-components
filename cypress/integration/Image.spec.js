@@ -11,6 +11,7 @@ context('Image', () => {
 		cy.insertBlock('Image Example');
         
         cy.get('button').contains('Media Library').click();
+        cy.get('#menu-item-browse').click();
         cy.get('.attachment-preview').first().click();
         cy.get('#attachment-details-alt-text').type('Test Alt Text');
         cy.get('.media-button-select').contains('Select').click();
