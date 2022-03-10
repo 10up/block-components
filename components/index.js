@@ -7,5 +7,5 @@ export { ContentSearch } from './content-search';
 export { ContentPicker } from './content-picker';
 export { ColorSetting } from './color-settings';
 export { ClipboardButton } from './clipboard-button';
-export { MediaToolbar } from './components/media-toolbar';
-export { Image } from './components/image';
+export { MediaToolbar } from './media-toolbar';
+export { Image } from './image';
