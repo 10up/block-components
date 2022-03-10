@@ -7,4 +7,4 @@ export { ContentSearch } from './content-search';
 export { ContentPicker } from './content-picker';
 export { ColorSetting } from './color-settings';
 export { ClipboardButton } from './clipboard-button';
-export { Link } from './components/link';
+export { Link } from './link';
