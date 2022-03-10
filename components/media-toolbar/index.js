@@ -21,7 +21,7 @@ export const MediaToolbar = (props) => {
 	const { media } = useMedia(id);
 
 	return (
-		<ToolbarGroup>
+		<ToolbarGroup label={__('Media', '10up-block-components')}>
 			{hasImage ? (
 				<>
 					<MediaReplaceFlow
