@@ -28,8 +28,10 @@ A collection of components built to be used in the block editor. These component
 - [ContentSearch](./components/content-search/)
 - [CustomBlockAppender](./components/custom-block-appender/)
 - [IconPicker](./components/icon-picker/)
+- [Image](./components/image/)
 - [InnerBlockSlider](./components/inner-block-slider/)
 - [IsAdmin](./components//is-admin/)
+- [MediaToolbar](./components/media-toolbar/)
 - [Optional](./components/optional/)
 
 ## Hooks
@@ -37,6 +39,7 @@ A collection of components built to be used in the block editor. These component
 - [useFilteredList](./hooks/use-filtered-list)
 - [useHasSelectedInnerBlock](./hooks/use-has-selected-inner-block/)
 - [useIcons](./hooks/use-icons/)
+- [useMedia](./hooks/use-media/)
 - [useRequestData](./hooks/use-request-data/)
 
 ## Stores
