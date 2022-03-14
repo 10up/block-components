@@ -9,6 +9,10 @@
         "html": false
     },
     "attributes": {
+        "title": {
+            "type": "string",
+            "default": "Hello World!"
+        },
         "url": {
             "type": "string"
         },
@@ -16,6 +20,16 @@
             "type": "string"
         },
         "opensInNewTab": {
+            "type": "boolean",
+            "default": false
+        },
+        "urlTwo": {
+            "type": "string"
+        },
+        "textTwo": {
+            "type": "string"
+        },
+        "opensInNewTabTwo": {
             "type": "boolean",
             "default": false
         }
