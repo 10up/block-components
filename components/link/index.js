@@ -48,7 +48,7 @@ function getSuggestionsQuery(type, kind) {
 	}
 }
 
-const LinkOutput = styled(RichText)`
+const StylesRichTextLink = styled(RichText)`
 	--color--warning: #f00;
 
 	/* Reset margins for this block alone. */
@@ -136,7 +136,7 @@ const Link = ({
 
 	return (
 		<>
-			<LinkOutput
+			<StylesRichTextLink
 				tagName="a"
 				identifier="label"
 				className={classnames('tenup-block-components-link__label', className)}
@@ -145,8 +145,8 @@ const Link = ({
 				aria-label={__('Link text', '10up-block-components')}
 				placeholder={placeholder}
 				__unstablePastePlainText
-				allowedFormats={['core/bold', 'core/italic', 'core/strikethrough']}
-				onFocusCapture={openPopover}
+				allowedFormats={[]}
+				onClick={openPopover}
 				ref={linkRef}
 			/>
 
@@ -158,11 +158,10 @@ const Link = ({
 
 			{isPopoverVisible && (
 				<Popover
-					position="top center"
+					position="bottom center"
 					anchorRef={linkRef.current}
 					ref={popoverRef}
 					focusOnMount={false}
-					noArrow={false}
 				>
 					<LinkControl
 						hasTextControl
