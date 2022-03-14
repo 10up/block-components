@@ -111,12 +111,12 @@ const Link = ({
 	placeholder,
 	className,
 }) => {
-	const linkRef = useRef();
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 	const [isValidLink, setIsValidLink] = useState(false);
 	const openPopover = () => setIsPopoverVisible(true);
 	const closePopover = () => setIsPopoverVisible(false);
 
+	const linkRef = useRef();
 	const popoverRef = useOnClickOutside(closePopover);
 
 	const link = {
@@ -159,7 +159,7 @@ const Link = ({
 			{isPopoverVisible && (
 				<Popover
 					position="top center"
-					anchorRef={ref.current}
+					anchorRef={linkRef.current}
 					ref={popoverRef}
 					focusOnMount={false}
 					noArrow={false}
