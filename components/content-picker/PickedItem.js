@@ -1,20 +1,14 @@
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
-import { sortableHandle } from 'react-sortable-hoc';
 import { useEffect } from '@wordpress/element';
 
-/**
- * PickedItem
- *
- * @param {object} props react props
- * @returns {*} React JSX
- */
-
-const DragHandle = sortableHandle(() => (
+const DragHandle = (props) => (
 	<svg
 		style={{ marginRight: '10px', cursor: 'grab', flexShrink: 0 }}
 		width="18"
@@ -24,30 +18,28 @@ const DragHandle = sortableHandle(() => (
 		role="img"
 		aria-hidden="true"
 		focusable="false"
+		{...props}
 	>
 		<path d="M5 4h2V2H5v2zm6-2v2h2V2h-2zm-6 8h2V8H5v2zm6 0h2V8h-2v2zm-6 6h2v-2H5v2zm6 0h2v-2h-2v2z" />
 	</svg>
-));
+);
 
-const Wrapper = styled('div')`
-	button {
-		display: block;
-		padding: 2px 8px 6px 8px;
-		margin-left: auto;
-		font-size: 2em;
-		cursor: pointer;
-		border: none;
-		background-color: transparent;
+const StyledCloseButton = styled('button')`
+	display: block;
+	padding: 2px 8px 6px 8px;
+	margin-left: auto;
+	font-size: 2em;
+	cursor: pointer;
+	border: none;
+	background-color: transparent;
 
-		&:hover {
-			background-color: #ccc;
-		}
+	&:hover {
+		background-color: #ccc;
 	}
 `;
 
-const PickedItem = ({ item, isOrderable, handleItemDelete, mode }) => {
+function getType(mode) {
 	let type;
-
 	switch (mode) {
 		case 'post':
 			type = 'postType';
@@ -59,6 +51,27 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, mode }) => {
 			type = 'taxonomy';
 			break;
 	}
+
+	return type;
+}
+
+/**
+ * PickedItem
+ *
+ * @param {object} props react props
+ * @param {object} props.item item to show in the picker
+ * @param {boolean} props.isOrderable whether or not the picker is sortable
+ * @param {Function} props.handleItemDelete callback for when the item is deleted
+ * @param {string} props.mode mode of the picker
+ * @param {number|string} props.id id of the item
+ * @returns {*} React JSX
+ */
+const PickedItem = ({ item, isOrderable, handleItemDelete, mode, id }) => {
+	const type = getType(mode);
+
+	const { attributes, isDragging, listeners, setNodeRef, transform, transition } = useSortable({
+		id,
+	});
 
 	// This will return undefined while the item data is being fetched. If the item comes back
 	// empty, it will return null, which is handled in the effect below.
@@ -99,19 +112,29 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, mode }) => {
 		}
 	}, [item, handleItemDelete, preparedItem]);
 
-	return preparedItem ? (
-		<Wrapper
-			style={{
-				border: '2px dashed #ddd',
-				paddingTop: '10px',
-				paddingBottom: '10px',
-				display: 'flex',
-				alignItems: 'center',
-				paddingLeft: isOrderable ? '3px' : '8px',
-			}}
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+		border: '2px dashed #ddd',
+		paddingTop: '10px',
+		paddingBottom: '10px',
+		display: 'flex',
+		alignItems: 'center',
+		paddingLeft: isOrderable ? '3px' : '8px',
+	};
+
+	if (!preparedItem) {
+		return null;
+	}
+
+	return (
+		<li
 			className="block-editor-link-control__search-item is-entity"
+			ref={setNodeRef}
+			style={style}
+			faded={isDragging}
 		>
-			{isOrderable ? <DragHandle /> : ''}
+			{isOrderable ? <DragHandle {...attributes} {...listeners} /> : ''}
 			<span className="block-editor-link-control__search-item-header">
 				<span className="block-editor-link-control__search-item-title">
 					{decodeEntities(preparedItem.title)}
@@ -121,7 +144,7 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, mode }) => {
 				</span>
 			</span>
 
-			<button
+			<StyledCloseButton
 				type="button"
 				onClick={() => {
 					handleItemDelete(preparedItem);
@@ -129,10 +152,8 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, mode }) => {
 				aria-label={__('Delete item', '10up-block-components')}
 			>
 				&times;
-			</button>
-		</Wrapper>
-	) : (
-		<div />
+			</StyledCloseButton>
+		</li>
 	);
 };
 
@@ -145,6 +166,7 @@ PickedItem.propTypes = {
 	isOrderable: PropTypes.bool,
 	handleItemDelete: PropTypes.func.isRequired,
 	mode: PropTypes.string.isRequired,
+	id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 };
 
 export default PickedItem;

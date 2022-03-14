@@ -165,11 +165,11 @@ const ContentPicker = ({
 					</span>
 
 					<SortableList
-						items={content}
-						useDragHandle
+						posts={content}
 						handleItemDelete={onDeleteItem}
 						isOrderable={isOrderable}
 						mode={mode}
+						setPosts={setContent}
 						onSortEnd={({ oldIndex, newIndex }) => {
 							const newContent = [...arrayMove(content, oldIndex, newIndex)];
 
