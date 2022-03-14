@@ -6,11 +6,7 @@ import {
 	useSensor,
 	useSensors,
 } from '@dnd-kit/core';
-import {
-	arrayMove,
-	SortableContext,
-	verticalListSortingStrategy, // <== doesn't break if this is rectSortingStrategy
-} from '@dnd-kit/sortable';
+import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import PropTypes from 'prop-types';
 import PickedItem from './PickedItem';
 
