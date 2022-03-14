@@ -111,7 +111,7 @@ const Link = ({
 	placeholder,
 	className,
 }) => {
-	const ref = useRef();
+	const linkRef = useRef();
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 	const [isValidLink, setIsValidLink] = useState(false);
 	const openPopover = () => setIsPopoverVisible(true);
@@ -147,7 +147,7 @@ const Link = ({
 				__unstablePastePlainText
 				allowedFormats={['core/bold', 'core/italic', 'core/strikethrough']}
 				onFocusCapture={openPopover}
-				ref={ref}
+				ref={linkRef}
 			/>
 
 			{!isValidLink && (
