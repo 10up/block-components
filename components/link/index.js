@@ -98,7 +98,7 @@ const LinkOutput = styled(RichText)`
  * @param {string} props.placeholder 					Text visible before actual value is inserted
  * @param {string} props.className 					    html class to be applied to the anchor element
  *
- * @returns {JSX}
+ * @returns {*} The rendered component.
  */
 const Link = ({
 	value,

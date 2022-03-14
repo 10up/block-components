@@ -4,7 +4,7 @@ import { useEffect, useRef } from '@wordpress/element';
  * useOnClickOutside
  *
  * @param {Function} onClickOutside callback that will get invoked when the user clicks outside of the target
- * @returns {React.RefObject<HTMLElement>}
+ * @returns {object} ref to the target element
  */
 export function useOnClickOutside(onClickOutside) {
 	const ref = useRef();
