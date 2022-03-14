@@ -112,10 +112,10 @@ const Link = ({
 	className,
 }) => {
 	const ref = useRef();
-	const [isLinkOpen, setIsLinkOpen] = useState(false);
-	const [isValid, setIsValid] = useState(false);
-	const openPopover = () => setIsLinkOpen(true);
-	const closePopover = () => setIsLinkOpen(false);
+	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
+	const [isValidLink, setIsValidLink] = useState(false);
+	const openPopover = () => setIsPopoverVisible(true);
+	const closePopover = () => setIsPopoverVisible(false);
 
 	const popoverRef = useOnClickOutside(closePopover);
 
@@ -131,7 +131,7 @@ const Link = ({
 	 * two needs to be set.
 	 */
 	useEffect(() => {
-		setIsValid(!!url && !!value);
+		setIsValidLink(!!url && !!value);
 	}, [url, value]);
 
 	return (
@@ -150,13 +150,13 @@ const Link = ({
 				ref={ref}
 			/>
 
-			{!isValid && (
+			{!isValidLink && (
 				<Tooltip text={__('URL or Text has not been set', '10up-block-components')}>
 					<Icon icon="warning" />
 				</Tooltip>
 			)}
 
-			{isLinkOpen && (
+			{isPopoverVisible && (
 				<Popover
 					position="top center"
 					anchorRef={ref.current}
