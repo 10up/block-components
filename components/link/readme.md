@@ -4,7 +4,7 @@ The `<Link>` Component makes it super simple to add inline links to your custom 
 
 ## Usage
 
-```jsx
+```js
 import { Link } from '@10up/block-components`;
 
 const BlockEdit = (props) => {
