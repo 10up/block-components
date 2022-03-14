@@ -16,7 +16,6 @@ const NAMESPACE = 'tenup-content-picker';
  */
 const StyleWrapper = styled('div')`
 	& .block-editor-link-control__search-item {
-		border: none !important;
 		cursor: default;
 
 		&:hover {

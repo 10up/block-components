@@ -115,7 +115,7 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, mode, id }) => {
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition,
-		border: '2px dashed #ddd',
+		border: isDragging ? '2px dashed #ddd' : '2px dashed transparent',
 		paddingTop: '10px',
 		paddingBottom: '10px',
 		display: 'flex',
