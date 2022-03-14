@@ -84,7 +84,7 @@ const LinkOutput = styled(RichText)`
 /**
  * Link component that can be used inside other Gutenberg blocks for setting up URLs.
  *
- * The link should not be visible if the block is not focused. This will mainain nicer
+ * The link should not be visible if the block is not focused. This will maintain nicer
  * visuals in the block editor as a whole.
  *
  * @param {object} props								All properties passed to the component.
