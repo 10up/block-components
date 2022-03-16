@@ -83,25 +83,26 @@ const ContentPicker = ({
 	}
 
 	const handleSelect = (item) => {
-		onPickChange([
+		const newItems = [
 			{
 				id: item.id,
 				uuid: uuidv4(),
 				type: 'subtype' in item ? item.subtype : item.type,
 			},
 			...content,
-		]);
+		];
+		onPickChange(newItems);
 	};
 
 	const onDeleteItem = (deletedItem) => {
-		onPickChange(
-			content.filter(({ id, uuid }) => {
-				if (deletedItem.uuid) {
-					return uuid !== deletedItem.uuid;
-				}
-				return id !== deletedItem.id;
-			}),
-		);
+		const newItems = content.filter(({ id, uuid }) => {
+			if (deletedItem.uuid) {
+				return uuid !== deletedItem.uuid;
+			}
+			return id !== deletedItem.id;
+		});
+
+		onPickChange(newItems);
 	};
 
 	const excludeItems = useMemo(() => {
