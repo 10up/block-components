@@ -42,6 +42,8 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
                         label={ __( 'Select a Post or Page', NAMESPACE ) }
                         onPickChange={ handlePostSelection }
                         content={ selectedPost }
+                        maxContentItems={5}
+                        isOrderable={true}
                     />
                 </PanelBody>
             </InspectorControls>
@@ -52,6 +54,9 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
                     onPickChange={ handlePostSelection }
                     content={ selectedPost }
                     perPage={3}
+
+                    maxContentItems={5}
+                    isOrderable={true}
                 />
             </Placeholder>
             </>
