@@ -18,7 +18,7 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
     },
     attributes: {
         selectedPost: {
-            type: 'object'
+            type: 'array'
         }
     },
     transforms: {},
@@ -38,12 +38,10 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
             <>
             <InspectorControls>
                 <PanelBody title={ __( 'Post Picker', NAMESPACE ) }>
-                    { !!selectedPost &&
-                        <div>selected post</div>
-                    }
                     <ContentPicker 
                         label={ __( 'Select a Post or Page', NAMESPACE ) }
-                        handleSelect={ handlePostSelection }
+                        onPickChange={ handlePostSelection }
+                        content={ selectedPost }
                     />
                 </PanelBody>
             </InspectorControls>
@@ -51,7 +49,8 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
                 <ContentPicker 
                     postTypes={ [ 'page', 'post' ] }
                     label={ __( 'Select a Post or Page', NAMESPACE ) }
-                    handleSelect={ handlePostSelection }
+                    onPickChange={ handlePostSelection }
+                    content={ selectedPost }
                     perPage={3}
                 />
             </Placeholder>
