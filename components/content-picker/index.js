@@ -16,7 +16,6 @@ const NAMESPACE = 'tenup-content-picker';
  */
 const StyleWrapper = styled('div')`
 	& .block-editor-link-control__search-item {
-		border: none !important;
 		cursor: default;
 
 		&:hover {
@@ -154,11 +153,11 @@ const ContentPicker = ({
 					</span>
 
 					<SortableList
-						items={content}
-						useDragHandle
+						posts={content}
 						handleItemDelete={onDeleteItem}
 						isOrderable={isOrderable}
 						mode={mode}
+						setPosts={setContent}
 						onSortEnd={({ oldIndex, newIndex }) => {
 							const newContent = [...arrayMove(content, oldIndex, newIndex)];
 
