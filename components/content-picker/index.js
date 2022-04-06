@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import arrayMove from 'array-move';
 import styled from '@emotion/styled';
 import { select } from '@wordpress/data';
 import { useMemo } from '@wordpress/element';
@@ -157,12 +156,7 @@ const ContentPicker = ({
 						handleItemDelete={onDeleteItem}
 						isOrderable={isOrderable}
 						mode={mode}
-						setPosts={setContent}
-						onSortEnd={({ oldIndex, newIndex }) => {
-							const newContent = [...arrayMove(content, oldIndex, newIndex)];
-
-							onPickChange(newContent);
-						}}
+						setPosts={onPickChange}
 					/>
 				</StyleWrapper>
 			)}

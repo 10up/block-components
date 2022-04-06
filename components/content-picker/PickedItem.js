@@ -132,7 +132,6 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, mode, id }) => {
 			className="block-editor-link-control__search-item is-entity"
 			ref={setNodeRef}
 			style={style}
-			faded={isDragging}
 		>
 			{isOrderable ? <DragHandle {...attributes} {...listeners} /> : ''}
 			<span className="block-editor-link-control__search-item-header">
