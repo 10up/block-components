@@ -54,7 +54,8 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
                     onPickChange={ handlePostSelection }
                     content={ selectedPost }
                     perPage={3}
-
+                    maxContentItems={ 5 }
+                    isOrderable={ true }
                     maxContentItems={5}
                     isOrderable={true}
                 />

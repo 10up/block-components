@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import arrayMove from 'array-move';
 import styled from '@emotion/styled';
 import { select } from '@wordpress/data';
 import { useMemo } from '@wordpress/element';
@@ -16,7 +15,6 @@ const NAMESPACE = 'tenup-content-picker';
  */
 const StyleWrapper = styled('div')`
 	& .block-editor-link-control__search-item {
-		border: none !important;
 		cursor: default;
 
 		&:hover {
@@ -154,16 +152,11 @@ const ContentPicker = ({
 					</span>
 
 					<SortableList
-						items={content}
-						useDragHandle
+						posts={content}
 						handleItemDelete={onDeleteItem}
 						isOrderable={isOrderable}
 						mode={mode}
-						onSortEnd={({ oldIndex, newIndex }) => {
-							const newContent = [...arrayMove(content, oldIndex, newIndex)];
-
-							onPickChange(newContent);
-						}}
+						setPosts={onPickChange}
 					/>
 				</StyleWrapper>
 			)}
