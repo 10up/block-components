@@ -20,12 +20,10 @@ const SortableList = ({ posts, isOrderable, handleItemDelete, mode, setPosts }) 
 		const { active, over } = event;
 
 		if (active.id !== over.id) {
-			setPosts((posts) => {
-				const oldIndex = posts.findIndex((post) => post.uuid === active.id);
-				const newIndex = posts.findIndex((post) => post.uuid === over.id);
+			const oldIndex = posts.findIndex((post) => post.uuid === active.id);
+			const newIndex = posts.findIndex((post) => post.uuid === over.id);
 
-				return arrayMove(posts, oldIndex, newIndex);
-			});
+			setPosts(arrayMove(posts, oldIndex, newIndex));
 		}
 	};
 
