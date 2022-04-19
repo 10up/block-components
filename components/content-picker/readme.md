@@ -2,7 +2,7 @@
 
 A Content Picker component that allows you to pick posts and pages very easily.
 
-![Content picker in action](images/content-picker.gif)
+![Content picker in action](../../images/content-picker.gif)
 
 ## Usage
 
