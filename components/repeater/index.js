@@ -32,8 +32,14 @@ export const Repeater = ({ children, attribute, addButton }) => {
 	 * Adds a new repeater item.
 	 */
 	function addItem() {
+		const defaultRepeaterDataCopy = defaultRepeaterData.slice();
+
+		if (!defaultRepeaterData.length) {
+			defaultRepeaterDataCopy.push([]);
+		}
+
 		updateBlockAttributes(clientId, {
-			[attribute]: [...repeaterData[attribute], defaultRepeaterData],
+			[attribute]: [...repeaterData[attribute], ...defaultRepeaterDataCopy],
 		});
 	}
 
@@ -45,7 +51,11 @@ export const Repeater = ({ children, attribute, addButton }) => {
 	 */
 	function setItem(value, index) {
 		const repeaterDataCopy = repeaterData[attribute].slice();
-		repeaterDataCopy[index] = value;
+		if (typeof value === 'object' && value !== null) {
+			repeaterDataCopy[index] = { ...repeaterDataCopy[index], ...value };
+		} else {
+			repeaterDataCopy[index] = value;
+		}
 		updateBlockAttributes(clientId, { [attribute]: repeaterDataCopy });
 	}
 
