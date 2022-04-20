@@ -39,10 +39,10 @@ export const Repeater = ({ children, attribute, addButton }) => {
 	/**
 	 * Updates the item currently being edited.
 	 *
-	 * @param {number} index The index at which the item should be updated.
 	 * @param {string|number|boolean} value The value that should be used to updated the item.
+	 * @param {number} index The index at which the item should be updated.
 	 */
-	function setItem(index, value) {
+	function setItem(value, index) {
 		const repeaterDataCopy = repeaterData[attribute].slice();
 		repeaterDataCopy[index] = value;
 		updateBlockAttributes(clientId, { [attribute]: repeaterDataCopy });
@@ -63,7 +63,12 @@ export const Repeater = ({ children, attribute, addButton }) => {
 	return (
 		<>
 			{repeaterData[attribute].map((item, key) => {
-				return children(item, key, setItem, removeItem);
+				return children(
+					item,
+					key,
+					(val) => setItem(val, key),
+					() => removeItem(key),
+				);
 			})}
 			{typeof addButton === 'function' ? (
 				addButton(addItem)
