@@ -10,9 +10,10 @@ import PropTypes from 'prop-types';
  * @param {object} props React props
  * @param {Function} props.children Render prop to render the children.
  * @param {string} props.attribute property of the block attribute that will provide data for Repeater.
+ * @param {string} props.addButton render prop to customize the "Add item" button.
  * @returns {*} React JSX
  */
-export const Repeater = ({ children, attribute }) => {
+export const Repeater = ({ children, attribute, addButton }) => {
 	const { clientId, name } = useBlockEditContext();
 	const { updateBlockAttributes } = dispatch('core/editor');
 
@@ -64,9 +65,13 @@ export const Repeater = ({ children, attribute }) => {
 			{repeaterData[attribute].map((item, key) => {
 				return children(item, key, setItem, removeItem);
 			})}
-			<Button variant="primary" onClick={() => addItem()}>
-				{__('Add item')}
-			</Button>
+			{typeof addButton === 'function' ? (
+				addButton(addItem)
+			) : (
+				<Button variant="primary" onClick={() => addItem()}>
+					{__('Add item')}
+				</Button>
+			)}
 		</>
 	);
 };
@@ -74,9 +79,11 @@ export const Repeater = ({ children, attribute }) => {
 Repeater.defaultProps = {
 	children: () => null,
 	attribute: 'items',
+	addButton: null,
 };
 
 Repeater.propTypes = {
 	children: PropTypes.func,
 	attribute: PropTypes.string,
+	addButton: PropTypes.func,
 };
