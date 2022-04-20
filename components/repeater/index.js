@@ -1,4 +1,5 @@
-import { useBlockEditContext } from '@wordpress/block-editor';
+import { useBlockEditContext, store as blockEditorStore } from '@wordpress/block-editor';
+import { store as blocksStore } from '@wordpress/blocks';
 import { useSelect, dispatch } from '@wordpress/data';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -15,11 +16,11 @@ import PropTypes from 'prop-types';
  */
 export const Repeater = ({ children, attribute, addButton }) => {
 	const { clientId, name } = useBlockEditContext();
-	const { updateBlockAttributes } = dispatch('core/editor');
+	const { updateBlockAttributes } = dispatch(blockEditorStore);
 
 	const { repeaterData, defaultRepeaterData } = useSelect((select) => {
-		const { getBlockAttributes } = select('core/editor');
-		const { getBlockType } = select('core/blocks');
+		const { getBlockAttributes } = select(blockEditorStore);
+		const { getBlockType } = select(blocksStore);
 
 		return {
 			repeaterData: getBlockAttributes(clientId),
