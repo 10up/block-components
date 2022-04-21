@@ -7,7 +7,7 @@ import { Repeater } from "@10up/block-components";
 export function BlockEdit(props) {
     function customAddButton(addItem) {
         return (
-            <tr>
+            <tr className="repeater-controls">
                 <td></td>
                 <td></td>
                 <td className="repeater-item-add">
@@ -54,7 +54,7 @@ export function BlockEdit(props) {
                     <Repeater attribute="items" addButton={customAddButton}>
                         {
                             (item, index, setItem, removeItem) => (
-                                <tr key={index}>
+                                <tr key={index} className="repeater-item">
                                     <td className="repeater-item-page-name">
                                         <TextControl value={item.pageName} onChange={(val) => setItem({pageName: val})} />
                                     </td>

@@ -93,3 +93,7 @@ Cypress.Commands.add('deletePost', () => {
 Cypress.Commands.add('goToAdmin', () => {
 	cy.get('#wp-admin-bar-site-name #wp-admin-bar-dashboard > a').click({ force: true });
 });
+
+Cypress.Commands.add('updatePost', () => {
+	cy.get('[type="button"]').contains('Update').click();
+});
