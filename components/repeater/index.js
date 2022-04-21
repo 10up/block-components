@@ -93,13 +93,12 @@ export const Repeater = ({ children, attribute, addButton }) => {
 };
 
 Repeater.defaultProps = {
-	children: () => null,
 	attribute: 'items',
 	addButton: null,
 };
 
 Repeater.propTypes = {
-	children: PropTypes.func,
+	children: PropTypes.func.isRequired,
 	attribute: PropTypes.string,
 	addButton: PropTypes.func,
 };
