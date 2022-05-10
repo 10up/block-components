@@ -23,8 +23,8 @@ A collection of components built to be used in the block editor. These component
 ## Components
 
 - [ClipboardButton](./components/clipboard-button/)
-- [ColorSettings](./components//clipboard-button/)
-- [ContentPicker](./components//content-picker/)
+- [ColorSettings](./components/color-settings/)
+- [ContentPicker](./components/content-picker/)
 - [ContentSearch](./components/content-search/)
 - [CustomBlockAppender](./components/custom-block-appender/)
 - [IconPicker](./components/icon-picker/)
