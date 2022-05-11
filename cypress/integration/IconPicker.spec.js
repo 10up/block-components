@@ -6,8 +6,8 @@ context('IconPicker', () => {
 		cy.loginToWordPress();
 	});
 
-	it('ensure the new setting shows up and doesn\'t cause deprecation errors', () => {
-		cy.createPost({title: 'Block Extension Test'});
+	it('allows the user to use the post picker to change an icon and displays it', () => {
+		cy.createPost({title: 'Icon Picker Example'});
 		cy.insertBlock('Icon Picker Example');
         cy.get('.component-icon-picker-inline-button').click();
         cy.get('.component-icon-picker-inline__content [placeholder="Search"]').type('tool');
