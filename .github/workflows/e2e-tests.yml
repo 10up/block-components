@@ -25,7 +25,10 @@ jobs:
           cd example/
           npm run build
       - name: Start WordPress Instance
-        run: cd example/ && npm run wp-env start
+        run: |
+          cd example/
+          npm run wp-env start
+          npm run import-media
       - name: Run Cypress E2E Tests
         uses: cypress-io/github-action@v3.0.2
         with:

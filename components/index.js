@@ -8,3 +8,5 @@ export { ContentPicker } from './content-picker';
 export { ColorSetting } from './color-settings';
 export { ClipboardButton } from './clipboard-button';
 export { Repeater } from './repeater';
+export { MediaToolbar } from './media-toolbar';
+export { Image } from './image';
