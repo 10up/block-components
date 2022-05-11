@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
-import arrayMove from 'array-move';
 import styled from '@emotion/styled';
 import { select } from '@wordpress/data';
-import { useState, useEffect, useMemo } from '@wordpress/element';
+import { useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { v4 as uuidv4 } from 'uuid';
 import { ContentSearch } from '../content-search';
@@ -16,7 +15,6 @@ const NAMESPACE = 'tenup-content-picker';
  */
 const StyleWrapper = styled('div')`
 	& .block-editor-link-control__search-item {
-		border: none !important;
 		cursor: default;
 
 		&:hover {
@@ -62,17 +60,11 @@ const ContentPicker = ({
 	isOrderable,
 	singlePickedLabel,
 	multiPickedLabel,
-	content: presetContent,
+	content,
 	uniqueContentItems,
 	excludeCurrentPost,
 	perPage,
 }) => {
-	const [content, setContent] = useState([]);
-
-	useEffect(() => {
-		setContent(presetContent);
-	}, [presetContent]);
-
 	const currentPostId = select('core/editor')?.getCurrentPostId();
 
 	/**
@@ -88,32 +80,27 @@ const ContentPicker = ({
 		}
 	}
 
-	// Run onPickChange callback when content changes.
-	useEffect(() => {
-		onPickChange(content);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [content]);
-
 	const handleSelect = (item) => {
-		setContent((previousContent) => [
+		const newItems = [
 			{
 				id: item.id,
 				uuid: uuidv4(),
 				type: 'subtype' in item ? item.subtype : item.type,
 			},
-			...previousContent,
-		]);
+			...content,
+		];
+		onPickChange(newItems);
 	};
 
 	const onDeleteItem = (deletedItem) => {
-		setContent((previousContent) => {
-			return previousContent.filter(({ id, uuid }) => {
-				if (deletedItem.uuid) {
-					return uuid !== deletedItem.uuid;
-				}
-				return id !== deletedItem.id;
-			});
+		const newItems = content.filter(({ id, uuid }) => {
+			if (deletedItem.uuid) {
+				return uuid !== deletedItem.uuid;
+			}
+			return id !== deletedItem.id;
 		});
+
+		onPickChange(newItems);
 	};
 
 	const excludeItems = useMemo(() => {
@@ -165,16 +152,11 @@ const ContentPicker = ({
 					</span>
 
 					<SortableList
-						items={content}
-						useDragHandle
+						posts={content}
 						handleItemDelete={onDeleteItem}
 						isOrderable={isOrderable}
 						mode={mode}
-						onSortEnd={({ oldIndex, newIndex }) => {
-							const newContent = [...arrayMove(content, oldIndex, newIndex)];
-
-							setContent(newContent);
-						}}
+						setPosts={onPickChange}
 					/>
 				</StyleWrapper>
 			)}

@@ -1,3 +1,6 @@
 {
-    "plugins": [ "." ]
+    "plugins": [ "." ],
+    "mappings": {
+        "/var/www/html/images": "./images"
+    }
 }
