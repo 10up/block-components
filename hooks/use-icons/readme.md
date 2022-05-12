@@ -7,6 +7,8 @@ The `useIcons` hook on the other hand allows you to either get all available ico
 ## Usage
 
 ```js
+import { useIcon } from '@10up/block-components';
+
 function BlockEdit(props) {
     const { attributes } = props;
     const { iconName, iconSet } = attributes;

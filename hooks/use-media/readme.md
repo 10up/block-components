@@ -5,6 +5,8 @@ The `useMedia` hook is a simple helper to quickly get something from the WordPre
 ## Usage
 
 ```js
+import { useMedia } from '@10up/block-components';
+
 function BlockEdit(props) {
     const { attributes } = props;
     const { imageId } = attributes;

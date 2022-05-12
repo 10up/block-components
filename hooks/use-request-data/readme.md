@@ -22,6 +22,8 @@ Returns:
 ## Multiple pieces of data
 
 ```js
+import { useRequestData } from '@10up/block-components';
+
 const ExampleBockEdit = ({ className }) => {
     const [data, isLoading, invalidateRequest ] = useRequestData('postType', 'post', { per_page: 5 });
 
