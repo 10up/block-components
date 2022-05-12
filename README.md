@@ -41,6 +41,7 @@ A collection of components built to be used in the block editor. These component
 - [useIcons](./hooks/use-icons/)
 - [useMedia](./hooks/use-media/)
 - [useRequestData](./hooks/use-request-data/)
+- [useScript](./hooks/use-script/)
 
 ## Stores
 
