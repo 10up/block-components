@@ -1,6 +1,3 @@
-import "cypress-localstorage-commands";
-
-
 Cypress.Commands.add('loginToWordPress', () => {
 	cy.visit('/wp-admin');
 
