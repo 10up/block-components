@@ -22,25 +22,26 @@ Returns:
 ## Multiple pieces of data
 
 ```js
-const ExampleBockEdit = ({ className }) => {
- const [data, isLoading, invalidateRequest ] = useRequestData('postType', 'post', { per_page: 5 });
+import { useRequestData } from '@10up/block-components';
 
- if (isLoading) {
-  return <h3>Loading...</h3>;
- }
- return (
-  <div className={className}>
-   <ul>
-    {data &&
-     data.map(({ title: { rendered: postTitle } }) => {
-      return <li>{postTitle}</li>;
-     })}
-   </ul>
-   <button type="button" onClick={invalidateRequest}>
-    Refresh list
-   </button>
-  </div>
- );
+const ExampleBockEdit = ({ className }) => {
+    const [data, isLoading, invalidateRequest ] = useRequestData('postType', 'post', { per_page: 5 });
+
+    if (isLoading) {
+        return <h3>Loading...</h3>;
+    }
+    return (
+        <div className={className}>
+            <ul>
+                {data && data.map(({ title: { rendered: postTitle } }) => (
+                    <li>{postTitle}</li>
+                 ))}
+            </ul>
+            <button type="button" onClick={invalidateRequest}>
+                Refresh list
+            </button>
+        </div>
+    );
 };
 ```
 
@@ -48,20 +49,18 @@ const ExampleBockEdit = ({ className }) => {
 
 ```js
 const ExampleBockEdit = ({ className }) => {
- const [data, isLoading, invalidateRequest ] = useRequestData('postType', 'post', 59);
+    const [data, isLoading, invalidateRequest ] = useRequestData('postType', 'post', 59);
 
- if (isLoading) {
-  return <h3>Loading...</h3>;
- }
- return (
-  <div className={className}>
-
-    {data &&( <div>{data.title.rendered}</div>)}
-
-   <button type="button" onClick={invalidateRequest}>
-    Refresh list
-   </button>
-  </div>
- );
+    if (isLoading) {
+        return <h3>Loading...</h3>;
+    }
+    return (
+        <div className={className}>
+            {data &&( <div>{data.title.rendered}</div>)}
+            <button type="button" onClick={invalidateRequest}>
+                Refresh list
+            </button>
+        </div>
+    );
 };
 ```
