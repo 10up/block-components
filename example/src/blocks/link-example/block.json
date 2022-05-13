@@ -1,0 +1,37 @@
+{
+    "name": "example/link-example",
+    "title": "Link Example",
+    "description": "Example Block to show the Link Component in usage",
+    "icon": "smiley",
+    "category": "common",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "title": {
+            "type": "string",
+            "default": "Hello World!"
+        },
+        "url": {
+            "type": "string"
+        },
+        "text": {
+            "type": "string"
+        },
+        "opensInNewTab": {
+            "type": "boolean",
+            "default": false
+        },
+        "urlTwo": {
+            "type": "string"
+        },
+        "textTwo": {
+            "type": "string"
+        },
+        "opensInNewTabTwo": {
+            "type": "boolean",
+            "default": false
+        }
+    }
+}

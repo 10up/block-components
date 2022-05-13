@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.9.1-next.1",
+  "version": "1.9.1-next.2",
   "description": "10up Components built for the WordPress Block Editor.",
   "main": "./dist/index.js",
   "source": "index.js",
@@ -46,8 +46,10 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@10up/cypress-wp-utils": "github:10up/cypress-wp-utils#build",
     "@wordpress/dependency-extraction-webpack-plugin": "^3.3.1",
     "10up-toolkit": "^2.1.1",
+    "classnames": "^2.3.1",
     "cypress-localstorage-commands": "^1.6.1"
   }
 }
