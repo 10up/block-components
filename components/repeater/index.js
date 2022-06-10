@@ -23,7 +23,7 @@ export const Repeater = ({ children, attribute, addButton }) => {
 		const { getBlockType } = select(blocksStore);
 
 		return {
-			repeaterData: getBlockAttributes(clientId),
+			repeaterData: getBlockAttributes(clientId)[attribute],
 			defaultRepeaterData: getBlockType(name).attributes[attribute].default,
 		};
 	});
@@ -39,7 +39,7 @@ export const Repeater = ({ children, attribute, addButton }) => {
 		}
 
 		updateBlockAttributes(clientId, {
-			[attribute]: [...repeaterData[attribute], ...defaultRepeaterDataCopy],
+			[attribute]: [...repeaterData, ...defaultRepeaterDataCopy],
 		});
 	}
 
@@ -50,7 +50,7 @@ export const Repeater = ({ children, attribute, addButton }) => {
 	 * @param {number} index The index at which the item should be updated.
 	 */
 	function setItem(value, index) {
-		const repeaterDataCopy = repeaterData[attribute].slice();
+		const repeaterDataCopy = repeaterData.slice();
 		if (typeof value === 'object' && value !== null) {
 			repeaterDataCopy[index] = { ...repeaterDataCopy[index], ...value };
 		} else {
@@ -65,7 +65,7 @@ export const Repeater = ({ children, attribute, addButton }) => {
 	 * @param {number} index The index of the item that needs to be removed.
 	 */
 	function removeItem(index) {
-		const repeaterDataCopy = repeaterData[attribute]
+		const repeaterDataCopy = repeaterData
 			.slice()
 			.filter((item, innerIndex) => index !== innerIndex);
 		updateBlockAttributes(clientId, { [attribute]: repeaterDataCopy });
@@ -73,7 +73,7 @@ export const Repeater = ({ children, attribute, addButton }) => {
 
 	return (
 		<>
-			{repeaterData[attribute].map((item, key) => {
+			{repeaterData.map((item, key) => {
 				return children(
 					item,
 					key,
