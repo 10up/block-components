@@ -92,7 +92,7 @@ export const Repeater = ({ children, attribute, addButton }) => {
 			{repeaterData.map((item, key) => {
 				return children(
 					item,
-					key,
+					item.uuid,
 					(val) => setItem(val, key),
 					() => removeItem(key),
 				);
