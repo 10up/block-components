@@ -7,13 +7,11 @@ import { Repeater } from "@10up/block-components";
 export function BlockEdit(props) {
     function customAddButton(addItem) {
         return (
-            <tr className="repeater-controls">
-                <td></td>
-                <td></td>
-                <td className="repeater-item-add">
+            <div className="repeater-controls">
+                <div className="repeater-item-add">
                     <Button variant="primary" icon={plus} onClick={addItem}/>
-                </td>
-            </tr>
+                </div>
+            </div>
         );
     }
     return (
@@ -22,54 +20,63 @@ export function BlockEdit(props) {
                 {`
                     .repeater-table-example {
                         width: 100%;
+                        border: 1px solid #ccc;
                     }
-                    .repeater-table-example, .repeater-table-example th, .repeater-table-example td {
-                        border: 1px solid #a5a5a5;
-                        border-collapse: collapse;
-                        padding: 1rem;
+                    .repeater-item {
+                        display: flex;
+                        align-items: center;
+                        border-bottom: 1px solid #ccc;
                     }
-                    .repeater-item-page-name .components-base-control__field {
+                    .repeater-item-page-name .components-base-control__field,
+                    .repeater-item-visibility .components-base-control__field {
                         margin-bottom: 0;
                     }
-                    .repeater-item-visibility .components-toggle-control .components-base-control__field {
+
+                    .repeater-item-page-name {
+                        flex: 1;
+                        padding: 0 1rem;
+                    }
+
+                    .repeater-item-visibility .components-form-toggle {
+                        margin-right: 0 !important;
+                    }
+
+                    .repeater-item-visibility,
+                    .repeater-item-remove {
+                        display: flex;
                         justify-content: center;
-                        margin-bottom: 0;
+                        align-items: center;
+                        padding: 16px;
                     }
-                    .repeater-item-remove, .repeater-item-add {
-                        text-align: center;
-                    }
-                    tbody tr:last-child, tbody > tr:last-child > td {
-                        border: 0;
+
+                    .repeater-controls {
+                        display: flex;
+                        justify-content: end;
+                        padding: 16px;
                     }
                 `}
             </style>
-            <table className="repeater-table-example">
-                <thead>
-                    <tr>
-                        <th>{ __( 'Page' ) }</th>
-                        <th>{ __( 'Visibility' ) }</th>
-                    </tr>
-                </thead>
-                <tbody>
+            <div className="repeater-table-example">
+                <div>
                     <Repeater attribute="items" addButton={customAddButton}>
                         {
                             (item, index, setItem, removeItem) => (
-                                <tr key={index} className="repeater-item">
-                                    <td className="repeater-item-page-name">
+                                <div key={index} className="repeater-item">
+                                    <div className="repeater-item-page-name">
                                         <TextControl value={item.pageName} onChange={(val) => setItem({pageName: val})} />
-                                    </td>
-                                    <td className="repeater-item-visibility">
+                                    </div>
+                                    <div className="repeater-item-visibility">
                                         <ToggleControl checked={item.visibility} onChange={(val) => setItem({visibility: val})} />
-                                    </td>
-                                    <td className="repeater-item-remove">
+                                    </div>
+                                    <div className="repeater-item-remove">
                                         <Button icon={close} isDestructive label={ __('Remove') } onClick={removeItem} />
-                                    </td>
-                                </tr>
+                                    </div>
+                                </div>
                             )
                         }
                     </Repeater>
-                </tbody>
-            </table>
+                </div>
+            </div>
         </>
     )
 }
