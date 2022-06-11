@@ -37,6 +37,26 @@ export const Repeater = ({ children, attribute, addButton }) => {
 	const { clientId, name } = useBlockEditContext();
 	const { updateBlockAttributes } = dispatch(blockEditorStore);
 
+	const sensors = useSensors(
+		useSensor(PointerSensor),
+		useSensor(KeyboardSensor, {
+			coordinateGetter: sortableKeyboardCoordinates,
+		}),
+	);
+
+	function handleDragEnd(event) {
+		const { active, over } = event;
+
+		if (active.id !== over.id) {
+			updateBlockAttributes(clientId, (items) => {
+				const oldIndex = items.findIndex((item) => item.id === active.id);
+				const newIndex = items.findIndex((item) => item.id === over.id);
+
+				return arrayMove(items, oldIndex, newIndex);
+			});
+		}
+	}
+
 	const { repeaterData, defaultRepeaterData } = useSelect((select) => {
 		const { getBlockAttributes } = select(blockEditorStore);
 		const { getBlockType } = select(blocksStore);
