@@ -7,6 +7,23 @@ import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
 
+import {
+	DndContext,
+	closestCenter,
+	KeyboardSensor,
+	PointerSensor,
+	useSensor,
+	useSensors,
+} from '@dnd-kit/core';
+import {
+	arrayMove,
+	SortableContext,
+	sortableKeyboardCoordinates,
+	verticalListSortingStrategy,
+	useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+
 /**
  * The Repeater Component.
  *
@@ -108,6 +125,37 @@ export const Repeater = ({ children, attribute, addButton }) => {
 	);
 };
 
+/**
+ * The Sortable Item Component.
+ *
+ * @param {object} props React props
+ * @param {Function} props.children Render prop to render the children.
+ * @param {string} props.item property of the block attribute that will provide data for Repeater.
+ * @param {string} props.removeItem render prop to customize the "Add item" button.
+ * @param {string} props.id render prop to customize the "Add item" button.
+ * @returns {*} React JSX
+ */
+const SortableItem = ({ children, item, removeItem, id }) => {
+	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+		id,
+	});
+
+	const style = {
+		transform: CSS.Transform.toString(transform),
+		transition,
+		display: 'flex',
+	};
+
+	return (
+		<div ref={setNodeRef} style={style}>
+			{children(item, removeItem)}
+			<button type="button" {...listeners} {...attributes}>
+				Drag
+			</button>
+		</div>
+	);
+};
+
 Repeater.defaultProps = {
 	attribute: 'items',
 	addButton: null,
@@ -117,4 +165,21 @@ Repeater.propTypes = {
 	children: PropTypes.func.isRequired,
 	attribute: PropTypes.string,
 	addButton: PropTypes.func,
+};
+
+SortableItem.defaultProps = {
+	attribute: 'items',
+	addItem: null,
+	removeItem: null,
+	item: {},
+	id: '',
+};
+
+SortableItem.propTypes = {
+	children: PropTypes.func.isRequired,
+	attribute: PropTypes.string,
+	addItem: PropTypes.func,
+	removeItem: PropTypes.func,
+	item: PropTypes.object,
+	id: PropTypes.string,
 };
