@@ -1,7 +1,7 @@
 import { useBlockEditContext, store as blockEditorStore } from '@wordpress/block-editor';
 import { store as blocksStore } from '@wordpress/blocks';
 import { useSelect, dispatch } from '@wordpress/data';
-import { useEffect } from '@wordpress/element';
+import { useEffect, cloneElement } from '@wordpress/element';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
@@ -24,6 +24,7 @@ import {
 } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { CSS } from '@dnd-kit/utilities';
+import { DragHandle } from '../content-picker/PickedItem';
 
 /**
  * The Repeater Component.
@@ -195,23 +196,35 @@ export const Repeater = ({ children, attribute, addButton, allowReordering }) =>
  * @returns {*} React JSX
  */
 const SortableItem = ({ children, item, setItem, removeItem, id }) => {
-	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
+	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id,
 	});
 
 	const style = {
 		transform: CSS.Transform.toString(transform),
 		transition,
+		display: 'flex',
+		zIndex: isDragging ? 999 : 1,
+		position: 'relative',
 	};
 
-	return (
-		<div ref={setNodeRef} style={style}>
-			{children(item, id, setItem, removeItem)}
-			<button type="button" {...listeners} {...attributes}>
-				Drag
-			</button>
-		</div>
+	const repeaterItem = children(item, id, setItem, removeItem);
+	const clonedRepeaterChild = cloneElement(
+		repeaterItem,
+		{
+			ref: setNodeRef,
+			style,
+			className: isDragging
+				? `${repeaterItem.props.className} repeater-item--is-dragging`
+				: repeaterItem.props.className,
+		},
+		[
+			<DragHandle className="repeater-item__drag-handle" {...attributes} {...listeners} />,
+			repeaterItem.props.children,
+		],
 	);
+
+	return clonedRepeaterChild;
 };
 
 Repeater.defaultProps = {
