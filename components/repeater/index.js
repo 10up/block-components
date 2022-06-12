@@ -33,7 +33,7 @@ import { DragHandle } from '../content-picker/PickedItem';
  * @param {Function} props.children Render prop to render the children.
  * @param {string} props.attribute property of the block attribute that will provide data for Repeater.
  * @param {string} props.addButton render prop to customize the "Add item" button.
- * @param {boolean} props.allowReordering Boolean to set enable reorerding of Repeater items.
+ * @param {boolean} props.allowReordering boolean to toggle reordering of Repeater items.
  * @returns {*} React JSX
  */
 export const Repeater = ({ children, attribute, addButton, allowReordering }) => {
@@ -81,6 +81,7 @@ export const Repeater = ({ children, attribute, addButton, allowReordering }) =>
 				return item;
 			}),
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	/**
@@ -189,10 +190,10 @@ export const Repeater = ({ children, attribute, addButton, allowReordering }) =>
  *
  * @param {object} props React props
  * @param {Function} props.children Render prop to render the children.
- * @param {string} props.item property of the block attribute that will provide data for Repeater.
- * @param {string} props.setItem render prop to customize the "Add item" button.
- * @param {string} props.removeItem render prop to customize the "Add item" button.
- * @param {string} props.id render prop to customize the "Add item" button.
+ * @param {object} props.item The repeater item object.
+ * @param {Function} props.setItem A function to set state of a repeater item.
+ * @param {Function} props.removeItem A function to delete a repeater item.
+ * @param {string} props.id A string identifier for a repeater item.
  * @returns {*} React JSX
  */
 const SortableItem = ({ children, item, setItem, removeItem, id }) => {

@@ -71,7 +71,7 @@ export function BlockEdit(props) {
                 `}
             </style>
             <div className="repeater-table-example">
-                <Repeater attribute="items" addButton={customAddButton} allowReordering={false}>
+                <Repeater attribute="items" addButton={customAddButton} allowReordering={true}>
                     {
                         (item, index, setItem, removeItem) => (
                             <div key={index} className="repeater-item" style={{color: 'red'}}>

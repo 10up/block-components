@@ -30,3 +30,4 @@ export function BlockEdit(props) {
 | ---------------- | ---------- | --------------------- | ---------------------------------------------------------------------- |
 | `attribute`   | `string` | `items`            | The name of the block attribute that holds data for the Repeater fields. |
 | `addButton`   | `function` | `null`            | A render prop to customize the "Add item" button. |
+| `allowReordering`   | `boolean` | `false`       | boolean to toggle reordering of Repeater items. |
