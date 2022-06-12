@@ -1,12 +1,9 @@
-import "cypress-localstorage-commands";
-
-
 Cypress.Commands.add('loginToWordPress', () => {
 	cy.visit('/wp-admin');
 
 	cy.url().then((url) => {
 		if (url.includes('wp-login.php')) {
-			cy.wait(100);
+			cy.wait(400);
 
 			const userName = Cypress.env('username');
 			const password = Cypress.env('password');
