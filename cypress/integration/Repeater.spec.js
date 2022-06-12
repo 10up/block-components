@@ -33,7 +33,7 @@ context('Repeater', () => {
 					addItemHelper( $repeaterItem, pageName, visibility );
 				} else {
 					cy.get( '.repeater-item-add button' ).click();
-					cy.get('.repeater-controls').prev().then( $repeaterItem => {
+					cy.get( '.repeater-table-example .repeater-item' ).last().then( $repeaterItem => {
 						addItemHelper( $repeaterItem, pageName, visibility );
 					} );
 				}

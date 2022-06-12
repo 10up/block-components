@@ -92,5 +92,9 @@ Cypress.Commands.add('goToAdmin', () => {
 });
 
 Cypress.Commands.add('updatePost', () => {
-	cy.get('[type="button"]').contains('Update').click();
+	cy.get('[type="button"]').then( $button => {
+		if ( 'Update' === $button.val() || 'Publish' === $button.val() ) {
+			cy.wrap( $button ).click();
+		}
+	} );
 });

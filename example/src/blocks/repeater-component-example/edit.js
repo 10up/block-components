@@ -26,6 +26,7 @@ export function BlockEdit(props) {
                         display: flex;
                         align-items: center;
                         border-bottom: 1px solid #ccc;
+                        transition: box-shadow 0.5s ease !important;
                     }
                     .repeater-item-page-name .components-base-control__field,
                     .repeater-item-visibility .components-base-control__field {
@@ -64,9 +65,10 @@ export function BlockEdit(props) {
                     }
 
                     .repeater-item--is-dragging {
-                        border: 1px solid #ccc;
+                        border-top: 1px solid #ccc;
                         background-color: #fff;
-                        box-shadow: 0 14px 28px rgb(0 0 0 / 25%), 0 10px 10px rgb(0 0 0 / 22%);
+                        box-shadow: 0 14px 28px -10px rgb(0 0 0 / 25%), 0 10px 10px -5px rgb(0 0 0 / 22%);
+                        transition: box-shadow 0.5s ease;
                     }
                 `}
             </style>
