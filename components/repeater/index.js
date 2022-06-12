@@ -1,7 +1,7 @@
 import { useBlockEditContext, store as blockEditorStore } from '@wordpress/block-editor';
 import { store as blocksStore } from '@wordpress/blocks';
 import { useSelect, dispatch } from '@wordpress/data';
-import { useEffect, cloneElement } from '@wordpress/element';
+import { cloneElement } from '@wordpress/element';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
@@ -50,9 +50,14 @@ export const Repeater = ({ children, attribute, addButton, allowReordering }) =>
 	const { repeaterData, defaultRepeaterData } = useSelect((select) => {
 		const { getBlockAttributes } = select(blockEditorStore);
 		const { getBlockType } = select(blocksStore);
+		const repeaterDataTemp = getBlockAttributes(clientId)[attribute];
+
+		if (repeaterDataTemp.length === 1 && !repeaterDataTemp[0].id) {
+			repeaterDataTemp[0].id = uuid();
+		}
 
 		return {
-			repeaterData: getBlockAttributes(clientId)[attribute],
+			repeaterData: repeaterDataTemp,
 			defaultRepeaterData: getBlockType(name).attributes[attribute].default,
 		};
 	});
@@ -73,16 +78,6 @@ export const Repeater = ({ children, attribute, addButton, allowReordering }) =>
 			});
 		}
 	}
-
-	useEffect(() => {
-		updateBlockAttributes(clientId, {
-			[attribute]: repeaterData.map((item) => {
-				item.id = uuid();
-				return item;
-			}),
-		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	/**
 	 * Adds a new repeater item.
