@@ -8,7 +8,7 @@ Determine whether one of the inner blocks currently is selected.
 import { useHasSelectedInnerBlock } from '@10up/block-components';
 
 function BlockEdit( props ) {
-    const hasSelectedInnerBlock = useHasSelectedInnerBlock(props);
+    const hasSelectedInnerBlock = useHasSelectedInnerBlock();
 
     return (
         <div>
