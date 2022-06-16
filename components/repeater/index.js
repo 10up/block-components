@@ -24,7 +24,7 @@ import {
 } from '@dnd-kit/sortable';
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { CSS } from '@dnd-kit/utilities';
-import { DragHandle } from '../content-picker/PickedItem';
+import { DragHandle } from '../drag-handle';
 
 /**
  * The Repeater Component.

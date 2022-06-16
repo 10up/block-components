@@ -76,7 +76,7 @@ export function BlockEdit(props) {
                 <Repeater attribute="items" addButton={customAddButton} allowReordering={true}>
                     {
                         (item, index, setItem, removeItem) => (
-                            <div key={index} className="repeater-item" style={{color: 'red'}}>
+                            <div key={index} className="repeater-item">
                                 <div className="repeater-item-page-name">
                                     <TextControl value={item.pageName} onChange={(val) => setItem({pageName: val})} />
                                 </div>
