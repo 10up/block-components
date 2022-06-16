@@ -190,7 +190,7 @@ ContentPicker.propTypes = {
 	contentTypes: PropTypes.array,
 	content: PropTypes.array,
 	placeholder: PropTypes.string,
-	mode: PropTypes.string,
+	mode: PropTypes.oneOf(['post', 'user', 'term']),
 	label: PropTypes.string,
 	multiPickedLabel: PropTypes.string,
 	singlePickedLabel: PropTypes.string,

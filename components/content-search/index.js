@@ -389,7 +389,7 @@ ContentSearch.defaultProps = {
 
 ContentSearch.propTypes = {
 	contentTypes: PropTypes.array,
-	mode: PropTypes.string,
+	mode: PropTypes.oneOf(['post', 'user', 'term']),
 	onSelectItem: PropTypes.func,
 	queryFilter: PropTypes.func,
 	placeholder: PropTypes.string,
