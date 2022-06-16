@@ -83,6 +83,10 @@ export const Repeater = ({ children, attribute, addButton, allowReordering }) =>
 	 * Adds a new repeater item.
 	 */
 	function addItem() {
+		/*
+		 * [...defaultRepeaterData] does a shallow copy. To ensure deep-copy,
+		 * we do JSON.parse(JSON.stringify()).
+		 */
 		const defaultRepeaterDataCopy = JSON.parse(JSON.stringify(defaultRepeaterData));
 
 		if (!defaultRepeaterData.length) {
@@ -103,6 +107,10 @@ export const Repeater = ({ children, attribute, addButton, allowReordering }) =>
 	 * @param {number} index The index at which the item should be updated.
 	 */
 	function setItem(value, index) {
+		/*
+		 * [...repeaterData] does a shallow copy. To ensure deep-copy,
+		 * we do JSON.parse(JSON.stringify()).
+		 */
 		const repeaterDataCopy = JSON.parse(JSON.stringify(repeaterData));
 
 		if (typeof value === 'object' && value !== null) {
