@@ -16,7 +16,15 @@ const NAMESPACE = 'tenup-content-search';
 // Equalize height of list icons to match loader in order to reduce jumping.
 const listMinHeight = '46px';
 
-const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, perPage }) => {
+const ContentSearch = ({
+	onSelectItem,
+	placeholder,
+	label,
+	contentTypes,
+	mode,
+	perPage,
+	queryFilter,
+}) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchQueries, setSearchQueries] = useState({});
 	const [selectedItem, setSelectedItem] = useState(null);
@@ -69,10 +77,9 @@ const ContentSearch = ({ onSelectItem, placeholder, label, contentTypes, mode, p
 					break;
 			}
 
-			return searchQuery;
+			return queryFilter(searchQuery);
 		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[perPage, contentTypes],
+		[perPage, contentTypes, mode, queryFilter],
 	);
 
 	/**
@@ -374,6 +381,7 @@ ContentSearch.defaultProps = {
 	perPage: 20,
 	label: '',
 	mode: 'post',
+	queryFilter: (query) => query,
 	onSelectItem: () => {
 		console.log('Select!'); // eslint-disable-line no-console
 	},
@@ -381,8 +389,9 @@ ContentSearch.defaultProps = {
 
 ContentSearch.propTypes = {
 	contentTypes: PropTypes.array,
-	mode: PropTypes.string,
+	mode: PropTypes.oneOf(['post', 'user', 'term']),
 	onSelectItem: PropTypes.func,
+	queryFilter: PropTypes.func,
 	placeholder: PropTypes.string,
 	label: PropTypes.string,
 	perPage: PropTypes.number,
