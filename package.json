@@ -13,7 +13,7 @@
     "build": "10up-toolkit build",
     "start": "10up-toolkit start",
     "test:e2e": "cypress open",
-	"prepublishOnly": "npm run lint && npm run build"
+    "prepublishOnly": "npm run lint && npm run build"
   },
   "repository": {
     "type": "git",
