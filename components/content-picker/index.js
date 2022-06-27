@@ -118,7 +118,7 @@ const ContentPicker = ({
 	}, [content, currentPostId, excludeCurrentPost, uniqueContentItems]);
 
 	return (
-		<ContentPickerWrapper className={`${NAMESPACE}`}>
+		<ContentPickerWrapper className={NAMESPACE}>
 			{!content.length || (content.length && content.length < maxContentItems) ? (
 				<ContentSearch
 					placeholder={placeholder}
