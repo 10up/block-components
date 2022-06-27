@@ -154,13 +154,15 @@ const ContentPicker = ({
 						{content.length > 1 ? multiPickedLabel : singlePickedLabel}
 					</span>
 
-					<SortableList
-						posts={content}
-						handleItemDelete={onDeleteItem}
-						isOrderable={isOrderable}
-						mode={mode}
-						setPosts={onPickChange}
-					/>
+					<ul className="block-editor-link-control__search-items">
+						<SortableList
+							posts={content}
+							handleItemDelete={onDeleteItem}
+							isOrderable={isOrderable}
+							mode={mode}
+							setPosts={onPickChange}
+						/>
+					</ul>
 				</StyleWrapper>
 			)}
 		</ContentPickerWrapper>
