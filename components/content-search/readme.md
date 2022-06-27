@@ -22,14 +22,14 @@ function MyComponent( props ) {
 
 ## Props
 
-| Name           | Type       | Default                     | Description                                                                                                                    |
-|----------------|------------|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------|
-| `onSelectItem` | `function` | `undefined`                 | Function called when a searched item is clicked                                                                                |
-| `queryFilter`  | `function` | `(query) => query`          | Function called to allow you to customize the query before is made. It's advisable to use `useCallback` to save this parameter |
-| `label`        | `string`   | `''`                        | Renders a label for the Search Field.                                                                                          |
-| `mode`         | `string`   | `'post'`                    | One of: `post`, `user`, `term`                                                                                                 |
-| `placeholder`  | `string`   | `''`                        | Renders placeholder text inside the Search Field.                                                                              |
-| `contentTypes` | `array`    | `[ 'post', 'page' ]`        | Names of the post types or taxonomies that should get searched                                                                 |
-| `excludeItems` | `array`    | `[ { id: 1, type: 'post' ]` | Items to exclude from search                                                                                                   |
-| `perPage`      | `number`   | `50`                        | Number of items to show during search                                                                                          |
+| Name           | Type       | Default                              | Description                                                                                                                    |
+|----------------|------------|--------------------------------------|--------------------------------------------------------------------------------------------------------------------------------|
+| `onSelectItem` | `function` | `undefined`                          | Function called when a searched item is clicked                                                                                |
+| `queryFilter`  | `function` | `(query, parametersObject) => query` | Function called to allow you to customize the query before is made. It's advisable to use `useCallback` to save this parameter |
+| `label`        | `string`   | `''`                                 | Renders a label for the Search Field.                                                                                          |
+| `mode`         | `string`   | `'post'`                             | One of: `post`, `user`, `term`                                                                                                 |
+| `placeholder`  | `string`   | `''`                                 | Renders placeholder text inside the Search Field.                                                                              |
+| `contentTypes` | `array`    | `[ 'post', 'page' ]`                 | Names of the post types or taxonomies that should get searched                                                                 |
+| `excludeItems` | `array`    | `[ { id: 1, type: 'post' ]`          | Items to exclude from search                                                                                                   |
+| `perPage`      | `number`   | `50`                                 | Number of items to show during search                                                                                          |
 
