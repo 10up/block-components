@@ -142,7 +142,7 @@ const ContentPicker = ({
 				)
 			)}
 
-			{Boolean(content?.length) > 0 && (
+			{Boolean(content?.length) && (
 				<StyleWrapper>
 					<span
 						style={{
