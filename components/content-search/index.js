@@ -1,6 +1,3 @@
-/* eslint-disable guard-for-in */
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable react/jsx-no-bind */
 import { TextControl, Spinner, NavigableMenu, Button } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
@@ -24,6 +21,7 @@ const ContentSearch = ({
 	mode,
 	perPage,
 	queryFilter,
+	excludeItems,
 }) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchQueries, setSearchQueries] = useState({});
@@ -31,6 +29,21 @@ const ContentSearch = ({
 	const [currentPage, setCurrentPage] = useState(1);
 
 	const mounted = useRef(true);
+
+	const filterResults = useCallback(
+		(results) => {
+			return results.filter((result) => {
+				let keep = true;
+
+				if (excludeItems.length) {
+					keep = excludeItems.every((item) => item.id !== result.id);
+				}
+
+				return keep;
+			});
+		},
+		[excludeItems],
+	);
 
 	/**
 	 * handleSelection
@@ -40,13 +53,13 @@ const ContentSearch = ({
 	 *
 	 * @param {*} item item
 	 */
-	function handleOnNavigate(item) {
+	const handleOnNavigate = (item) => {
 		if (item === 0) {
 			setSelectedItem(null);
 		}
 
 		setSelectedItem(item);
-	}
+	};
 
 	/**
 	 * handleItemSelection
@@ -56,11 +69,11 @@ const ContentSearch = ({
 	 *
 	 * @param {*} item item
 	 */
-	function handleItemSelection(item) {
+	const handleItemSelection = (item) => {
 		setSearchString('');
 
 		onSelectItem(item);
-	}
+	};
 
 	const prepareSearchQuery = useCallback(
 		(keyword, page) => {
@@ -77,7 +90,13 @@ const ContentSearch = ({
 					break;
 			}
 
-			return queryFilter(searchQuery);
+			return queryFilter(searchQuery, {
+				perPage,
+				page,
+				contentTypes,
+				mode,
+				keyword,
+			});
 		},
 		[perPage, contentTypes, mode, queryFilter],
 	);
@@ -92,21 +111,21 @@ const ContentSearch = ({
 	 */
 	const normalizeResults = useCallback(
 		(result = []) => {
+			const normalizedResults = filterResults(result);
+
 			if (mode === 'user') {
-				return result.map((item) => {
-					return {
-						id: item.id,
-						subtype: mode,
-						title: item.name,
-						type: mode,
-						url: item.link,
-					};
-				});
+				return normalizedResults.map((item) => ({
+					id: item.id,
+					subtype: mode,
+					title: item.name,
+					type: mode,
+					url: item.link,
+				}));
 			}
 
-			return result;
+			return normalizedResults;
 		},
-		[mode],
+		[mode, filterResults],
 	);
 
 	/**
@@ -133,11 +152,11 @@ const ContentSearch = ({
 				const newQueries = {};
 
 				// Remove errored or cancelled queries
-				for (const query in queries) {
+				Object.keys(queries).forEach((query) => {
 					if (queries[query].controller !== 1) {
 						newQueries[query] = queries[query];
 					}
-				}
+				});
 
 				newQueries[preparedQuery] = {
 					results: null,
@@ -236,7 +255,8 @@ const ContentSearch = ({
 	let showLoadMore = false;
 
 	for (let i = 1; i <= currentPage; i++) {
-		for (const searchQueryString in searchQueries) {
+		// eslint-disable-next-line no-loop-func
+		Object.keys(searchQueries).forEach((searchQueryString) => {
 			const searchQuery = searchQueries[searchQueryString];
 
 			if (searchQueryString === prepareSearchQuery(searchString, i)) {
@@ -260,7 +280,7 @@ const ContentSearch = ({
 					showLoadMore = false;
 				}
 			}
-		}
+		});
 	}
 
 	const hasSearchString = !!searchString.length;
@@ -381,6 +401,7 @@ ContentSearch.defaultProps = {
 	perPage: 20,
 	label: '',
 	mode: 'post',
+	excludeItems: [],
 	queryFilter: (query) => query,
 	onSelectItem: () => {
 		console.log('Select!'); // eslint-disable-line no-console
@@ -393,6 +414,7 @@ ContentSearch.propTypes = {
 	onSelectItem: PropTypes.func,
 	queryFilter: PropTypes.func,
 	placeholder: PropTypes.string,
+	excludeItems: PropTypes.array,
 	label: PropTypes.string,
 	perPage: PropTypes.number,
 };
