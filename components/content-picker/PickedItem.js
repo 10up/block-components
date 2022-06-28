@@ -123,13 +123,16 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, mode, id }) => {
 		paddingLeft: isOrderable ? '3px' : '8px',
 	};
 
+	const normalizedItemType = item?.type ? item.type : 'post';
+	const className = `block-editor-link-control__search-item is-entity is-type-${normalizedItemType}`;
+
 	if (!preparedItem) {
 		return null;
 	}
 
 	return (
 		<li
-			className="block-editor-link-control__search-item is-entity"
+			className={className}
 			ref={setNodeRef}
 			style={style}
 		>

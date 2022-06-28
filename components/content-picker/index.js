@@ -118,7 +118,7 @@ const ContentPicker = ({
 	}, [content, currentPostId, excludeCurrentPost, uniqueContentItems]);
 
 	return (
-		<ContentPickerWrapper className={`${NAMESPACE}`}>
+		<ContentPickerWrapper className={NAMESPACE}>
 			{!content.length || (content.length && content.length < maxContentItems) ? (
 				<ContentSearch
 					placeholder={placeholder}
@@ -142,7 +142,7 @@ const ContentPicker = ({
 				)
 			)}
 
-			{Boolean(content?.length) > 0 && (
+			{Boolean(content?.length) && (
 				<StyleWrapper>
 					<span
 						style={{
@@ -154,13 +154,15 @@ const ContentPicker = ({
 						{content.length > 1 ? multiPickedLabel : singlePickedLabel}
 					</span>
 
-					<SortableList
-						posts={content}
-						handleItemDelete={onDeleteItem}
-						isOrderable={isOrderable}
-						mode={mode}
-						setPosts={onPickChange}
-					/>
+					<ul className="block-editor-link-control__search-items">
+						<SortableList
+							posts={content}
+							handleItemDelete={onDeleteItem}
+							isOrderable={isOrderable}
+							mode={mode}
+							setPosts={onPickChange}
+						/>
+					</ul>
 				</StyleWrapper>
 			)}
 		</ContentPickerWrapper>
