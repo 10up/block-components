@@ -40,6 +40,7 @@ const ContentPickerWrapper = styled('div')`
  * @param {Array} props.contentTypes array of content types to filter by
  * @param {string} props.placeholder placeholder text for the search input
  * @param {Function} props.onPickChange callback for when the picker changes
+ * @param {Function} props.queryFilter callback that allows to modify the query
  * @param {number} props.maxContentItems max number of items to show in the picker
  * @param {boolean} props.isOrderable whether or not the picker is sortable
  * @param {string} props.singlePickedLabel label for the single picked item
@@ -56,6 +57,7 @@ const ContentPicker = ({
 	contentTypes,
 	placeholder,
 	onPickChange,
+	queryFilter,
 	maxContentItems,
 	isOrderable,
 	singlePickedLabel,
@@ -125,6 +127,7 @@ const ContentPicker = ({
 					onSelectItem={handleSelect}
 					contentTypes={contentTypes}
 					mode={mode}
+					queryFilter={queryFilter}
 					perPage={perPage}
 				/>
 			) : (
@@ -170,6 +173,7 @@ ContentPicker.defaultProps = {
 	onPickChange: (ids) => {
 		console.log('Content picker list change', ids); // eslint-disable-line no-console
 	},
+	queryFilter: undefined,
 	contentTypes: ['post', 'page'],
 	placeholder: '',
 	content: [],
@@ -186,12 +190,13 @@ ContentPicker.propTypes = {
 	contentTypes: PropTypes.array,
 	content: PropTypes.array,
 	placeholder: PropTypes.string,
-	mode: PropTypes.string,
+	mode: PropTypes.oneOf(['post', 'user', 'term']),
 	label: PropTypes.string,
 	multiPickedLabel: PropTypes.string,
 	singlePickedLabel: PropTypes.string,
 	isOrderable: PropTypes.bool,
 	onPickChange: PropTypes.func,
+	queryFilter: PropTypes.func,
 	uniqueContentItems: PropTypes.bool,
 	excludeCurrentPost: PropTypes.bool,
 	maxContentItems: PropTypes.number,

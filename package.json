@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.9.1-next.3",
+  "version": "1.9.2-next.2",
   "description": "10up Components built for the WordPress Block Editor.",
   "main": "./dist/index.js",
   "source": "index.js",
@@ -12,7 +12,8 @@
     "test": "10up-toolkit test-unit-jest",
     "build": "10up-toolkit build",
     "start": "10up-toolkit start",
-    "test:e2e": "cypress open"
+    "test:e2e": "cypress open",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -28,6 +29,10 @@
     "email": "info@10up.com",
     "url": "https://10up.com"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "license": "GPL-2.0-or-later",
   "bugs": {
     "url": "https://github.com/10up/block-components.git/issues"
