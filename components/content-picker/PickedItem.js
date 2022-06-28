@@ -116,11 +116,7 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, mode, id }) => {
 	}
 
 	return (
-		<li
-			className={className}
-			ref={setNodeRef}
-			style={style}
-		>
+		<li className={className} ref={setNodeRef} style={style}>
 			{isOrderable ? <DragHandle {...attributes} {...listeners} /> : ''}
 			<span className="block-editor-link-control__search-item-header">
 				<span className="block-editor-link-control__search-item-title">
