@@ -5,8 +5,10 @@ export { IconPicker, Icon, IconPickerToolbarButton, InlineIconPicker } from './i
 export { CustomBlockAppender } from './custom-block-appender';
 export { ContentSearch } from './content-search';
 export { ContentPicker } from './content-picker';
+export { DragHandle } from './drag-handle';
 export { ColorSetting } from './color-settings';
 export { ClipboardButton } from './clipboard-button';
+export { Repeater } from './repeater';
 export { Link } from './link';
 export { MediaToolbar } from './media-toolbar';
 export { Image } from './image';

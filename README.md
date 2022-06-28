@@ -33,6 +33,7 @@ A collection of components built to be used in the block editor. These component
 - [IsAdmin](./components//is-admin/)
 - [MediaToolbar](./components/media-toolbar/)
 - [Optional](./components/optional/)
+- [Repeater](./components/repeater/)
 
 ## Hooks
 
