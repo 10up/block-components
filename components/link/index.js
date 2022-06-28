@@ -138,7 +138,6 @@ const Link = ({
 		<>
 			<StylesRichTextLink
 				tagName="a"
-				identifier="label"
 				className={classnames('tenup-block-components-link__label', className)}
 				value={value}
 				onChange={onTextChange}
