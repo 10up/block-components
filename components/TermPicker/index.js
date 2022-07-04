@@ -1,51 +1,19 @@
 /**
  * External dependencies
  */
-import { groupBy, find, get, some, unescape as unescapeString, without } from 'lodash';
+import { find, get, some, unescape as unescapeString, without } from 'lodash';
 
 /**
  * WordPress dependencies
  */
 import { __, _n, _x, sprintf } from '@wordpress/i18n';
 import { useMemo, useState } from '@wordpress/element';
-import { Button, CheckboxControl, TextControl, TreeSelect } from '@wordpress/components';
-import { useDispatch, useSelect, store as editorStore } from '@wordpress/data';
+import { Button, CheckboxControl, TextControl, RadioControl } from '@wordpress/components';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { useDebounce } from '@wordpress/compose';
 import { store as coreStore } from '@wordpress/core-data';
+import { store as editorStore } from '@wordpress/editor';
 import { speak } from '@wordpress/a11y';
-
-/**
- * Returns terms in a tree form.
- *
- * @param {Array} flatTerms  Array of terms in flat format.
- *
- * @returns {Array} Array of terms in tree format.
- */
-export function buildTermsTree(flatTerms) {
-	const flatTermsWithParentAndChildren = flatTerms.map((term) => {
-		return {
-			children: [],
-			parent: null,
-			...term,
-		};
-	});
-
-	const termsByParent = groupBy(flatTermsWithParentAndChildren, 'parent');
-	if (termsByParent.null && termsByParent.null.length) {
-		return flatTermsWithParentAndChildren;
-	}
-	const fillWithChildren = (terms) => {
-		return terms.map((term) => {
-			const children = termsByParent[term.id];
-			return {
-				...term,
-				children: children && children.length ? fillWithChildren(children) : [],
-			};
-		});
-	};
-
-	return fillWithChildren(termsByParent['0'] || []);
-}
 
 /**
  * Module Constants
@@ -138,16 +106,13 @@ export function getFilterMatcher(filterValue) {
 
 		// Map and filter the children, recursive so we deal with grandchildren
 		// and any deeper levels.
-		if (term.children.length > 0) {
-			term.children = term.children.map(matchTermsForFilter).filter((child) => child);
+		if (term.length > 0) {
+			term = term.map(matchTermsForFilter).filter((child) => child);
 		}
 
 		// If the term's name contains the filterValue, or it has children
 		// (i.e. some child matched at some point in the tree) then return it.
-		if (
-			term.name.toLowerCase().indexOf(filterValue.toLowerCase()) !== -1 ||
-			term.children.length > 0
-		) {
+		if (term.name.toLowerCase().indexOf(filterValue.toLowerCase()) !== -1 || term.length > 0) {
 			return term;
 		}
 
@@ -168,6 +133,9 @@ export function getFilterMatcher(filterValue) {
 export const TermPicker = ({ slug }) => {
 	const [adding, setAdding] = useState(false);
 	const [formName, setFormName] = useState('');
+	/**
+	 * @type {[number|'', Function]}
+	 */
 	const [formParent, setFormParent] = useState('');
 	const [showForm, setShowForm] = useState(false);
 	const [filterValue, setFilterValue] = useState('');
@@ -209,12 +177,7 @@ export const TermPicker = ({ slug }) => {
 	const { editPost } = useDispatch(editorStore);
 	const { saveEntityRecord } = useDispatch(coreStore);
 
-	const availableTermsTree = useMemo(
-		() => sortBySelected(buildTermsTree(availableTerms), terms),
-		// Remove `terms` from the dependency list to avoid reordering every time
-		// checking or unchecking a term.
-		[availableTerms],
-	);
+	const availableTermsTree = availableTerms;
 
 	if (!hasAssignAction) {
 		return null;
@@ -338,25 +301,23 @@ export const TermPicker = ({ slug }) => {
 	};
 
 	const renderTerms = (renderedTerms) => {
-		return renderedTerms.map((term) => {
-			return (
-				<div key={term.id} className="editor-post-taxonomies__hierarchical-terms-choice">
-					<CheckboxControl
-						checked={terms.indexOf(term.id) !== -1}
-						onChange={() => {
-							const termId = parseInt(term.id, 10);
-							onChange(termId);
-						}}
-						label={unescapeString(term.name)}
-					/>
-					{!!term.children.length && (
-						<div className="editor-post-taxonomies__hierarchical-terms-subchoices">
-							{renderTerms(term.children)}
-						</div>
-					)}
-				</div>
-			);
+		const options = renderedTerms.map((term) => {
+			return {
+				label: term.name,
+				value: term.id,
+			};
 		});
+
+		return (
+			<div className="editor-post-taxonomies__hierarchical-terms-choice">
+				<p>Testing</p>
+				<RadioControl
+					onChange={(value) => onChange(value)}
+					label="Categories"
+					options={options}
+				/>
+			</div>
+		);
 	};
 
 	const labelWithFallback = (labelProperty, fallbackIsCategory, fallbackIsNotCategory) =>
@@ -424,12 +385,12 @@ export const TermPicker = ({ slug }) => {
 						required
 					/>
 					{!!availableTerms.length && (
-						<TreeSelect
+						<RadioControl
 							label={parentSelectLabel}
 							noOptionLabel={noParentOption}
 							onChange={onChangeFormParent}
-							selectedId={formParent}
-							tree={availableTermsTree}
+							selected={formParent}
+							options={availableTermsTree}
 						/>
 					)}
 					<Button
