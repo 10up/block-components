@@ -22,11 +22,13 @@ const ContentSearch = ({
 	perPage,
 	queryFilter,
 	excludeItems,
+	fetchOnFocus,
 }) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchQueries, setSearchQueries] = useState({});
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [isFocused, setIsFocused] = useState(false);
 
 	const mounted = useRef(true);
 
@@ -131,17 +133,17 @@ const ContentSearch = ({
 	/**
 	 * handleSearchStringChange
 	 *
-	 * Using the keyword and the list of tags that are linked to the parent block
-	 * search for posts/terms that match and return them to the autocomplete component.
+	 * Using the keyword and the list of tags that are linked to the parent
+	 * block search for posts/terms/users that match and return them to the
+	 * autocomplete component.
 	 *
 	 * @param {string} keyword search query string
 	 * @param {string} page page query string
 	 */
 	const handleSearchStringChange = (keyword, page) => {
+		// Reset page and query on empty keyword.
 		if (keyword.trim() === '') {
-			setSearchString(keyword);
 			setCurrentPage(1);
-			return;
 		}
 
 		const preparedQuery = prepareSearchQuery(keyword, page);
@@ -327,9 +329,19 @@ const ContentSearch = ({
 				}}
 				placeholder={placeholder}
 				autoComplete="off"
+				onFocus={() => {
+					setIsFocused(true);
+
+					if (fetchOnFocus) {
+						handleSearchStringChange('', 1);
+					}
+				}}
+				onBlur={() => {
+					setIsFocused(false);
+				}}
 			/>
 
-			{hasSearchString ? (
+			{hasSearchString || (fetchOnFocus && isFocused) ? (
 				<>
 					<ul className={`${NAMESPACE}-list`} css={listCSS}>
 						{isLoading && currentPage === 1 && (
@@ -406,6 +418,7 @@ ContentSearch.defaultProps = {
 	onSelectItem: () => {
 		console.log('Select!'); // eslint-disable-line no-console
 	},
+	fetchOnFocus: false,
 };
 
 ContentSearch.propTypes = {
@@ -417,6 +430,7 @@ ContentSearch.propTypes = {
 	excludeItems: PropTypes.array,
 	label: PropTypes.string,
 	perPage: PropTypes.number,
+	fetchOnFocus: PropTypes.bool,
 };
 
 export { ContentSearch };
