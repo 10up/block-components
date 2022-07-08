@@ -287,6 +287,7 @@ const ContentSearch = ({
 
 	const hasSearchString = !!searchString.length;
 	const hasSearchResults = searchResults && !!searchResults.length;
+	const hasFocusResults = fetchOnFocus && (isFocused || hasSearchResults);
 
 	const listCSS = css`
 		/* stylelint-disable */
@@ -341,7 +342,7 @@ const ContentSearch = ({
 				}}
 			/>
 
-			{hasSearchString || (fetchOnFocus && isFocused) ? (
+			{hasSearchString || hasFocusResults ? (
 				<>
 					<ul className={`${NAMESPACE}-list`} css={listCSS}>
 						{isLoading && currentPage === 1 && (
