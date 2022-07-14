@@ -17,13 +17,28 @@ import { createHigherOrderComponent } from '@wordpress/compose';
  * @property {Function} Edit               block edit extension function. Will only get rendered when the block is selected
  * @property {string}   extensionName      unique identifier used for the name of the addFilter calls
  *
- * @param {string}             blockName name of the block
+ * @param {string|string[]}    blockName name of the block or array of block names
  * @param {BlockOptionOptions} options   configuration options
  */
 function registerBlockExtension(
 	blockName,
 	{ attributes, classNameGenerator, Edit, extensionName },
 ) {
+	const isMultiBlock = Array.isArray(blockName);
+
+	/**
+	 * shouldApplyBlockExtension
+	 *
+	 * @param {string} blockType name of the block
+	 * @returns {boolean} true if the block is the one we want to add the extension to
+	 */
+	const shouldApplyBlockExtension = (blockType) => {
+		if (isMultiBlock) {
+			return blockName.includes(blockType);
+		}
+		return blockType === blockName;
+	};
+
 	/**
 	 * addAttributesToBlock
 	 *
@@ -33,7 +48,7 @@ function registerBlockExtension(
 	 */
 	const addAttributesToBlock = (settings, name) => {
 		// return early from the block modification
-		if (name !== blockName) {
+		if (!shouldApplyBlockExtension(name)) {
 			return settings;
 		}
 
@@ -61,7 +76,7 @@ function registerBlockExtension(
 			const { name, isSelected } = props;
 
 			// return early from the block modification
-			if (name !== blockName) {
+			if (!shouldApplyBlockExtension(name)) {
 				return <BlockEdit {...props} />;
 			}
 
@@ -88,7 +103,7 @@ function registerBlockExtension(
 			const { name, attributes } = props;
 
 			// return early from the block modification
-			if (name !== blockName) {
+			if (!shouldApplyBlockExtension(name)) {
 				return <BlockList {...props} />;
 			}
 
@@ -123,7 +138,7 @@ function registerBlockExtension(
 	 */
 	const saveSpacingAttributes = (props, block, attributes) => {
 		// return early from the block modification
-		if (block.name !== blockName) {
+		if (!shouldApplyBlockExtension(block.name)) {
 			return props;
 		}
 
