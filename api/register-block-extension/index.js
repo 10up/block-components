@@ -39,6 +39,8 @@ function registerBlockExtension(
 		return blockType === blockName;
 	};
 
+	const blockNamespace = isMultiBlock ? blockName.join('-') : blockName;
+
 	/**
 	 * addAttributesToBlock
 	 *
@@ -64,7 +66,7 @@ function registerBlockExtension(
 
 	addFilter(
 		'blocks.registerBlockType',
-		`namespace/${blockName}/${extensionName}/addAttributesToBlock`,
+		`namespace/${blockNamespace}/${extensionName}/addAttributesToBlock`,
 		addAttributesToBlock,
 	);
 
@@ -91,7 +93,7 @@ function registerBlockExtension(
 
 	addFilter(
 		'editor.BlockEdit',
-		`namespace/${blockName}/${extensionName}/addSettingsToBlock`,
+		`namespace/${blockNamespace}/${extensionName}/addSettingsToBlock`,
 		addSettingsToBlock,
 	);
 
@@ -124,7 +126,7 @@ function registerBlockExtension(
 
 	addFilter(
 		'editor.BlockListBlock',
-		`namespace/${blockName}/${extensionName}/addClassNameInEditor`,
+		`namespace/${blockNamespace}/${extensionName}/addClassNameInEditor`,
 		addClassNameInEditor,
 	);
 
@@ -153,7 +155,7 @@ function registerBlockExtension(
 
 	addFilter(
 		'blocks.getSaveContent.extraProps',
-		`namespace/${blockName}/${extensionName}/saveSpacingAttributes`,
+		`namespace/${blockNamespace}/${extensionName}/saveSpacingAttributes`,
 		saveSpacingAttributes,
 	);
 }
