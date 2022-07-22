@@ -20,6 +20,29 @@ const getCharacterCount = (str) => {
 };
 
 /**
+ * Counter
+ *
+ * @description display character count and limit.
+ *
+ * @returns <Counter />
+ */
+const Counter = forwardRef((props, ref) => {
+	const { count, limit } = props;
+	return (
+		<div
+			className={cx('tenup--block-components__character-count', {
+				'is-over-limit': count > limit,
+			})}
+			{...props}
+			ref={ref}
+		>
+			<span className="tenup--block-components__character-count__count">{count}</span> /{' '}
+			<span className="tenup--block-components__character-count__limit">{limit}</span>
+		</div>
+	);
+});
+
+/**
  * Rich Text Character Limit
  *
  * @description extend `RichText` with the ability to add a character limit.
@@ -83,26 +106,6 @@ const RichTextCharacterLimit = (props) => {
 		onChange(sanitized);
 	};
 
-	/**
-	 * Counter
-	 *
-	 * @description display character count and limit.
-	 *
-	 * @returns <Counter />
-	 */
-	const Counter = forwardRef((props, ref) => (
-		<div
-			className={cx('tenup--block-components__character-count', {
-				'is-over-limit': count > limit,
-			})}
-			{...props}
-			ref={ref}
-		>
-			<span className="tenup--block-components__character-count__count">{count}</span> /{' '}
-			<span className="tenup--block-components__character-count__limit">{limit}</span>
-		</div>
-	));
-
 	const { enforce: _enforce, ...richTextProps } = props;
 
 	/**
@@ -120,6 +123,8 @@ const RichTextCharacterLimit = (props) => {
 			/>
 			{isSelected && (
 				<Counter
+					count={count}
+					limit={limit}
 					ref={floating}
 					style={{
 						position: strategy,
