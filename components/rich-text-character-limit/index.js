@@ -67,6 +67,7 @@ const StyledCounter = styled('div')`
 	align-items: center;
 	justify-content: center;
 	gap: 0.5em;
+	font-variant-numeric: tabular-nums;
 `;
 
 const CircularProgressBar = (props) => {
