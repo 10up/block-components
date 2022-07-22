@@ -60,7 +60,7 @@ const RichTextCharacterLimit = (props) => {
 		const isOverLimit = getCharacterCount(str) > limit;
 
 		if (isOverLimit && enforce) {
-			// Hack which fixes an issue with `<RichText>` not updating.
+			// Workaround which fixes an issue with `<RichText>` not updating.
 			setRichTextValue('');
 			return remove(richTextContent, limit, getCharacterCount(str));
 		}
