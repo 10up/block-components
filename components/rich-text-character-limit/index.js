@@ -50,7 +50,7 @@ const RichTextCharacterLimit = (props) => {
 	/**
 	 * Sanitize
 	 * 
-	 * @description
+	 * @description remove characters if `enforce` is set to true.
 	 * 
 	 * @param {string} str
 	 * @returns {string} str
@@ -71,7 +71,7 @@ const RichTextCharacterLimit = (props) => {
 	/**
 	 * Rich Text On Change
 	 * 
-	 * @description
+	 * @description set rich text value and run `onChange` from initial props.
 	 * 
 	 * @param {string} str 
 	 */
@@ -84,7 +84,7 @@ const RichTextCharacterLimit = (props) => {
 	/**
 	 * Counter
 	 * 
-	 * @description
+	 * @description display character count and limit.
 	 * 
 	 * @returns <Counter />
 	 */
