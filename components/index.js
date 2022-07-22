@@ -12,3 +12,4 @@ export { Repeater } from './repeater';
 export { Link } from './link';
 export { MediaToolbar } from './media-toolbar';
 export { Image } from './image';
+export { RichTextCharacterLimit } from './rich-text-character-limit';
