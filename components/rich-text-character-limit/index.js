@@ -4,6 +4,7 @@ import { RichText, useBlockEditContext } from '@wordpress/block-editor';
 import { create, remove, getTextContent, toHTMLString } from '@wordpress/rich-text';
 import PropTypes from 'prop-types';
 import { useFloating, autoUpdate } from '@floating-ui/react-dom';
+import styled from '@emotion/styled';
 
 /**
  * Get Character Count
@@ -29,18 +30,79 @@ const getCharacterCount = (str) => {
 const Counter = forwardRef((props, ref) => {
 	const { count, limit } = props;
 	return (
-		<div
+		<StyledCounter
 			className={cx('tenup--block-components__character-count', {
 				'is-over-limit': count > limit,
 			})}
 			{...props}
 			ref={ref}
 		>
-			<span className="tenup--block-components__character-count__count">{count}</span> /{' '}
-			<span className="tenup--block-components__character-count__limit">{limit}</span>
-		</div>
+			<div className="tenup--block-components__character-count__label">
+				<span className="tenup--block-components__character-count__count">{count}</span> /{' '}
+				<span className="tenup--block-components__character-count__limit">{limit}</span>
+			</div>
+			<CircularProgressBar percentage={(count / limit) * 100} />
+		</StyledCounter>
 	);
 });
+
+const StyledSvg = styled('svg')`
+	transform: rotate(-90deg);
+
+	& circle {
+		transition: stroke-dashoffset 0.3s linear;
+		stroke: #fff;
+		stroke-width: 1em;
+		opacity: 0.3;
+	}
+
+	& .bar {
+		stroke: #fff;
+		opacity: 1;
+	}
+`;
+
+const StyledCounter = styled('div')`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5em;
+`;
+
+const CircularProgressBar = (props) => {
+	const { percentage } = props;
+	const radius = 90;
+	const circumference = 2 * Math.PI * radius;
+
+	const strokeDashoffset = ((100 - percentage) / 100) * circumference;
+
+	return (
+		<StyledSvg
+			xmlns="http://www.w3.org/2000/svg"
+			width="20"
+			height="20"
+			viewBox="0 0 200 200"
+			version="1.1"
+		>
+			<circle
+				cx="100"
+				cy="100"
+				r={radius}
+				fill="transparent"
+				strokeDasharray={circumference}
+			/>
+			<circle
+				className="bar"
+				cx="100"
+				cy="100"
+				r={radius}
+				fill="transparent"
+				strokeDasharray={circumference}
+				strokeDashoffset={strokeDashoffset}
+			/>
+		</StyledSvg>
+	);
+};
 
 /**
  * Rich Text Character Limit
@@ -149,4 +211,8 @@ RichTextCharacterLimit.propTypes = {
 	enforce: PropTypes.bool,
 	value: PropTypes.string.isRequired,
 	onChange: PropTypes.func.isRequired,
+};
+
+CircularProgressBar.propTypes = {
+	percentage: PropTypes.number.isRequired,
 };
