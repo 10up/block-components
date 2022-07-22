@@ -17,8 +17,9 @@ function BlockEdit(props) {
         <RichTextCharacterLimit
             limit={30}
             enforce={true}
-            tagName='h2'
+            tagName="h2"
             value={title}
+			placeholder={ __( 'Enter some text', NAMESPACE ) }
             onChange={(title) => setAttributes({title})}
             allowedFormats={[
                 'core/bold',
