@@ -1,5 +1,7 @@
 # `IconPicker`
 
+![Icon Picker Demonstration](../../images/icon-picker.gif)
+
 The `IconPicker` comes in a few different iterations. You can choose whether you want to use an `InlineIconPicker`, `IconPickerToolbarButton`, just the `IconPicker` itself, and also just an `Icon` component to display the icon that was picked.
 
 ## Usage

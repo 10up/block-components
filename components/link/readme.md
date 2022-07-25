@@ -1,5 +1,7 @@
 # Link
 
+![Link Component Demo](../../images/link-component.gif)
+
 The `<Link>` Component makes it super simple to add inline links to your custom blocks.
 
 ## Usage
