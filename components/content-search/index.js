@@ -22,7 +22,7 @@ const ContentSearch = ({
 	perPage,
 	queryFilter,
 	excludeItems,
-	fetchOnFocus,
+	fetchInitialResults,
 }) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchQueries, setSearchQueries] = useState({});
@@ -181,9 +181,15 @@ const ContentSearch = ({
 	};
 
 	useEffect(() => {
+		// Trigger initial fetch if enabled.
+		if (fetchInitialResults) {
+			handleSearchStringChange('', 1);
+		}
+
 		return () => {
 			mounted.current = false;
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
@@ -287,7 +293,7 @@ const ContentSearch = ({
 
 	const hasSearchString = !!searchString.length;
 	const hasSearchResults = searchResults && !!searchResults.length;
-	const hasFocusResults = fetchOnFocus && (isFocused || hasSearchResults);
+	const hasInitalResults = fetchInitialResults && isFocused;
 
 	const listCSS = css`
 		/* stylelint-disable */
@@ -332,17 +338,13 @@ const ContentSearch = ({
 				autoComplete="off"
 				onFocus={() => {
 					setIsFocused(true);
-
-					if (fetchOnFocus) {
-						handleSearchStringChange('', 1);
-					}
 				}}
 				onBlur={() => {
 					setIsFocused(false);
 				}}
 			/>
 
-			{hasSearchString || hasFocusResults ? (
+			{hasSearchString || hasInitalResults ? (
 				<>
 					<ul className={`${NAMESPACE}-list`} css={listCSS}>
 						{isLoading && currentPage === 1 && (
@@ -419,7 +421,7 @@ ContentSearch.defaultProps = {
 	onSelectItem: () => {
 		console.log('Select!'); // eslint-disable-line no-console
 	},
-	fetchOnFocus: false,
+	fetchInitialResults: false,
 };
 
 ContentSearch.propTypes = {
@@ -431,7 +433,7 @@ ContentSearch.propTypes = {
 	excludeItems: PropTypes.array,
 	label: PropTypes.string,
 	perPage: PropTypes.number,
-	fetchOnFocus: PropTypes.bool,
+	fetchInitialResults: PropTypes.bool,
 };
 
 export { ContentSearch };

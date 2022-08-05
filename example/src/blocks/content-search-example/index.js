@@ -1,8 +1,7 @@
-import { useState } from 'react';
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/block-editor';
-import { PanelBody, Placeholder, Notice, CheckboxControl } from '@wordpress/components';
+import { PanelBody, Placeholder } from '@wordpress/components';
 
 import { ContentSearch } from '@10up/block-components';
 
@@ -25,11 +24,8 @@ registerBlockType( `${ NAMESPACE }/content-search`, {
     transforms: {},
     variations: [],
     edit: (props) => {
-        const [fetchOnFocus, setFetchOnFocus] = useState(false);
-
         const {
             className,
-            attributes: { selectedPost },
             setAttributes
         } = props;
 
@@ -45,7 +41,7 @@ registerBlockType( `${ NAMESPACE }/content-search`, {
                         label={ __( 'Select a Post or Page', NAMESPACE ) }
                         contentTypes={ [ 'page', 'post' ] }
                         onSelectItem={ handlePostSelection }
-                        fetchOnFocus={fetchOnFocus}
+                        fetchInitialResults
                     />
                 </PanelBody>
             </InspectorControls>
@@ -54,21 +50,9 @@ registerBlockType( `${ NAMESPACE }/content-search`, {
                     label={ __( 'Select a Post or Page', NAMESPACE ) }
                     contentTypes={ [ 'page', 'post' ] }
                     onSelectItem={ handlePostSelection }
-                    fetchOnFocus={fetchOnFocus}
+                    fetchInitialResults
                 />
-                <div style={{ width: '100%' }}>
-                    <CheckboxControl
-                        label="Enable fetch on focus"
-                        checked={fetchOnFocus}
-                        onChange={setFetchOnFocus}
-                    />
-                </div>
             </Placeholder>
-            {selectedPost && (
-                <Notice status="info" isDismissible={false} >
-                    <p>{selectedPost.title}</p>
-                </Notice>
-            )}
             </>
         )
     },
