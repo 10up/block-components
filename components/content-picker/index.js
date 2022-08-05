@@ -129,7 +129,7 @@ const ContentPicker = ({
 					mode={mode}
 					queryFilter={queryFilter}
 					perPage={perPage}
-					fetchInitialResults
+					fetchInitialResults={content.length === 0}
 				/>
 			) : (
 				label && (
