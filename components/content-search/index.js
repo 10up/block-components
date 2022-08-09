@@ -293,7 +293,7 @@ const ContentSearch = ({
 
 	const hasSearchString = !!searchString.length;
 	const hasSearchResults = searchResults && !!searchResults.length;
-	const hasInitalResults = fetchInitialResults && isFocused;
+	const hasInitialResults = fetchInitialResults && isFocused;
 
 	const listCSS = css`
 		/* stylelint-disable */
@@ -344,7 +344,7 @@ const ContentSearch = ({
 				}}
 			/>
 
-			{hasSearchString || hasInitalResults ? (
+			{hasSearchString || hasInitialResults ? (
 				<>
 					<ul className={`${NAMESPACE}-list`} css={listCSS}>
 						{isLoading && currentPage === 1 && (
