@@ -75,7 +75,9 @@ const CircularProgressBar = (props) => {
 	const radius = 90;
 	const circumference = 2 * Math.PI * radius;
 
-	const strokeDashoffset = ((100 - percentage) / 100) * circumference;
+	const normalizedPercentage = Math.max(0, Math.min(percentage, 100));
+
+	const strokeDashoffset = ((100 - normalizedPercentage) / 100) * circumference;
 
 	return (
 		<StyledSvg
