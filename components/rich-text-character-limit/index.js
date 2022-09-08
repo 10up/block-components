@@ -202,7 +202,7 @@ const RichTextCharacterLimit = (props) => {
 	);
 };
 
-export { RichTextCharacterLimit };
+export { RichTextCharacterLimit, getCharacterCount, CircularProgressBar, Counter };
 
 RichTextCharacterLimit.defaultProps = {
 	limit: 100,
