@@ -55,17 +55,17 @@ const StyledSvg = styled('svg')`
 
 	& circle {
 		transition: stroke-dashoffset 0.3s linear;
-		stroke: #fff;
+		stroke: currentColor;
 		stroke-width: 1em;
 		opacity: 0.3;
 	}
 
 	& path {
-		fill: #fff;
+		fill: currentColor;
 	}
 
 	& .bar {
-		stroke: #fff;
+		stroke: currentColor;
 		opacity: 1;
 	}
 `;
