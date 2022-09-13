@@ -15,6 +15,9 @@ import styled from '@emotion/styled';
  * @returns {number} text content length
  */
 const getCharacterCount = (str) => {
+	if (!str) {
+		return 0;
+	}
 	const richTextContent = create({ html: str });
 	const textContent = getTextContent(richTextContent);
 	return textContent.length;
