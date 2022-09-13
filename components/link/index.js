@@ -57,7 +57,7 @@ const StylesRichTextLink = styled(RichText)`
 
 	color: var(--wp--style--color--link);
 	position: relative;
-	display: inline-flex;
+	display: block;
 	align-items: center;
 	gap: 0.5em;
 	text-decoration: underline;
