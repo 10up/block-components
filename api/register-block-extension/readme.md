@@ -49,7 +49,7 @@ function BlockEdit(props) {...}
 function generateClassNames(attributes) {...}
 
 registerBlockExtension(
- 'core/group',
+ 'core/group', // also supports adding multiple blocks as an array
  {
   extensionName: 'background-patterns',
   attributes: additionalAttributes,
@@ -63,7 +63,7 @@ registerBlockExtension(
 
 | Name                       | Type       | Description                                       |
 |----------------------------|------------|---------------------------------------------------|
-| blockName                  | `string`   | Name of the block the options should get added to |
+| blockName                  | `string|string[]`   | Name of the block or array with multiple block names the options should get added to |
 | options.extensionName      | `string`   | Unique Identifier of the option added    |
 | options.attributes         | `object`   | Block Attributes that should get added to the block |
 | options.classNameGenerator | `function` | Function that gets passed the attributes of the block to generate a class name string |

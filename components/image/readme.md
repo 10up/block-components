@@ -1,5 +1,7 @@
 # Image
 
+![Image Component Example](../../images/image-component.gif)
+
 The Image component allows you to easily add images to your custom blocks without needing to manually worry about loading states etc. It renders a `<MediaPlaceholder />` component in place of the image if the id is not set and shows a spinner when the image is still loading.
 
 ## Usage
