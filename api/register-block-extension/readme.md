@@ -55,6 +55,7 @@ registerBlockExtension(
   attributes: additionalAttributes,
   classNameGenerator: generateClassNames,
   Edit: BlockEdit,
+  order: 'before',
  }
 );
 ```
@@ -68,3 +69,4 @@ registerBlockExtension(
 | options.attributes         | `object`   | Block Attributes that should get added to the block |
 | options.classNameGenerator | `function` | Function that gets passed the attributes of the block to generate a class name string |
 | options.Edit               | `function` | BlockEdit component like in `registerBlockType` only without the actual block. So only using slots like the `InspectorControls` is advised. |
+| options.order               | `string` | The order in which the extension should be called in relation to the original BlockEdit component. Can be `before` or `after`. Defaults to `after` |

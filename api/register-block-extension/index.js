@@ -16,13 +16,14 @@ import { createHigherOrderComponent } from '@wordpress/compose';
  * @property {Function} classNameGenerator function that gets passed the attributes and should return a string for the classname
  * @property {Function} Edit               block edit extension function. Will only get rendered when the block is selected
  * @property {string}   extensionName      unique identifier used for the name of the addFilter calls
+ * @property {string}   order              the order where the extension should be rendered. Can be 'before' or 'after'. Defaults to 'after'
  *
  * @param {string|string[]}    blockName name of the block or array of block names
  * @param {BlockOptionOptions} options   configuration options
  */
 function registerBlockExtension(
 	blockName,
-	{ attributes, classNameGenerator, Edit, extensionName },
+	{ attributes, classNameGenerator, Edit, extensionName, order = 'after' },
 ) {
 	const isMultiBlock = Array.isArray(blockName);
 
@@ -82,10 +83,17 @@ function registerBlockExtension(
 				return <BlockEdit {...props} />;
 			}
 
+			const shouldRenderBefore = order === 'before' && isSelected;
+			const shouldRenderAfter = order === 'after' && isSelected;
+
+			const shouldRenderFallback = !shouldRenderBefore && !shouldRenderAfter && isSelected;
+
 			return (
 				<>
+					{shouldRenderBefore && <Edit {...props} />}
 					<BlockEdit {...props} />
-					{isSelected && <Edit {...props} />}
+					{shouldRenderAfter && <Edit {...props} />}
+					{shouldRenderFallback && <Edit {...props} />}
 				</>
 			);
 		};
