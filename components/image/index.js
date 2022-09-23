@@ -61,7 +61,7 @@ const Image = (props) => {
 					</PanelBody>
 				</InspectorControls>
 			)}
-			<img src={imageUrl} alt={altText} {...rest} />;
+			<img src={imageUrl} alt={altText} {...rest} />
 		</>
 	);
 };
