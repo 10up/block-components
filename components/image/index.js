@@ -37,6 +37,7 @@ const Image = (props) => {
 
 	if (hasFocalPoint) {
 		const focalPointStyle = {
+			objectFit: 'cover',
 			backgroundPosition: `${focalPoint.x * 100}% ${focalPoint.y * 100}%`,
 		};
 
