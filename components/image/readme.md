@@ -28,6 +28,10 @@ function BlockEdit(props) {
 }
 ```
 
+> **Note**
+> In order to get the same result as the GIF you also need to use the [`MediaToolbar`](https://github.com/10up/block-components/tree/develop/components/media-toolbar) component. It adds the Replace flow to the Blocks Toolbar.
+
+
 ## Props
 
 | Name       | Type              | Default  |  Description                                                   |
