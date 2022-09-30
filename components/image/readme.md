@@ -11,10 +11,14 @@ import { Image } from '@10up/block-components';
 
 function BlockEdit(props) {
     const { attributes, setAttributes } = props;
-    const { imageId } = attributes;
+    const { imageId, focalPoint } = attributes;
 
     function handleImageSelect( image ) {
         setAttributes({imageId: image.id});
+    }
+
+    function handleFocalPointChange( value ) {
+        setAttributes({focalPoint: value});
     }
 
     return (
@@ -23,6 +27,8 @@ function BlockEdit(props) {
             className="my-image"
             size="full"
             onSelect={handleImageSelect}
+            focalPoint={focalPoint}
+            onChangeFocalPoint={handleFocalPointChange}
         />
     )
 }
@@ -39,4 +45,6 @@ function BlockEdit(props) {
 | `id` | `number`    | `null`   | image id          |
 | `onSelect` | `Function` | `null` | Callback that gets called with the new image when one is selected |
 | `size` | `string` | `large` | name of the image size to be displayed |
+| `focalPoint` | `object` | `undefined` | optional focal point object |
+| `onChangeFocalPoint` | `function` | `undefined` | Callback that gets called with the new focal point when it changes |
 | `...rest` | `*` | `null` | any additional attributes you want to pass to the underlying `img` tag |

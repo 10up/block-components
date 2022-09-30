@@ -9,13 +9,17 @@ export function BlockEdit(props) {
         setAttributes
     } = props;
 
-    const { imageId } = attributes;
+    const { imageId, focalPoint } = attributes;
     const blockProps = useBlockProps();
 
     const handleImageSelection = value => {
         setAttributes({imageId: value.id })
     };
     const removeImage = () => setAttributes({imageId: null});
+
+	const handleFocalPointChange = value => {
+		setAttributes({focalPoint: value})
+	};
 
     return (
         <>
@@ -24,7 +28,7 @@ export function BlockEdit(props) {
             </BlockControls>
             <div {...blockProps}>
                 <h2>Hello World!</h2>
-                <Image id={imageId} size="large" onSelect={handleImageSelection} className="example-image" />
+                <Image id={imageId} size="large" onSelect={handleImageSelection} className="example-image" focalPoint={focalPoint} onChangeFocalPoint={handleFocalPointChange} />
             </div>
         </>
     )
