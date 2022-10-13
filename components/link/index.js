@@ -158,12 +158,7 @@ const Link = ({
 			)}
 
 			{isPopoverVisible && (
-				<Popover
-					position="bottom center"
-					anchorRef={linkRef.current}
-					ref={popoverRef}
-					focusOnMount={false}
-				>
+				<Popover anchorRef={linkRef.current} ref={popoverRef} focusOnMount={false}>
 					<LinkControl
 						hasTextControl
 						className="tenup-block-components-link__link-control"
