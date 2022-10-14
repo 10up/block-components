@@ -34,6 +34,7 @@ A collection of components built to be used in the block editor. These component
 - [MediaToolbar](./components/media-toolbar/)
 - [Optional](./components/optional/)
 - [Repeater](./components/repeater/)
+- [RichTextCharacterLimit](./components/rich-text-character-limit)
 
 ## Hooks
 
