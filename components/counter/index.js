@@ -14,12 +14,36 @@ const StyledSvg = styled('svg')`
 	}
 
 	& path {
-		fill: currentColor;
+		fill: #46b450;
 	}
 
 	& .bar {
-		stroke: currentColor;
+		stroke: #46b450;
 		opacity: 1;
+	}
+
+	&.tenup--block-components__circular-progress {
+		&.is-over-limit {
+			& path {
+				fill: #dc3232;
+			}
+
+			& .bar {
+				stroke: #dc3232;
+				opacity: 1;
+			}
+		}
+
+		&.is-approaching-limit {
+			& path {
+				fill: #ffb900;
+			}
+
+			& .bar {
+				stroke: #ffb900;
+				opacity: 1;
+			}
+		}
 	}
 `;
 
@@ -50,6 +74,10 @@ const CircularProgressBar = (props) => {
 			height="20"
 			viewBox="0 0 200 200"
 			version="1.1"
+			className={cx('tenup--block-components__circular-progress', {
+				'is-over-limit': isOverLimit,
+				'is-approaching-limit': isApproachingLimit && !isOverLimit,
+			})}
 		>
 			<circle
 				cx="100"
@@ -68,13 +96,32 @@ const CircularProgressBar = (props) => {
 				strokeDashoffset={strokeDashoffset}
 			/>
 			{isApproachingLimit && !isOverLimit && (
-				<path
-					style={{ transform: 'rotate(90deg)', transformOrigin: 'center' }}
-					d="M100,31.2c38,0,68.8,30.8,68.8,68.8S138,168.8,100,168.8S31.2,138,31.2,100S62,31.2,100,31.2z M109.7,111.9
-				l3-55.6H87.3l3,55.6C90.3,111.9,109.7,111.9,109.7,111.9z M108.9,140.8c2.1-2,3.2-4.7,3.2-8.3c0-3.6-1-6.4-3.1-8.3
-				c-2.1-2-5.1-3-9.1-3c-4,0-7.1,1-9.2,3c-2.1,2-3.2,4.7-3.2,8.3c0,3.5,1.1,6.3,3.3,8.3c2.2,2,5.2,2.9,9.1,2.9S106.8,142.7,108.9,140.8
-				z"
-				/>
+				<>
+					<path
+						style={{
+							transform: 'rotate(90deg)',
+							transformOrigin: 'center',
+							fill: '#ffb900',
+						}}
+						d="M100,31.2c38,0,68.8,30.8,68.8,68.8S138,168.8,100,168.8S31.2,138,31.2,100S62,31.2,100,31.2z"
+					/>
+					<path
+						style={{
+							transform: 'rotate(90deg)',
+							transformOrigin: 'center',
+							fill: '#000',
+						}}
+						d="M108.9,140.8c2.1-2,3.2-4.7,3.2-8.3c0-3.6-1-6.4-3.1-8.3 c-2.1-2-5.1-3-9.1-3c-4,0-7.1,1-9.2,3c-2.1,2-3.2,4.7-3.2,8.3c0,3.5,1.1,6.3,3.3,8.3c2.2,2,5.2,2.9,9.1,2.9S106.8,142.7,108.9,140.8 z"
+					/>
+					<path
+						style={{
+							transform: 'rotate(90deg)',
+							transformOrigin: 'center',
+							fill: '#000',
+						}}
+						d="M109.7,111.9 l3-55.6H87.3l3,55.6C90.3,111.9,109.7,111.9,109.7,111.9z"
+					/>
+				</>
 			)}
 			{isOverLimit && (
 				<path
