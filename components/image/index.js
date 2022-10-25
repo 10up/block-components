@@ -2,6 +2,8 @@ import { MediaPlaceholder, InspectorControls } from '@wordpress/block-editor';
 import { Spinner, FocalPointPicker, PanelBody } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
+import { useRefEffect } from '@wordpress/compose';
+import { useState } from '@wordpress/element';
 
 import { useMedia } from '../../hooks/use-media';
 
@@ -12,28 +14,21 @@ const Image = (props) => {
 		onSelect,
 		focalPoint = undefined,
 		onChangeFocalPoint,
+		fallback,
 		...rest
 	} = props;
-	const hasImage = !!id;
+	const hasImage = !!id && id !== -1;
 	const { media, isResolvingMedia } = useMedia(id);
 
+	console.count('Image Component Renders');
+
 	const hasFocalPoint = !!focalPoint;
+	const hasFallbackImage = !!fallback;
 
 	if (hasFocalPoint && typeof onChangeFocalPoint !== 'function') {
 		// eslint-disable-next-line no-console
 		console.warn('onChangeFocalPoint is required when focalPoint is set');
 	}
-
-	if (!hasImage) {
-		return <MediaPlaceholder onSelect={onSelect} accept="image" multiple={false} />;
-	}
-
-	if (isResolvingMedia) {
-		return <Spinner />;
-	}
-
-	const imageUrl = media?.media_details?.sizes[size]?.source_url ?? media?.source_url;
-	const altText = media?.alt_text;
 
 	if (hasFocalPoint) {
 		const focalPointStyle = {
@@ -46,6 +41,54 @@ const Image = (props) => {
 			...focalPointStyle,
 		};
 	}
+
+	const [isBlockPreview, setIsBlockPreview] = useState(false);
+
+	const ref = useRefEffect((node) => {
+		const isRenderedInsideIframe = node.ownerDocument.documentElement.classList.contains(
+			'block-editor-block-preview__content-iframe',
+		);
+
+		setIsBlockPreview(isRenderedInsideIframe);
+	});
+
+	if (isBlockPreview && hasFallbackImage) {
+		rest.style = {
+			...rest.style,
+			maxWidth: '100%',
+		};
+		return <img src={fallback} alt="" ref={ref} {...rest} />;
+	}
+
+	if (!hasImage) {
+		return (
+			<>
+				<MediaPlaceholder onSelect={onSelect} accept="image" multiple={false} />
+				<span
+					style={{
+						border: 0,
+						clip: 'rect(1px, 1px, 1px, 1px)',
+						clipPath: 'inset(50%)',
+						height: '1px',
+						margin: '-1px',
+						overflow: 'hidden',
+						padding: 0,
+						position: 'absolute',
+						width: '1px',
+						wordWrap: 'normal !important',
+					}}
+					ref={ref}
+				/>
+			</>
+		);
+	}
+
+	if (isResolvingMedia) {
+		return <Spinner />;
+	}
+
+	const imageUrl = media?.media_details?.sizes[size]?.source_url ?? media?.source_url;
+	const altText = media?.alt_text;
 
 	return (
 		<>
@@ -70,6 +113,7 @@ export { Image };
 
 Image.defaultProps = {
 	size: 'large',
+	fallback: '',
 	focalPoint: undefined,
 	onChangeFocalPoint: undefined,
 };
@@ -78,9 +122,10 @@ Image.propTypes = {
 	id: PropTypes.number.isRequired,
 	size: PropTypes.string,
 	onSelect: PropTypes.func.isRequired,
+	fallback: PropTypes.string,
 	onChangeFocalPoint: PropTypes.func,
 	focalPoint: PropTypes.shape({
-		x: PropTypes.string,
-		y: PropTypes.string,
+		x: PropTypes.number,
+		y: PropTypes.number,
 	}),
 };

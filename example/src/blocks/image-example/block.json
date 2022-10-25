@@ -5,13 +5,24 @@
     "description": "Example Block to show the Image in usage",
     "icon": "smiley",
     "category": "common",
-    "example": {},
+    "example": {
+		"attributes": {
+			"image": {
+				"id": -1,
+				"fallback": "https://images.unsplash.com/photo-1666625267725-310b76f139d6"
+			}
+		}
+	},
     "supports": {
         "html": false
     },
     "attributes": {
-        "imageId": {
-            "type": "number"
+        "image": {
+            "type": "object",
+			"default": {
+				"id": null,
+				"fallback": null
+			}
         },
 		"focalPoint": {
 			"type": "object",
