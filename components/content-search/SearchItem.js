@@ -31,14 +31,30 @@ const ButtonStyled = styled(Button)`
  * @param {string} props.searchTerm the search term
  * @param {boolean} props.isSelected whether the item is selected
  * @param {string} props.id the id of the item
+ * @param {Function} props.renderType a callback to override the type text
  * @returns {*} React JSX
  */
-const SearchItem = ({ suggestion, onClick, searchTerm, isSelected, id, contentTypes }) => {
+const SearchItem = ({
+	suggestion,
+	onClick,
+	searchTerm,
+	isSelected,
+	id,
+	contentTypes,
+	renderType,
+}) => {
 	const showType = suggestion.type && contentTypes.length > 1;
 
 	const richTextContent = create({ html: suggestion.title });
 	const textContent = getTextContent(richTextContent);
 	const titleContent = decodeEntities(textContent);
+
+	// Rename 'post_tag' to 'tag'. Ideally, the API would return the localised CPT or taxonomy label.
+	let type = suggestion.type === 'post_tag' ? 'tag' : suggestion.type;
+	// Allow type to be overriden by renderType
+	if (renderType) {
+		type = renderType(suggestion);
+	}
 
 	return (
 		<Tooltip text={decodeEntities(suggestion.title)}>
@@ -73,10 +89,7 @@ const SearchItem = ({ suggestion, onClick, searchTerm, isSelected, id, contentTy
 					</span>
 				</span>
 				{showType && (
-					<span className="block-editor-link-control__search-item-type">
-						{/* Rename 'post_tag' to 'tag'. Ideally, the API would return the localised CPT or taxonomy label. */}
-						{suggestion.type === 'post_tag' ? 'tag' : suggestion.type}
-					</span>
+					<span className="block-editor-link-control__search-item-type">{type}</span>
 				)}
 			</ButtonStyled>
 		</Tooltip>
@@ -87,6 +100,7 @@ SearchItem.defaultProps = {
 	id: '',
 	searchTerm: '',
 	isSelected: false,
+	renderType: null,
 };
 
 SearchItem.propTypes = {
@@ -96,6 +110,7 @@ SearchItem.propTypes = {
 	onClick: PropTypes.func.isRequired,
 	isSelected: PropTypes.bool,
 	contentTypes: PropTypes.array.isRequired,
+	renderType: PropTypes.func,
 };
 
 export default SearchItem;

@@ -22,6 +22,7 @@ const ContentSearch = ({
 	perPage,
 	queryFilter,
 	excludeItems,
+	renderItemType,
 }) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchQueries, setSearchQueries] = useState({});
@@ -366,6 +367,7 @@ const ContentSearch = ({
 											suggestion={item}
 											contentTypes={contentTypes}
 											isSelected={selectedItem === index + 1}
+											renderType={renderItemType}
 										/>
 									</li>
 								);
@@ -406,6 +408,7 @@ ContentSearch.defaultProps = {
 	onSelectItem: () => {
 		console.log('Select!'); // eslint-disable-line no-console
 	},
+	renderItemType: null,
 };
 
 ContentSearch.propTypes = {
@@ -417,6 +420,7 @@ ContentSearch.propTypes = {
 	excludeItems: PropTypes.array,
 	label: PropTypes.string,
 	perPage: PropTypes.number,
+	renderItemType: PropTypes.func,
 };
 
 export { ContentSearch };
