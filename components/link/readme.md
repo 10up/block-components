@@ -15,7 +15,7 @@ const BlockEdit = (props) => {
 
     const blockProps = useBlockProps();
 
-    const handleTextChange = value => setAttributes({text: value});
+    const handleTextChange = value => setAttributes({linkText: value});
     const handleLinkChange = value => setAttributes({
         linkUrl: value?.url,
         opensInNewTab: value?.opensInNewTab,
