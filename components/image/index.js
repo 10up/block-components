@@ -34,7 +34,7 @@ const Image = (props) => {
 		onChangeFocalPoint,
 		hasInlineControls = false,
 		onRemove,
-		isOptional = false,
+		isOptional = true,
 		...rest
 	} = props;
 	const hasImage = !!id;
