@@ -32,5 +32,5 @@ function MyComponent( props ) {
 | `contentTypes`   | `array`    | `[ 'post', 'page' ]`                 | Names of the post types or taxonomies that should get searched                                                                 |
 | `excludeItems`   | `array`    | `[ { id: 1, type: 'post' ]`          | Items to exclude from search                                                                                                   |
 | `perPage`        | `number`   | `50`                                 | Number of items to show during search                                                                                          |
-| `renderItemType` | `function` | `null`                               | Function called to override the item type label in `SearchItem`. Must return the new label.                                                                                      |
+| `renderItemType` | `function` | `undefined`                          | Function called to override the item type label in `SearchItem`. Must return the new label.                                                                                      |
 

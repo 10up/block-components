@@ -49,13 +49,6 @@ const SearchItem = ({
 	const textContent = getTextContent(richTextContent);
 	const titleContent = decodeEntities(textContent);
 
-	// Rename 'post_tag' to 'tag'. Ideally, the API would return the localised CPT or taxonomy label.
-	let type = suggestion.type === 'post_tag' ? 'tag' : suggestion.type;
-	// Allow type to be overriden by renderType
-	if (renderType) {
-		type = renderType(suggestion);
-	}
-
 	return (
 		<Tooltip text={decodeEntities(suggestion.title)}>
 			<ButtonStyled
@@ -89,7 +82,9 @@ const SearchItem = ({
 					</span>
 				</span>
 				{showType && (
-					<span className="block-editor-link-control__search-item-type">{type}</span>
+					<span className="block-editor-link-control__search-item-type">
+						{renderType(suggestion)}
+					</span>
 				)}
 			</ButtonStyled>
 		</Tooltip>
@@ -100,7 +95,10 @@ SearchItem.defaultProps = {
 	id: '',
 	searchTerm: '',
 	isSelected: false,
-	renderType: null,
+	renderType: (suggestion) => {
+		// Rename 'post_tag' to 'tag'. Ideally, the API would return the localised CPT or taxonomy label.
+		return suggestion.type === 'post_tag' ? 'tag' : suggestion.type;
+	},
 };
 
 SearchItem.propTypes = {

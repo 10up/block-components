@@ -408,7 +408,7 @@ ContentSearch.defaultProps = {
 	onSelectItem: () => {
 		console.log('Select!'); // eslint-disable-line no-console
 	},
-	renderItemType: null,
+	renderItemType: undefined,
 };
 
 ContentSearch.propTypes = {
