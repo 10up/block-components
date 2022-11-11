@@ -40,11 +40,14 @@ function BlockEdit(props) {
 
 ## Props
 
-| Name       | Type              | Default  |  Description                                                   |
-| ---------- | ----------------- | -------- | -------------------------------------------------------------- |
-| `id` | `number`    | `null`   | image id          |
-| `onSelect` | `Function` | `null` | Callback that gets called with the new image when one is selected |
-| `size` | `string` | `large` | name of the image size to be displayed |
-| `focalPoint` | `object` | `undefined` | optional focal point object |
-| `onChangeFocalPoint` | `function` | `undefined` | Callback that gets called with the new focal point when it changes |
-| `...rest` | `*` | `null` | any additional attributes you want to pass to the underlying `img` tag |
+| Name       | Type              | Default  | Required |  Description                                                   |
+| ---------- | ----------------- | -------- | -------- |-------------------------------------------------------------- |
+| `id` | `number`    | `null`   | Yes | image id          |
+| `onSelect` | `function` | `null` | Yes | Callback that gets called with the new image when one is selected |
+| `size` | `string` | `large` | No | name of the image size to be displayed |
+| `focalPoint` | `object` | `undefined` | No | optional focal point object |
+| `onChangeFocalPoint` | `function` | `undefined` | No | Callback that gets called with the new focal point when it changes |
+| `hasInlineControls` | `boolean` | `false` | No | When `true`, it will display inline media flow controls |
+| `onRemove` | `function` | `undefined` | No | Callback that gets called and passed to the Remove Image button inside the inline controls. ***NOTE:*** it has no effect if `hasInlineControls` is `false` |
+| `isOptional` | `boolean` | `false` | No | Wether or not the inline controls' Remove Image button should be shown. ***NOTE:*** it has no effect if `hasInlineControls` is `false` |
+| `...rest` | `*` | `null` | No | any additional attributes you want to pass to the underlying `img` tag |
