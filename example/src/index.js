@@ -4,4 +4,5 @@ import './blocks/icon-picker-example';
 import './blocks/repeater-component-example';
 import './blocks/link-example';
 import './blocks/image-example';
+import './blocks/multiple-image-example';
 import './blocks/rich-text-character-limit';

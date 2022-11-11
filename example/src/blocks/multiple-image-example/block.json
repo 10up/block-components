@@ -1,0 +1,44 @@
+{
+    "name": "example/multiple-image-example",
+    "apiVersion": 2,
+    "title": "Multiple Image Example",
+    "description": "Multiple images block to show the Image with inline controls in usage",
+    "icon": "smiley",
+    "category": "common",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "image1": {
+            "type": "number"
+        },
+        "image2": {
+            "type": "number"
+        },
+        "image3": {
+            "type": "number"
+        },
+        "focalPoint1": {
+            "type": "object",
+            "default": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        "focalPoint2": {
+            "type": "object",
+            "default": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        },
+        "focalPoint3": {
+            "type": "object",
+            "default": {
+                "x": 0.5,
+                "y": 0.5
+            }
+        }
+    }
+}
