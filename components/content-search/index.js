@@ -284,6 +284,9 @@ const ContentSearch = ({
 		});
 	}
 
+	if (searchResults !== null) {
+		searchResults = filterResults(searchResults);
+	}
 	const hasSearchString = !!searchString.length;
 	const hasSearchResults = searchResults && !!searchResults.length;
 
