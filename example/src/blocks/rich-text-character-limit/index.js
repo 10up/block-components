@@ -1,7 +1,7 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
-import { RichTextCharacterLimit } from '../../../../components/rich-text-character-limit';
+import { RichTextCharacterLimit } from '@10up/block-components';
 
 const NAMESPACE = 'example';
 
