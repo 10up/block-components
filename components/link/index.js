@@ -159,8 +159,8 @@ const Link = ({
 
 			{isPopoverVisible && (
 				<Popover
-					position="bottom center"
 					anchorRef={linkRef.current}
+					anchor={linkRef.current}
 					ref={popoverRef}
 					focusOnMount={false}
 				>
