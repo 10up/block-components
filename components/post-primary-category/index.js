@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
-import { usePrimaryTerm } from '../../hooks';
+import { PostPrimaryTerm } from '../post-primary-term';
 
 export const PostPrimaryCategory = (props) => {
 	const {
@@ -10,28 +10,15 @@ export const PostPrimaryCategory = (props) => {
 		...rest
 	} = props;
 
-	const [primaryCategory, isSupportedTaxonomy] = usePrimaryTerm('category', context);
-
-	const hasPrimaryCategory = !!primaryCategory;
-
-	const categoryString = hasPrimaryCategory ? primaryCategory.name : placeholder;
-	const categoryUrl = hasPrimaryCategory ? primaryCategory.link : '#';
-
-	if (!isSupportedTaxonomy) {
-		return null;
-	}
-
-	const Tag = isLink ? 'a' : 'span';
-
-	const wrapperProps = {
-		...rest,
-	};
-
-	if (isLink) {
-		wrapperProps.href = categoryUrl;
-	}
-
-	return <Tag {...wrapperProps}>{categoryString}</Tag>;
+	return (
+		<PostPrimaryTerm
+			context={context}
+			taxonomyName="category"
+			placeholder={placeholder}
+			isLink={isLink}
+			{...rest}
+		/>
+	);
 };
 
 PostPrimaryCategory.propTypes = {
