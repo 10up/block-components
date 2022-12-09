@@ -25,4 +25,5 @@ export { PostAuthor } from './post-author';
 export { PostDate, PostDatePicker } from './post-date';
 export { PostTerms } from './post-terms';
 export { PostCategories } from './post-categories';
+export { PostPrimaryTerm } from './post-primary-term';
 export { PostPrimaryCategory } from './post-primary-category';
