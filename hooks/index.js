@@ -5,3 +5,4 @@ export { useFilteredList } from './use-filtered-list';
 export { useMedia } from './use-media';
 export { useBlockParentAttributes } from './use-block-parent-attributes';
 export { usePost } from './use-post';
+export { useCanEditEntity } from './use-can-edit-entity';
