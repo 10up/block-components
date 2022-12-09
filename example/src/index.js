@@ -5,3 +5,4 @@ import './blocks/repeater-component-example';
 import './blocks/link-example';
 import './blocks/image-example';
 import './blocks/rich-text-character-limit';
+import './blocks/post-title';
