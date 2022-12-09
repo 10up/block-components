@@ -4,3 +4,4 @@ export { useIcons, useIcon } from './use-icons';
 export { useFilteredList } from './use-filtered-list';
 export { useMedia } from './use-media';
 export { useBlockParentAttributes } from './use-block-parent-attributes';
+export { usePost } from './use-post';
