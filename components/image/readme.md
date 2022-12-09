@@ -37,7 +37,6 @@ function BlockEdit(props) {
 > **Note**
 > In order to get the same result as the GIF you also need to use the [`MediaToolbar`](https://github.com/10up/block-components/tree/develop/components/media-toolbar) component. It adds the Replace flow to the Blocks Toolbar.
 
-
 ## Props
 
 | Name       | Type              | Default  |  Description                                                   |
@@ -48,3 +47,4 @@ function BlockEdit(props) {
 | `focalPoint` | `object` | `undefined` | optional focal point object |
 | `onChangeFocalPoint` | `function` | `undefined` | Callback that gets called with the new focal point when it changes |
 | `...rest` | `*` | `null` | any additional attributes you want to pass to the underlying `img` tag |
+| `canEditImage` | `boolean` | `true` | whether or not the image can be edited by in the context its getting viewed. Controls whether a placeholder or upload controls should be shown when no image is present |
