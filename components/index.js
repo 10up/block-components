@@ -23,3 +23,4 @@ export { PostFeaturedImage } from './post-featured-image';
 export { PostExcerpt } from './post-excerpt';
 export { PostAuthor } from './post-author';
 export { PostDate, PostDatePicker } from './post-date';
+export { PostCategories } from './post-categories';
