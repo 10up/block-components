@@ -20,3 +20,4 @@ export {
 } from './rich-text-character-limit';
 export { PostTitle } from './post-title';
 export { PostFeaturedImage } from './post-featured-image';
+export { PostExcerpt } from './post-excerpt';
