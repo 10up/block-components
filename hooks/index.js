@@ -7,3 +7,7 @@ export { useBlockParentAttributes } from './use-block-parent-attributes';
 export { usePost } from './use-post';
 export { useCanEditEntity } from './use-can-edit-entity';
 export { useIsSupportedTaxonomy } from './use-is-supported-taxonomy';
+export { useAllTerms } from './use-all-terms';
+export { useSelectedTermIds } from './use-selected-term-ids';
+export { useSelectedTerms } from './use-selected-terms';
+export { useSelectedTermsOfSavedPost } from './use-selected-terms-of-saved-post';
