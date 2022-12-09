@@ -24,3 +24,4 @@ export { PostExcerpt } from './post-excerpt';
 export { PostAuthor } from './post-author';
 export { PostDate, PostDatePicker } from './post-date';
 export { PostCategories } from './post-categories';
+export { PostPrimaryCategory } from './post-primary-category';
