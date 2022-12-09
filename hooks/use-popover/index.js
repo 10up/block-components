@@ -23,6 +23,7 @@ export const usePopover = () => {
 		setPopoverAnchor,
 		toggleVisible,
 		toggleProps,
+		// eslint-disable-next-line react/prop-types
 		Popover: ({ children }) =>
 			isVisible ? (
 				<Popover ref={ref} anchor={popoverAnchor} focusOnMount={false} animate={false}>
