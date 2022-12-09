@@ -18,3 +18,4 @@ export {
 	CircularProgressBar,
 	Counter,
 } from './rich-text-character-limit';
+export { PostTitle } from './post-title';
