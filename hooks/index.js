@@ -11,3 +11,4 @@ export { useAllTerms } from './use-all-terms';
 export { useSelectedTermIds } from './use-selected-term-ids';
 export { useSelectedTerms } from './use-selected-terms';
 export { useSelectedTermsOfSavedPost } from './use-selected-terms-of-saved-post';
+export { useIsPluginActive } from './use-is-plugin-active';
