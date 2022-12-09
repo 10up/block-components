@@ -6,3 +6,4 @@ export { useMedia } from './use-media';
 export { useBlockParentAttributes } from './use-block-parent-attributes';
 export { usePost } from './use-post';
 export { useCanEditEntity } from './use-can-edit-entity';
+export { useIsSupportedTaxonomy } from './use-is-supported-taxonomy';
