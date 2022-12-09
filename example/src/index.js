@@ -7,3 +7,4 @@ import './blocks/image-example';
 import './blocks/rich-text-character-limit';
 import './blocks/post-title';
 import './blocks/post-featured-image';
+import './blocks/content-item';
