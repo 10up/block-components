@@ -21,3 +21,4 @@ export {
 export { PostTitle } from './post-title';
 export { PostFeaturedImage } from './post-featured-image';
 export { PostExcerpt } from './post-excerpt';
+export { PostAuthor } from './post-author';
