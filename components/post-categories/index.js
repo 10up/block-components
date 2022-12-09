@@ -1,35 +1,11 @@
-import { Spinner } from '@wordpress/components';
 import PropTypes from 'prop-types';
 
-import { usePost, useSelectedTerms } from '../../hooks';
+import { PostTerms } from '../post-terms';
 
 export const PostCategories = (props) => {
 	const { context, children, ...rest } = props;
 
-	const { isDescendentOfQueryLoop } = usePost(context);
-
-	const hasRenderCallback = typeof children === 'function';
-
-	const [selectedCategories, hasResolvedSelectedCategories] = useSelectedTerms(
-		'category',
-		context,
-	);
-
-	if (!hasResolvedSelectedCategories) {
-		return <Spinner />;
-	}
-
-	if (hasRenderCallback) {
-		return selectedCategories.map((category) =>
-			children({ ...category, isDescendentOfQueryLoop }),
-		);
-	}
-
-	return selectedCategories.map((category) => (
-		<li key={category.id} {...rest}>
-			{category.name}
-		</li>
-	));
+	return <PostTerms context={context} taxonomyName="category" {...rest} />;
 };
 
 PostCategories.propTypes = {
