@@ -3,7 +3,7 @@ import { useBlockProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import { header } from '@wordpress/icons';
 
-import { PostFeaturedImage, PostTitle, PostPrimaryCategory, PostDate, PostCategories, PostAuthor } from '@10up/block-components';
+import { PostFeaturedImage, PostTitle, PostPrimaryCategory, PostDate, PostCategoryList, PostAuthor } from '@10up/block-components';
 import { PostExcerpt } from '../../../../components';
 
 const NAMESPACE = 'example';
@@ -31,15 +31,11 @@ registerBlockType(`${NAMESPACE}/hero`, {
 				</figure>
 				<PostPrimaryCategory className="wp-block-example-hero__category" />
 				<PostTitle className="wp-block-example-hero__title" />
-				<ul className="wp-block-example-hero__categories">
-					<PostCategories>
-						{({ name, link, id }) => (
-							<li key={id} className="wp-block-example-hero__category">
-								<a href={link} className="wp-block-example-hero__category-link">{name}</a>
-							</li>
-						)}
-					</PostCategories>
-				</ul>
+				<PostCategoryList className="wp-block-example-hero__categories">
+					<PostCategoryList.ListItem className="wp-block-example-hero__category">
+						<PostCategoryList.TermLink className="wp-block-example-hero__category-link" />
+					</PostCategoryList.ListItem>
+				</PostCategoryList>
 				<PostDate className="wp-block-example-hero__date" />
 				<PostExcerpt className="wp-block-example-hero__excerpt" />
 				<PostAuthor>

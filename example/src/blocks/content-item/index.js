@@ -2,7 +2,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 
-import { PostFeaturedImage, PostTitle, PostPrimaryCategory, PostDate, PostCategories } from '@10up/block-components';
+import { PostFeaturedImage, PostTitle, PostPrimaryCategory, PostDate, PostCategoryList } from '@10up/block-components';
 import { PostAuthor, PostExcerpt, PostCoAuthors } from '../../../../components';
 
 const NAMESPACE = 'example';
@@ -31,13 +31,13 @@ registerBlockType( `${ NAMESPACE }/content-item`, {
 				<PostPrimaryCategory context={context} className="wp-block-example-content-item__category" />
 				<PostTitle context={context} className="wp-block-example-content-item__title" />
 				<ul className="wp-block-example-content-item__categories">
-					<PostCategories context={context}>
+					<PostCategoryList context={context}>
 						{({ name, link, id }) => (
 							<li key={id} className="wp-block-example-content-item__category">
 								<a href={link} className="wp-block-example-content-item__category-link">{name}</a>
 							</li>
 						)}
-					</PostCategories>
+					</PostCategoryList>
 				</ul>
 				<PostDate context={context} className="wp-block-example-content-item__date" />
 				<PostExcerpt context={context} className="wp-block-example-content-item__excerpt" />
