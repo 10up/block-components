@@ -2,13 +2,12 @@ import { useEntityProp } from '@wordpress/core-data';
 import { RichText, store as blockEditorStore } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
 import PropTypes from 'prop-types';
-import { usePost, useCanEditEntity } from '../../hooks';
+import { usePost } from '../../hooks';
 
 export const PostTitle = (props) => {
 	const { context, tagName: TagName = 'h1', ...rest } = props;
 	const { postId, postType, isDescendentOfQueryLoop } = usePost(context);
 
-	const userCanEditTitle = useCanEditEntity('postType', postType, postId);
 	const [rawTitle = '', setTitle, fullTitle] = useEntityProp(
 		'postType',
 		postType,
@@ -21,7 +20,7 @@ export const PostTitle = (props) => {
 		[],
 	);
 
-	if (!userCanEditTitle || isDescendentOfQueryLoop) {
+	if (isDescendentOfQueryLoop) {
 		// eslint-disable-next-line react/no-danger
 		return <TagName {...rest} dangerouslySetInnerHTML={{ __html: fullTitle?.rendered }} />;
 	}
