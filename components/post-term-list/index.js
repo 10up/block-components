@@ -24,7 +24,7 @@ export const PostTermList = (props) => {
 	}
 
 	if (hasRenderCallback) {
-		return selectedTerms.map((term) => children({ ...term, isDescendentOfQueryLoop }));
+		return children({ selectedTerms, isDescendentOfQueryLoop });
 	}
 
 	let listElementProps = {
@@ -57,11 +57,15 @@ export const PostTermList = (props) => {
 		);
 	}
 
-	return selectedTerms.map((term) => (
-		<li key={term.id} {...rest}>
-			{term.name}
-		</li>
-	));
+	return (
+		<ul {...rest}>
+			{selectedTerms.map((term) => (
+				<li key={term.id}>
+					<a href={term.link}>{term.name}</a>
+				</li>
+			))}
+		</ul>
+	);
 };
 
 PostTermList.propTypes = {
