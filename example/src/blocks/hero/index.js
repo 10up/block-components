@@ -38,14 +38,12 @@ registerBlockType(`${NAMESPACE}/hero`, {
 				</PostCategoryList>
 				<PostDate className="wp-block-example-hero__date" />
 				<PostExcerpt className="wp-block-example-hero__excerpt" />
-				<PostAuthor>
-					<div className="wp-block-example-hero__author">
-						<PostAuthor.Avatar className="wp-block-example-hero__author-avatar" />
-						<PostAuthor.Name className="wp-block-example-hero__author-name" />
-						<PostAuthor.FirstName className="wp-block-example-hero__author-first-name" />
-						<PostAuthor.LastName className="wp-block-example-hero__author-last-name" />
-						<PostAuthor.Bio className="wp-block-example-hero__author-bio" />
-					</div>
+				<PostAuthor className="wp-block-example-hero__author">
+					<PostAuthor.Avatar className="wp-block-example-hero__author-avatar" />
+					<PostAuthor.Name className="wp-block-example-hero__author-name" />
+					<PostAuthor.FirstName className="wp-block-example-hero__author-first-name" />
+					<PostAuthor.LastName className="wp-block-example-hero__author-last-name" />
+					<PostAuthor.Bio className="wp-block-example-hero__author-bio" />
 				</PostAuthor>
 			</header>
 		)

@@ -30,26 +30,20 @@ registerBlockType( `${ NAMESPACE }/content-item`, {
 				</figure>
 				<PostPrimaryCategory context={context} className="wp-block-example-content-item__category" />
 				<PostTitle context={context} className="wp-block-example-content-item__title" />
-				<ul className="wp-block-example-content-item__categories">
-					<PostCategoryList context={context}>
-						{({ name, link, id }) => (
-							<li key={id} className="wp-block-example-content-item__category">
-								<a href={link} className="wp-block-example-content-item__category-link">{name}</a>
-							</li>
-						)}
-					</PostCategoryList>
-				</ul>
+				<PostCategoryList className="wp-block-example-content-item__categories">
+					<PostCategoryList.ListItem className="wp-block-example-content-item__category">
+						<PostCategoryList.TermLink className="wp-block-example-content-item__category-link" />
+					</PostCategoryList.ListItem>
+				</PostCategoryList>
 				<PostDate context={context} className="wp-block-example-content-item__date" />
 				<PostExcerpt context={context} className="wp-block-example-content-item__excerpt" />
-				<PostAuthor context={context}>
-					<div className="wp-block-example-content-item__author">
-						<PostAuthor.Avatar className="wp-block-example-content-item__author-avatar" />
-						<PostAuthor.Name as="a" className="wp-block-example-content-item__author-name" />
-						<PostAuthor.FirstName className="wp-block-example-content-item__author-first-name" />
-						<PostAuthor.LastName className="wp-block-example-content-item__author-last-name" />
-						<PostAuthor.Bio className="wp-block-example-content-item__author-bio" />
-						<PostAuthor.Email className="wp-block-example-content-item__author-email" />
-					</div>
+				<PostAuthor context={context} className="wp-block-example-content-item__author">
+					<PostAuthor.Avatar className="wp-block-example-content-item__author-avatar" />
+					<PostAuthor.Name tagName="a" className="wp-block-example-content-item__author-name" />
+					<PostAuthor.FirstName className="wp-block-example-content-item__author-first-name" />
+					<PostAuthor.LastName className="wp-block-example-content-item__author-last-name" />
+					<PostAuthor.Bio className="wp-block-example-content-item__author-bio" />
+					<PostAuthor.Email className="wp-block-example-content-item__author-email" />
 				</PostAuthor>
 			</article>
         )

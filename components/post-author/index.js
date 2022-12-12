@@ -40,7 +40,11 @@ export const PostAuthor = (props) => {
 	}
 
 	if (hasChildComponents) {
-		return <AUTHOR_CONTEXT.Provider value={author}>{children}</AUTHOR_CONTEXT.Provider>;
+		return (
+			<AUTHOR_CONTEXT.Provider value={author}>
+				<div {...rest}>{children}</div>
+			</AUTHOR_CONTEXT.Provider>
+		);
 	}
 
 	if (hasRenderCallback) {
@@ -52,7 +56,11 @@ export const PostAuthor = (props) => {
 
 PostAuthor.propTypes = {
 	context: PropTypes.object,
-	children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
+	children: PropTypes.oneOfType([
+		PropTypes.func,
+		PropTypes.node,
+		PropTypes.arrayOf(PropTypes.node),
+	]),
 };
 
 PostAuthor.defaultProps = {

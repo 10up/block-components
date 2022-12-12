@@ -8,7 +8,13 @@ import { POST_TERM_ITEM_CONTEXT } from './context';
 import { ListItem, TermLink } from './item';
 
 export const PostTermList = (props) => {
-	const { context, taxonomyName = 'category', children, ...rest } = props;
+	const {
+		context,
+		tagName: TagName = 'ul',
+		taxonomyName = 'category',
+		children,
+		...rest
+	} = props;
 
 	const { isDescendentOfQueryLoop } = usePost(context);
 
@@ -41,13 +47,13 @@ export const PostTermList = (props) => {
 	if (hasChildComponents) {
 		return (
 			<>
-				<ul {...listElementProps}>
+				<TagName {...listElementProps}>
 					{selectedTerms.map((term) => (
 						<POST_TERM_ITEM_CONTEXT.Provider value={term} key={term.id}>
 							{children}
 						</POST_TERM_ITEM_CONTEXT.Provider>
 					))}
-				</ul>
+				</TagName>
 				{!isDescendentOfQueryLoop && (
 					<Popover>
 						<PostTaxonomiesHierarchicalTermSelector slug={taxonomyName} />
@@ -70,13 +76,15 @@ export const PostTermList = (props) => {
 
 PostTermList.propTypes = {
 	context: PropTypes.object,
-	children: PropTypes.func,
+	children: PropTypes.func || PropTypes.node,
 	taxonomyName: PropTypes.string.isRequired,
+	tagName: PropTypes.string,
 };
 
 PostTermList.defaultProps = {
 	context: {},
 	children: null,
+	tagName: 'ul',
 };
 
 PostTermList.ListItem = ListItem;

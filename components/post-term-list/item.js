@@ -19,24 +19,19 @@ ListItem.defaultProps = {
 };
 
 export const TermLink = (props) => {
-	const { tagName: TagName = 'a', children, ...rest } = props;
+	const { children, ...rest } = props;
 
 	const { link, name } = useContext(POST_TERM_ITEM_CONTEXT);
 
 	return (
 		<Disabled>
-			<TagName href={link} {...rest}>
+			<a href={link} {...rest}>
 				{name}
-			</TagName>
+			</a>
 		</Disabled>
 	);
 };
 
 TermLink.propTypes = {
-	tagName: PropTypes.string,
 	children: PropTypes.node.isRequired,
-};
-
-TermLink.defaultProps = {
-	tagName: 'a',
 };
