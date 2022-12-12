@@ -23,7 +23,7 @@ import { AUTHOR_CONTEXT } from './context';
  */
 
 export const Name = (props) => {
-	const { as: Component = 'span', ...rest } = props;
+	const { tagName: TagName = 'span', ...rest } = props;
 
 	/**
 	 * @type {Author}
@@ -32,57 +32,57 @@ export const Name = (props) => {
 
 	const wrapperProps = { ...rest };
 
-	if (Component === 'a' && link) {
+	if (TagName === 'a' && link) {
 		wrapperProps.href = link;
 	}
 
-	return <Component {...wrapperProps}>{name}</Component>;
+	return <TagName {...wrapperProps}>{name}</TagName>;
 };
 
 Name.propTypes = {
-	as: PropTypes.string,
+	tagName: PropTypes.string,
 };
 
 Name.defaultProps = {
-	as: 'span',
+	tagName: 'span',
 };
 
 export const FirstName = (props) => {
-	const { as: Component = 'span', ...rest } = props;
+	const { tagName: TagName = 'span', ...rest } = props;
 
 	/**
 	 * @type {Author}
 	 */
 	const { first_name: firstName } = useContext(AUTHOR_CONTEXT);
 
-	return <Component {...rest}>{firstName}</Component>;
+	return <TagName {...rest}>{firstName}</TagName>;
 };
 
 FirstName.propTypes = {
-	as: PropTypes.string,
+	tagName: PropTypes.string,
 };
 
 FirstName.defaultProps = {
-	as: 'span',
+	tagName: 'span',
 };
 
 export const LastName = (props) => {
-	const { as: Component = 'span', ...rest } = props;
+	const { tagName: TagName = 'span', ...rest } = props;
 
 	/**
 	 * @type {Author}
 	 */
 	const { last_name: lastName } = useContext(AUTHOR_CONTEXT);
 
-	return <Component {...rest}>{lastName}</Component>;
+	return <TagName {...rest}>{lastName}</TagName>;
 };
 
 LastName.propTypes = {
-	as: PropTypes.string,
+	tagName: PropTypes.string,
 };
 
 LastName.defaultProps = {
-	as: 'span',
+	tagName: 'span',
 };
 
 function useDefaultAvatar() {
@@ -95,7 +95,7 @@ function useDefaultAvatar() {
 }
 
 export const Avatar = (props) => {
-	const { as: Component = 'img', ...rest } = props;
+	const { tagName: TagName = 'img', ...rest } = props;
 
 	/**
 	 * @type {Author}
@@ -107,34 +107,34 @@ export const Avatar = (props) => {
 
 	const avatarSourceUrl = avatarUrls ? avatarUrls[avatarUrls.length - 1] : defaultAvatar;
 
-	return <Component src={avatarSourceUrl} {...rest} />;
+	return <TagName src={avatarSourceUrl} {...rest} />;
 };
 
 Avatar.propTypes = {
-	as: PropTypes.string,
+	tagName: PropTypes.string,
 };
 
 Avatar.defaultProps = {
-	as: 'img',
+	tagName: 'img',
 };
 
 export const Bio = (props) => {
-	const { as: Component = 'p', ...rest } = props;
+	const { tagName: TagName = 'p', ...rest } = props;
 
 	/**
 	 * @type {Author}
 	 */
 	const { description } = useContext(AUTHOR_CONTEXT);
 
-	return <Component {...rest}>{description}</Component>;
+	return <TagName {...rest}>{description}</TagName>;
 };
 
 Bio.propTypes = {
-	as: PropTypes.string,
+	tagName: PropTypes.string,
 };
 
 Bio.defaultProps = {
-	as: 'p',
+	tagName: 'p',
 };
 
 export const Email = (props) => {
