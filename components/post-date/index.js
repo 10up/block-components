@@ -28,9 +28,9 @@ PostDatePicker.propTypes = {
 };
 
 export const PostDate = (props) => {
-	const { context, placeholder = __('No date set', 'tenup'), ...rest } = props;
+	const { placeholder = __('No date set', 'tenup'), ...rest } = props;
 
-	const { postId, postType, isDescendentOfQueryLoop } = usePost(context);
+	const { postId, postType, isEditable } = usePost();
 
 	const [date, setDate] = useEntityProp('postType', postType, 'date', postId);
 	const [siteFormat] = useEntityProp('root', 'site', 'date_format');
@@ -45,7 +45,7 @@ export const PostDate = (props) => {
 
 	let parentProps = { ...rest };
 
-	if (!isDescendentOfQueryLoop) {
+	if (isEditable) {
 		parentProps = {
 			...toggleProps,
 			...parentProps,
@@ -62,7 +62,7 @@ export const PostDate = (props) => {
 			>
 				{timeString}
 			</time>
-			{!isDescendentOfQueryLoop && (
+			{isEditable && (
 				<Popover>
 					<PostDatePicker date={date} setDate={setDate} />
 				</Popover>
@@ -72,11 +72,9 @@ export const PostDate = (props) => {
 };
 
 PostDate.propTypes = {
-	context: PropTypes.object,
 	placeholder: PropTypes.string,
 };
 
 PostDate.defaultProps = {
-	context: {},
 	placeholder: __('No date set', 'tenup'),
 };

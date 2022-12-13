@@ -23,7 +23,6 @@ function BlockEdit() {
 
 | Name       | Type              | Default  |  Description                                                   |
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
-| `context` | `object` | `{}` |  |
 | `children` | `function\|node\|null`  | `null` |  |
 | `...rest` | `object` | `{}` |  |
 

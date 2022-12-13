@@ -17,6 +17,5 @@ function BlockEdit() {
 
 | Name       | Type              | Default  |  Description                                                   |
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
-| `context` | `object` | `{}` |  |
 | `placeholder` | `string` | `No date set` |  |
 | `...rest` | `object` | `{}` |  |

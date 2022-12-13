@@ -8,20 +8,14 @@ import { POST_TERM_ITEM_CONTEXT } from './context';
 import { ListItem, TermLink } from './item';
 
 export const PostTermList = (props) => {
-	const {
-		context,
-		tagName: TagName = 'ul',
-		taxonomyName = 'category',
-		children,
-		...rest
-	} = props;
+	const { tagName: TagName = 'ul', taxonomyName = 'category', children, ...rest } = props;
 
-	const { isDescendentOfQueryLoop } = usePost(context);
+	const { isEditable } = usePost();
 
 	const hasRenderCallback = typeof children === 'function';
 	const hasChildComponents = !hasRenderCallback && Children.count(children);
 
-	const [selectedTerms, hasResolvedSelectedTerms] = useSelectedTerms(taxonomyName, context);
+	const [selectedTerms, hasResolvedSelectedTerms] = useSelectedTerms(taxonomyName);
 
 	const { toggleProps, Popover } = usePopover();
 
@@ -30,14 +24,14 @@ export const PostTermList = (props) => {
 	}
 
 	if (hasRenderCallback) {
-		return children({ selectedTerms, isDescendentOfQueryLoop });
+		return children({ selectedTerms, isEditable });
 	}
 
 	let listElementProps = {
 		...rest,
 	};
 
-	if (!isDescendentOfQueryLoop) {
+	if (isEditable) {
 		listElementProps = {
 			...listElementProps,
 			...toggleProps,
@@ -54,7 +48,7 @@ export const PostTermList = (props) => {
 						</POST_TERM_ITEM_CONTEXT.Provider>
 					))}
 				</TagName>
-				{!isDescendentOfQueryLoop && (
+				{isEditable && (
 					<Popover>
 						<PostTaxonomiesHierarchicalTermSelector slug={taxonomyName} />
 					</Popover>
@@ -75,14 +69,12 @@ export const PostTermList = (props) => {
 };
 
 PostTermList.propTypes = {
-	context: PropTypes.object,
-	children: PropTypes.func || PropTypes.node,
+	children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 	taxonomyName: PropTypes.string.isRequired,
 	tagName: PropTypes.string,
 };
 
 PostTermList.defaultProps = {
-	context: {},
 	children: null,
 	tagName: 'ul',
 };

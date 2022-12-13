@@ -9,8 +9,8 @@ import { Name, FirstName, LastName, Avatar, Bio, Email } from '../author';
 import { AUTHOR_CONTEXT } from '../author/context';
 
 export const PostAuthor = (props) => {
-	const { context, children, ...rest } = props;
-	const { postId, postType } = usePost(context);
+	const { children, ...rest } = props;
+	const { postId, postType } = usePost();
 
 	const [author, hasResolved] = useSelect(
 		(select) => {
@@ -55,7 +55,6 @@ export const PostAuthor = (props) => {
 };
 
 PostAuthor.propTypes = {
-	context: PropTypes.object,
 	children: PropTypes.oneOfType([
 		PropTypes.func,
 		PropTypes.node,
@@ -64,7 +63,6 @@ PostAuthor.propTypes = {
 };
 
 PostAuthor.defaultProps = {
-	context: {},
 	children: null,
 };
 

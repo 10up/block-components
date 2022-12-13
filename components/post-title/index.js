@@ -5,8 +5,8 @@ import PropTypes from 'prop-types';
 import { usePost } from '../../hooks';
 
 export const PostTitle = (props) => {
-	const { context, tagName: TagName = 'h1', ...rest } = props;
-	const { postId, postType, isDescendentOfQueryLoop } = usePost(context);
+	const { tagName: TagName = 'h1', ...rest } = props;
+	const { postId, postType, isEditable } = usePost();
 
 	const [rawTitle = '', setTitle, fullTitle] = useEntityProp(
 		'postType',
@@ -20,7 +20,7 @@ export const PostTitle = (props) => {
 		[],
 	);
 
-	if (isDescendentOfQueryLoop) {
+	if (!isEditable) {
 		// eslint-disable-next-line react/no-danger
 		return <TagName {...rest} dangerouslySetInnerHTML={{ __html: fullTitle?.rendered }} />;
 	}
@@ -38,11 +38,9 @@ export const PostTitle = (props) => {
 };
 
 PostTitle.propTypes = {
-	context: PropTypes.object,
 	tagName: PropTypes.string,
 };
 
 PostTitle.defaultProps = {
-	context: {},
 	tagName: 'h1',
 };

@@ -17,6 +17,5 @@ function BlockEdit() {
 
 | Name       | Type              | Default  |  Description                                                   |
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
-| `context` | `object` | `{}` |  |
 | `tagName` | `string` | `h1` |  |
 | `...rest` | `object` | `{}` |  |

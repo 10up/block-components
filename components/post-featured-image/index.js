@@ -4,8 +4,7 @@ import { usePost } from '../../hooks';
 import { Image } from '../image';
 
 export const PostFeaturedImage = (props) => {
-	const { context, ...rest } = props;
-	const { postId, postType, isDescendentOfQueryLoop } = usePost(context);
+	const { postId, postType, isEditable } = usePost();
 	const [featuredImage, setFeaturedImage] = useEntityProp(
 		'postType',
 		postType,
@@ -20,9 +19,9 @@ export const PostFeaturedImage = (props) => {
 	return (
 		<Image
 			id={featuredImage}
-			canEditImage={!isDescendentOfQueryLoop}
+			canEditImage={isEditable}
 			onSelect={handleImageSelect}
-			{...rest}
+			{...props}
 		/>
 	);
 };

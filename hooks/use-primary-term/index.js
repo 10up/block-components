@@ -4,8 +4,8 @@ import { usePost } from '../use-post';
 import { useIsPluginActive } from '../use-is-plugin-active';
 import { useIsSupportedTaxonomy } from '../use-is-supported-taxonomy';
 
-export const usePrimaryTerm = (taxonomyName, context = {}) => {
-	const { postType, isDescendentOfQueryLoop } = usePost(context);
+export const usePrimaryTerm = (taxonomyName) => {
+	const { postType, isEditable } = usePost();
 
 	const [isYoastSeoActive, hasResolvedIsPluginActive] = useIsPluginActive('wordpress-seo/wp-seo');
 	const [isSupportedTaxonomy, hasResolvedIsSupportedTaxonomy] = useIsSupportedTaxonomy(
@@ -58,8 +58,5 @@ export const usePrimaryTerm = (taxonomyName, context = {}) => {
 		[primaryTermId],
 	);
 
-	return [
-		isDescendentOfQueryLoop ? { name: __('Primary Term', 'tenup') } : primaryTerm,
-		isSupportedTaxonomy,
-	];
+	return [!isEditable ? { name: __('Primary Term', 'tenup') } : primaryTerm, isSupportedTaxonomy];
 };

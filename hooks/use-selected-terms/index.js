@@ -4,8 +4,8 @@ import { useAllTerms } from '../use-all-terms';
 import { useSelectedTermIds } from '../use-selected-term-ids';
 import { useSelectedTermsOfSavedPost } from '../use-selected-terms-of-saved-post';
 
-export const useSelectedTerms = (taxonomyName, context = {}) => {
-	const { postId, postType, isDescendentOfQueryLoop } = usePost(context);
+export const useSelectedTerms = (taxonomyName) => {
+	const { postId, postType, isEditable } = usePost();
 	const [isSupportedTaxonomy, hasResolvedIsSupportedTaxonomy] = useIsSupportedTaxonomy(
 		postType,
 		taxonomyName,
@@ -28,13 +28,13 @@ export const useSelectedTerms = (taxonomyName, context = {}) => {
 	}
 
 	if (
-		(isDescendentOfQueryLoop && !hasResolvedSelectedTermsOfSavedPost) ||
-		(!isDescendentOfQueryLoop && (!hasResolvedTerms || !hasResolvedSelectedTermIds))
+		(!isEditable && !hasResolvedSelectedTermsOfSavedPost) ||
+		(isEditable && (!hasResolvedTerms || !hasResolvedSelectedTermIds))
 	) {
 		return [[], false];
 	}
 
-	if (isDescendentOfQueryLoop && hasResolvedSelectedTermsOfSavedPost) {
+	if (!isEditable && hasResolvedSelectedTermsOfSavedPost) {
 		return [selectedTermsOfSavedPost, hasResolvedSelectedTermsOfSavedPost];
 	}
 
