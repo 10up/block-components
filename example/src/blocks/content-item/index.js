@@ -33,7 +33,7 @@ registerBlockType(`${NAMESPACE}/content-item`, {
 		const blockProps = useBlockProps();
 		return (
 			<article {...blockProps}>
-				<PostContext postId={context.postId} postType={context.postType} isEditable={false}>
+				<PostContext postId={context.postId} postType={context.postType} isEditable={!Number.isFinite(context.queryId)}>
 					<figure className="wp-block-example-content-item__media">
 						<PostFeaturedImage className="wp-block-example-content-item__image" />
 					</figure>
