@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useMemo } from '@wordpress/element';
-import { POST_CONTEXT } from './context';
+import { DEFAULT_POST_CONTEXT, POST_CONTEXT } from './context';
 
 export const PostContext = (props) => {
 	const { children, postId, postType, isEditable } = props;
@@ -24,8 +24,4 @@ PostContext.propTypes = {
 	isEditable: PropTypes.bool,
 };
 
-PostContext.defaultProps = {
-	postId: null,
-	postType: null,
-	isEditable: null,
-};
+PostContext.defaultProps = DEFAULT_POST_CONTEXT;

@@ -1,9 +1,13 @@
-import { createContext } from '@wordpress/element';
+import { createContext, useContext } from '@wordpress/element';
 
-const DEFAULT_POST_CONTEXT = {
+export const DEFAULT_POST_CONTEXT = {
 	postId: null,
 	postType: null,
 	isEditable: null,
 };
 
 export const POST_CONTEXT = createContext(DEFAULT_POST_CONTEXT);
+
+export const usePostContext = () => {
+	return useContext(POST_CONTEXT);
+};
