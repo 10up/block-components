@@ -2,8 +2,16 @@ import { registerBlockType } from '@wordpress/blocks';
 import { useBlockProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 
-import { PostContext, PostFeaturedImage, PostTitle, PostPrimaryCategory, PostDate, PostCategoryList } from '@10up/block-components';
-import { PostAuthor, PostExcerpt, PostCoAuthors } from '../../../../components';
+import {
+	PostContext,
+	PostFeaturedImage,
+	PostTitle,
+	PostPrimaryCategory,
+	PostDate,
+	PostCategoryList,
+	PostAuthor,
+	PostExcerpt
+} from '@10up/block-components';
 
 const NAMESPACE = 'example';
 
