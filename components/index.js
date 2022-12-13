@@ -18,6 +18,7 @@ export {
 	CircularProgressBar,
 	Counter,
 } from './rich-text-character-limit';
+export { PostContext } from './post-context';
 export { PostTitle } from './post-title';
 export { PostFeaturedImage } from './post-featured-image';
 export { PostExcerpt } from './post-excerpt';
