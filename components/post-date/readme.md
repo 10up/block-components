@@ -18,4 +18,5 @@ function BlockEdit() {
 | Name       | Type              | Default  |  Description                                                   |
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
 | `placeholder` | `string` | `No date set` |  |
+| `format` | `string` |  | Uses the WordPress date format setting of the site |
 | `...rest` | `object` | `{}` |  |

@@ -28,7 +28,7 @@ PostDatePicker.propTypes = {
 };
 
 export const PostDate = (props) => {
-	const { placeholder = __('No date set', 'tenup'), ...rest } = props;
+	const { placeholder = __('No date set', 'tenup'), format = undefined, ...rest } = props;
 
 	const { postId, postType, isEditable } = usePost();
 
@@ -37,7 +37,7 @@ export const PostDate = (props) => {
 	const settings = getSettings();
 	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-	const resolvedFormat = siteFormat || settings.formats.date;
+	const resolvedFormat = format || siteFormat || settings.formats.date;
 
 	const { toggleProps, Popover } = usePopover();
 
@@ -73,8 +73,10 @@ export const PostDate = (props) => {
 
 PostDate.propTypes = {
 	placeholder: PropTypes.string,
+	format: PropTypes.string,
 };
 
 PostDate.defaultProps = {
 	placeholder: __('No date set', 'tenup'),
+	format: undefined,
 };
