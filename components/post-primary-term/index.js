@@ -29,6 +29,7 @@ export const PostPrimaryTerm = (props) => {
 
 	if (isLink) {
 		wrapperProps.href = termUrl;
+		wrapperProps.inert = 'true';
 	}
 
 	return <Tag {...wrapperProps}>{termString}</Tag>;

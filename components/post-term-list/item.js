@@ -1,6 +1,5 @@
 import { useContext } from '@wordpress/element';
 import PropTypes from 'prop-types';
-import { Disabled } from '@wordpress/components';
 import { POST_TERM_ITEM_CONTEXT } from './context';
 
 export const ListItem = (props) => {
@@ -22,10 +21,8 @@ export const TermLink = (props) => {
 	const { link, name } = useContext(POST_TERM_ITEM_CONTEXT);
 
 	return (
-		<Disabled>
-			<a href={link} {...props}>
-				{name}
-			</a>
-		</Disabled>
+		<a href={link} inert="true" {...props}>
+			{name}
+		</a>
 	);
 };

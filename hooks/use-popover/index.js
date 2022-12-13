@@ -27,7 +27,7 @@ export const usePopover = () => {
 		Popover: ({ children }) =>
 			isVisible ? (
 				<Popover ref={ref} anchor={popoverAnchor} focusOnMount={false} animate={false}>
-					<div style={{ padding: '16px' }}>{children}</div>
+					<div style={{ padding: '16px', minWidth: '250px' }}>{children}</div>
 				</Popover>
 			) : null,
 	};
