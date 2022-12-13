@@ -1,5 +1,4 @@
 import { useEntityProp } from '@wordpress/core-data';
-import PropTypes from 'prop-types';
 import { usePost } from '../../hooks';
 import { Image } from '../image';
 
@@ -24,12 +23,4 @@ export const PostFeaturedImage = (props) => {
 			{...props}
 		/>
 	);
-};
-
-PostFeaturedImage.propTypes = {
-	context: PropTypes.object,
-};
-
-PostFeaturedImage.defaultProps = {
-	context: {},
 };
