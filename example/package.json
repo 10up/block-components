@@ -7,6 +7,7 @@
         "build": "wp-scripts build",
         "start": "wp-scripts start",
         "wp-env": "wp-env",
+		"start-env": "wp-env start",
         "import-media": "wp-env run tests-cli wp media import /var/www/html/wp-content/plugins/example/images/1920-1080.png"
     },
     "keywords": [],
