@@ -12,6 +12,8 @@
     "test": "10up-toolkit test-unit-jest",
     "build": "10up-toolkit build",
     "start": "10up-toolkit start",
+	"build-test-env": "npm run build && npm run build -w example/",
+	"start-test-env": "npm run start-env -w example/ && npm run import-media -w example/",
     "test:e2e": "cypress open",
     "prepublishOnly": "npm run build"
   },
