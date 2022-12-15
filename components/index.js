@@ -12,9 +12,5 @@ export { Repeater } from './repeater';
 export { Link } from './link';
 export { MediaToolbar } from './media-toolbar';
 export { Image } from './image';
-export {
-	RichTextCharacterLimit,
-	getCharacterCount,
-	CircularProgressBar,
-	Counter,
-} from './rich-text-character-limit';
+export { RichTextCharacterLimit, getCharacterCount } from './rich-text-character-limit';
+export { CircularProgressBar, Counter } from './counter';
