@@ -20,6 +20,7 @@
     "url": "git+https://github.com/10up/block-components.git"
   },
   "workspaces": [
+	"./",
 	"example/"
   ],
   "keywords": [
