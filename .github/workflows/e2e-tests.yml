@@ -2,7 +2,8 @@ name: Run E2E Test Suite
 on: [ push, workflow_dispatch ]
 
 jobs:
-  install:
+  cypress:
+    name: Cypress
     runs-on: ubuntu-latest
     strategy:
       # when one test fails, DO NOT cancel the other
