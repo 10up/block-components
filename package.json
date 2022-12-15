@@ -48,7 +48,7 @@
     "@floating-ui/react-dom": "^1.0.0",
     "@wordpress/icons": "^9.7.0",
     "array-move": "^3.0.1",
-    "cypress": "^9.5.0",
+    "cypress": "^12.1.0",
     "prop-types": "^15.7.2",
     "uuid": "^8.3.2"
   },
