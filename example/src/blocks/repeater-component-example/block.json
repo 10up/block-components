@@ -1,0 +1,22 @@
+{
+    "name": "example/repeater-component-example",
+    "title": "Repeater component Example",
+    "description": "Example Block to show the Repeater Component in usage",
+    "icon": "smiley",
+    "category": "common",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "items": {
+            "type": "array",
+            "default": [
+                {
+                    "pageName": "",
+                    "visibility": false
+                }
+            ]
+        }
+    }
+}
