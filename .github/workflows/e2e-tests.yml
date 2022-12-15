@@ -14,21 +14,35 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install Dependencies
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Get NPM cache directory
+        id: npm-cache-dir
         run: |
-          npm ci
-          cd example/
-          npm ci
+          echo "::set-output name=dir::$(npm config get cache)"
+      - uses: actions/cache@v3
+        id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install NPM dependencies
+        run: npm ci
+
       - name: Build Plugin Assets
-        run: |
-          npm run build
-          cd example/
-          npm run build
+        run: npm run build --workspaces --if-present
+
       - name: Start WordPress Instance
         run: |
           cd example/
           npm run wp-env start
           npm run import-media
+
       - name: Run Cypress E2E Tests
         uses: cypress-io/github-action@v5
         with:
