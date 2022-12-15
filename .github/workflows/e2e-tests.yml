@@ -30,7 +30,7 @@ jobs:
           npm run wp-env start
           npm run import-media
       - name: Run Cypress E2E Tests
-        uses: cypress-io/github-action@v3.0.2
+        uses: cypress-io/github-action@v5
         with:
           # Sends test results to Cypress Dashboard
           record: true
