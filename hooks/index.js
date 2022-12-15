@@ -14,3 +14,4 @@ export { useSelectedTermsOfSavedPost } from './use-selected-terms-of-saved-post'
 export { useIsPluginActive } from './use-is-plugin-active';
 export { usePrimaryTerm } from './use-primary-term';
 export { usePopover } from './use-popover';
+export { useScript } from './use-script';

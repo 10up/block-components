@@ -28,3 +28,5 @@ export { PostTermList } from './post-term-list';
 export { PostCategoryList } from './post-category-list';
 export { PostPrimaryTerm } from './post-primary-term';
 export { PostPrimaryCategory } from './post-primary-category';
+export { RichTextCharacterLimit, getCharacterCount } from './rich-text-character-limit';
+export { CircularProgressBar, Counter } from './counter';
