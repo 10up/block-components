@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.14.2-next.2",
+  "version": "1.14.2-next.3",
   "description": "10up Components built for the WordPress Block Editor.",
   "main": "./dist/index.js",
   "source": "index.js",
@@ -20,8 +20,8 @@
     "url": "git+https://github.com/10up/block-components.git"
   },
   "workspaces": [
-	"./",
-	"example/"
+    "./",
+    "example/"
   ],
   "keywords": [
     "gutenberg",
