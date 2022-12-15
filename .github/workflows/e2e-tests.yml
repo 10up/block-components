@@ -1,5 +1,9 @@
 name: Run E2E Test Suite 
-on: [ push, workflow_dispatch ]
+on:
+  pull_request:
+  push:
+    branches:
+      - 'develop'
 
 jobs:
   cypress:
