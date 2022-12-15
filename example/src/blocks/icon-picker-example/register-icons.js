@@ -17,11 +17,9 @@ import {
     addSubmenu,
     alignCenter,
     alignJustify,
-    alignJustifyAlt,
     alignLeft,
     alignNone,
     alignRight,
-    archiveTitle,
     arrowDown,
     arrowLeft,
     arrowRight,
@@ -136,11 +134,6 @@ registerIcons({
             label: "alignJustify"
         },
         {
-            source: renderToString( <CoreIcon icon={alignJustifyAlt} />),
-            name: "alignJustifyAlt",
-            label: "alignJustifyAlt"
-        },
-        {
             source: renderToString( <CoreIcon icon={alignLeft} />),
             name: "alignLeft",
             label: "alignLeft"
@@ -154,11 +147,6 @@ registerIcons({
             source: renderToString( <CoreIcon icon={alignRight} />),
             name: "alignRight",
             label: "alignRight"
-        },
-        {
-            source: renderToString( <CoreIcon icon={archiveTitle} />),
-            name: "archiveTitle",
-            label: "archiveTitle"
         },
         {
             source: renderToString( <CoreIcon icon={arrowDown} />),

@@ -1,42 +1,31 @@
 name: Run E2E Test Suite 
+on:
+  pull_request:
+  push:
+    branches:
+      - 'develop'
 
-# Controls when the workflow will run
-on: [ push, workflow_dispatch ]
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-# This workflow contains a single job called "build"
-  test:
-    # The type of runner that the job will run on
+  cypress:
+    name: Cypress
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install Dependencies
-        run: |
-          npm install
-          cd example/
-          npm install
-      - name: Build Plugin Assets
-        run: |
-          npm run build
-          cd example/
-          npm run build
-      - name: Start WordPress Instance
-        run: |
-          cd example/
-          npm run wp-env start
-          npm run import-media
-      - name: Run Cypress E2E Tests
-        uses: cypress-io/github-action@v3.0.2
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          # Sends test results to Cypress Dashboard
+          node-version-file: '.nvmrc'
+      - name: Run Cypress E2E Tests
+        uses: cypress-io/github-action@v5
+        with:
+          build: npm run build --workspaces --if-present
+          start: npm run start-test-env
+          wait-on: http://localhost:8888
+          browser: chrome
           record: true
-          # Whether or not to load balance tests using multiple containers
           parallel: false
-          env: video=false
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

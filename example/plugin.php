@@ -46,11 +46,11 @@ function register_block() {
 			'render_callback' => function( $attributes, $content, $block ) {
 				$title = $attributes['title'];
 
-				$link_one_url   = $attributes['url'];
-				$link_one_label = $attributes['text'];
+				$link_one_url   = isset( $attributes['url'] ) ? $attributes['url'] : '';
+				$link_one_label = isset( $attributes['text'] ) ? $attributes['text'] : '';
 
-				$link_two_url   = $attributes['urlTwo'];
-				$link_two_label = $attributes['textTwo'];
+				$link_two_url   = isset( $attributes['urlTwo'] ) ? $attributes['urlTwo'] : '';
+				$link_two_label = isset( $attributes['textTwo'] ) ? $attributes['textTwo'] : '';
 
 				$wrapper_attributes = get_block_wrapper_attributes();
 
