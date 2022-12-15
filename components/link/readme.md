@@ -1,5 +1,7 @@
 # Link
 
+![Link Component Demo](../../images/link-component.gif)
+
 The `<Link>` Component makes it super simple to add inline links to your custom blocks.
 
 ## Usage
@@ -19,6 +21,10 @@ const BlockEdit = (props) => {
         opensInNewTab: value?.opensInNewTab,
         linkText: value?.title ?? linkText
     });
+    const handleLinkRemove = () => setAttributes({
+        linkUrl: null,
+        opensInNewTab: null,
+    });
 
     return (
         <div {...blockProps}>
@@ -28,6 +34,7 @@ const BlockEdit = (props) => {
                 opensInNewTab={ opensInNewTab }
                 onTextChange={ handleTextChange }
                 onLinkChange={ handleLinkChange }
+                onLinkRemove={ handleLinkRemove }
                 className='example-classname'
                 placeholder='Enter Link Text here...'
             />
@@ -47,6 +54,7 @@ The `<RichText>` node will only render when BlockEdit is selected.
 |  `opensInNewTab` | `boolean` | `false` |     Should the link open in a new tab? |
 |  `url` | `string` | `undefined` |        The actual link to be set as href |
 |  `onLinkChange` | `Function` | `() => {}` |     Callback when the URL is changed |
+|  `onLinkRemove` | `Function` | `null` |     Optional Callback when the URL is removed. The "Unlink" option only gets shown if this prop gets provided |
 |  `onTextChange` | `Function` | `() => {}` |     Callback when the link's text is changed |
 |  `kind` | `string` | `""` |        Page or Post |
 |  `placeholder` | `string` | `Link text ...` |      Text visible before actual value is inserted |

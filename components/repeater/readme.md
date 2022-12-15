@@ -1,6 +1,11 @@
 # Repeater
 
+![Repeater Component Demo](../../images/repeater-component.gif)
+
 A Repeater component that allows you to add repeater fields.
+
+> **Warning**
+> The Repeater component should only be used for repeatable fields inside of the Inspector Sidebar or on custom Settings Pages. For most repeatable content InnerBlocks should be used.
 
 ## Usage
 

@@ -29,11 +29,13 @@ A collection of components built to be used in the block editor. These component
 - [CustomBlockAppender](./components/custom-block-appender/)
 - [IconPicker](./components/icon-picker/)
 - [Image](./components/image/)
+- [Link](./components/link/)
 - [InnerBlockSlider](./components/inner-block-slider/)
 - [IsAdmin](./components//is-admin/)
 - [MediaToolbar](./components/media-toolbar/)
 - [Optional](./components/optional/)
 - [Repeater](./components/repeater/)
+- [RichTextCharacterLimit](./components/rich-text-character-limit)
 
 ## Hooks
 
@@ -42,6 +44,8 @@ A collection of components built to be used in the block editor. These component
 - [useIcons](./hooks/use-icons/)
 - [useMedia](./hooks/use-media/)
 - [useRequestData](./hooks/use-request-data/)
+- [useBlockParentAttributes](./hooks/use-block-parent-attributes/)
+- [useScript](./hooks/use-script/)
 
 ## Stores
 

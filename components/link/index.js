@@ -57,7 +57,7 @@ const StylesRichTextLink = styled(RichText)`
 
 	color: var(--wp--style--color--link);
 	position: relative;
-	display: inline-flex;
+	display: block;
 	align-items: center;
 	gap: 0.5em;
 	text-decoration: underline;
@@ -93,6 +93,7 @@ const StylesRichTextLink = styled(RichText)`
  * @param {boolean} props.opensInNewTab 				Should the link open in a new tab?
  * @param {string} props.url 							The actual link to be set as href
  * @param {Function} props.onLinkChange 				Callback when the URL is changed
+ * @param {Function} props.onLinkRemove 				Callback when the URL is changed
  * @param {Function} props.onTextChange 				Callback when the link's text is changed
  * @param {string} props.kind 							Page or Post
  * @param {string} props.placeholder 					Text visible before actual value is inserted
@@ -107,6 +108,7 @@ const Link = ({
 	url,
 	onLinkChange,
 	onTextChange,
+	onLinkRemove,
 	kind,
 	placeholder,
 	className,
@@ -151,14 +153,23 @@ const Link = ({
 
 			{!isValidLink && (
 				<Tooltip text={__('URL or Text has not been set', '10up-block-components')}>
-					<Icon icon="warning" />
+					{/*
+					 * This additional span is needed to prevent an issue with how the Tooltip tries
+					 * to pass a ref to the Icon component. The Icon component is a functional
+					 * component and does not accept a ref.
+					 *
+					 * @see https://github.com/WordPress/gutenberg/issues/43129
+					 */}
+					<span>
+						<Icon icon="warning" />
+					</span>
 				</Tooltip>
 			)}
 
 			{isPopoverVisible && (
 				<Popover
-					position="bottom center"
 					anchorRef={linkRef.current}
+					anchor={linkRef.current}
 					ref={popoverRef}
 					focusOnMount={false}
 				>
@@ -171,6 +182,7 @@ const Link = ({
 						noURLSuggestion={!!type}
 						suggestionsQuery={getSuggestionsQuery(type, kind)}
 						onChange={onLinkChange}
+						onRemove={onLinkRemove}
 						settings={[
 							{
 								id: 'opensInNewTab',
@@ -188,6 +200,7 @@ Link.defaultProps = {
 	value: undefined,
 	url: undefined,
 	className: undefined,
+	onLinkRemove: null,
 	type: '',
 	kind: '',
 	placeholder: __('Link text ...', '10up-block-components'),
@@ -197,6 +210,7 @@ Link.propTypes = {
 	value: PropTypes.string,
 	url: PropTypes.string,
 	onLinkChange: PropTypes.func.isRequired,
+	onLinkRemove: PropTypes.func,
 	onTextChange: PropTypes.func.isRequired,
 	opensInNewTab: PropTypes.bool.isRequired,
 	type: PropTypes.string,

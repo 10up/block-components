@@ -16,14 +16,32 @@ import { createHigherOrderComponent } from '@wordpress/compose';
  * @property {Function} classNameGenerator function that gets passed the attributes and should return a string for the classname
  * @property {Function} Edit               block edit extension function. Will only get rendered when the block is selected
  * @property {string}   extensionName      unique identifier used for the name of the addFilter calls
+ * @property {string}   order              the order where the extension should be rendered. Can be 'before' or 'after'. Defaults to 'after'
  *
- * @param {string}             blockName name of the block
+ * @param {string|string[]}    blockName name of the block or array of block names
  * @param {BlockOptionOptions} options   configuration options
  */
 function registerBlockExtension(
 	blockName,
-	{ attributes, classNameGenerator, Edit, extensionName },
+	{ attributes, classNameGenerator, Edit, extensionName, order = 'after' },
 ) {
+	const isMultiBlock = Array.isArray(blockName);
+
+	/**
+	 * shouldApplyBlockExtension
+	 *
+	 * @param {string} blockType name of the block
+	 * @returns {boolean} true if the block is the one we want to add the extension to
+	 */
+	const shouldApplyBlockExtension = (blockType) => {
+		if (isMultiBlock) {
+			return blockName.includes(blockType);
+		}
+		return blockType === blockName;
+	};
+
+	const blockNamespace = isMultiBlock ? blockName.join('-') : blockName;
+
 	/**
 	 * addAttributesToBlock
 	 *
@@ -33,7 +51,7 @@ function registerBlockExtension(
 	 */
 	const addAttributesToBlock = (settings, name) => {
 		// return early from the block modification
-		if (name !== blockName) {
+		if (!shouldApplyBlockExtension(name)) {
 			return settings;
 		}
 
@@ -49,7 +67,7 @@ function registerBlockExtension(
 
 	addFilter(
 		'blocks.registerBlockType',
-		`namespace/${blockName}/${extensionName}/addAttributesToBlock`,
+		`namespace/${blockNamespace}/${extensionName}/addAttributesToBlock`,
 		addAttributesToBlock,
 	);
 
@@ -61,14 +79,21 @@ function registerBlockExtension(
 			const { name, isSelected } = props;
 
 			// return early from the block modification
-			if (name !== blockName) {
+			if (!shouldApplyBlockExtension(name)) {
 				return <BlockEdit {...props} />;
 			}
 
+			const shouldRenderBefore = order === 'before' && isSelected;
+			const shouldRenderAfter = order === 'after' && isSelected;
+
+			const shouldRenderFallback = !shouldRenderBefore && !shouldRenderAfter && isSelected;
+
 			return (
 				<>
+					{shouldRenderBefore && <Edit {...props} />}
 					<BlockEdit {...props} />
-					{isSelected && <Edit {...props} />}
+					{shouldRenderAfter && <Edit {...props} />}
+					{shouldRenderFallback && <Edit {...props} />}
 				</>
 			);
 		};
@@ -76,7 +101,7 @@ function registerBlockExtension(
 
 	addFilter(
 		'editor.BlockEdit',
-		`namespace/${blockName}/${extensionName}/addSettingsToBlock`,
+		`namespace/${blockNamespace}/${extensionName}/addSettingsToBlock`,
 		addSettingsToBlock,
 	);
 
@@ -88,7 +113,7 @@ function registerBlockExtension(
 			const { name, attributes } = props;
 
 			// return early from the block modification
-			if (name !== blockName) {
+			if (!shouldApplyBlockExtension(name)) {
 				return <BlockList {...props} />;
 			}
 
@@ -109,7 +134,7 @@ function registerBlockExtension(
 
 	addFilter(
 		'editor.BlockListBlock',
-		`namespace/${blockName}/${extensionName}/addClassNameInEditor`,
+		`namespace/${blockNamespace}/${extensionName}/addClassNameInEditor`,
 		addClassNameInEditor,
 	);
 
@@ -123,7 +148,7 @@ function registerBlockExtension(
 	 */
 	const saveSpacingAttributes = (props, block, attributes) => {
 		// return early from the block modification
-		if (block.name !== blockName) {
+		if (!shouldApplyBlockExtension(block.name)) {
 			return props;
 		}
 
@@ -138,7 +163,7 @@ function registerBlockExtension(
 
 	addFilter(
 		'blocks.getSaveContent.extraProps',
-		`namespace/${blockName}/${extensionName}/saveSpacingAttributes`,
+		`namespace/${blockNamespace}/${extensionName}/saveSpacingAttributes`,
 		saveSpacingAttributes,
 	);
 }
