@@ -12,12 +12,6 @@ export { Repeater } from './repeater';
 export { Link } from './link';
 export { MediaToolbar } from './media-toolbar';
 export { Image } from './image';
-export {
-	RichTextCharacterLimit,
-	getCharacterCount,
-	CircularProgressBar,
-	Counter,
-} from './rich-text-character-limit';
 export { PostContext } from './post-context';
 export { PostTitle } from './post-title';
 export { PostFeaturedImage } from './post-featured-image';
