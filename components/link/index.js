@@ -153,14 +153,23 @@ const Link = ({
 
 			{!isValidLink && (
 				<Tooltip text={__('URL or Text has not been set', '10up-block-components')}>
-					<Icon icon="warning" />
+					{/*
+					 * This additional span is needed to prevent an issue with how the Tooltip tries
+					 * to pass a ref to the Icon component. The Icon component is a functional
+					 * component and does not accept a ref.
+					 *
+					 * @see https://github.com/WordPress/gutenberg/issues/43129
+					 */}
+					<span>
+						<Icon icon="warning" />
+					</span>
 				</Tooltip>
 			)}
 
 			{isPopoverVisible && (
 				<Popover
-					position="bottom center"
 					anchorRef={linkRef.current}
+					anchor={linkRef.current}
 					ref={popoverRef}
 					focusOnMount={false}
 				>
