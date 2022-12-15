@@ -1,11 +1,5 @@
 name: Run Unit Test Suite 
-
-on:
-  pull_request:
-  push:
-    branches:
-      - 'develop'
-  workflow_dispatch:
+on: [push, workflow_dispatch]
 
 jobs:
   jest:
