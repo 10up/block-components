@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
 import { Button, TextHighlight, Tooltip } from '@wordpress/components';
+import { getTextContent, create } from '@wordpress/rich-text';
 
 const ButtonStyled = styled(Button)`
 	&:hover {
@@ -30,10 +31,23 @@ const ButtonStyled = styled(Button)`
  * @param {string} props.searchTerm the search term
  * @param {boolean} props.isSelected whether the item is selected
  * @param {string} props.id the id of the item
+ * @param {Function} props.renderType a callback to override the type text
  * @returns {*} React JSX
  */
-const SearchItem = ({ suggestion, onClick, searchTerm, isSelected, id, contentTypes }) => {
+const SearchItem = ({
+	suggestion,
+	onClick,
+	searchTerm,
+	isSelected,
+	id,
+	contentTypes,
+	renderType,
+}) => {
 	const showType = suggestion.type && contentTypes.length > 1;
+
+	const richTextContent = create({ html: suggestion.title });
+	const textContent = getTextContent(richTextContent);
+	const titleContent = decodeEntities(textContent);
 
 	return (
 		<Tooltip text={decodeEntities(suggestion.title)}>
@@ -55,10 +69,7 @@ const SearchItem = ({ suggestion, onClick, searchTerm, isSelected, id, contentTy
 							paddingRight: !showType ? 0 : null,
 						}}
 					>
-						<TextHighlight
-							text={decodeEntities(suggestion.title)}
-							highlight={searchTerm}
-						/>
+						<TextHighlight text={titleContent} highlight={searchTerm} />
 					</span>
 					<span
 						aria-hidden
@@ -72,8 +83,7 @@ const SearchItem = ({ suggestion, onClick, searchTerm, isSelected, id, contentTy
 				</span>
 				{showType && (
 					<span className="block-editor-link-control__search-item-type">
-						{/* Rename 'post_tag' to 'tag'. Ideally, the API would return the localised CPT or taxonomy label. */}
-						{suggestion.type === 'post_tag' ? 'tag' : suggestion.type}
+						{renderType(suggestion)}
 					</span>
 				)}
 			</ButtonStyled>
@@ -85,6 +95,10 @@ SearchItem.defaultProps = {
 	id: '',
 	searchTerm: '',
 	isSelected: false,
+	renderType: (suggestion) => {
+		// Rename 'post_tag' to 'tag'. Ideally, the API would return the localised CPT or taxonomy label.
+		return suggestion.type === 'post_tag' ? 'tag' : suggestion.type;
+	},
 };
 
 SearchItem.propTypes = {
@@ -94,6 +108,7 @@ SearchItem.propTypes = {
 	onClick: PropTypes.func.isRequired,
 	isSelected: PropTypes.bool,
 	contentTypes: PropTypes.array.isRequired,
+	renderType: PropTypes.func,
 };
 
 export default SearchItem;

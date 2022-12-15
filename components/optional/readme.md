@@ -1,5 +1,7 @@
 # Optional
 
+![Optional Component Demo](../../images/optional-component.gif)
+
 A component that takes care of the logic of rendering nodes only when it is selected.
 
 ## Usage

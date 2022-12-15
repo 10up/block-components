@@ -34,7 +34,7 @@ const StyledIconGrid = styled(NavigableMenu)`
 	}
 `;
 
-const StyledIconButton = styled.div`
+const StyledIconButton = styled(Icon)`
 	background-color: ${({ isSelected }) => (isSelected ? 'black' : 'white')};
 	color: ${({ isSelected }) => (isSelected ? 'white' : 'black')};
 	fill: ${({ isSelected }) => (isSelected ? 'white' : 'black')};
@@ -43,9 +43,20 @@ const StyledIconButton = styled.div`
 	border-radius: 4px;
 	height: 34px;
 	width: 34px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 
 	&:hover {
 		background-color: ${({ isSelected }) => (isSelected ? '#555D66' : '#f3f4f5')};
+	}
+
+	& svg {
+		max-height: 100%;
+		max-width: 100%;
+		height: auto;
+		width: auto;
+		object-fit: contain;
 	}
 `;
 
@@ -106,10 +117,15 @@ const IconGrid = (props) => {
 				const isChecked =
 					selectedIcon?.name === icon.name && selectedIcon?.iconSet === icon.iconSet;
 				const Label = memo(() => (
-					<StyledIconButton isSelected={isChecked}>
-						<Icon key={icon.name} name={icon.name} iconSet={icon.iconSet} />
+					<>
+						<StyledIconButton
+							isSelected={isChecked}
+							key={icon.name}
+							name={icon.name}
+							iconSet={icon.iconSet}
+						/>
 						<VisuallyHidden>{icon.label}</VisuallyHidden>
-					</StyledIconButton>
+					</>
 				));
 				return (
 					<CheckboxControl

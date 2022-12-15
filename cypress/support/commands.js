@@ -1,6 +1,3 @@
-import "cypress-localstorage-commands";
-
-
 Cypress.Commands.add('loginToWordPress', () => {
 	cy.visit('/wp-admin');
 
@@ -92,4 +89,12 @@ Cypress.Commands.add('deletePost', () => {
 
 Cypress.Commands.add('goToAdmin', () => {
 	cy.get('#wp-admin-bar-site-name #wp-admin-bar-dashboard > a').click({ force: true });
+});
+
+Cypress.Commands.add('updatePost', () => {
+	cy.get('[type="button"]').then( $button => {
+		if ( 'Update' === $button.val() || 'Publish' === $button.val() ) {
+			cy.wrap( $button ).click();
+		}
+	} );
 });
