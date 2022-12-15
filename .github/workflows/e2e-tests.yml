@@ -13,30 +13,44 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Install Dependencies
+        uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Get NPM cache directory
+        id: npm-cache-dir
         run: |
-          npm install
-          cd example/
-          npm install
+          echo "::set-output name=dir::$(npm config get cache)"
+      - uses: actions/cache@v3
+        id: npm-cache # use this to check for `cache-hit` ==> if: steps.npm-cache.outputs.cache-hit != 'true'
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Install NPM dependencies
+        run: npm ci
+
       - name: Build Plugin Assets
-        run: |
-          npm run build
-          cd example/
-          npm run build
+        run: npm run build --workspaces --if-present
+
       - name: Start WordPress Instance
         run: |
           cd example/
           npm run wp-env start
           npm run import-media
+
       - name: Run Cypress E2E Tests
-        uses: cypress-io/github-action@v3.0.2
+        uses: cypress-io/github-action@v5
         with:
+          browser: chrome
           # Sends test results to Cypress Dashboard
           record: true
           # Whether or not to load balance tests using multiple containers
           parallel: false
-          env: video=false
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
