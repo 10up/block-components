@@ -55,7 +55,7 @@ const Image = (props) => {
 						<FocalPointPicker
 							label={__('Focal Point Picker')}
 							url={imageUrl}
-							value={focalPoint}
+							value={focalPoint || { x: 0.5, y: 0.5 }}
 							onChange={onChangeFocalPoint}
 						/>
 					</PanelBody>
