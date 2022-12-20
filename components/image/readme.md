@@ -42,9 +42,9 @@ function BlockEdit(props) {
 
 | Name       | Type              | Default  |  Description                                                   |
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
-| `id` | `number`    | `null`   | image id          |
+| `id` | `number`    | `null`   | Image ID          |
 | `onSelect` | `Function` | `null` | Callback that gets called with the new image when one is selected |
-| `size` | `string` | `large` | name of the image size to be displayed |
-| `focalPoint` | `object` | `undefined` | optional focal point object |
+| `size` | `string` | `large` | Name of the image size to be displayed |
+| `focalPoint` | `object` | `undefined` | Optional focal point object. Default settings must be added when used. |
 | `onChangeFocalPoint` | `function` | `undefined` | Callback that gets called with the new focal point when it changes |
-| `...rest` | `*` | `null` | any additional attributes you want to pass to the underlying `img` tag |
+| `...rest` | `*` | `null` | Any additional attributes you want to pass to the underlying `img` tag |
