@@ -17,7 +17,7 @@ const Image = (props) => {
 	const hasImage = !!id;
 	const { media, isResolvingMedia } = useMedia(id);
 
-	const shouldDisplayFocalPointPicker = typeof onChangeFocalPoint !== 'function';
+	const shouldDisplayFocalPointPicker = typeof onChangeFocalPoint === 'function';
 
 	if (!hasImage) {
 		return <MediaPlaceholder onSelect={onSelect} accept="image" multiple={false} />;
