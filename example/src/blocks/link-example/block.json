@@ -33,5 +33,6 @@
             "type": "boolean",
             "default": false
         }
-    }
+    },
+	"render": "file:./render.php"
 }

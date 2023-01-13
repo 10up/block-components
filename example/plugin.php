@@ -32,38 +32,14 @@ function register_block() {
 		false
 	);
 
-	register_block_type(
-		'example/hello-world',
-		[
-			'editor_script' => 'editor-script',
-		]
-	);
+	$blocks_build_dir = plugin_dir_path( __FILE__ ) . 'build/blocks/';
 
-	register_block_type(
-		__DIR__ . '/src/blocks/link-example',
-		[
-			'editor_script'   => 'editor-script',
-			'render_callback' => function( $attributes, $content, $block ) {
-				$title = $attributes['title'];
+	if ( file_exists( $blocks_build_dir ) ) {
+		$block_json_files = glob( $blocks_build_dir . '*/block.json' );
+		foreach ( $block_json_files as $filename ) {
+			$block_folder = dirname( $filename );
+			$block = register_block_type( $block_folder );
+		};
+	};
 
-				$link_one_url   = isset( $attributes['url'] ) ? $attributes['url'] : '';
-				$link_one_label = isset( $attributes['text'] ) ? $attributes['text'] : '';
-
-				$link_two_url   = isset( $attributes['urlTwo'] ) ? $attributes['urlTwo'] : '';
-				$link_two_label = isset( $attributes['textTwo'] ) ? $attributes['textTwo'] : '';
-
-				$wrapper_attributes = get_block_wrapper_attributes();
-
-				ob_start();
-				?>
-				<div <?php echo wp_kses_post( $wrapper_attributes ); ?>>
-					<h2><?php echo wp_kses_post( $title ); ?></h2>
-					<a href="<?php echo esc_url( $link_one_url ); ?>"><?php echo wp_kses_post( $link_one_label ); ?></a>
-					<a href="<?php echo esc_url( $link_two_url ); ?>"><?php echo wp_kses_post( $link_two_label ); ?></a>
-				</div>
-				<?php
-				return ob_get_clean();
-			},
-		]
-	);
 };
