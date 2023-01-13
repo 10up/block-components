@@ -1,0 +1,17 @@
+{
+	"name": "example/hello-world",
+	"title": "Hello World",
+    "description": "Example Block to show the Post Picker in usage",
+    "icon": "smiley",
+    "category": "common",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "selectedPost": {
+            "type": "array"
+        }
+    },
+	"editorScript": "file:./index.js"
+}

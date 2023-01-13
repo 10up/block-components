@@ -2,27 +2,10 @@ import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, Placeholder } from '@wordpress/components';
+import { ContentPicker } from '@10up/block-components';
+import metadata from './block.json';
 
-import {ContentPicker} from '@10up/block-components';
-
-const NAMESPACE = 'example';
-
-registerBlockType( `${ NAMESPACE }/hello-world`, {
-    title: __( 'Hello World', NAMESPACE ),
-    description: __( 'Example Block to show the Post Picker in usage', NAMESPACE ),
-    icon: 'smiley',
-    category: 'common',
-    example: {},
-    supports: {
-        html: false
-    },
-    attributes: {
-        selectedPost: {
-            type: 'array'
-        }
-    },
-    transforms: {},
-    variations: [],
+registerBlockType( metadata, {
     edit: (props) => {
         const {
             className,
@@ -37,9 +20,9 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
         return (
             <>
             <InspectorControls>
-                <PanelBody title={ __( 'Post Picker', NAMESPACE ) }>
+                <PanelBody title={ __( 'Post Picker', 'example' ) }>
                     <ContentPicker 
-                        label={ __( 'Select a Post or Page', NAMESPACE ) }
+                        label={ __( 'Select a Post or Page', 'example' ) }
                         onPickChange={ handlePostSelection }
                         content={ selectedPost }
                         maxContentItems={5}
@@ -47,10 +30,10 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
                     />
                 </PanelBody>
             </InspectorControls>
-            <Placeholder label={ __( 'Post Picker', NAMESPACE ) } instructions={ __( 'Use the text field so search for a post', NAMESPACE) } className={ className }>
+            <Placeholder label={ __( 'Post Picker', 'example' ) } instructions={ __( 'Use the text field so search for a post', 'example') } className={ className }>
                 <ContentPicker 
                     postTypes={ [ 'page', 'post' ] }
-                    label={ __( 'Select a Post or Page', NAMESPACE ) }
+                    label={ __( 'Select a Post or Page', 'example' ) }
                     onPickChange={ handlePostSelection }
                     content={ selectedPost }
                     perPage={3}

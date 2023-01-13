@@ -20,5 +20,6 @@
 				"y": 0.5
 			}
 		}
-    }
+    },
+	"editorScript": "file:./index.js"
 }

@@ -2,25 +2,9 @@ import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { useBlockProps } from '@wordpress/block-editor';
 import { RichTextCharacterLimit } from '@10up/block-components';
+import metadata from './block.json';
 
-const NAMESPACE = 'example';
-
-registerBlockType( `${ NAMESPACE }/rich-text-character-limit`, {
-	apiVersion: 2,
-	title: __( 'Rich Text Character Limit', NAMESPACE ),
-	description: __( 'Example Block to show the Rich Text Character Limit in usage', NAMESPACE ),
-	icon: 'smiley',
-	category: 'common',
-	example: {},
-	supports: {
-		html: false
-	},
-	attributes: {
-		title: {
-			type: 'string',
-			default: ''
-		}
-	},
+registerBlockType( metadata, {
 	edit: (props) => {
 		const {
 			attributes: { title },
@@ -36,7 +20,7 @@ registerBlockType( `${ NAMESPACE }/rich-text-character-limit`, {
 					enforce={true}
 					tagName="h2"
 					value={title}
-					placeholder={ __( 'Enter some text', NAMESPACE ) }
+					placeholder={ __( 'Enter some text', 'example' ) }
 					onChange={(title) => setAttributes({title})}
 					allowedFormats={[
 						'core/bold',

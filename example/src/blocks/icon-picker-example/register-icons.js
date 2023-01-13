@@ -42,6 +42,10 @@ import {
 } from '@wordpress/icons';
 import { renderToString } from '@wordpress/element';
 
+
+console.log("registerIcons");
+
+
 import { registerIcons } from '@10up/block-components';
 
 registerIcons({
