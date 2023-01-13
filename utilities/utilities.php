@@ -143,7 +143,7 @@ function render_icon( $icon_set, $icon_name ) {
  *
  * @param  string $icon_set  Name of the icon set.
  * @param  string $icon_name Name of the icon.
- * @return \BouveTheme\Icon|null
+ * @return \tenup\BlockComponents\Icon|null
  */
 function get_icon( $icon_set, $icon_name ) {
 	return Icons::get_instance()->get_icon( $icon_set, $icon_name );

@@ -24,7 +24,7 @@ class Icons {
 	/**
 	 * Container for the main instance of the class.
 	 *
-	 * @var \BouveTheme\Icons|null
+	 * @var \tenup\BlockComponents\Icons|null
 	 */
 	private static $instance = null;
 
@@ -33,7 +33,7 @@ class Icons {
 	 *
 	 * The instance will be created if it does not exist yet.
 	 *
-	 * @return \BouveTheme\Icons The main instance.
+	 * @return \tenup\BlockComponents\Icons The main instance.
 	 */
 	public static function get_instance() {
 
@@ -100,7 +100,7 @@ class Icons {
 	 *
 	 * @param  string $icon_set  Name of the icon set.
 	 * @param  string $icon_name Name of the icon.
-	 * @return \BouveTheme\Icon|null
+	 * @return \tenup\BlockComponents\Icon|null
 	 */
 	public function get_icon( $icon_set, $icon_name ) {
 
