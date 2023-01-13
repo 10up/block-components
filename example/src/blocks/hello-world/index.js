@@ -39,8 +39,6 @@ registerBlockType( metadata, {
                     perPage={3}
                     maxContentItems={ 5 }
                     isOrderable={ true }
-                    maxContentItems={5}
-                    isOrderable={true}
                 />
             </Placeholder>
             </>
