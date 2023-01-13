@@ -14,6 +14,11 @@
 
 namespace HelloWorld;
 
+// Require Composer autoloader if it exists.
+if ( file_exists( plugin_dir_path( __FILE__ ) . 'vendor/autoload.php' ) ) {
+	require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+}
+
 add_action( 'init', __NAMESPACE__ . '\register_block' );
 /**
  * Register the block

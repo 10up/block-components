@@ -1,0 +1,12 @@
+{
+    "name": "tenup/example",
+    "require": {
+        "tenup/block-components": "@dev"
+    },
+	"repositories": [
+		{
+			"type": "path",
+			"url": "../"
+		}
+	]
+}

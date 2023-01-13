@@ -1,0 +1,45 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "62311067ab3fb771fa0e7d0a20810d3d",
+    "packages": [
+        {
+            "name": "tenup/block-components",
+            "version": "dev-develop",
+            "dist": {
+                "type": "path",
+                "url": "..",
+                "reference": "ac20024594a2003bed47c0b91a8147f8db33f7c6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "tenup\\BlockComponents\\Components\\": "components/",
+                    "tenup\\BlockComponents\\API\\": "api/",
+                    "tenup\\BlockComponents\\Utilities\\": "utilities/"
+                }
+            },
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "10up Components built for the WordPress Block Editor.",
+            "transport-options": {
+                "relative": true
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "tenup/block-components": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.1.0"
+}
