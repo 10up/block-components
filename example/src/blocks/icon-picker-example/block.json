@@ -16,5 +16,6 @@
                 "name": "cloud"
             }
         }
-    }
+    },
+	"render": "file:./render.php"
 }
