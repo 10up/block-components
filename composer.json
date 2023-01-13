@@ -1,0 +1,15 @@
+{
+    "name": "tenup/block-components",
+    "description": "10up Components built for the WordPress Block Editor.",
+    "type": "library",
+    "license": "GPL-2.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "tenup\\BlockComponents\\Components\\": "components/",
+            "tenup\\BlockComponents\\API\\": "api/",
+            "tenup\\BlockComponents\\Utilities\\": "utilities/"
+        }
+    },
+    "minimum-stability": "stable",
+    "require": {}
+}
