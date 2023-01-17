@@ -14,9 +14,19 @@
 
 namespace HelloWorld;
 
+
+ // Useful global constants.
+define( 'EXAMPLE_PLUGIN_TEMPLATE_URL', plugin_dir_url( __FILE__ ) );
+define( 'EXAMPLE_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+define( 'EXAMPLE_PLUGIN_DIST_PATH', EXAMPLE_PLUGIN_PATH . 'dist/' );
+define( 'EXAMPLE_PLUGIN_DIST_URL', EXAMPLE_PLUGIN_TEMPLATE_URL . '/dist/' );
+define( 'EXAMPLE_PLUGIN_INC', EXAMPLE_PLUGIN_PATH . 'includes/' );
+define( 'EXAMPLE_PLUGIN_BLOCK_DIR', EXAMPLE_PLUGIN_INC . 'blocks/' );
+define( 'EXAMPLE_PLUGIN_BLOCK_DIST_DIR', EXAMPLE_PLUGIN_PATH . 'build/blocks/' );
+
 // Require Composer autoloader if it exists.
-if ( file_exists( plugin_dir_path( __FILE__ ) . 'vendor/autoload.php' ) ) {
-	require_once plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
+if ( file_exists( EXAMPLE_PLUGIN_PATH . 'vendor/autoload.php' ) ) {
+	require_once EXAMPLE_PLUGIN_PATH . 'vendor/autoload.php';
 }
 
 add_action( 'init', __NAMESPACE__ . '\register_block' );
@@ -37,10 +47,8 @@ function register_block() {
 	// 	false
 	// );
 
-	$blocks_build_dir = plugin_dir_path( __FILE__ ) . 'build/blocks/';
-
-	if ( file_exists( $blocks_build_dir ) ) {
-		$block_json_files = glob( $blocks_build_dir . '*/block.json' );
+	if ( file_exists( EXAMPLE_PLUGIN_BLOCK_DIST_DIR ) ) {
+		$block_json_files = glob( EXAMPLE_PLUGIN_BLOCK_DIST_DIR . '*/block.json' );
 		foreach ( $block_json_files as $filename ) {
 			$block_folder = dirname( $filename );
 			$block = register_block_type( $block_folder );
