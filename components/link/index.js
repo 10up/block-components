@@ -87,7 +87,7 @@ const StylesRichTextLink = styled(RichText)`
  * The link should not be visible if the block is not focused. This will maintain nicer
  * visuals in the block editor as a whole.
  *
- * @param {object} props								All properties passed to the component.
+ * @param {...object} props								All properties passed to the component.
  * @param {string} props.value 							The text to show inside the link
  * @param {string} props.type 							Post or Page, used to autosuggest content for URL
  * @param {boolean} props.opensInNewTab 				Should the link open in a new tab?
@@ -98,7 +98,6 @@ const StylesRichTextLink = styled(RichText)`
  * @param {string} props.kind 							Page or Post
  * @param {string} props.placeholder 					Text visible before actual value is inserted
  * @param {string} props.className 					    html class to be applied to the anchor element
- * @param {object} rest 								All other properties passed to the component.
  *
  * @returns {*} The rendered component.
  */
