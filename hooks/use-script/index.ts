@@ -2,12 +2,9 @@ import { useEffect, useRef, useState } from '@wordpress/element';
 
 /**
  * Add a script tag to body
- *
- * @param {string} scriptSource Source URL of the script to be loaded.
- * @returns {HTMLScriptElement} The script tag.
  */
-export const useScript = (scriptSource) => {
-	const scriptElement = useRef();
+export const useScript = (scriptSource: string) => {
+	const scriptElement = useRef<HTMLScriptElement>();
 	const [scriptLoaded, setScriptLoaded] = useState(false);
 
 	useEffect(() => {

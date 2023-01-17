@@ -1,15 +1,11 @@
 import { useState, useEffect, useCallback } from '@wordpress/element';
 
-/**
- * useFilteredList
- *
- * @param {Array} list list of items to filter
- * @param {string} searchTerm search term string
- * @param {string?} property name of the prop
- * @returns {Array} filtered list
- */
-export function useFilteredList(list = [], searchTerm = '', property = 'name') {
-	const [filteredList, setFilteredList] = useState(list);
+interface ObjectWithDynamicPropertyArray {
+	[key: string]: any[];
+}
+
+export function useFilteredList<T>(list: T[] = [], searchTerm: string = '', property: string = 'name') {
+	const [filteredList, setFilteredList] = useState<T[]>(list);
 
 	const filterList = useCallback(
 		(searchTerm) => {

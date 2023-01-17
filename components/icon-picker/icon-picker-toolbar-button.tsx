@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 
 import { IconPicker } from './icon-picker';
 import { Icon } from './icon';
+import React from 'react';
 
 const StyledIconPickerDropdown = styled(IconPicker)`
 	margin: 6px;

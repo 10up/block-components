@@ -25,6 +25,7 @@ import {
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
 import { CSS } from '@dnd-kit/utilities';
 import { DragHandle } from '../drag-handle';
+import React from 'react';
 
 /**
  * The Repeater Component.
@@ -48,7 +49,10 @@ export const Repeater = ({ children, attribute, addButton, allowReordering }) =>
 	);
 
 	const { repeaterData, defaultRepeaterData } = useSelect((select) => {
+
+		// @ts-ignore
 		const { getBlockAttributes } = select(blockEditorStore);
+		// @ts-ignore
 		const { getBlockType } = select(blocksStore);
 		const repeaterDataTemp = getBlockAttributes(clientId)[attribute];
 
@@ -60,7 +64,7 @@ export const Repeater = ({ children, attribute, addButton, allowReordering }) =>
 			repeaterData: repeaterDataTemp,
 			defaultRepeaterData: getBlockType(name).attributes[attribute].default,
 		};
-	});
+	}, [clientId, attribute, name]);
 
 	function handleDragEnd(event) {
 		const { active, over } = event;

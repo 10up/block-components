@@ -1,12 +1,13 @@
 import { useSelect } from '@wordpress/data';
 import { useState, useEffect } from '@wordpress/element';
 import { iconStore } from '../../stores';
+import { Icon } from '../../stores/icons/selectors';
 
 function transformIcons(iconSet) {
 	return iconSet.icons.map((icon) => ({ ...icon, iconSet: iconSet.name }));
 }
 
-const useIcons = (iconSet = false) => {
+const useIcons = (iconSet = false): Icon[] => {
 	const [icons, setIcons] = useState([]);
 	const rawIcons = useSelect(
 		(select) => {
@@ -38,7 +39,7 @@ const useIcons = (iconSet = false) => {
 };
 
 const useIcon = (iconSet, name) => {
-	const [icon, setIcon] = useState(null);
+	const [icon, setIcon] = useState<Icon>();
 	const rawIcon = useSelect(
 		(select) => {
 			return select(iconStore).getIcon(iconSet, name);

@@ -1,11 +1,31 @@
 import { MediaPlaceholder, InspectorControls } from '@wordpress/block-editor';
 import { Spinner, FocalPointPicker, PanelBody, Placeholder } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
+import React from 'react';
 
 import { useMedia } from '../../hooks/use-media';
 
-const Image = (props) => {
+type FocalPoint = {
+	x: number,
+	y: number,
+};
+
+type ImageProps = {
+	id: number;
+	size: string;
+	onSelect: Function;
+	onChangeFocalPoint: Function | undefined;
+	focalPoint: FocalPoint;
+	labels: {
+		title: string;
+		instructions: string;
+	};
+	canEditImage: boolean;
+	[key: string]: any;
+};
+
+
+const Image = (props: ImageProps) => {
 	const {
 		id,
 		size = 'full',
@@ -70,27 +90,3 @@ const Image = (props) => {
 };
 
 export { Image };
-
-Image.defaultProps = {
-	size: 'large',
-	focalPoint: { x: 0.5, y: 0.5 },
-	onChangeFocalPoint: undefined,
-	labels: {},
-	canEditImage: true,
-};
-
-Image.propTypes = {
-	id: PropTypes.number.isRequired,
-	size: PropTypes.string,
-	onSelect: PropTypes.func.isRequired,
-	onChangeFocalPoint: PropTypes.func,
-	focalPoint: PropTypes.shape({
-		x: PropTypes.string,
-		y: PropTypes.string,
-	}),
-	labels: PropTypes.shape({
-		title: PropTypes.string,
-		instructions: PropTypes.string,
-	}),
-	canEditImage: PropTypes.bool,
-};

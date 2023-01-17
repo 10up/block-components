@@ -2,8 +2,8 @@ import { useState, useEffect } from '@wordpress/element';
 import { RichText, useBlockEditContext } from '@wordpress/block-editor';
 import { create, remove, getTextContent, toHTMLString } from '@wordpress/rich-text';
 import { useFloating, autoUpdate } from '@floating-ui/react-dom';
-import PropTypes from 'prop-types';
 import { Counter } from '../counter';
+import React from 'react';
 
 /**
  * Get Character Count
@@ -22,15 +22,19 @@ const getCharacterCount = (str) => {
 	return textContent.length;
 };
 
+type RichTextCharacterLimitProps = {
+	limit?: number;
+	enforce?: boolean;
+	value: string;
+	onChange: (str: string) => void;
+};
+
 /**
  * Rich Text Character Limit
  *
  * @description extend `RichText` with the ability to add a character limit.
- *
- * @param {object} props - component props
- * @returns {HTMLElement} <RichTextCharacterLimit />
  */
-const RichTextCharacterLimit = (props) => {
+const RichTextCharacterLimit = (props: RichTextCharacterLimitProps) => {
 	const { limit = 100, enforce = true, value, onChange } = props;
 
 	const { x, y, reference, floating, strategy } = useFloating({
@@ -119,14 +123,3 @@ const RichTextCharacterLimit = (props) => {
 
 export { RichTextCharacterLimit, getCharacterCount };
 
-RichTextCharacterLimit.defaultProps = {
-	limit: 100,
-	enforce: true,
-};
-
-RichTextCharacterLimit.propTypes = {
-	limit: PropTypes.number,
-	enforce: PropTypes.bool,
-	value: PropTypes.string.isRequired,
-	onChange: PropTypes.func.isRequired,
-};

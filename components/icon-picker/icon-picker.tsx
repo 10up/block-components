@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { __ } from '@wordpress/i18n';
 import {
@@ -15,7 +14,9 @@ import { useState, memo } from '@wordpress/element';
 import { useIcons } from '../../hooks/use-icons';
 import { useFilteredList } from '../../hooks/use-filtered-list';
 
+import React from 'react';
 import { Icon } from './icon';
+import type { Icon as IconType} from '../../stores/icons/selectors';
 
 const StyledIconGrid = styled(NavigableMenu)`
 	display: grid;
@@ -60,18 +61,24 @@ const StyledIconButton = styled(Icon)`
 	}
 `;
 
-/**
- * IconPicker
- *
- * @typedef IconPickerProps
- * @property {object} value value of the selected icon
- * @property {Function} onChange change handler for when a new icon is selected
- * @property {string} label label of the icon picker
- *
- * @param {IconPickerProps} props IconPicker Props
- * @returns {*} React Element
- */
-export const IconPicker = (props) => {
+type IconPickerProps = {
+	/**
+	 * value of the selected icon
+	 */
+	value: IconType;
+
+	/**
+	 * change handler for when a new icon is selected
+	 */
+	onChange: Function;
+
+	/**
+	 * label of the icon picker
+	 */
+	label: string;
+};
+
+export const IconPicker = (props: IconPickerProps) => {
 	const { value, onChange, label, ...rest } = props;
 
 	const icons = useIcons();
@@ -80,7 +87,7 @@ export const IconPicker = (props) => {
 	const id = `icon-picker-${instanceId}`;
 
 	const [searchTerm, setSearchTerm] = useState('');
-	const [filteredIcons] = useFilteredList(icons, searchTerm);
+	const [filteredIcons] = useFilteredList<IconType>(icons, searchTerm);
 
 	const hasIcons = !!filteredIcons.length;
 
@@ -98,17 +105,13 @@ export const IconPicker = (props) => {
 	);
 };
 
-IconPicker.defaultProps = {
-	label: '',
+type IconGridProps = {
+	icons: IconType[];
+	selectedIcon: IconType;
+	onChange: Function;
 };
 
-IconPicker.propTypes = {
-	value: PropTypes.object.isRequired,
-	onChange: PropTypes.func.isRequired,
-	label: PropTypes.string,
-};
-
-const IconGrid = (props) => {
+const IconGrid = (props: IconGridProps) => {
 	const { icons, selectedIcon, onChange } = props;
 
 	return (
@@ -141,8 +144,3 @@ const IconGrid = (props) => {
 	);
 };
 
-IconGrid.propTypes = {
-	icons: PropTypes.array.isRequired,
-	selectedIcon: PropTypes.object.isRequired,
-	onChange: PropTypes.func.isRequired,
-};

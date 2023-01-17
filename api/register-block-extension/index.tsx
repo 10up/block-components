@@ -1,9 +1,22 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/jsx-props-no-spreading */
-
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import classnames from 'classnames';
+import React from 'react';
+
+type BlockOptionOptions = {
+	// object for new attributes that should get added to the block
+	attributes: object;
+	// function that gets passed the attributes and should return a string for the classname
+	classNameGenerator: (attributes: object) => string;
+	// function that gets passed the attributes and should return an object for the inline styles
+	inlineStyleGenerator: (attributes: object) => object;
+	// block edit extension function. Will only get rendered when the block is selected
+	Edit: React.FC;
+	// unique identifier used for the name of the addFilter calls
+	extensionName: string;
+	// the order where the extension should be rendered. Can be 'before' or 'after'. Defaults to 'after'
+	order?: 'before' | 'after';
+};
 
 /**
  * registerBlockExtension
@@ -11,21 +24,10 @@ import classnames from 'classnames';
  * A helper function that allows you to add custom settings to any block.
  * Under the hood it filters the blocks registerBlockType, BlockEdit, BlockListBlock
  * and getSaveContent.extraProps filters.
- *
- * @typedef BlockOptionOptions
- * @property {object}   attributes           object for new attributes that should get added to the block
- * @property {Function} classNameGenerator   function that gets passed the attributes and should return a string for the classname
- * @property {Function} inlineStyleGenerator function that gets passed the attributes and should return an object for the inline styles
- * @property {Function} Edit                 block edit extension function. Will only get rendered when the block is selected
- * @property {string}   extensionName        unique identifier used for the name of the addFilter calls
- * @property {string}   order                the order where the extension should be rendered. Can be 'before' or 'after'. Defaults to 'after'
- *
- * @param {string|string[]}    blockName name of the block or array of block names
- * @param {BlockOptionOptions} options   configuration options
  */
 function registerBlockExtension(
-	blockName,
-	{ attributes, classNameGenerator, inlineStyleGenerator, Edit, extensionName, order = 'after' },
+	blockName: string | string[],
+	{ attributes, classNameGenerator, inlineStyleGenerator, Edit, extensionName, order = 'after' }: BlockOptionOptions,
 ) {
 	const isMultiBlock = Array.isArray(blockName);
 
@@ -126,7 +128,7 @@ function registerBlockExtension(
 			const additionalClassName = classNameGenerator(attributes);
 			const newClassName = classnames(className, additionalClassName);
 
-			let additionalStyles = null;
+			let additionalStyles = {};
 			let newStyles = { ...style };
 			if (typeof inlineStyleGenerator === 'function') {
 				additionalStyles = inlineStyleGenerator(attributes);
@@ -172,7 +174,7 @@ function registerBlockExtension(
 		const additionalClassName = classNameGenerator(attributes);
 		const newClassName = classnames(className, additionalClassName);
 
-		let additionalStyles = null;
+		let additionalStyles = {};
 		let newStyles = { ...style };
 		if (typeof inlineStyleGenerator === 'function') {
 			additionalStyles = inlineStyleGenerator(attributes);

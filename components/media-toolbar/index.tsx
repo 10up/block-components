@@ -1,8 +1,15 @@
 import { __ } from '@wordpress/i18n';
 import { MediaReplaceFlow, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
-import PropTypes from 'prop-types';
 import { useMedia } from '../../hooks/use-media';
+import React from 'react';
+
+type MediaToolbarProps = {
+	id: number;
+	onSelect: (media: any) => void;
+	onRemove: () => void;
+	isOptional?: boolean;
+};
 
 /**
  * MediaToolbar
@@ -11,11 +18,8 @@ import { useMedia } from '../../hooks/use-media';
  * with some buttons to add or remove an image.
  *
  * This should be used on components that have optional images.
- *
- * @param {object} props options
- * @returns {object} markup of the ToolbarGroup
  */
-export const MediaToolbar = (props) => {
+export const MediaToolbar = (props: MediaToolbarProps) => {
 	const { onSelect, onRemove, isOptional = false, id } = props;
 
 	const hasImage = !!id;
@@ -50,15 +54,4 @@ export const MediaToolbar = (props) => {
 			)}
 		</ToolbarGroup>
 	);
-};
-
-MediaToolbar.defaultProps = {
-	isOptional: false,
-};
-
-MediaToolbar.propTypes = {
-	id: PropTypes.number.isRequired,
-	onSelect: PropTypes.func.isRequired,
-	onRemove: PropTypes.func.isRequired,
-	isOptional: PropTypes.bool,
 };

@@ -6,7 +6,7 @@
   "version": "1.15.10",
   "description": "10up Components built for the WordPress Block Editor.",
   "main": "./dist/index.js",
-  "source": "index.js",
+  "source": "index.ts",
   "scripts": {
     "lint": "10up-toolkit lint-js",
     "test": "10up-toolkit test-unit-jest",
@@ -59,6 +59,9 @@
   },
   "devDependencies": {
     "@10up/cypress-wp-utils": "github:10up/cypress-wp-utils#build",
+    "@wordpress/block-editor": "^11.2.0",
+    "@wordpress/core-data": "^6.2.0",
+    "@wordpress/data": "^8.2.0",
     "@wordpress/dependency-extraction-webpack-plugin": "^4.6.0",
     "10up-toolkit": "^4.3.1",
     "classnames": "^2.3.2",

@@ -5,6 +5,7 @@ import { useCallback } from '@wordpress/element';
 
 import { IconPicker } from './icon-picker';
 import { Icon } from './icon';
+import React from 'react';
 
 const StyledIconPickerDropdown = styled(IconPicker)`
 	margin: 6px;
@@ -23,15 +24,11 @@ const StyledIconPickerDropdown = styled(IconPicker)`
 export const InlineIconPicker = (props) => {
 	const { value, ...rest } = props;
 	const IconButton = useCallback(
-		({ onToggle }) => (
+		({ onToggle }: { onToggle: Function}) => (
 			<Icon name={value.name} iconSet={value.iconSet} onClick={onToggle} {...rest} />
 		),
 		[value, rest],
 	);
-
-	IconButton.propTypes = {
-		onToggle: PropTypes.func.isRequired,
-	};
 
 	return <IconPickerDropdown renderToggle={IconButton} {...props} />;
 };

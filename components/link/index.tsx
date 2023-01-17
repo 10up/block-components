@@ -3,7 +3,6 @@
  */
 import classnames from 'classnames';
 import styled from '@emotion/styled';
-import PropTypes from 'prop-types';
 
 /**
  * WordPress dependencies
@@ -17,6 +16,7 @@ import { __experimentalLinkControl as LinkControl, RichText } from '@wordpress/b
  * Internal Dependencies
  */
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
+import React from 'react';
 
 /**
  * Given the Link block's type attribute, return the query params to give to
@@ -81,25 +81,59 @@ const StylesRichTextLink = styled(RichText)`
 	}
 `;
 
+type LinkProps = {
+	/**
+	 * The text to show inside the link
+	 */
+	value: string;
+	/**
+	 * The URL to link to
+	 */
+	url: string;
+	/**
+	 * Callback when the URL is changed
+	 */
+	onLinkChange: Function;
+	/**
+	 * Callback when the URL is changed
+	 */
+	onLinkRemove: Function;
+	/**
+	 * Callback when the link's text is changed
+	 */
+	onTextChange: Function;
+	/**
+	 * Should the link open in a new tab?
+	 */
+	opensInNewTab: Function;
+	/**
+	 * Post or Page, used to autosuggest content for URL
+	 */
+	type: string;
+	/**
+	 * Page or Post
+	 */
+	kind: string;
+	/**
+	 * html class to be applied to the anchor element
+	 */
+	className: string;
+	/**
+	 * Text visible before actual value is inserted
+	 */
+	placeholder: string;
+
+	/**
+	 * All other props passed to the component
+	 */
+	[key: string]: any;
+};
+
 /**
  * Link component that can be used inside other Gutenberg blocks for setting up URLs.
  *
  * The link should not be visible if the block is not focused. This will maintain nicer
- * visuals in the block editor as a whole.
- *
- * @param {...object} props								All properties passed to the component.
- * @param {string} props.value 							The text to show inside the link
- * @param {string} props.type 							Post or Page, used to autosuggest content for URL
- * @param {boolean} props.opensInNewTab 				Should the link open in a new tab?
- * @param {string} props.url 							The actual link to be set as href
- * @param {Function} props.onLinkChange 				Callback when the URL is changed
- * @param {Function} props.onLinkRemove 				Callback when the URL is changed
- * @param {Function} props.onTextChange 				Callback when the link's text is changed
- * @param {string} props.kind 							Page or Post
- * @param {string} props.placeholder 					Text visible before actual value is inserted
- * @param {string} props.className 					    html class to be applied to the anchor element
- *
- * @returns {*} The rendered component.
+ * visuals in the block editor as a whole.43a (start refactor to typescript):components/link/index.tsx
  */
 const Link = ({
 	value,
@@ -113,7 +147,7 @@ const Link = ({
 	placeholder,
 	className,
 	...rest
-}) => {
+}: LinkProps) => {
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 	const [isValidLink, setIsValidLink] = useState(false);
 	const openPopover = () => setIsPopoverVisible(true);
@@ -196,29 +230,6 @@ const Link = ({
 			)}
 		</>
 	);
-};
-
-Link.defaultProps = {
-	value: undefined,
-	url: undefined,
-	className: undefined,
-	onLinkRemove: null,
-	type: '',
-	kind: '',
-	placeholder: __('Link text ...', '10up-block-components'),
-};
-
-Link.propTypes = {
-	value: PropTypes.string,
-	url: PropTypes.string,
-	onLinkChange: PropTypes.func.isRequired,
-	onLinkRemove: PropTypes.func,
-	onTextChange: PropTypes.func.isRequired,
-	opensInNewTab: PropTypes.bool.isRequired,
-	type: PropTypes.string,
-	kind: PropTypes.string,
-	className: PropTypes.string,
-	placeholder: PropTypes.string,
 };
 
 export { Link };

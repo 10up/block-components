@@ -1,7 +1,7 @@
 import { forwardRef } from '@wordpress/element';
-import PropTypes from 'prop-types';
 import cx from 'classnames';
 import styled from '@emotion/styled';
+import React from 'react';
 
 const StyledSvg = styled('svg')`
 	transform: rotate(-90deg);
@@ -136,6 +136,12 @@ const CircularProgressBar = (props) => {
 	);
 };
 
+type CounterProps = {
+	count: number;
+	limit: number;
+	[x: string]: any;
+};
+
 /**
  * Counter
  *
@@ -143,7 +149,7 @@ const CircularProgressBar = (props) => {
  *
  * @returns <Counter />
  */
-const Counter = forwardRef((props, ref) => {
+const Counter = forwardRef((props: CounterProps, ref: React.LegacyRef<HTMLDivElement>) => {
 	const { count, limit } = props;
 	const percentage = (count / limit) * 100;
 	return (
@@ -162,9 +168,5 @@ const Counter = forwardRef((props, ref) => {
 		</StyledCounter>
 	);
 });
-
-CircularProgressBar.propTypes = {
-	percentage: PropTypes.number.isRequired,
-};
 
 export { CircularProgressBar, Counter };

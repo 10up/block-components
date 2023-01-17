@@ -1,5 +1,5 @@
 import { useSelect } from '@wordpress/data';
-import { useBlockEditContext } from '@wordpress/block-editor';
+import { useBlockEditContext, store as blockEditorStore } from '@wordpress/block-editor';
 
 /**
  * useHasSelectedInnerBlock
@@ -10,5 +10,5 @@ import { useBlockEditContext } from '@wordpress/block-editor';
 export function useHasSelectedInnerBlock() {
 	const { clientId } = useBlockEditContext();
 
-	return useSelect((select) => select('core/block-editor').hasSelectedInnerBlock(clientId, true));
+	return useSelect((select) => select(blockEditorStore).hasSelectedInnerBlock(clientId, true));
 }
