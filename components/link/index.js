@@ -98,6 +98,7 @@ const StylesRichTextLink = styled(RichText)`
  * @param {string} props.kind 							Page or Post
  * @param {string} props.placeholder 					Text visible before actual value is inserted
  * @param {string} props.className 					    html class to be applied to the anchor element
+ * @param {object} rest 								All other properties passed to the component.
  *
  * @returns {*} The rendered component.
  */
@@ -112,6 +113,7 @@ const Link = ({
 	kind,
 	placeholder,
 	className,
+	...rest
 }) => {
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 	const [isValidLink, setIsValidLink] = useState(false);
@@ -149,6 +151,7 @@ const Link = ({
 				allowedFormats={[]}
 				onClick={openPopover}
 				ref={linkRef}
+				{...rest}
 			/>
 
 			{!isValidLink && (
