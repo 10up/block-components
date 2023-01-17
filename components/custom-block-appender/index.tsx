@@ -7,8 +7,10 @@ import PropTypes from 'prop-types';
 /**
  * WordPress dependencies
  */
+// @ts-ignore
 import { Inserter } from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
+import React from 'react';
 
 /**
  * CustomBlockAppender.

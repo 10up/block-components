@@ -4,6 +4,7 @@ import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
 import { Button, TextHighlight, Tooltip } from '@wordpress/components';
 import { getTextContent, create } from '@wordpress/rich-text';
+import React from 'react';
 
 const ButtonStyled = styled(Button)`
 	&:hover {
@@ -20,6 +21,20 @@ const ButtonStyled = styled(Button)`
 		background-color: rgba(0, 0, 0, 0.05);
 	}
 `;
+
+type SearchItemProps = {
+	id: string;
+	searchTerm: string;
+	suggestion: {
+		type: string;
+		title: string;
+		url: string;
+	};
+	onClick: Function;
+	isSelected: boolean;
+	contentTypes: [];
+	renderType: Function;
+};
 
 /**
  * SearchItem
@@ -42,7 +57,7 @@ const SearchItem = ({
 	id,
 	contentTypes,
 	renderType,
-}) => {
+}: SearchItemProps) => {
 	const showType = suggestion.type && contentTypes.length > 1;
 
 	const richTextContent = create({ html: suggestion.title });
@@ -66,7 +81,7 @@ const SearchItem = ({
 					<span
 						className="block-editor-link-control__search-item-title"
 						style={{
-							paddingRight: !showType ? 0 : null,
+							paddingRight: !showType ? 0 : undefined,
 						}}
 					>
 						<TextHighlight text={titleContent} highlight={searchTerm} />
@@ -75,7 +90,7 @@ const SearchItem = ({
 						aria-hidden
 						className="block-editor-link-control__search-item-info"
 						style={{
-							paddingRight: !showType ? 0 : null,
+							paddingRight: !showType ? 0 : undefined,
 						}}
 					>
 						{filterURLForDisplay(safeDecodeURI(suggestion.url)) || ''}
@@ -89,26 +104,6 @@ const SearchItem = ({
 			</ButtonStyled>
 		</Tooltip>
 	);
-};
-
-SearchItem.defaultProps = {
-	id: '',
-	searchTerm: '',
-	isSelected: false,
-	renderType: (suggestion) => {
-		// Rename 'post_tag' to 'tag'. Ideally, the API would return the localised CPT or taxonomy label.
-		return suggestion.type === 'post_tag' ? 'tag' : suggestion.type;
-	},
-};
-
-SearchItem.propTypes = {
-	id: PropTypes.string,
-	searchTerm: PropTypes.string,
-	suggestion: PropTypes.object.isRequired,
-	onClick: PropTypes.func.isRequired,
-	isSelected: PropTypes.bool,
-	contentTypes: PropTypes.array.isRequired,
-	renderType: PropTypes.func,
 };
 
 export default SearchItem;

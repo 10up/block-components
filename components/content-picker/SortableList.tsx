@@ -8,6 +8,7 @@ import {
 } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import PropTypes from 'prop-types';
+import React from 'react';
 import PickedItem from './PickedItem';
 
 const SortableList = ({ posts, isOrderable, handleItemDelete, mode, setPosts }) => {

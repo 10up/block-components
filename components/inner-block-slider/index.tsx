@@ -1,12 +1,22 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import { useEffect, useState, useRef } from '@wordpress/element';
+// @ts-ignore
 import { createBlock } from '@wordpress/blocks';
-import { InnerBlocks } from '@wordpress/block-editor';
-import PropTypes from 'prop-types';
+// @ts-ignore
+import { InnerBlocks, store as blockEditorStore } from '@wordpress/block-editor';
 /** @jsx jsx */
 // eslint-disable-next-line no-unused-vars
 import { jsx, css } from '@emotion/react';
 import { ChevronLeft, ChevronRight } from './icons';
+import React from 'react';
+
+type InnerBlockSliderProps = {
+	slidesPerPage: number;
+	parentBlockId: string;
+	allowedBlock: string;
+	template?: [[string]];
+	slideHeight: string;
+};
 
 const InnerBlockSlider = ({
 	parentBlockId,
@@ -14,7 +24,7 @@ const InnerBlockSlider = ({
 	allowedBlock,
 	template,
 	slideHeight,
-}) => {
+}: InnerBlockSliderProps) => {
 	const [currentPage, setCurrentPage] = useState(1);
 
 	let innerBlockTemplate = template;
@@ -24,12 +34,12 @@ const InnerBlockSlider = ({
 	}
 
 	const slideBlocks = useSelect(
-		(select) => select('core/block-editor').getBlock(parentBlockId).innerBlocks,
+		(select) => select(blockEditorStore).getBlock(parentBlockId).innerBlocks, [ parentBlockId ]
 	);
 
 	const { insertBlock } = useDispatch('core/editor');
 
-	const slides = useRef();
+	const slides = useRef<HTMLDivElement>();
 
 	const slideCount = useRef();
 
@@ -156,20 +166,6 @@ const InnerBlockSlider = ({
 			</div>
 		</div>
 	);
-};
-
-InnerBlockSlider.defaultProps = {
-	slidesPerPage: 1,
-	template: null,
-	slideHeight: null,
-};
-
-InnerBlockSlider.propTypes = {
-	slidesPerPage: PropTypes.number,
-	parentBlockId: PropTypes.string.isRequired,
-	allowedBlock: PropTypes.string.isRequired,
-	template: PropTypes.array,
-	slideHeight: PropTypes.string,
 };
 
 export { InnerBlockSlider };

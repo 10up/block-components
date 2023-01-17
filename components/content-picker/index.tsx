@@ -6,6 +6,7 @@ import { __ } from '@wordpress/i18n';
 import { v4 as uuidv4 } from 'uuid';
 import { ContentSearch } from '../content-search';
 import SortableList from './SortableList';
+import React from 'react';
 
 const NAMESPACE = 'tenup-content-picker';
 

@@ -1,3 +1,5 @@
+import React from "react";
+
 /**
  * Renders an SVG drag handle.
  *

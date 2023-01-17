@@ -4,6 +4,7 @@ import { store as coreStore } from '@wordpress/core-data';
 export function useMedia(id) {
 	return useSelect(
 		(select) => {
+			// @ts-ignore
 			const { getMedia, isResolving, hasFinishedResolution } = select(coreStore);
 
 			const mediaParameters = [id, { context: 'view' }];

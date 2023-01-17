@@ -1,11 +1,11 @@
 import { TextControl, Spinner, NavigableMenu, Button } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
-import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 // eslint-disable-next-line no-unused-vars
 import { jsx, css } from '@emotion/react';
 import SearchItem from './SearchItem';
+import React from 'react';
 /** @jsx jsx */
 
 const NAMESPACE = 'tenup-content-search';
@@ -13,18 +13,31 @@ const NAMESPACE = 'tenup-content-search';
 // Equalize height of list icons to match loader in order to reduce jumping.
 const listMinHeight = '46px';
 
-const ContentSearch = ({
-	onSelectItem,
-	placeholder,
-	label,
-	contentTypes,
-	mode,
-	perPage,
-	queryFilter,
-	excludeItems,
-	renderItemType,
-	fetchInitialResults,
-}) => {
+type ContentSearchProps = {
+	contentTypes: [];
+	mode: 'post' | 'user' | 'term';
+	onSelectItem: Function;
+	queryFilter: Function;
+	placeholder: string;
+	excludeItems: [];
+	label: string;
+	perPage: number;
+	renderItemType: Function;
+	fetchInitialResults: boolean;
+};
+
+export const ContentSearch = ({
+	contentTypes: ['post', 'page'],
+	placeholder: '',
+	perPage: 20,
+	label: '',
+	mode: 'post',
+	excludeItems: [],
+	queryFilter: (query) => query,
+	onSelectItem: () => {},
+	renderItemType: undefined,
+	fetchInitialResults: false,
+}: ContentSearchProps) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchQueries, setSearchQueries] = useState({});
 	const [selectedItem, setSelectedItem] = useState(null);
@@ -429,33 +442,3 @@ const ContentSearch = ({
 		</NavigableMenu>
 	);
 };
-
-ContentSearch.defaultProps = {
-	contentTypes: ['post', 'page'],
-	placeholder: '',
-	perPage: 20,
-	label: '',
-	mode: 'post',
-	excludeItems: [],
-	queryFilter: (query) => query,
-	onSelectItem: () => {
-		console.log('Select!'); // eslint-disable-line no-console
-	},
-	renderItemType: undefined,
-	fetchInitialResults: false,
-};
-
-ContentSearch.propTypes = {
-	contentTypes: PropTypes.array,
-	mode: PropTypes.oneOf(['post', 'user', 'term']),
-	onSelectItem: PropTypes.func,
-	queryFilter: PropTypes.func,
-	placeholder: PropTypes.string,
-	excludeItems: PropTypes.array,
-	label: PropTypes.string,
-	perPage: PropTypes.number,
-	renderItemType: PropTypes.func,
-	fetchInitialResults: PropTypes.bool,
-};
-
-export { ContentSearch };

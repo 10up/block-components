@@ -60,6 +60,7 @@
   "devDependencies": {
     "@10up/cypress-wp-utils": "github:10up/cypress-wp-utils#build",
     "@wordpress/block-editor": "^11.2.0",
+    "@wordpress/blocks": "^12.2.0",
     "@wordpress/core-data": "^6.2.0",
     "@wordpress/data": "^8.2.0",
     "@wordpress/dependency-extraction-webpack-plugin": "^4.6.0",
