@@ -9,6 +9,7 @@ import { useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { DragHandle } from '../drag-handle';
 import React from 'react';
+import { store as coreStore } from '@wordpress/core-data';
 
 const StyledCloseButton = styled('button')`
 	display: block;
@@ -41,6 +42,18 @@ function getType(mode) {
 	return type;
 }
 
+type PickedItemProps = {
+	item: {
+		id: number;
+		type?: string;
+		uuid: string;
+	};
+	isOrderable: boolean;
+	handleItemDelete: Function;
+	mode: string;
+	id: string | number;
+};
+
 /**
  * PickedItem
  *
@@ -52,7 +65,7 @@ function getType(mode) {
  * @param {number|string} props.id id of the item
  * @returns {*} React JSX
  */
-const PickedItem = ({ item, isOrderable, handleItemDelete, mode, id }) => {
+const PickedItem = ({ item, isOrderable = false, handleItemDelete, mode, id }: PickedItemProps) => {
 	const type = getType(mode);
 
 	const { attributes, isDragging, listeners, setNodeRef, transform, transition } = useSortable({
@@ -63,13 +76,16 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, mode, id }) => {
 	// empty, it will return null, which is handled in the effect below.
 	const preparedItem = useSelect(
 		(select) => {
-			const { getEntityRecord, hasFinishedResolution } = select('core');
+			// @ts-ignore
+			const { getEntityRecord, hasFinishedResolution } = select(coreStore);
 
 			const getEntityRecordParameters = [type, item.type, item.id];
-			const result = getEntityRecord(...getEntityRecordParameters);
+			const result: any = getEntityRecord(...getEntityRecordParameters);
 
 			if (result) {
-				const newItem = {
+				const newItem: {
+					[key: string]: any;
+				} = {
 					title: mode === 'post' ? result.title.rendered : result.name,
 					url: result.link,
 					id: result.id,
@@ -139,18 +155,6 @@ const PickedItem = ({ item, isOrderable, handleItemDelete, mode, id }) => {
 			</StyledCloseButton>
 		</li>
 	);
-};
-
-PickedItem.defaultProps = {
-	isOrderable: false,
-};
-
-PickedItem.propTypes = {
-	item: PropTypes.object.isRequired,
-	isOrderable: PropTypes.bool,
-	handleItemDelete: PropTypes.func.isRequired,
-	mode: PropTypes.string.isRequired,
-	id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 };
 
 export default PickedItem;

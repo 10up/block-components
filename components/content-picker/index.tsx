@@ -32,44 +32,94 @@ const ContentPickerWrapper = styled('div')`
 	width: 100%;
 `;
 
-/**
- * Content Picker
- *
- * @param {object} props React props
- * @param {string} props.label label for the picker
- * @param {string} props.mode mode of the picker
- * @param {Array} props.contentTypes array of content types to filter by
- * @param {string} props.placeholder placeholder text for the search input
- * @param {Function} props.onPickChange callback for when the picker changes
- * @param {Function} props.queryFilter callback that allows to modify the query
- * @param {number} props.maxContentItems max number of items to show in the picker
- * @param {boolean} props.isOrderable whether or not the picker is sortable
- * @param {string} props.singlePickedLabel label for the single picked item
- * @param {string} props.multiPickedLabel label for the multi picked item
- * @param {Array} props.content items to show in the picker
- * @param {boolean} props.uniqueContentItems whether or not the picker should only show unique items
- * @param {boolean} props.excludeCurrentPost whether or not to exclude the current post from the picker
- * @param {number} props.perPage number of items to show per page
- * @param {boolean} props.fetchInitialResults whether or not to fetch initial results on mount
- * @returns {*} React JSX
- */
-const ContentPicker = ({
-	label,
-	mode,
-	contentTypes,
-	placeholder,
-	onPickChange,
-	queryFilter,
-	maxContentItems,
-	isOrderable,
-	singlePickedLabel,
-	multiPickedLabel,
-	content,
-	uniqueContentItems,
-	excludeCurrentPost,
-	perPage,
-	fetchInitialResults,
-}) => {
+type ContentPickerProps = {
+	/**
+	 * Array of content types to filter by
+	 */
+	contentTypes: string[];
+	/**
+	 * Array of content items to show in the picker
+	 */
+	content: {
+		id: number;
+		type?: string;
+		uuid?: string;
+	}[];
+	/**
+	 * Placeholder text for the search input
+	 */
+	placeholder: string;
+	/**
+	 * Mode of the picker
+	 */
+	mode: 'post' | 'user' | 'term';
+	/**
+	 * Label for the picker
+	 */
+	label: string;
+	/**
+	 * Label for the multi picked item
+	 */
+	multiPickedLabel: string;
+	/**
+	 * Label for the single picked item
+	 */
+	singlePickedLabel: string;
+	/**
+	 * Whether or not the picker is sortable
+	 */
+	isOrderable: boolean;
+	/**
+	 * Callback for when the picker changes
+	 */
+	onPickChange: Function;
+	/**
+	 * Callback that allows to modify the query
+	 */
+	queryFilter?: Function;
+	/**
+	 * Whether or not the picker should only show unique items
+	 */
+	uniqueContentItems: boolean;
+	/**
+	 * Whether or not to exclude the current post from the picker
+	 */
+	excludeCurrentPost: boolean;
+	/**
+	 * Max number of items to show in the picker
+	 */
+	maxContentItems: number;
+	/**
+	 * Number of items to show per page
+	 */
+	perPage: number;
+
+	/**
+	 * Whether or not to fetch initial results on mount
+	 * @default true
+	 */
+	fetchInitialResults?: boolean;
+};
+
+export const ContentPicker = ({
+	label = '',
+	mode = 'post',
+	onPickChange = (ids) => {
+		console.log('Content picker list change', ids); // eslint-disable-line no-console
+	},
+	queryFilter = undefined,
+	contentTypes = ['post', 'page'],
+	placeholder = '',
+	content = [],
+	perPage = 20,
+	maxContentItems = 1,
+	uniqueContentItems = true,
+	isOrderable = false,
+	excludeCurrentPost = true,
+	multiPickedLabel = __('You have selected the following items:', '10up-block-components'),
+	singlePickedLabel = __('You have selected the following item:', '10up-block-components'),
+	fetchInitialResults = true,
+}: ContentPickerProps) => {
 	const currentPostId = select('core/editor')?.getCurrentPostId();
 
 	/**
@@ -79,7 +129,8 @@ const ContentPicker = ({
 	if (content.length && typeof content[0] !== 'object') {
 		for (let i = 0; i < content.length; i++) {
 			content[i] = {
-				id: content[i],
+				id: Number(content[i]),
+				uuid: uuidv4(),
 				type: contentTypes[0],
 			};
 		}
@@ -114,6 +165,7 @@ const ContentPicker = ({
 		if (excludeCurrentPost && currentPostId) {
 			items.push({
 				id: currentPostId,
+				uuid: uuidv4(),
 			});
 		}
 
@@ -172,43 +224,3 @@ const ContentPicker = ({
 		</ContentPickerWrapper>
 	);
 };
-
-ContentPicker.defaultProps = {
-	label: '',
-	mode: 'post',
-	onPickChange: (ids) => {
-		console.log('Content picker list change', ids); // eslint-disable-line no-console
-	},
-	queryFilter: undefined,
-	contentTypes: ['post', 'page'],
-	placeholder: '',
-	content: [],
-	perPage: 20,
-	maxContentItems: 1,
-	uniqueContentItems: true,
-	isOrderable: false,
-	excludeCurrentPost: true,
-	multiPickedLabel: __('You have selected the following items:', '10up-block-components'),
-	singlePickedLabel: __('You have selected the following item:', '10up-block-components'),
-	fetchInitialResults: false,
-};
-
-ContentPicker.propTypes = {
-	contentTypes: PropTypes.array,
-	content: PropTypes.array,
-	placeholder: PropTypes.string,
-	mode: PropTypes.oneOf(['post', 'user', 'term']),
-	label: PropTypes.string,
-	multiPickedLabel: PropTypes.string,
-	singlePickedLabel: PropTypes.string,
-	isOrderable: PropTypes.bool,
-	onPickChange: PropTypes.func,
-	queryFilter: PropTypes.func,
-	uniqueContentItems: PropTypes.bool,
-	excludeCurrentPost: PropTypes.bool,
-	maxContentItems: PropTypes.number,
-	perPage: PropTypes.number,
-	fetchInitialResults: PropTypes.bool,
-};
-
-export { ContentPicker };

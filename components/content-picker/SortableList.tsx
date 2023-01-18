@@ -11,7 +11,17 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import PickedItem from './PickedItem';
 
-const SortableList = ({ posts, isOrderable, handleItemDelete, mode, setPosts }) => {
+type SortableListProps = {
+	posts: {
+		uuid: string;
+	}[];
+	isOrderable: boolean;
+	handleItemDelete: Function;
+	mode: string;
+	setPosts: Function;
+};
+
+const SortableList = ({ posts, isOrderable = false, handleItemDelete, mode = 'post', setPosts }: SortableListProps) => {
 	const hasMultiplePosts = posts.length > 1;
 
 	const items = posts.map((item) => item.uuid);
@@ -44,19 +54,6 @@ const SortableList = ({ posts, isOrderable, handleItemDelete, mode, setPosts }) 
 			</SortableContext>
 		</DndContext>
 	);
-};
-
-SortableList.defaultProps = {
-	isOrderable: false,
-	mode: 'post',
-};
-
-SortableList.propTypes = {
-	posts: PropTypes.array.isRequired,
-	isOrderable: PropTypes.bool,
-	handleItemDelete: PropTypes.func.isRequired,
-	mode: PropTypes.string,
-	setPosts: PropTypes.func.isRequired,
 };
 
 export default SortableList;

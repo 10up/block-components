@@ -1,37 +1,41 @@
-/* eslint-disable react/jsx-props-no-spreading */
-/**
- * External dependencies
- */
-import PropTypes from 'prop-types';
-
-/**
- * WordPress dependencies
- */
 // @ts-ignore
 import { Inserter } from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
 import React from 'react';
+
+type CustomBlockAppenderProps = {
+	/**
+	 * Client ID of the block where this is being used.
+	 */
+	rootClientId: string;
+	/**
+	 * Text to display in the Button.
+	 */
+	buttonText?: string;
+	/**
+	 * The icon to use.
+	 */
+	icon?: string;
+	/**
+	 * class names to be added to the button.
+	 */
+	className?: string;
+	[key: string]: any;
+};
 
 /**
  * CustomBlockAppender.
  *
  * Provide a Button component to trigger the inserter.
  * Any undocumented props are spread onto the Button component.
- *
- * @param {object} props              All props sent to this component.
- * @param {string} props.rootClientId Client ID of the block where this is being used.
- * @param {string} props.className    class names to be added to the button.
- * @param {string} [props.buttonText] Text to display in the Button.
- * @param {string} [props.icon]       The icon to use.
- * @returns {Function} The component.
  */
-const CustomBlockAppender = ({
+export const CustomBlockAppender = ({
 	rootClientId,
 	buttonText,
 	icon,
 	className = 'custom-block-appender',
 	...buttonProps
-}) => {
+}: CustomBlockAppenderProps) => {
 	return (
 		<Inserter
 			isAppender
@@ -50,20 +54,3 @@ const CustomBlockAppender = ({
 		/>
 	);
 };
-
-CustomBlockAppender.propTypes = {
-	rootClientId: PropTypes.string.isRequired,
-	buttonText: PropTypes.string,
-	label: PropTypes.string,
-	icon: PropTypes.string,
-	className: PropTypes.string,
-};
-
-CustomBlockAppender.defaultProps = {
-	buttonText: '',
-	label: '',
-	icon: 'plus',
-	className: 'custom-block-appender',
-};
-
-export { CustomBlockAppender };
