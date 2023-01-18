@@ -95,7 +95,7 @@ function useDefaultAvatar() {
 }
 
 export const Avatar = (props) => {
-	const { tagName: TagName = 'img', ...rest } = props;
+	const { ...rest } = props;
 
 	/**
 	 * @type {Author}
@@ -107,15 +107,7 @@ export const Avatar = (props) => {
 
 	const avatarSourceUrl = avatarUrls ? avatarUrls[avatarUrls.length - 1] : defaultAvatar;
 
-	return <TagName src={avatarSourceUrl} {...rest} />;
-};
-
-Avatar.propTypes = {
-	tagName: PropTypes.string,
-};
-
-Avatar.defaultProps = {
-	tagName: 'img',
+	return <img src={avatarSourceUrl} {...rest} />;
 };
 
 export const Bio = (props) => {
