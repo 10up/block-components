@@ -26,17 +26,15 @@ export const IconPickerToolbarButton = (props) => {
 		buttonLabel,
 	} = props;
 
+	const buttonIcon = name && iconSet ? <Icon name={name} iconSet={iconSet} /> : null;
+
 	return (
 		<Dropdown
 			className="component-icon-picker-toolbar-button"
 			contentClassName="component-icon-picker-toolbar-button__content"
 			position="bottom right"
 			renderToggle={({ isOpen, onToggle }) => (
-				<ToolbarButton
-					onClick={onToggle}
-					aria-expanded={isOpen}
-					icon={<Icon name={name} iconSet={iconSet} />}
-				>
+				<ToolbarButton onClick={onToggle} aria-expanded={isOpen} icon={buttonIcon}>
 					{buttonLabel ?? __('Select Icon')}
 				</ToolbarButton>
 			)}

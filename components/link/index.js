@@ -87,7 +87,7 @@ const StylesRichTextLink = styled(RichText)`
  * The link should not be visible if the block is not focused. This will maintain nicer
  * visuals in the block editor as a whole.
  *
- * @param {object} props								All properties passed to the component.
+ * @param {...object} props								All properties passed to the component.
  * @param {string} props.value 							The text to show inside the link
  * @param {string} props.type 							Post or Page, used to autosuggest content for URL
  * @param {boolean} props.opensInNewTab 				Should the link open in a new tab?
@@ -112,6 +112,7 @@ const Link = ({
 	kind,
 	placeholder,
 	className,
+	...rest
 }) => {
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 	const [isValidLink, setIsValidLink] = useState(false);
@@ -149,6 +150,7 @@ const Link = ({
 				allowedFormats={[]}
 				onClick={openPopover}
 				ref={linkRef}
+				{...rest}
 			/>
 
 			{!isValidLink && (
