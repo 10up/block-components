@@ -56,8 +56,7 @@ Returns the first name of the Author
 #### Props
 
 | Name       | Type              | Default  |  Description                                                   |
-| ---------- | ----------------- | -------- |
--------------------------------------------------------------- |
+| ---------- | ----------------- | -------- | -------------------------------------------------------------- |
 | `tagName` | `string` | `span` | the tag name that should be used for the element |
 | `...rest` | `object` | `{}` |  |
 
