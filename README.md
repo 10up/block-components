@@ -37,6 +37,21 @@ A collection of components built to be used in the block editor. These component
 - [Repeater](./components/repeater/)
 - [RichTextCharacterLimit](./components/rich-text-character-limit)
 
+### Post related Components
+
+These components read/write information from the global post object or a `PostContext`.
+
+- [PostAuthor](./components/post-author/)
+- [PostCategoryList](./components/post-category-list/)
+- [PostContext](./components/post-context/)
+- [PostDate](./components/post-date)
+- [PostExcerpt](./components/post-excerpt/)
+- [PostFeaturedImage](./components/post-featured-image/)
+- [PostPrimaryCategory](./components/post-primary-category/)
+- [PostPrimaryTerm](./components/post-primary-term/)
+- [PostTermList](./components/post-term-list/)
+- [PostTitle](./components/post-title/)
+
 ## Hooks
 
 - [useFilteredList](./hooks/use-filtered-list)
@@ -46,6 +61,20 @@ A collection of components built to be used in the block editor. These component
 - [useRequestData](./hooks/use-request-data/)
 - [useBlockParentAttributes](./hooks/use-block-parent-attributes/)
 - [useScript](./hooks/use-script/)
+- [useIsPluginActive](./hooks/use-is-plugin-active/)
+- [usePopover](./hooks/use-popover/)
+
+### Post related hooks
+
+These hooks read/write information from the global post object or a `PostContext`.
+
+- [useAllTerms](./hooks/use-all-terms/)
+- [useIsSupportedTaxonomy](./hooks/use-is-supported-taxonomy/)
+- [usePost](./hooks/use-post/)
+- [usePrimaryTerm](./hooks/use-primary-term/)
+- [useSelectedTermIds](./hooks/use-selected-term-ids/)
+- [useSelectedTerms](./hooks/use-selected-terms/)
+- [useSelectedTermsOfSavedPost](./hooks/use-selected-terms-of-saved-post/)
 
 ## Stores
 
