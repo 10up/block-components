@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.14.2-next.3",
+  "version": "1.14.4",
   "description": "10up Components built for the WordPress Block Editor.",
   "main": "./dist/index.js",
   "source": "index.js",
@@ -12,8 +12,8 @@
     "test": "10up-toolkit test-unit-jest",
     "build": "10up-toolkit build",
     "start": "10up-toolkit start",
-	"build-test-env": "npm run build --workspaces --if-present",
-	"start-test-env": "npm run start-env -w example/ && npm run import-media -w example/",
+    "build-test-env": "npm run build --workspaces --if-present",
+    "start-test-env": "npm run start-env -w example/ && npm run import-media -w example/",
     "test:e2e": "cypress open",
     "prepublishOnly": "npm run build"
   },

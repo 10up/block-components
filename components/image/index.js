@@ -12,7 +12,7 @@ const Image = (props) => {
 		id,
 		size = 'full',
 		onSelect,
-		focalPoint = undefined,
+		focalPoint = { x: 0.5, y: 0.5 },
 		onChangeFocalPoint,
 		fallback,
 		...rest
@@ -20,17 +20,20 @@ const Image = (props) => {
 	const hasImage = !!id && id !== -1;
 	const { media, isResolvingMedia } = useMedia(id);
 
-	console.count('Image Component Renders');
+	const shouldDisplayFocalPointPicker = typeof onChangeFocalPoint === 'function';
 
-	const hasFocalPoint = !!focalPoint;
-	const hasFallbackImage = !!fallback;
-
-	if (hasFocalPoint && typeof onChangeFocalPoint !== 'function') {
-		// eslint-disable-next-line no-console
-		console.warn('onChangeFocalPoint is required when focalPoint is set');
+	if (!hasImage) {
+		return <MediaPlaceholder onSelect={onSelect} accept="image" multiple={false} />;
 	}
 
-	if (hasFocalPoint) {
+	if (isResolvingMedia) {
+		return <Spinner />;
+	}
+
+	const imageUrl = media?.media_details?.sizes[size]?.source_url ?? media?.source_url;
+	const altText = media?.alt_text;
+
+	if (shouldDisplayFocalPointPicker) {
 		const focalPointStyle = {
 			objectFit: 'cover',
 			objectPosition: `${focalPoint.x * 100}% ${focalPoint.y * 100}%`,
@@ -92,7 +95,7 @@ const Image = (props) => {
 
 	return (
 		<>
-			{hasFocalPoint && (
+			{shouldDisplayFocalPointPicker && (
 				<InspectorControls>
 					<PanelBody title={__('Image Settings')}>
 						<FocalPointPicker
@@ -114,7 +117,7 @@ export { Image };
 Image.defaultProps = {
 	size: 'large',
 	fallback: '',
-	focalPoint: undefined,
+	focalPoint: { x: 0.5, y: 0.5 },
 	onChangeFocalPoint: undefined,
 };
 
