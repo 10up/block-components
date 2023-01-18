@@ -2,6 +2,12 @@ import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import classnames from 'classnames';
 import React from 'react';
+import type { BlockConfiguration, BlockAttributes } from '@wordpress/blocks';
+
+/**
+ * name of the block or array of block names
+ */
+type BlockTypeName = `${string}/${string}` | "*";
 
 type BlockOptionOptions = {
 	// object for new attributes that should get added to the block
@@ -26,22 +32,15 @@ type BlockOptionOptions = {
  * and getSaveContent.extraProps filters.
  */
 function registerBlockExtension(
-	blockName: string | string[],
+	blockName: BlockTypeName | BlockTypeName[],
 	{ attributes, classNameGenerator, inlineStyleGenerator, Edit, extensionName, order = 'after' }: BlockOptionOptions,
 ) {
 	const isMultiBlock = Array.isArray(blockName);
 
-	/**
-	 * shouldApplyBlockExtension
-	 *
-	 * @param {string} blockType name of the block
-	 * @returns {boolean} true if the block is the one we want to add the extension to
-	 */
-	const shouldApplyBlockExtension = (blockType) => {
+	const shouldApplyBlockExtension = (blockType: BlockTypeName) => {
 		if (blockName === '*') {
 			return true;
 		}
-
 		if (isMultiBlock) {
 			return blockName.includes(blockType);
 		}
@@ -50,14 +49,7 @@ function registerBlockExtension(
 
 	const blockNamespace = isMultiBlock ? blockName.join('-') : blockName;
 
-	/**
-	 * addAttributesToBlock
-	 *
-	 * @param {object} settings block settings
-	 * @param {string} name     block name
-	 * @returns {Array}
-	 */
-	const addAttributesToBlock = (settings, name) => {
+	const addAttributesToBlock = (settings: BlockConfiguration, name: BlockTypeName) => {
 		// return early from the block modification
 		if (!shouldApplyBlockExtension(name)) {
 			return settings;
@@ -79,9 +71,7 @@ function registerBlockExtension(
 		addAttributesToBlock,
 	);
 
-	/**
-	 * addSettingsToBlock
-	 */
+
 	const addSettingsToBlock = createHigherOrderComponent((BlockEdit) => {
 		return (props) => {
 			const { name, isSelected } = props;
@@ -113,9 +103,6 @@ function registerBlockExtension(
 		addSettingsToBlock,
 	);
 
-	/**
-	 * addAdditionalPropertiesInEditor
-	 */
 	const addAdditionalPropertiesInEditor = createHigherOrderComponent((BlockList) => {
 		return (props) => {
 			const { name, attributes, className, style, wrapperProps } = props;
@@ -155,22 +142,14 @@ function registerBlockExtension(
 		addAdditionalPropertiesInEditor,
 	);
 
-	/**
-	 * addAdditionalPropertiesToSavedMarkup
-	 *
-	 * @param {object} props      block props
-	 * @param {object} block      block object
-	 * @param {object} attributes block attributes
-	 * @returns {object}
-	 */
-	const addAdditionalPropertiesToSavedMarkup = (props, block, attributes) => {
-		const { className, style } = props;
 
+	const addAdditionalPropertiesToSavedMarkup = (props, block, attributes) => {
 		// return early from the block modification
 		if (!shouldApplyBlockExtension(block.name)) {
 			return props;
 		}
 
+		const { className, style } = props;
 		const additionalClassName = classNameGenerator(attributes);
 		const newClassName = classnames(className, additionalClassName);
 
