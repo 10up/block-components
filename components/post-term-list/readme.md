@@ -43,6 +43,12 @@ function BlockEdit() {
 
 ## Child Components
 
+You can use this component in three different ways. Without any children it will just return some default markup containing the name of the term. Alternatively you can pass a render function as the children. This render function will get the term object passed into it. The third option is using the provided sub-components as shown in the example code. Each of these child component again automatically manages the data and allows you to just focus on the markup.
+
+## Sub-Components
+
+These are all the available sub-components of the `PostTermList` component.
+
 ### `PostTermList.ListItem`
 
 ### `PostTermList.TermLink`
