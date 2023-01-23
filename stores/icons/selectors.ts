@@ -1,16 +1,6 @@
 /* eslint-disable no-prototype-builtins */
 
-export type Icon = {
-	name: string;
-	source: string;
-	iconSet: string;
-	label: string;
-};
-
-export type IconSet = {
-	name: string;
-	icons: Icon[];
-};
+import { Icon, IconSet } from "./types";
 
 /**
  * Returns all icons sets

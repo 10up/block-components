@@ -1,4 +1,7 @@
 /* eslint-disable default-param-last */
+
+import { ActionTypes } from './types';
+
 /**
  * Reducer managing the block style variations.
  *
@@ -9,7 +12,7 @@
  */
 export default function reducer(state = { iconSets: {} }, action) {
 	switch (action.type) {
-		case 'REGISTER_ICON_SET':
+		case ActionTypes.REGISTER_ICON_SET:
 			return {
 				...state,
 				iconSets: {
@@ -17,7 +20,7 @@ export default function reducer(state = { iconSets: {} }, action) {
 					[action.iconSet.name]: action.iconSet,
 				},
 			};
-		case 'REMOVE_ICON_SET':
+		case ActionTypes.REMOVE_ICON_SET:
 			// eslint-disable-next-line no-prototype-builtins
 			if (state.iconSets.hasOwnProperty(action.name)) {
 				const newState = { ...state };

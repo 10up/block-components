@@ -12,11 +12,6 @@ import * as actions from './actions';
 
 const STORE_NAME = 'tenup/icons';
 
-/**
- * Store definition for the icons namespace.
- *
- * @type {object}
- */
 export const store = createReduxStore(STORE_NAME, {
 	reducer,
 	selectors,
