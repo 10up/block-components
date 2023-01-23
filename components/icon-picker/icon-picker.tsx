@@ -16,7 +16,7 @@ import { useFilteredList } from '../../hooks/use-filtered-list';
 
 import React from 'react';
 import { Icon } from './icon';
-import type { Icon as IconType} from '../../stores/icons/selectors';
+import type { Icon as IconType} from '../../stores/icons/types';
 
 const StyledIconGrid = styled(NavigableMenu)`
 	display: grid;
