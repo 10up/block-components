@@ -61,7 +61,7 @@ const StyledIconButton = styled(Icon)`
 	}
 `;
 
-type IconPickerProps = {
+export type IconPickerProps = {
 	/**
 	 * value of the selected icon
 	 */

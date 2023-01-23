@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import { Dropdown, ToolbarButton } from '@wordpress/components';
 import styled from '@emotion/styled';

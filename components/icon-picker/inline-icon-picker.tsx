@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { Dropdown } from '@wordpress/components';
 import { useCallback } from '@wordpress/element';
@@ -6,22 +5,14 @@ import { useCallback } from '@wordpress/element';
 import { IconPicker } from './icon-picker';
 import { Icon } from './icon';
 import React from 'react';
+import type { IconPickerProps } from './icon-picker';
 
 const StyledIconPickerDropdown = styled(IconPicker)`
 	margin: 6px;
 	width: 306px;
 `;
 
-/**
- * InlineIconPicker
- *
- * @typedef InlineIconPickerProps
- * @property {string} buttonLabel label
- *
- * @param {InlineIconPickerProps} props InlineIconPickerProps
- * @returns {*}
- */
-export const InlineIconPicker = (props) => {
+export const InlineIconPicker = (props: IconPickerProps) => {
 	const { value, ...rest } = props;
 	const IconButton = useCallback(
 		({ onToggle }: { onToggle: Function }) => (
@@ -33,11 +24,11 @@ export const InlineIconPicker = (props) => {
 	return <IconPickerDropdown renderToggle={IconButton} {...props} />;
 };
 
-InlineIconPicker.propTypes = {
-	value: PropTypes.object.isRequired,
+interface IconPickerDropdownProps extends IconPickerProps {
+	renderToggle: Function;
 };
 
-export const IconPickerDropdown = (props) => {
+export const IconPickerDropdown = (props: IconPickerDropdownProps) => {
 	const { renderToggle, ...iconPickerProps } = props;
 	return (
 		<Dropdown
@@ -48,8 +39,4 @@ export const IconPickerDropdown = (props) => {
 			renderContent={() => <StyledIconPickerDropdown {...iconPickerProps} />}
 		/>
 	);
-};
-
-IconPickerDropdown.propTypes = {
-	renderToggle: PropTypes.func.isRequired,
 };

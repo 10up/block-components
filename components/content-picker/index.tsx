@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { select } from '@wordpress/data';
 import { useMemo } from '@wordpress/element';

@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import { useCopyToClipboard } from '@wordpress/compose';
 import { useState, useEffect } from '@wordpress/element';
 import { Button } from '@wordpress/components';

@@ -4,7 +4,6 @@ import { useSelect, dispatch } from '@wordpress/data';
 import { cloneElement } from '@wordpress/element';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
 
 import {
@@ -27,17 +26,26 @@ import { CSS } from '@dnd-kit/utilities';
 import { DragHandle } from '../drag-handle';
 import React from 'react';
 
-/**
- * The Repeater Component.
- *
- * @param {object} props React props
- * @param {Function} props.children Render prop to render the children.
- * @param {string} props.attribute property of the block attribute that will provide data for Repeater.
- * @param {string} props.addButton render prop to customize the "Add item" button.
- * @param {boolean} props.allowReordering boolean to toggle reordering of Repeater items.
- * @returns {*} React JSX
- */
-export const Repeater = ({ children, attribute, addButton, allowReordering }) => {
+export type RepeaterProps = {
+	/**
+	 * Render prop to render the children.
+	 */
+	children: React.ReactNode;
+	/**
+	 * property of the block attribute that will provide data for Repeater.
+	 */
+	attribute: string;
+	/**
+	 * render prop to customize the "Add item" button.
+	 */
+	addButton?: Function | null;
+	/**
+	 * boolean to toggle reordering of Repeater items.
+	 */
+	allowReordering: boolean;
+};
+
+export const Repeater = ({ children, attribute = 'items', addButton = null, allowReordering = false }: RepeaterProps) => {
 	const { clientId, name } = useBlockEditContext();
 	const { updateBlockAttributes } = dispatch(blockEditorStore);
 
@@ -192,18 +200,30 @@ export const Repeater = ({ children, attribute, addButton, allowReordering }) =>
 	);
 };
 
-/**
- * The Sortable Item Component.
- *
- * @param {object} props React props
- * @param {Function} props.children Render prop to render the children.
- * @param {object} props.item The repeater item object.
- * @param {Function} props.setItem A function to set state of a repeater item.
- * @param {Function} props.removeItem A function to delete a repeater item.
- * @param {string} props.id A string identifier for a repeater item.
- * @returns {*} React JSX
- */
-const SortableItem = ({ children, item, setItem, removeItem, id }) => {
+export type SortableItemProps = {
+	/**
+	 * Render prop to render the children.
+	 */
+	children: Function;
+	/**
+	 * A function to set state of a repeater item.
+	 */
+	setItem?: Function | null;
+	/**
+	 * A function to delete a repeater item.
+	 */
+	removeItem?: Function | null;
+	/**
+	 * The repeater item object.
+	 */
+	item: Object;
+	/**
+	 * A string identifier for a repeater item.
+	 */
+	id: string;
+};
+
+const SortableItem = ({ children, item = {}, setItem = null, removeItem = null, id = '' }: SortableItemProps) => {
 	const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
 		id,
 	});
@@ -215,6 +235,11 @@ const SortableItem = ({ children, item, setItem, removeItem, id }) => {
 		zIndex: isDragging ? 999 : 1,
 		position: 'relative',
 	};
+
+	// check if the children is a function
+	if (typeof children !== 'function') {
+		return null;
+	}
 
 	const repeaterItem = children(item, id, setItem, removeItem);
 	const clonedRepeaterChild = cloneElement(
@@ -233,36 +258,4 @@ const SortableItem = ({ children, item, setItem, removeItem, id }) => {
 	);
 
 	return clonedRepeaterChild;
-};
-
-Repeater.defaultProps = {
-	attribute: 'items',
-	addButton: null,
-	allowReordering: false,
-};
-
-Repeater.propTypes = {
-	children: PropTypes.func.isRequired,
-	attribute: PropTypes.string,
-	addButton: PropTypes.func,
-	allowReordering: PropTypes.bool,
-};
-
-SortableItem.defaultProps = {
-	attribute: 'items',
-	addItem: null,
-	setItem: null,
-	removeItem: null,
-	item: {},
-	id: '',
-};
-
-SortableItem.propTypes = {
-	children: PropTypes.func.isRequired,
-	attribute: PropTypes.string,
-	addItem: PropTypes.func,
-	setItem: PropTypes.func,
-	removeItem: PropTypes.func,
-	item: PropTypes.object,
-	id: PropTypes.string,
 };
