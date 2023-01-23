@@ -21,19 +21,19 @@ type ColorSettingProps = {
 	 */
 	label: string;
 	/**
-	 * If this property is added, a help text will be generated using help property as the content.
+	 * If true, the label will only be visible to screen readers
 	 */
 	hideLabelFromVision: boolean;
 	/**
-	 * If no className is passed only components-base-control is used.
+	 * If this property is added, a help text will be generated using help property as the content.
 	 */
 	help: string;
 	/**
-	 * If true, the label will only be visible to screen readers
+	 * If no className is passed only components-base-control is used.
 	 */
 	className: string;
 	/**
-	 * Array with the colors to be shown.
+	 * Whether to allow custom color or not.
 	 */
 	disableCustomColors: boolean;
 	/**
@@ -41,15 +41,15 @@ type ColorSettingProps = {
 	 */
 	value: string;
 	/**
-	 * Whether to allow custom color or not.
+	 * Whether the palette should have a clearing button or not.
 	 */
 	clearable: boolean;
 	/**
-	 * Callback called when a color is selected.
+	 * Array with the colors to be shown.
 	 */
 	colors: PaletteObject[];
 	/**
-	 * Whether the palette should have a clearing button or not.
+	 * Callback called when a color is selected.
 	 */
 	onChange: (value: string) => void;
 };
