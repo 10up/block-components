@@ -44,7 +44,7 @@ function getType(mode) {
 type PickedItemProps = {
 	item: {
 		id: number;
-		type?: string;
+		type: string;
 		uuid: string;
 	};
 	isOrderable: boolean;
@@ -52,6 +52,8 @@ type PickedItemProps = {
 	mode: string;
 	id: string | number;
 };
+
+type GetEntityRecordTuple = [string, string, number];
 
 /**
  * PickedItem
@@ -75,10 +77,10 @@ const PickedItem = ({ item, isOrderable = false, handleItemDelete, mode, id }: P
 	// empty, it will return null, which is handled in the effect below.
 	const preparedItem = useSelect(
 		(select) => {
-			// @ts-ignore
+			// @ts-ignore - TS doesn't know about the `hasFinishedResolution` selector.
 			const { getEntityRecord, hasFinishedResolution } = select(coreStore);
 
-			const getEntityRecordParameters = [type, item.type, item.id];
+			const getEntityRecordParameters: GetEntityRecordTuple = [type, item.type, item.id];
 			const result: any = getEntityRecord(...getEntityRecordParameters);
 
 			if (result) {
