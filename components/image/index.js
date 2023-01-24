@@ -12,6 +12,7 @@ const Image = (props) => {
 		onSelect,
 		focalPoint = { x: 0.5, y: 0.5 },
 		onChangeFocalPoint,
+		labels = {},
 		...rest
 	} = props;
 	const hasImage = !!id;
@@ -20,7 +21,9 @@ const Image = (props) => {
 	const shouldDisplayFocalPointPicker = typeof onChangeFocalPoint === 'function';
 
 	if (!hasImage) {
-		return <MediaPlaceholder onSelect={onSelect} accept="image" multiple={false} />;
+		return (
+			<MediaPlaceholder labels={labels} onSelect={onSelect} accept="image" multiple={false} />
+		);
 	}
 
 	if (isResolvingMedia) {
@@ -67,6 +70,7 @@ Image.defaultProps = {
 	size: 'large',
 	focalPoint: { x: 0.5, y: 0.5 },
 	onChangeFocalPoint: undefined,
+	labels: {},
 };
 
 Image.propTypes = {
@@ -77,5 +81,9 @@ Image.propTypes = {
 	focalPoint: PropTypes.shape({
 		x: PropTypes.string,
 		y: PropTypes.string,
+	}),
+	labels: PropTypes.shape({
+		title: PropTypes.string,
+		instructions: PropTypes.string,
 	}),
 };
