@@ -37,6 +37,10 @@ function BlockEdit(props) {
 }
 ```
 
+*Note: If you enable `isEditable` prop in the `<PostContext>` component for posts that aren't the current post this will actually update the external post. This should be used with caution since it may not be immediately obvious for users.*
+
+![Block Editor Save button showing an indicator for unsaved external changes](../../images/block-editor-unsaved-external-change.png)
+
 ## Props
 
 | Name       | Type              | Default  |  Description                                                   |
