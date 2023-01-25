@@ -51,4 +51,21 @@ These are all the available sub-components of the `PostTermList` component.
 
 ### `PostTermList.ListItem`
 
+Returns the list item markup
+
+#### Props
+
+| Name       | Type              | Default  |  Description                                                   |
+| ---------- | ----------------- | -------- | -------------------------------------------------------------- |
+| `tagName` | `string` | `li` | the tag name that should be used for the element |
+| `...rest` | `object` | `{}` |  |
+
 ### `PostTermList.TermLink`
+
+Returns the anchor element containing the title of the term
+
+#### Props
+
+| Name       | Type              | Default  |  Description                                                   |
+| ---------- | ----------------- | -------- | -------------------------------------------------------------- |
+| `...rest` | `object` | `{}` |  |
