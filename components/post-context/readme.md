@@ -19,6 +19,24 @@ function BlockEdit() {
 }
 ```
 
+The `PostContext` component works great with the Core Query Loop block if you want / need to create a custom block to be used within the post template. Any block that gets used inside the query loop can access the current post id, post type, and query id via the block context. These values can then be used within the `<PostContext>` to make them available for any of the post level components nested within.
+
+```js
+import { PostContext, PostTitle } from '@10up/block-components';
+
+function BlockEdit(props) {
+    const { context } = props;
+    const { postId, postType, queryId } = context;
+    const isDescendantOfQueryLoop = Number.isFinite(queryId);
+
+    return (
+        <PostContext postId={postId} postType={postType} isEditable={!isDescendantOfQueryLoop}>
+            <PostTitle tagName="h2" className="wp-block-example-hero__title" />
+        </PostContext>
+    )
+}
+```
+
 ## Props
 
 | Name       | Type              | Default  |  Description                                                   |
