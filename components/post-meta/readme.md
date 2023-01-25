@@ -27,6 +27,26 @@ If you want to override this automatic type casting you can use the sub-componen
 > **Warning**
 > Currently only `string`, `number`, `boolean` for `single` meta values are supported.
 
+You can also completely customize the UI of the meta field by passing a render function to the `PostMeta` component:
+
+```js
+import { PostMeta } from '@10up/block-components';
+
+function BlockEdit() {
+
+    return (
+        <PostMeta metaKey="price">
+            ( price, setPrice ) => (
+                <>
+                    <label htmlFor="price">Price:</label>
+                    <input type="number" id="price" value={price} onChange={setPrice} placeholder="10" />
+                </>
+            )
+        </PostMeta>
+    )
+}
+```
+
 ## Props
 
 | Name       | Type              | Default  |  Description                                                   |

@@ -5,9 +5,13 @@ import { usePostMetaValue } from '../../hooks';
 import { toSentence } from './utilities';
 
 export const PostMeta = (props) => {
-	const { metaKey } = props;
-	const [metaValue] = usePostMetaValue(metaKey);
+	const { metaKey, children } = props;
+	const [metaValue, setMetaValue] = usePostMetaValue(metaKey);
 	const metaValueType = typeof metaValue;
+
+	if (typeof children === 'function') {
+		return children(metaValue, setMetaValue);
+	}
 
 	if (metaValueType === 'number') {
 		return <MetaNumber {...props} />;
