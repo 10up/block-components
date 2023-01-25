@@ -3,6 +3,7 @@
 
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
+import classnames from 'classnames';
 
 /**
  * registerBlockExtension
@@ -110,7 +111,7 @@ function registerBlockExtension(
 	 */
 	const addClassNameInEditor = createHigherOrderComponent((BlockList) => {
 		return (props) => {
-			const { name, attributes } = props;
+			const { name, attributes, className } = props;
 
 			// return early from the block modification
 			if (!shouldApplyBlockExtension(name)) {
@@ -123,12 +124,9 @@ function registerBlockExtension(
 				return <BlockList {...props} />;
 			}
 
-			return (
-				<BlockList
-					{...props}
-					className={`${attributes.className || ''} ${additionalClassName}`}
-				/>
-			);
+			const newClassName = classnames(className, additionalClassName);
+
+			return <BlockList {...props} className={newClassName} />;
 		};
 	}, 'addClassNameInEditor');
 
