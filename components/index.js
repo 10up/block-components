@@ -15,6 +15,7 @@ export { Image } from './image';
 export { PostContext } from './post-context';
 export { PostTitle } from './post-title';
 export { PostFeaturedImage } from './post-featured-image';
+export { PostMeta } from './post-meta';
 export { PostExcerpt } from './post-excerpt';
 export { PostAuthor } from './post-author';
 export { PostDate, PostDatePicker } from './post-date';

@@ -51,6 +51,7 @@ These components read/write information from the global post object or a `PostCo
 - [PostPrimaryTerm](./components/post-primary-term/)
 - [PostTermList](./components/post-term-list/)
 - [PostTitle](./components/post-title/)
+- [PostMeta](./components/post-meta/)
 
 ## Hooks
 
@@ -75,6 +76,7 @@ These hooks read/write information from the global post object or a `PostContext
 - [useSelectedTermIds](./hooks/use-selected-term-ids/)
 - [useSelectedTerms](./hooks/use-selected-terms/)
 - [useSelectedTermsOfSavedPost](./hooks/use-selected-terms-of-saved-post/)
+- [usePostMetaValue](./hooks/use-post-meta-value/)
 
 ## Stores
 
