@@ -36,12 +36,12 @@ function BlockEdit() {
 
     return (
         <PostMeta metaKey="price">
-            ( price, setPrice ) => (
+            {( price, setPrice ) => (
                 <>
                     <label htmlFor="price">Price:</label>
                     <input type="number" id="price" value={price} onChange={setPrice} placeholder="10" />
                 </>
-            )
+            )}
         </PostMeta>
     )
 }
