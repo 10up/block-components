@@ -59,6 +59,7 @@
   },
   "devDependencies": {
     "@10up/cypress-wp-utils": "github:10up/cypress-wp-utils#build",
+    "@types/uuid": "^9.0.0",
     "@types/wordpress__block-editor": "^11.0.1",
     "@types/wordpress__components": "^23.0.1",
     "@wordpress/block-editor": "^11.2.0",

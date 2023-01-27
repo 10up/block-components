@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import { Dropdown, ToolbarButton } from '@wordpress/components';
 import styled from '@emotion/styled';
 
-import { IconPicker } from './icon-picker';
+import { IconPicker, IconPickerProps } from './icon-picker';
 import { Icon } from './icon';
 import React from 'react';
 import type { Icon as IconType } from '../../stores/icons/types';
@@ -12,7 +12,7 @@ const StyledIconPickerDropdown = styled(IconPicker)`
 	width: 306px;
 `;
 
-type IconPickerToolbarButtonProps = {
+interface IconPickerToolbarButtonProps extends IconPickerProps {
 	buttonLabel: string;
 	value: IconType;
 };

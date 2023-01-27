@@ -30,17 +30,15 @@
 		"esModuleInterop": false,
 		"resolveJsonModule": true,
 
-		"typeRoots": [ "./typings", "./node_modules/@types" ],
+		"typeRoots": [ "./node_modules/@types" ],
 		"types": []
 	},
 	"exclude": [
-		"**/*.android.js",
-		"**/*.ios.js",
-		"**/*.native.js",
-		"**/benchmark",
-		"packages/*/build-*/**",
-		"packages/*/build/**",
-		"**/test/**",
-		"packages/**/react-native-*/**"
+		"cypress/**",
+		"example/**",
+		"node_modules/**",
+		"dist/**",
+		"webpack.config.js",
+		"cypress.config.js",
 	]
 }

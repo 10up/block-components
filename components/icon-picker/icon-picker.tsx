@@ -5,7 +5,9 @@ import {
 	BaseControl,
 	NavigableMenu,
 	VisuallyHidden,
+	// @ts-ignore - the type definition for this component is still missing in core
 	__experimentalScrollable as Scrollable,
+	// @ts-ignore - the type definition for this component is still missing in core
 	SearchControl,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
