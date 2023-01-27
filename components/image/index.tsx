@@ -13,8 +13,8 @@ type FocalPoint = {
 type ImageProps = {
 	id: number;
 	size: string;
-	onSelect: Function;
-	onChangeFocalPoint: Function | undefined;
+	onSelect(value: { id: number } & { [k: string]: any }): void;
+	onChangeFocalPoint?(value: FocalPoint): void;
 	focalPoint: FocalPoint;
 	labels: {
 		title: string;

@@ -15,7 +15,7 @@ const StyledIconPickerDropdown = styled(IconPicker)`
 export const InlineIconPicker = (props: IconPickerProps) => {
 	const { value, ...rest } = props;
 	const IconButton = useCallback(
-		({ onToggle }: { onToggle: Function }) => (
+		({ onToggle }: Dropdown.RenderProps) => (
 			<Icon name={value.name} iconSet={value.iconSet} onClick={onToggle} {...rest} />
 		),
 		[value, rest],
@@ -25,7 +25,7 @@ export const InlineIconPicker = (props: IconPickerProps) => {
 };
 
 interface IconPickerDropdownProps extends IconPickerProps {
-	renderToggle: Function;
+	renderToggle: (props: Dropdown.RenderProps) => JSX.Element;
 };
 
 export const IconPickerDropdown = (props: IconPickerDropdownProps) => {
