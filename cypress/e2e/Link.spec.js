@@ -13,7 +13,7 @@ context('Link', () => {
         // create the first link
         cy.get('.tenup-block-components-link__label').first().click();
         cy.wait(1500);
-        cy.get('.tenup-block-components-link__label').first().type('First Link Label', { delay: 50, waitForAnimations: true });
+        cy.get('.tenup-block-components-link__label').first().scrollIntoView({offset: {top: 100}}).type('First Link Label', { delay: 50, waitForAnimations: true });
         cy.get('.block-editor-url-input__input').first().type('https://10up.com/', { delay: 50, waitForAnimations: true });
         cy.get('button.block-editor-link-control__search-submit').first().click();
 
