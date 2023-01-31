@@ -55,7 +55,8 @@
     "@wordpress/icons": "^9.16.0",
     "array-move": "^3.0.1",
     "cypress": "^12.1.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "wp-types": "^3.61.0"
   },
   "devDependencies": {
     "@10up/cypress-wp-utils": "github:10up/cypress-wp-utils#build",
