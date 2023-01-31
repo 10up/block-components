@@ -17,6 +17,7 @@ import { useIcons } from '../../hooks/use-icons';
 import { useFilteredList } from '../../hooks/use-filtered-list';
 
 import React from 'react';
+import type { FC } from 'react';
 import { Icon } from './icon';
 import type { Icon as IconType} from '../../stores/icons/types';
 
@@ -80,7 +81,7 @@ export type IconPickerProps = {
 	label: string;
 };
 
-export const IconPicker = (props: IconPickerProps) => {
+export const IconPicker: FC<IconPickerProps> = (props) => {
 	const { value, onChange, label, ...rest } = props;
 
 	const icons = useIcons();
@@ -113,7 +114,7 @@ type IconGridProps = {
 	onChange: Function;
 };
 
-const IconGrid = (props: IconGridProps) => {
+const IconGrid: FC<IconGridProps> = (props) => {
 	const { icons, selectedIcon, onChange } = props;
 
 	return (

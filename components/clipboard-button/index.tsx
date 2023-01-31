@@ -3,6 +3,7 @@ import { useState, useEffect } from '@wordpress/element';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import React from 'react';
+import type { FC } from 'react';
 
 type ClipboardButtonProps = {
 	text: string;
@@ -14,7 +15,7 @@ type ClipboardButtonProps = {
 	};
 };
 
-export const ClipboardButton = (props: ClipboardButtonProps) => {
+export const ClipboardButton: FC<ClipboardButtonProps> = (props) => {
 	const { text, disabled, onSuccess, labels } = props;
 	const [hasCopied, setHasCopied] = useState(false);
 	const copy = labels.copy ? labels.copy : __('Copy');

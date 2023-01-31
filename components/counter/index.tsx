@@ -2,6 +2,7 @@ import { forwardRef } from '@wordpress/element';
 import cx from 'classnames';
 import styled from '@emotion/styled';
 import React from 'react';
+import type { FC } from 'react';
 
 const StyledSvg = styled('svg')`
 	transform: rotate(-90deg);
@@ -55,7 +56,11 @@ const StyledCounter = styled('div')`
 	font-variant-numeric: tabular-nums;
 `;
 
-const CircularProgressBar = (props) => {
+type CircularProgressBarProps = {
+	percentage: number;
+};
+
+const CircularProgressBar: FC<CircularProgressBarProps> = (props) => {
 	const { percentage } = props;
 	const radius = 90;
 	const circumference = 2 * Math.PI * radius;
@@ -149,7 +154,7 @@ type CounterProps = {
  *
  * @returns <Counter />
  */
-const Counter = forwardRef((props: CounterProps, ref: React.LegacyRef<HTMLDivElement>) => {
+const Counter = forwardRef<HTMLDivElement, CounterProps>((props, ref) => {
 	const { count, limit } = props;
 	const percentage = (count / limit) * 100;
 	return (

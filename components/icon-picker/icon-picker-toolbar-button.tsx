@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import { IconPicker, IconPickerProps } from './icon-picker';
 import { Icon } from './icon';
 import React from 'react';
+import type { FC } from 'react';
 import type { Icon as IconType } from '../../stores/icons/types';
 
 const StyledIconPickerDropdown = styled(IconPicker)`
@@ -26,7 +27,7 @@ interface IconPickerToolbarButtonProps extends IconPickerProps {
  * @param {IconPickerToolbarButtonProps} props IconPickerToolbarButtonProps
  * @returns {*}
  */
-export const IconPickerToolbarButton = (props: IconPickerToolbarButtonProps) => {
+export const IconPickerToolbarButton: FC<IconPickerToolbarButtonProps> = (props) => {
 	const {
 		value: { name, iconSet },
 		buttonLabel = __('Select Icon'),

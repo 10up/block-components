@@ -17,6 +17,7 @@ import { __experimentalLinkControl as LinkControl, RichText } from '@wordpress/b
  */
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 import React from 'react';
+import type { FC } from 'react';
 
 /**
  * Given the Link block's type attribute, return the query params to give to
@@ -26,7 +27,7 @@ import React from 'react';
  * @param {string} kind Link block's entity of kind (post-type|taxonomy)
  * @returns {{ type?: string, subtype?: string }} Search query params.
  */
-function getSuggestionsQuery(type, kind) {
+function getSuggestionsQuery(type: string, kind: string) {
 	switch (type) {
 		case 'post':
 		case 'page':
@@ -93,19 +94,19 @@ type LinkProps = {
 	/**
 	 * Callback when the URL is changed
 	 */
-	onLinkChange: Function;
+	onLinkChange: (value: { url: string; opensInNewTab: boolean, title: string }) => void;
 	/**
 	 * Callback when the URL is changed
 	 */
-	onLinkRemove: Function;
+	onLinkRemove: () => void;
 	/**
 	 * Callback when the link's text is changed
 	 */
-	onTextChange: Function;
+	onTextChange: (value: string) => void;
 	/**
 	 * Should the link open in a new tab?
 	 */
-	opensInNewTab: Function;
+	opensInNewTab: boolean;
 	/**
 	 * Post or Page, used to autosuggest content for URL
 	 */
@@ -135,7 +136,7 @@ type LinkProps = {
  * The link should not be visible if the block is not focused. This will maintain nicer
  * visuals in the block editor as a whole.43a (start refactor to typescript):components/link/index.tsx
  */
-const Link = ({
+const Link: FC<LinkProps> = ({
 	value,
 	type,
 	opensInNewTab,
@@ -147,7 +148,7 @@ const Link = ({
 	placeholder,
 	className,
 	...rest
-}: LinkProps) => {
+}) => {
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 	const [isValidLink, setIsValidLink] = useState(false);
 	const openPopover = () => setIsPopoverVisible(true);

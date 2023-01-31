@@ -1,6 +1,7 @@
 import { Spinner } from '@wordpress/components';
 import { useIcon } from '../../hooks/use-icons';
 import React from 'react';
+import type { FC } from 'react';
 
 type IconProps = {
 	name: string;
@@ -9,7 +10,7 @@ type IconProps = {
 	[key: string]: any;
 };
 
-export const Icon = (props: IconProps) => {
+export const Icon: FC<IconProps> = (props) => {
 	const { name, iconSet, onClick, ...rest } = props;
 	const icon= useIcon(iconSet, name);
 

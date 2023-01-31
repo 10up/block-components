@@ -2,6 +2,7 @@ import { MediaPlaceholder, InspectorControls } from '@wordpress/block-editor';
 import { Spinner, FocalPointPicker, PanelBody, Placeholder } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import React from 'react';
+import type { FC } from 'react';
 
 import { useMedia } from '../../hooks/use-media';
 
@@ -24,8 +25,7 @@ type ImageProps = {
 	[key: string]: any;
 };
 
-
-const Image = (props: ImageProps) => {
+const Image: FC<ImageProps> = (props) => {
 	const {
 		id,
 		size = 'full',

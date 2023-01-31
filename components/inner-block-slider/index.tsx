@@ -9,6 +9,7 @@ import { InnerBlocks, store as blockEditorStore } from '@wordpress/block-editor'
 import { jsx, css } from '@emotion/react';
 import { ChevronLeft, ChevronRight } from './icons';
 import React from 'react';
+import type { FC } from 'react';
 
 type InnerBlockSliderProps = {
 	slidesPerPage: number;
@@ -18,13 +19,13 @@ type InnerBlockSliderProps = {
 	slideHeight: string;
 };
 
-const InnerBlockSlider = ({
+const InnerBlockSlider: FC<InnerBlockSliderProps> = ({
 	parentBlockId,
 	slidesPerPage,
 	allowedBlock,
 	template,
 	slideHeight,
-}: InnerBlockSliderProps) => {
+}) => {
 	const [currentPage, setCurrentPage] = useState(1);
 
 	let innerBlockTemplate = template;

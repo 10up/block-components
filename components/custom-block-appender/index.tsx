@@ -2,6 +2,7 @@
 import { Inserter } from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
 import React from 'react';
+import type { FC } from 'react';
 
 type CustomBlockAppenderProps = {
 	/**
@@ -29,13 +30,13 @@ type CustomBlockAppenderProps = {
  * Provide a Button component to trigger the inserter.
  * Any undocumented props are spread onto the Button component.
  */
-export const CustomBlockAppender = ({
+export const CustomBlockAppender: FC<CustomBlockAppenderProps> = ({
 	rootClientId,
 	buttonText,
 	icon,
 	className = 'custom-block-appender',
 	...buttonProps
-}: CustomBlockAppenderProps) => {
+}) => {
 	return (
 		<Inserter
 			isAppender

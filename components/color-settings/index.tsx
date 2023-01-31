@@ -2,10 +2,11 @@ import { BaseControl } from '@wordpress/components';
 import { ColorPalette } from '@wordpress/block-editor';
 import { useInstanceId } from '@wordpress/compose';
 import React from 'react';
+import type { FC } from 'react';
 
 type ColorSettingProps = ColorPalette.Props & BaseControl.ControlProps;
 
-export const ColorSetting = (props: ColorSettingProps) => {
+export const ColorSetting: FC<ColorSettingProps> = (props) => {
 	const {
 		label,
 		help,
