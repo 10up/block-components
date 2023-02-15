@@ -1,5 +1,5 @@
 import { MediaPlaceholder, InspectorControls } from '@wordpress/block-editor';
-import { Spinner, FocalPointPicker, PanelBody } from '@wordpress/components';
+import { Spinner, FocalPointPicker, PanelBody, Placeholder } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
 
@@ -12,6 +12,7 @@ const Image = (props) => {
 		onSelect,
 		focalPoint = { x: 0.5, y: 0.5 },
 		onChangeFocalPoint,
+		canEditImage = true,
 		...rest
 	} = props;
 	const hasImage = !!id;
@@ -19,7 +20,11 @@ const Image = (props) => {
 
 	const shouldDisplayFocalPointPicker = typeof onChangeFocalPoint === 'function';
 
-	if (!hasImage) {
+	if (!hasImage && !canEditImage) {
+		return <Placeholder className="block-editor-media-placeholder" withIllustration />;
+	}
+
+	if (!hasImage && canEditImage) {
 		return <MediaPlaceholder onSelect={onSelect} accept="image" multiple={false} />;
 	}
 
@@ -67,6 +72,7 @@ Image.defaultProps = {
 	size: 'large',
 	focalPoint: { x: 0.5, y: 0.5 },
 	onChangeFocalPoint: undefined,
+	canEditImage: true,
 };
 
 Image.propTypes = {
@@ -78,4 +84,5 @@ Image.propTypes = {
 		x: PropTypes.string,
 		y: PropTypes.string,
 	}),
+	canEditImage: PropTypes.bool,
 };
