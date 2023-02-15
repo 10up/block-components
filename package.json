@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.14.6-alpha.2",
+  "version": "1.14.6-alpha.3",
   "description": "10up Components built for the WordPress Block Editor.",
   "main": "./dist/index.js",
   "source": "index.js",
