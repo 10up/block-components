@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { usePost } from '../../hooks';
 
 export const PostExcerpt = (props) => {
-	const { placeholder = __('Enter excerpt...', 'tenup'), ...rest } = props;
+	const { placeholder, ...rest } = props;
 	const { postId, postType, isEditable } = usePost();
 
 	const [rawExcerpt = '', setExcerpt, fullExcerpt] = useEntityProp(
