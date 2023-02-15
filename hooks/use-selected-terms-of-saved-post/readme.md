@@ -10,8 +10,10 @@ import { useSelectedTermsOfSavedPost } from '@10up/block-components';
 function BlockEdit(props) {
     const { context } = props;
     const { postId } = context;
-    const [selectedCategoriesOfSavedPost, hasResolvedSelectedCategoriesOfSavedPost] =
-  useSelectedTermsOfSavedPost('category', postId);
+    const [
+        selectedCategoriesOfSavedPost,
+        hasResolvedSelectedCategoriesOfSavedPost
+    ] = useSelectedTermsOfSavedPost('category', postId);
 
     return (
         ...
