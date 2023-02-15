@@ -51,4 +51,5 @@ function BlockEdit(props) {
 | `focalPoint` | `object` | `{x:0.5,y:0.5}` | Optional focal point object.
 | `onChangeFocalPoint` | `function` | `undefined` | Callback that gets called with the new focal point when it changes. (Is required for the FocalPointPicker to appear) |
 | `labels` | `object` | `{}` | Pass in an object of labels to be used by the `MediaPlaceholder` component under the hook. Allows the sub properties `title` and `instructions` |
-| `...rest` | `*` | `null` | Any additional attributes you want to pass to the underlying `img` tag |
+| `canEditImage` | `boolean` | `true` | whether or not the image can be edited by in the context its getting viewed. Controls whether a placeholder or upload controls should be shown when no image is present |
+| `...rest` | `*` | `null` | any additional attributes you want to pass to the underlying `img` tag |
