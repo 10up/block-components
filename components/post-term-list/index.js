@@ -11,7 +11,7 @@ import { PostTermContext } from './context';
 import { ListItem, TermLink } from './item';
 
 export const PostTermList = (props) => {
-	const { tagName: TagName = 'ul', taxonomyName = 'category', children, ...rest } = props;
+	const { tagName: TagName, taxonomyName, children, ...rest } = props;
 
 	const { isEditable } = usePost();
 
@@ -85,13 +85,14 @@ export const PostTermList = (props) => {
 
 PostTermList.propTypes = {
 	children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
-	taxonomyName: PropTypes.string.isRequired,
+	taxonomyName: PropTypes.string,
 	tagName: PropTypes.string,
 };
 
 PostTermList.defaultProps = {
 	children: null,
 	tagName: 'ul',
+	taxonomyName: 'category',
 };
 
 PostTermList.ListItem = ListItem;
