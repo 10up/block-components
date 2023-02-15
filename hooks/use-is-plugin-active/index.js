@@ -4,9 +4,10 @@ import { store as coreStore } from '@wordpress/core-data';
 export const useIsPluginActive = (pluginName) => {
 	return useSelect(
 		(select) => {
-			const plugins = select(coreStore).getPlugins();
-			const hasResolvedPlugins = select(coreStore).hasFinishedResolution('getPlugins');
-			const plugin = plugins?.find((plugin) => plugin.plugin === pluginName);
+			const plugin = select(coreStore).getPlugin(pluginName);
+			const hasResolvedPlugins = select(coreStore).hasFinishedResolution('getPlugin', [
+				pluginName,
+			]);
 			return [plugin?.status === 'active' ?? false, hasResolvedPlugins];
 		},
 		[pluginName],
