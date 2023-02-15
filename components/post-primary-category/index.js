@@ -4,10 +4,6 @@ import { PostPrimaryTerm } from '../post-primary-term';
 
 export const PostPrimaryCategory = PostPrimaryTerm;
 
-PostPrimaryCategory.defaultProps = {
-	placeholder: __('Select a category', 'tenup'),
-};
-
 PostPrimaryCategory.propTypes = {
 	placeholder: PropTypes.string,
 	taxonomyName: PropTypes.string,
