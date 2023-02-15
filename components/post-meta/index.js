@@ -29,7 +29,7 @@ PostMeta.propTypes = {
 };
 
 const MetaString = (props) => {
-	const { metaKey, tagName = 'p' } = props;
+	const { metaKey, tagName } = props;
 	const [metaValue, setMetaValue] = usePostMetaValue(metaKey);
 
 	return <RichText value={metaValue} onChange={setMetaValue} tagName={tagName} {...props} />;
