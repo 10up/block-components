@@ -1,6 +1,6 @@
 # `PostContext`
 
-The `PostContext` component allows you to customize the post object referenced by and of the components referencing the current post object. They are all prefixed with `Post`.
+The `PostContext` component allows you to customize the post object referenced by any of the components referencing the current post object. They are all prefixed with `Post`.
 
 For example this can be used to build a custom block that gets used inside the core query loop and accesses the passed in post id / post type of that to power the functionality of all the `Post` child components.
 
