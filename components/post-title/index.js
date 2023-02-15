@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { usePost } from '../../hooks';
 
 export const PostTitle = (props) => {
-	const { tagName: TagName = 'h1', ...rest } = props;
+	const { tagName: TagName, ...rest } = props;
 	const { postId, postType, isEditable } = usePost();
 
 	const [rawTitle = '', setTitle, fullTitle] = useEntityProp(
