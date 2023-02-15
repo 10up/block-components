@@ -1,0 +1,12 @@
+{
+	"apiVersion": 2,
+	"name": "example/post-meta",
+	"description": "Set some Metadata",
+	"title": "Post Meta",
+	"attributes": {
+		"metaKey": {
+			"type": "string",
+			"default": ""
+		}
+	}
+}
