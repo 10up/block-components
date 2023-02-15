@@ -3,12 +3,7 @@ import PropTypes from 'prop-types';
 import { usePrimaryTerm } from '../../hooks';
 
 export const PostPrimaryTerm = (props) => {
-	const {
-		taxonomyName = 'category',
-		placeholder = __('Select a term', 'tenup'),
-		isLink = true,
-		...rest
-	} = props;
+	const { taxonomyName, placeholder, isLink, ...rest } = props;
 
 	const [primaryTerm, isSupportedTaxonomy] = usePrimaryTerm(taxonomyName);
 
@@ -37,11 +32,12 @@ export const PostPrimaryTerm = (props) => {
 
 PostPrimaryTerm.propTypes = {
 	placeholder: PropTypes.string,
-	taxonomyName: PropTypes.string.isRequired,
+	taxonomyName: PropTypes.string,
 	isLink: PropTypes.bool,
 };
 
 PostPrimaryTerm.defaultProps = {
 	placeholder: __('Select a Term', 'tenup'),
 	isLink: true,
+	taxonomyName: 'category',
 };
