@@ -70,6 +70,7 @@ These components read/write information from the global post object or a `PostCo
 These hooks read/write information from the global post object or a `PostContext`.
 
 - [useAllTerms](./hooks/use-all-terms/)
+- [useTaxonomy](./hooks/use-taxonomy/)
 - [useIsSupportedTaxonomy](./hooks/use-is-supported-taxonomy/)
 - [usePost](./hooks/use-post/)
 - [usePrimaryTerm](./hooks/use-primary-term/)
