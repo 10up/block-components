@@ -3,8 +3,7 @@ import { useBlockProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import { header } from '@wordpress/icons';
 
-import { PostFeaturedImage, PostTitle, PostPrimaryCategory, PostDate, PostCategoryList, PostAuthor } from '@10up/block-components';
-import { PostExcerpt } from '../../../../components';
+import { PostFeaturedImage, PostTitle, PostPrimaryCategory, PostDate, PostCategoryList, PostAuthor, PostExcerpt } from '@10up/block-components';
 
 const NAMESPACE = 'example';
 
