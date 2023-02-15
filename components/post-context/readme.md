@@ -19,7 +19,7 @@ function BlockEdit() {
 }
 ```
 
-The `PostContext` component works great with the Core Query Loop block if you want / need to create a custom block to be used within the post template. Any block that gets used inside the query loop can access the current post id, post type, and query id via the block context. These values can then be used within the `<PostContext>` to make them available for any of the post level components nested within.
+The `PostContext` component works great with the Core Query Loop block if you want / need to create a custom block to be used within the post template. Any block that gets used inside the query loop can access the current post id, post type, and query id via the block context. A block only needs to set the [`usesContext` property in the `block.json`](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-metadata/#context) file to `[ "postId", "postType" ]`. These values can then be accessed via the `context` property passed into the block via the `props` and then used within the `<PostContext>` to make them available for any of the post level components nested within.
 
 ```js
 import { PostContext, PostTitle } from '@10up/block-components';
