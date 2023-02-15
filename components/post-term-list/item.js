@@ -1,6 +1,6 @@
 import { useContext } from '@wordpress/element';
 import PropTypes from 'prop-types';
-import { POST_TERM_ITEM_CONTEXT } from './context';
+import { PostTermItemContext } from './context';
 
 export const ListItem = (props) => {
 	const { tagName: TagName = 'li', children, ...rest } = props;
@@ -18,7 +18,7 @@ ListItem.defaultProps = {
 };
 
 export const TermLink = (props) => {
-	const { link, name } = useContext(POST_TERM_ITEM_CONTEXT);
+	const { link, name } = useContext(PostTermItemContext);
 
 	return (
 		<a href={link} inert="true" {...props}>
