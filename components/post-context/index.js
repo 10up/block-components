@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useMemo } from '@wordpress/element';
-import { DEFAULT_POST_CONTEXT, POST_CONTEXT } from './context';
+import { DEFAULT_POST_CONTEXT, PostContext as PostContextContext } from './context';
 
 export const PostContext = (props) => {
 	const { children, postId, postType, isEditable } = props;
@@ -14,7 +14,7 @@ export const PostContext = (props) => {
 		[postId, postType, isEditable],
 	);
 
-	return <POST_CONTEXT.Provider value={value}>{children}</POST_CONTEXT.Provider>;
+	return <PostContextContext.Provider value={value}>{children}</PostContextContext.Provider>;
 };
 
 PostContext.propTypes = {
