@@ -28,7 +28,7 @@ PostDatePicker.propTypes = {
 };
 
 export const PostDate = (props) => {
-	const { placeholder = __('No date set', 'tenup'), format = undefined, ...rest } = props;
+	const { placeholder, format, ...rest } = props;
 
 	const { postId, postType, isEditable } = usePost();
 
