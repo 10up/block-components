@@ -7,7 +7,7 @@ import {
 } from '@wordpress/editor';
 
 import { usePopover, usePost, useSelectedTerms, useTaxonomy } from '../../hooks';
-import { PostTermItemContext } from './context';
+import { PostTermContext } from './context';
 import { ListItem, TermLink } from './item';
 
 export const PostTermList = (props) => {
@@ -51,9 +51,9 @@ export const PostTermList = (props) => {
 			<>
 				<TagName {...listElementProps}>
 					{selectedTerms.map((term) => (
-						<PostTermItemContext.Provider value={term} key={term.id}>
+						<PostTermContext.Provider value={term} key={term.id}>
 							{children}
-						</PostTermItemContext.Provider>
+						</PostTermContext.Provider>
 					))}
 				</TagName>
 				{isEditable && (

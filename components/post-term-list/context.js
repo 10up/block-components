@@ -1,3 +1,3 @@
 import { createContext } from '@wordpress/element';
 
-export const PostTermItemContext = createContext();
+export const PostTermContext = createContext();
