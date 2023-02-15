@@ -1,9 +1,12 @@
 import { Spinner } from '@wordpress/components';
 import { Children } from '@wordpress/element';
 import PropTypes from 'prop-types';
-import { PostTaxonomiesHierarchicalTermSelector } from '@wordpress/editor';
+import {
+	PostTaxonomiesHierarchicalTermSelector,
+	PostTaxonomiesFlatTermSelector,
+} from '@wordpress/editor';
 
-import { usePopover, usePost, useSelectedTerms } from '../../hooks';
+import { usePopover, usePost, useSelectedTerms, useTaxonomy } from '../../hooks';
 import { POST_TERM_ITEM_CONTEXT } from './context';
 import { ListItem, TermLink } from './item';
 
@@ -16,12 +19,17 @@ export const PostTermList = (props) => {
 	const hasChildComponents = !hasRenderCallback && Children.count(children);
 
 	const [selectedTerms, hasResolvedSelectedTerms] = useSelectedTerms(taxonomyName);
+	const [taxonomy, hasResolvedTaxonomy] = useTaxonomy(taxonomyName);
 
 	const { toggleProps, Popover } = usePopover();
 
-	if (!hasResolvedSelectedTerms) {
+	if (!hasResolvedSelectedTerms || !hasResolvedTaxonomy) {
 		return <Spinner />;
 	}
+
+	const PostTaxonomiesTermSelector = taxonomy.hierarchical
+		? PostTaxonomiesHierarchicalTermSelector
+		: PostTaxonomiesFlatTermSelector;
 
 	if (hasRenderCallback) {
 		return children({ selectedTerms, isEditable });
@@ -50,7 +58,7 @@ export const PostTermList = (props) => {
 				</TagName>
 				{isEditable && (
 					<Popover>
-						<PostTaxonomiesHierarchicalTermSelector slug={taxonomyName} />
+						<PostTaxonomiesTermSelector slug={taxonomyName} />
 					</Popover>
 				)}
 			</>
@@ -58,13 +66,20 @@ export const PostTermList = (props) => {
 	}
 
 	return (
-		<ul {...rest}>
-			{selectedTerms.map((term) => (
-				<li key={term.id}>
-					<a href={term.link}>{term.name}</a>
-				</li>
-			))}
-		</ul>
+		<>
+			<TagName {...listElementProps}>
+				{selectedTerms.map((term) => (
+					<li key={term.id}>
+						<a href={term.link}>{term.name}</a>
+					</li>
+				))}
+			</TagName>
+			{isEditable && (
+				<Popover>
+					<PostTaxonomiesTermSelector slug={taxonomyName} />
+				</Popover>
+			)}
+		</>
 	);
 };
 
