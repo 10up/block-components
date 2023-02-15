@@ -2,7 +2,7 @@ import { useContext } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import { store as blockEditorStore } from '@wordpress/block-editor';
 import PropTypes from 'prop-types';
-import { AUTHOR_CONTEXT } from './context';
+import { AuthorContext } from './context';
 
 /**
  * @typedef {object} Author
@@ -27,7 +27,7 @@ export const Name = (props) => {
 	/**
 	 * @type {Author}
 	 */
-	const { name, link } = useContext(AUTHOR_CONTEXT);
+	const { name, link } = useContext(AuthorContext);
 
 	const wrapperProps = { ...rest };
 
@@ -52,7 +52,7 @@ export const FirstName = (props) => {
 	/**
 	 * @type {Author}
 	 */
-	const { first_name: firstName } = useContext(AUTHOR_CONTEXT);
+	const { first_name: firstName } = useContext(AuthorContext);
 
 	return <TagName {...rest}>{firstName}</TagName>;
 };
@@ -71,7 +71,7 @@ export const LastName = (props) => {
 	/**
 	 * @type {Author}
 	 */
-	const { last_name: lastName } = useContext(AUTHOR_CONTEXT);
+	const { last_name: lastName } = useContext(AuthorContext);
 
 	return <TagName {...rest}>{lastName}</TagName>;
 };
@@ -99,7 +99,7 @@ export const Avatar = (props) => {
 	/**
 	 * @type {Author}
 	 */
-	const authorDetails = useContext(AUTHOR_CONTEXT);
+	const authorDetails = useContext(AuthorContext);
 
 	const avatarUrls = authorDetails?.avatar_urls ? Object.values(authorDetails.avatar_urls) : null;
 	const defaultAvatar = useDefaultAvatar();
@@ -115,7 +115,7 @@ export const Bio = (props) => {
 	/**
 	 * @type {Author}
 	 */
-	const { description } = useContext(AUTHOR_CONTEXT);
+	const { description } = useContext(AuthorContext);
 
 	return <TagName {...rest}>{description}</TagName>;
 };
@@ -134,7 +134,7 @@ export const Email = (props) => {
 	/**
 	 * @type {Author}
 	 */
-	const { email } = useContext(AUTHOR_CONTEXT);
+	const { email } = useContext(AuthorContext);
 
 	return (
 		<a href={`mailto:${email}`} {...rest}>

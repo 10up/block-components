@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { usePost } from '../../hooks';
 import { Name, FirstName, LastName, Avatar, Bio, Email } from '../author';
 
-import { AUTHOR_CONTEXT } from '../author/context';
+import { AuthorContext } from '../author/context';
 
 export const PostAuthor = (props) => {
 	const { children, ...rest } = props;
@@ -41,9 +41,9 @@ export const PostAuthor = (props) => {
 
 	if (hasChildComponents) {
 		return (
-			<AUTHOR_CONTEXT.Provider value={author}>
+			<AuthorContext.Provider value={author}>
 				<div {...rest}>{children}</div>
-			</AUTHOR_CONTEXT.Provider>
+			</AuthorContext.Provider>
 		);
 	}
 
