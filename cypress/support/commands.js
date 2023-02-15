@@ -58,6 +58,14 @@ Cypress.Commands.add('createPost', (options = {}) => {
 		.contains(postType, { matchCase: false })
 		.click({ force: true });
 
+	// close the Yoast SEO metabox
+	cy.get('.wpseo-metabox .handlediv').then(button => {
+		const isExpanded = button[0].getAttribute('aria-expanded') === 'true';
+		if ( isExpanded ) {
+			cy.get('.wpseo-metabox .handlediv').click();
+		}
+	});
+
 	cy.wait(100);
 
 	if (title !== '') {

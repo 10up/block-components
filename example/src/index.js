@@ -5,3 +5,8 @@ import './blocks/repeater-component-example';
 import './blocks/link-example';
 import './blocks/image-example';
 import './blocks/rich-text-character-limit';
+import './blocks/post-title';
+import './blocks/post-featured-image';
+import './blocks/content-item';
+import './blocks/hero';
+import './blocks/post-meta';

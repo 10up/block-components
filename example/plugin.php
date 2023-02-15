@@ -67,3 +67,61 @@ function register_block() {
 		]
 	);
 };
+
+function register_book_custom_post_type() {
+	$labels = array(
+		'name'               => __( 'Books', 'tenup' ),
+		'singular_name'      => __( 'Book', 'tenup' ),
+		'menu_name'          => __( 'Books', 'tenup' ),
+		'view_item'          => __( 'View book', 'tenup' ),
+	);
+
+	$args = [
+		'labels'              => $labels,
+		'menu_icon'           => 'dashicons-book',
+		'supports'            => [ 'title', 'editor', 'meta', 'custom-fields', 'revisions' ],
+		'hierarchical'        => false,
+		'public'              => true,
+		'show_ui'             => true,
+		'show_in_menu'        => true,
+		'show_in_nav_menus'   => true,
+		'show_in_admin_bar'   => true,
+		'menu_position'       => 20,
+		'can_export'          => true,
+		'has_archive'         => false,
+		'exclude_from_search' => false,
+		'publicly_queryable'  => true,
+		'template'            => [],
+		'template_lock'       => false,
+		'capability_type'     => 'post',
+		'show_in_rest'        => true,
+	];
+	
+	register_post_type( 'books', $args );
+
+	register_post_meta( 'books', 'author', [
+		'type'         => 'string',
+		'single'       => true,
+		'show_in_rest' => true,
+	] );
+	
+	register_post_meta( 'books', 'isbn', [
+		'type'         => 'string',
+		'single'       => true,
+		'show_in_rest' => true,
+	] );
+	
+	register_post_meta( 'books', 'price', [
+		'type'         => 'number',
+		'single'       => true,
+		'show_in_rest' => true,
+	] );
+	
+	register_post_meta( 'books', 'is_featured', [
+		'type'         => 'boolean',
+		'single'       => true,
+		'show_in_rest' => true,
+	] );
+}
+
+add_action( 'init', __NAMESPACE__ . '\register_book_custom_post_type' );
