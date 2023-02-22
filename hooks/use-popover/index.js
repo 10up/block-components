@@ -32,7 +32,7 @@ export const usePopover = () => {
 					</Popover>
 				);
 			},
-		[isVisible, popoverAnchor],
+		[isVisible, popoverAnchor, ref],
 	);
 
 	return {
