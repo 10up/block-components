@@ -11,7 +11,7 @@ import { PostTermContext } from './context';
 import { ListItem, TermLink } from './item';
 
 export const PostTermList = (props) => {
-	const { tagName: TagName, taxonomyName, children, ...rest } = props;
+	const { tagName: TagName = 'ul', taxonomyName, children, ...rest } = props;
 
 	const { isEditable } = usePost();
 
