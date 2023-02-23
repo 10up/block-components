@@ -68,7 +68,9 @@ export const PostTermList = (props) => {
 								</PostTermContext.Provider>
 							))
 						) : (
-							<i>{noResultsMessage}</i>
+							<li>
+								<i>{noResultsMessage}</i>
+							</li>
 						)}
 					</TagName>
 				</Optional>
@@ -92,7 +94,9 @@ export const PostTermList = (props) => {
 							</li>
 						))
 					) : (
-						<i>{noResultsMessage}</i>
+						<li>
+							<i>{noResultsMessage}</i>
+						</li>
 					)}
 				</TagName>
 			</Optional>
