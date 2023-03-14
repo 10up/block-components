@@ -5,7 +5,7 @@ export const usePostMetaValue = (metaKey) => {
 	const { postId, postType } = usePost();
 	const [meta, setMeta] = useEntityProp('postType', postType, 'meta', postId);
 
-	if (!meta || !metaKey || Object.prototype.hasOwnProperty.call(meta, metaKey)) {
+	if (!meta || !metaKey || !Object.prototype.hasOwnProperty.call(meta, metaKey)) {
 		return [undefined, () => {}];
 	}
 
