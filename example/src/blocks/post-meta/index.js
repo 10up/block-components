@@ -2,7 +2,7 @@ import { registerBlockType, registerBlockVariation, store as blocksStore, create
 import {
 	useBlockProps, __experimentalBlockVariationPicker as BlockVariationPicker, store as blockEditorStore,
 } from '@wordpress/block-editor';
-import { select, subscribe, useSelect, useDispatch } from '@wordpress/data';
+import { useSelect, useDispatch } from '@wordpress/data';
 import { PostMeta } from '@10up/block-components';
 import { box } from '@wordpress/icons';
 
@@ -102,32 +102,22 @@ registerBlockType(metadata, {
 	save: () => null
 })
 
-let availableKeys = [];
-subscribe(() => {
-	const meta = select('core/editor').getCurrentPostAttribute('meta');
-	if (!meta) {
-		return;
-	}
+let availableKeys = [
+	"author",
+	"isbn",
+	"price",
+	"is_featured",
+];
 
-	const keys = Object.keys(meta);
+const newVariations = availableKeys.map(metaKey => ({
+	title: toSentence(metaKey) + ' - Meta',
+	description: `Displays the value of the meta key: "${metaKey}"`,
+	name: metaKey,
+	scope: ['inserter', 'block'],
+	attributes: {
+		metaKey: metaKey
+	},
+	isActive: ['metaKey']
+}));
 
-	if (JSON.stringify(keys) === JSON.stringify(availableKeys)) {
-		return;
-	}
-
-	availableKeys = keys;
-
-	const newVariations = availableKeys.map(metaKey => ({
-		title: toSentence(metaKey) + ' - Meta',
-		description: `Displays the value of the meta key: "${metaKey}"`,
-		name: metaKey,
-		scope: ['inserter', 'block'],
-		attributes: {
-			metaKey: metaKey
-		},
-		isActive: ['metaKey']
-	}));
-
-	registerBlockVariation('example/post-meta', newVariations);
-
-});
+registerBlockVariation('example/post-meta', newVariations);

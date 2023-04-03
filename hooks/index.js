@@ -16,3 +16,4 @@ export { usePopover } from './use-popover';
 export { useScript } from './use-script';
 export { usePostMetaValue } from './use-post-meta-value';
 export { useTaxonomy } from './use-taxonomy';
+export { useIsSupportedMetaField } from './use-is-supported-meta-value';
