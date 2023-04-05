@@ -217,9 +217,11 @@ const ContentSearch = ({
 							setSearchQueries((queries) => {
 								const newQueries = { ...queries };
 
-								newQueries[searchQueryString].results = normalizedResults;
-								newQueries[searchQueryString].totalPages = totalPages;
-								newQueries[searchQueryString].controller = 0;
+								if (newQueries[searchQueryString]) {
+									newQueries[searchQueryString].results = normalizedResults;
+									newQueries[searchQueryString].totalPages = totalPages;
+									newQueries[searchQueryString].controller = 0;
+								}
 
 								return newQueries;
 							});
@@ -231,8 +233,10 @@ const ContentSearch = ({
 							setSearchQueries((queries) => {
 								const newQueries = { ...queries };
 
-								newQueries[searchQueryString].controller = 1;
-								newQueries[searchQueryString].results = [];
+								if (newQueries[searchQueryString]) {
+									newQueries[searchQueryString].controller = 1;
+									newQueries[searchQueryString].results = [];
+								}
 
 								return newQueries;
 							});
