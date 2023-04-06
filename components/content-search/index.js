@@ -217,6 +217,14 @@ const ContentSearch = ({
 							setSearchQueries((queries) => {
 								const newQueries = { ...queries };
 
+								if (typeof newQueries[searchQueryString] === 'undefined') {
+									newQueries[searchQueryString] = {
+										results: null,
+										controller: null,
+										totalPages: null,
+									};
+								}
+
 								newQueries[searchQueryString].results = normalizedResults;
 								newQueries[searchQueryString].totalPages = totalPages;
 								newQueries[searchQueryString].controller = 0;
@@ -230,6 +238,13 @@ const ContentSearch = ({
 						if (error.code !== 'fetch_error') {
 							setSearchQueries((queries) => {
 								const newQueries = { ...queries };
+
+								if (typeof newQueries[searchQueryString] === 'undefined') {
+									newQueries[searchQueryString] = {
+										results: null,
+										controller: null,
+									};
+								}
 
 								newQueries[searchQueryString].controller = 1;
 								newQueries[searchQueryString].results = [];
