@@ -38,7 +38,7 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
             <>
             <InspectorControls>
                 <PanelBody title={ __( 'Post Picker', NAMESPACE ) }>
-                    <ContentPicker 
+                    <ContentPicker
                         label={ __( 'Select a Post or Page', NAMESPACE ) }
                         onPickChange={ handlePostSelection }
                         content={ selectedPost }
@@ -53,9 +53,9 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
                     label={ __( 'Select a Post or Page', NAMESPACE ) }
                     onPickChange={ handlePostSelection }
                     content={ selectedPost }
-                    perPage={3}
-                    maxContentItems={5}
-                    isOrderable={true}
+                    perPage={ 3 }
+                    maxContentItems={ 5 }
+                    isOrderable={ true }
                 />
             </Placeholder>
             </>

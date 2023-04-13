@@ -12,6 +12,7 @@ const Image = (props) => {
 		onSelect,
 		focalPoint = { x: 0.5, y: 0.5 },
 		onChangeFocalPoint,
+		labels = {},
 		canEditImage = true,
 		...rest
 	} = props;
@@ -25,7 +26,9 @@ const Image = (props) => {
 	}
 
 	if (!hasImage && canEditImage) {
-		return <MediaPlaceholder onSelect={onSelect} accept="image" multiple={false} />;
+		return (
+			<MediaPlaceholder labels={labels} onSelect={onSelect} accept="image" multiple={false} />
+		);
 	}
 
 	if (isResolvingMedia) {
@@ -72,6 +75,7 @@ Image.defaultProps = {
 	size: 'large',
 	focalPoint: { x: 0.5, y: 0.5 },
 	onChangeFocalPoint: undefined,
+	labels: {},
 	canEditImage: true,
 };
 
@@ -83,6 +87,10 @@ Image.propTypes = {
 	focalPoint: PropTypes.shape({
 		x: PropTypes.string,
 		y: PropTypes.string,
+	}),
+	labels: PropTypes.shape({
+		title: PropTypes.string,
+		instructions: PropTypes.string,
 	}),
 	canEditImage: PropTypes.bool,
 };

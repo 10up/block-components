@@ -3,7 +3,7 @@ import { useBlockProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 import { header } from '@wordpress/icons';
 
-import { PostFeaturedImage, PostTitle, PostPrimaryCategory, PostDate, PostCategoryList, PostAuthor, PostExcerpt } from '@10up/block-components';
+import { PostFeaturedImage, PostTitle, PostPrimaryCategory, PostDate, PostCategoryList, PostTermList, PostAuthor, PostExcerpt } from '@10up/block-components';
 
 const NAMESPACE = 'example';
 
@@ -35,6 +35,11 @@ registerBlockType(`${NAMESPACE}/hero`, {
 						<PostCategoryList.TermLink className="wp-block-example-hero__category-link" />
 					</PostCategoryList.ListItem>
 				</PostCategoryList>
+				<PostTermList taxonomyName="post_tag" className="wp-block-example-hero__tags">
+					<PostTermList.ListItem className="wp-block-example-hero__tag">
+						<PostTermList.TermLink className="wp-block-example-hero__tag-link" />
+					</PostTermList.ListItem>
+				</PostTermList>
 				<PostDate className="wp-block-example-hero__date" />
 				<PostExcerpt className="wp-block-example-hero__excerpt" />
 				<PostAuthor className="wp-block-example-hero__author">

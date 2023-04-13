@@ -38,6 +38,7 @@ function BlockEdit() {
 | `context` | `object` | `{}` |  |
 | `children` | `function\|node\|null`  | `null` |  |
 | `taxonomyName` | `string` | `category` |  |
+| `noResultsMessage` | `string` | `Please select a term` |  |
 | `tagName` | `string` | `ul` |  |
 | `...rest` | `object` | `{}` |  |
 
