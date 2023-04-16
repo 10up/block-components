@@ -25,12 +25,6 @@ const Image = (props) => {
 		return <Placeholder className="block-editor-media-placeholder" withIllustration />;
 	}
 
-	if (!hasImage && canEditImage) {
-		return (
-			<MediaPlaceholder labels={labels} onSelect={onSelect} accept="image" multiple={false} />
-		);
-	}
-
 	if (isResolvingMedia) {
 		return <Spinner />;
 	}
@@ -65,6 +59,13 @@ const Image = (props) => {
 				</InspectorControls>
 			)}
 			<img src={imageUrl} alt={altText} {...rest} />
+			<MediaPlaceholder
+				labels={labels}
+				onSelect={onSelect}
+				accept="image"
+				multiple={false}
+				disableMediaButtons={imageUrl}
+			/>
 		</>
 	);
 };
