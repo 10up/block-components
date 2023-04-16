@@ -7,18 +7,19 @@
         "build": "wp-scripts build",
         "start": "wp-scripts start",
         "wp-env": "wp-env",
+		"start-env": "wp-env start",
         "import-media": "wp-env run tests-cli wp media import /var/www/html/wp-content/plugins/example/images/1920-1080.png"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "devDependencies": {
-        "@wordpress/env": "^5.2.0",
-        "@wordpress/eslint-plugin": "^9.3.0",
-        "@wordpress/scripts": "^24.0.0"
+        "@wordpress/env": "^5.8.0",
+        "@wordpress/eslint-plugin": "^13.7.0",
+        "@wordpress/scripts": "^25.0.0"
     },
     "dependencies": {
         "@10up/block-components": "file:../dist/index.js",
-        "@wordpress/icons": "^6.1.1"
+        "@wordpress/icons": "^9.14.0"
     }
 }

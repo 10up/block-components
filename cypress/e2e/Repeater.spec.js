@@ -24,9 +24,7 @@ context('Repeater', () => {
 		cy.insertBlock('Repeater component Example');
 
 		cy.savePost();
-	})
-
-	it('Adding repeater fields', () => {
+		
 		function addItem( pageName = '', visibility = false ) {
 			cy.get( '.repeater-item' ).then( $repeaterItem => {
 				if ( $repeaterItem.length === 1 && $repeaterItem.find( '.repeater-item-page-name input[type="text"]' ).val().length === 0 ) {
@@ -83,15 +81,13 @@ context('Repeater', () => {
 		cy.updatePost();
 
 		cy.get('.repeater-item').should('have.length', 3);
-	});
-
-	it('Verify repeater items', () => {
-		const items = [
+	
+		const newItems = [
 			{ title: 'Home', status: true },
 			{ title: 'About Us', status: false },
 			{ title: 'Blog', status: false },
 		];
 
-		verifyRepeaterItems(items);
+		verifyRepeaterItems(newItems);
 	});
 })

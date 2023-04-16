@@ -1,13 +1,11 @@
 name: Lint Pull Request
-on:
- pull_request:
-  
-  push:
-    branches:
-      - 'develop'
+on: [push, workflow_dispatch]
+
 jobs:
   eslint:
+    name: ESLint
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
       - uses: reviewdog/action-eslint@v1.0.0

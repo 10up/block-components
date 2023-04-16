@@ -22,6 +22,7 @@ const ContentSearch = ({
 	perPage,
 	queryFilter,
 	excludeItems,
+	renderItemType,
 }) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchQueries, setSearchQueries] = useState({});
@@ -216,6 +217,14 @@ const ContentSearch = ({
 							setSearchQueries((queries) => {
 								const newQueries = { ...queries };
 
+								if (typeof newQueries[searchQueryString] === 'undefined') {
+									newQueries[searchQueryString] = {
+										results: null,
+										controller: null,
+										totalPages: null,
+									};
+								}
+
 								newQueries[searchQueryString].results = normalizedResults;
 								newQueries[searchQueryString].totalPages = totalPages;
 								newQueries[searchQueryString].controller = 0;
@@ -229,6 +238,13 @@ const ContentSearch = ({
 						if (error.code !== 'fetch_error') {
 							setSearchQueries((queries) => {
 								const newQueries = { ...queries };
+
+								if (typeof newQueries[searchQueryString] === 'undefined') {
+									newQueries[searchQueryString] = {
+										results: null,
+										controller: null,
+									};
+								}
 
 								newQueries[searchQueryString].controller = 1;
 								newQueries[searchQueryString].results = [];
@@ -283,6 +299,9 @@ const ContentSearch = ({
 		});
 	}
 
+	if (searchResults !== null) {
+		searchResults = filterResults(searchResults);
+	}
 	const hasSearchString = !!searchString.length;
 	const hasSearchResults = searchResults && !!searchResults.length;
 
@@ -366,6 +385,7 @@ const ContentSearch = ({
 											suggestion={item}
 											contentTypes={contentTypes}
 											isSelected={selectedItem === index + 1}
+											renderType={renderItemType}
 										/>
 									</li>
 								);
@@ -406,6 +426,7 @@ ContentSearch.defaultProps = {
 	onSelectItem: () => {
 		console.log('Select!'); // eslint-disable-line no-console
 	},
+	renderItemType: undefined,
 };
 
 ContentSearch.propTypes = {
@@ -417,6 +438,7 @@ ContentSearch.propTypes = {
 	excludeItems: PropTypes.array,
 	label: PropTypes.string,
 	perPage: PropTypes.number,
+	renderItemType: PropTypes.func,
 };
 
 export { ContentSearch };

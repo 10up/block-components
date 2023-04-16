@@ -87,7 +87,7 @@ const StylesRichTextLink = styled(RichText)`
  * The link should not be visible if the block is not focused. This will maintain nicer
  * visuals in the block editor as a whole.
  *
- * @param {object} props								All properties passed to the component.
+ * @param {...object} props								All properties passed to the component.
  * @param {string} props.value 							The text to show inside the link
  * @param {string} props.type 							Post or Page, used to autosuggest content for URL
  * @param {boolean} props.opensInNewTab 				Should the link open in a new tab?
@@ -112,6 +112,7 @@ const Link = ({
 	kind,
 	placeholder,
 	className,
+	...rest
 }) => {
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
 	const [isValidLink, setIsValidLink] = useState(false);
@@ -149,18 +150,28 @@ const Link = ({
 				allowedFormats={[]}
 				onClick={openPopover}
 				ref={linkRef}
+				{...rest}
 			/>
 
 			{!isValidLink && (
 				<Tooltip text={__('URL or Text has not been set', '10up-block-components')}>
-					<Icon icon="warning" />
+					{/*
+					 * This additional span is needed to prevent an issue with how the Tooltip tries
+					 * to pass a ref to the Icon component. The Icon component is a functional
+					 * component and does not accept a ref.
+					 *
+					 * @see https://github.com/WordPress/gutenberg/issues/43129
+					 */}
+					<span>
+						<Icon icon="warning" />
+					</span>
 				</Tooltip>
 			)}
 
 			{isPopoverVisible && (
 				<Popover
-					position="bottom center"
 					anchorRef={linkRef.current}
+					anchor={linkRef.current}
 					ref={popoverRef}
 					focusOnMount={false}
 				>

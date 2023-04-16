@@ -19,5 +19,21 @@ import "cypress-localstorage-commands";
 // Import commands.js using ES2015 syntax:
 import './commands'
 
+Cypress.on('uncaught:exception', (err, runnable) => {
+
+	/*
+	 * the ResizeObserver loop limit exceeded error is thrown because of the underlying
+	 * implementation of the Popover component which uses the floating-ui library
+	 *
+	 * @see https://github.com/floating-ui/floating-ui/issues/1740
+	 */
+	if (err.message.includes('ResizeObserver loop limit exceeded')) {
+		// returning false here prevents Cypress from failing the test
+		return false;
+	}
+
+	return runnable;
+});
+
 // Alternatively you can use CommonJS syntax:
 // require('./commands')

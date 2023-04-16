@@ -1,5 +1,5 @@
 import { MediaPlaceholder, InspectorControls } from '@wordpress/block-editor';
-import { Spinner, FocalPointPicker, PanelBody } from '@wordpress/components';
+import { Spinner, FocalPointPicker, PanelBody, Placeholder } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
 
@@ -10,22 +10,25 @@ const Image = (props) => {
 		id,
 		size = 'full',
 		onSelect,
-		focalPoint = undefined,
+		focalPoint = { x: 0.5, y: 0.5 },
 		onChangeFocalPoint,
+		labels = {},
+		canEditImage = true,
 		...rest
 	} = props;
 	const hasImage = !!id;
 	const { media, isResolvingMedia } = useMedia(id);
 
-	const hasFocalPoint = !!focalPoint;
+	const shouldDisplayFocalPointPicker = typeof onChangeFocalPoint === 'function';
 
-	if (hasFocalPoint && typeof onChangeFocalPoint !== 'function') {
-		// eslint-disable-next-line no-console
-		console.warn('onChangeFocalPoint is required when focalPoint is set');
+	if (!hasImage && !canEditImage) {
+		return <Placeholder className="block-editor-media-placeholder" withIllustration />;
 	}
 
-	if (!hasImage) {
-		return <MediaPlaceholder onSelect={onSelect} accept="image" multiple={false} />;
+	if (!hasImage && canEditImage) {
+		return (
+			<MediaPlaceholder labels={labels} onSelect={onSelect} accept="image" multiple={false} />
+		);
 	}
 
 	if (isResolvingMedia) {
@@ -35,7 +38,7 @@ const Image = (props) => {
 	const imageUrl = media?.media_details?.sizes[size]?.source_url ?? media?.source_url;
 	const altText = media?.alt_text;
 
-	if (hasFocalPoint) {
+	if (shouldDisplayFocalPointPicker) {
 		const focalPointStyle = {
 			objectFit: 'cover',
 			objectPosition: `${focalPoint.x * 100}% ${focalPoint.y * 100}%`,
@@ -49,7 +52,7 @@ const Image = (props) => {
 
 	return (
 		<>
-			{hasFocalPoint && (
+			{shouldDisplayFocalPointPicker && (
 				<InspectorControls>
 					<PanelBody title={__('Image Settings')}>
 						<FocalPointPicker
@@ -70,8 +73,10 @@ export { Image };
 
 Image.defaultProps = {
 	size: 'large',
-	focalPoint: undefined,
+	focalPoint: { x: 0.5, y: 0.5 },
 	onChangeFocalPoint: undefined,
+	labels: {},
+	canEditImage: true,
 };
 
 Image.propTypes = {
@@ -83,4 +88,9 @@ Image.propTypes = {
 		x: PropTypes.string,
 		y: PropTypes.string,
 	}),
+	labels: PropTypes.shape({
+		title: PropTypes.string,
+		instructions: PropTypes.string,
+	}),
+	canEditImage: PropTypes.bool,
 };
