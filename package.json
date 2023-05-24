@@ -52,25 +52,25 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@floating-ui/react-dom": "^1.2.1",
-    "@wordpress/icons": "^9.16.0",
+    "@wordpress/icons": "^9.24.0",
     "array-move": "^3.0.1",
     "cypress": "^12.1.0",
     "uuid": "^8.3.2",
-    "wp-types": "^3.61.0"
+    "wp-types": "^3.62.4"
   },
   "devDependencies": {
     "@10up/cypress-wp-utils": "github:10up/cypress-wp-utils#build",
     "@types/uuid": "^9.0.0",
-    "@types/wordpress__block-editor": "^11.0.1",
+    "@types/wordpress__block-editor": "^11.5.1",
     "@types/wordpress__components": "^23.0.1",
-    "@wordpress/block-editor": "^11.2.0",
-    "@wordpress/blocks": "^12.2.0",
-    "@wordpress/core-data": "^6.2.0",
-    "@wordpress/data": "^8.2.0",
-    "@wordpress/dependency-extraction-webpack-plugin": "^4.6.0",
-    "10up-toolkit": "^4.3.1",
+    "@wordpress/block-editor": "^12.1.0",
+    "@wordpress/blocks": "^12.10.0",
+    "@wordpress/core-data": "^6.10.0",
+    "@wordpress/data": "^9.3.0",
+    "@wordpress/dependency-extraction-webpack-plugin": "^4.16.0",
+    "10up-toolkit": "^5.2.0",
     "classnames": "^2.3.2",
-    "cypress": "^12.1.0",
-    "cypress-localstorage-commands": "^2.2.2"
+    "cypress": "^12.13.0",
+    "cypress-localstorage-commands": "^2.2.3"
   }
 }
