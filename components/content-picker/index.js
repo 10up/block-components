@@ -189,7 +189,7 @@ ContentPicker.defaultProps = {
 	excludeCurrentPost: true,
 	multiPickedLabel: __('You have selected the following items:', '10up-block-components'),
 	singlePickedLabel: __('You have selected the following item:', '10up-block-components'),
-	fetchInitialResults: true,
+	fetchInitialResults: false,
 };
 
 ContentPicker.propTypes = {
