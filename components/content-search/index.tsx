@@ -14,7 +14,7 @@ const NAMESPACE = 'tenup-content-search';
 const listMinHeight = '46px';
 
 type ContentSearchProps = {
-	contentTypes: [];
+	contentTypes: string[];
 	mode: 'post' | 'user' | 'term';
 	onSelectItem: Function;
 	queryFilter: Function;
@@ -22,21 +22,21 @@ type ContentSearchProps = {
 	excludeItems: [];
 	label: string;
 	perPage: number;
-	renderItemType: Function;
+	renderItemType?: Function;
 	fetchInitialResults: boolean;
 };
 
 export const ContentSearch = ({
-	contentTypes: ['post', 'page'],
-	placeholder: '',
-	perPage: 20,
-	label: '',
-	mode: 'post',
-	excludeItems: [],
-	queryFilter: (query) => query,
-	onSelectItem: () => {},
-	renderItemType: undefined,
-	fetchInitialResults: false,
+	contentTypes = ['post', 'page'],
+	placeholder = '',
+	perPage = 20,
+	label = '',
+	mode = 'post',
+	excludeItems = [],
+	queryFilter = (query: object) => query,
+	onSelectItem = () => {},
+	renderItemType = undefined,
+	fetchInitialResults = false,
 }: ContentSearchProps) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchQueries, setSearchQueries] = useState({});
