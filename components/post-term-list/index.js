@@ -1,5 +1,6 @@
 import { Spinner } from '@wordpress/components';
 import { Children } from '@wordpress/element';
+import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
 import {
 	PostTaxonomiesHierarchicalTermSelector,
@@ -7,11 +8,18 @@ import {
 } from '@wordpress/editor';
 
 import { usePopover, usePost, useSelectedTerms, useTaxonomy } from '../../hooks';
+import { Optional } from '..';
 import { PostTermContext } from './context';
 import { ListItem, TermLink } from './item';
 
 export const PostTermList = (props) => {
-	const { tagName: TagName, taxonomyName, children, ...rest } = props;
+	const {
+		tagName: TagName = 'ul',
+		taxonomyName,
+		children,
+		noResultsMessage = __('Please select a term', 'tenup'),
+		...rest
+	} = props;
 
 	const { isEditable } = usePost();
 
@@ -46,16 +54,26 @@ export const PostTermList = (props) => {
 		};
 	}
 
+	const hasSelectedTerms = selectedTerms.length > 0;
+
 	if (hasChildComponents) {
 		return (
 			<>
-				<TagName {...listElementProps}>
-					{selectedTerms.map((term) => (
-						<PostTermContext.Provider value={term} key={term.id}>
-							{children}
-						</PostTermContext.Provider>
-					))}
-				</TagName>
+				<Optional value={hasSelectedTerms}>
+					<TagName {...listElementProps}>
+						{hasSelectedTerms ? (
+							selectedTerms.map((term) => (
+								<PostTermContext.Provider value={term} key={term.id}>
+									{children}
+								</PostTermContext.Provider>
+							))
+						) : (
+							<li>
+								<i>{noResultsMessage}</i>
+							</li>
+						)}
+					</TagName>
+				</Optional>
 				{isEditable && (
 					<Popover>
 						<PostTaxonomiesTermSelector slug={taxonomyName} />
@@ -67,13 +85,21 @@ export const PostTermList = (props) => {
 
 	return (
 		<>
-			<TagName {...listElementProps}>
-				{selectedTerms.map((term) => (
-					<li key={term.id}>
-						<a href={term.link}>{term.name}</a>
-					</li>
-				))}
-			</TagName>
+			<Optional value={hasSelectedTerms}>
+				<TagName {...listElementProps}>
+					{hasSelectedTerms ? (
+						selectedTerms.map((term) => (
+							<li key={term.id}>
+								<a href={term.link}>{term.name}</a>
+							</li>
+						))
+					) : (
+						<li>
+							<i>{noResultsMessage}</i>
+						</li>
+					)}
+				</TagName>
+			</Optional>
 			{isEditable && (
 				<Popover>
 					<PostTaxonomiesTermSelector slug={taxonomyName} />
@@ -87,12 +113,14 @@ PostTermList.propTypes = {
 	children: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
 	taxonomyName: PropTypes.string,
 	tagName: PropTypes.string,
+	noResultsMessage: PropTypes.string,
 };
 
 PostTermList.defaultProps = {
 	children: null,
 	tagName: 'ul',
 	taxonomyName: 'category',
+	noResultsMessage: __('Please select a term', 'tenup'),
 };
 
 PostTermList.ListItem = ListItem;

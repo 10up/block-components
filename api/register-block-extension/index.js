@@ -127,7 +127,7 @@ function registerBlockExtension(
 			const newClassName = classnames(className, additionalClassName);
 
 			let additionalStyles = null;
-			let newStyles = {};
+			let newStyles = { ...style };
 			if (typeof inlineStyleGenerator === 'function') {
 				additionalStyles = inlineStyleGenerator(attributes);
 				newStyles = { ...style, ...wrapperProps?.style, ...additionalStyles };
@@ -173,7 +173,7 @@ function registerBlockExtension(
 		const newClassName = classnames(className, additionalClassName);
 
 		let additionalStyles = null;
-		let newStyles = {};
+		let newStyles = { ...style };
 		if (typeof inlineStyleGenerator === 'function') {
 			additionalStyles = inlineStyleGenerator(attributes);
 			newStyles = { ...style, ...additionalStyles };

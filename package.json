@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.14.6-next.1",
+  "version": "1.15.10",
   "description": "10up Components built for the WordPress Block Editor.",
   "main": "./dist/index.js",
   "source": "index.js",
@@ -54,7 +54,6 @@
     "@floating-ui/react-dom": "^1.0.1",
     "@wordpress/icons": "^9.14.0",
     "array-move": "^3.0.1",
-    "cypress": "^12.1.0",
     "prop-types": "^15.8.1",
     "uuid": "^8.3.2"
   },
@@ -63,6 +62,7 @@
     "@wordpress/dependency-extraction-webpack-plugin": "^4.6.0",
     "10up-toolkit": "^4.3.1",
     "classnames": "^2.3.2",
+    "cypress": "^12.1.0",
     "cypress-localstorage-commands": "^2.2.2"
   }
 }

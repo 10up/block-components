@@ -23,11 +23,13 @@ const ContentSearch = ({
 	queryFilter,
 	excludeItems,
 	renderItemType,
+	fetchInitialResults,
 }) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchQueries, setSearchQueries] = useState({});
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [currentPage, setCurrentPage] = useState(1);
+	const [isFocused, setIsFocused] = useState(false);
 
 	const mounted = useRef(true);
 
@@ -132,17 +134,17 @@ const ContentSearch = ({
 	/**
 	 * handleSearchStringChange
 	 *
-	 * Using the keyword and the list of tags that are linked to the parent block
-	 * search for posts/terms that match and return them to the autocomplete component.
+	 * Using the keyword and the list of tags that are linked to the parent
+	 * block search for posts/terms/users that match and return them to the
+	 * autocomplete component.
 	 *
 	 * @param {string} keyword search query string
 	 * @param {string} page page query string
 	 */
 	const handleSearchStringChange = (keyword, page) => {
+		// Reset page and query on empty keyword.
 		if (keyword.trim() === '') {
-			setSearchString(keyword);
 			setCurrentPage(1);
-			return;
 		}
 
 		const preparedQuery = prepareSearchQuery(keyword, page);
@@ -180,9 +182,15 @@ const ContentSearch = ({
 	};
 
 	useEffect(() => {
+		// Trigger initial fetch if enabled.
+		if (fetchInitialResults) {
+			handleSearchStringChange('', 1);
+		}
+
 		return () => {
 			mounted.current = false;
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
@@ -217,6 +225,14 @@ const ContentSearch = ({
 							setSearchQueries((queries) => {
 								const newQueries = { ...queries };
 
+								if (typeof newQueries[searchQueryString] === 'undefined') {
+									newQueries[searchQueryString] = {
+										results: null,
+										controller: null,
+										totalPages: null,
+									};
+								}
+
 								newQueries[searchQueryString].results = normalizedResults;
 								newQueries[searchQueryString].totalPages = totalPages;
 								newQueries[searchQueryString].controller = 0;
@@ -230,6 +246,13 @@ const ContentSearch = ({
 						if (error.code !== 'fetch_error') {
 							setSearchQueries((queries) => {
 								const newQueries = { ...queries };
+
+								if (typeof newQueries[searchQueryString] === 'undefined') {
+									newQueries[searchQueryString] = {
+										results: null,
+										controller: null,
+									};
+								}
 
 								newQueries[searchQueryString].controller = 1;
 								newQueries[searchQueryString].results = [];
@@ -289,6 +312,7 @@ const ContentSearch = ({
 	}
 	const hasSearchString = !!searchString.length;
 	const hasSearchResults = searchResults && !!searchResults.length;
+	const hasInitialResults = fetchInitialResults && isFocused;
 
 	const listCSS = css`
 		/* stylelint-disable */
@@ -331,9 +355,15 @@ const ContentSearch = ({
 				}}
 				placeholder={placeholder}
 				autoComplete="off"
+				onFocus={() => {
+					setIsFocused(true);
+				}}
+				onBlur={() => {
+					setIsFocused(false);
+				}}
 			/>
 
-			{hasSearchString ? (
+			{hasSearchString || hasInitialResults ? (
 				<>
 					<ul className={`${NAMESPACE}-list`} css={listCSS}>
 						{isLoading && currentPage === 1 && (
@@ -412,6 +442,7 @@ ContentSearch.defaultProps = {
 		console.log('Select!'); // eslint-disable-line no-console
 	},
 	renderItemType: undefined,
+	fetchInitialResults: false,
 };
 
 ContentSearch.propTypes = {
@@ -424,6 +455,7 @@ ContentSearch.propTypes = {
 	label: PropTypes.string,
 	perPage: PropTypes.number,
 	renderItemType: PropTypes.func,
+	fetchInitialResults: PropTypes.bool,
 };
 
 export { ContentSearch };

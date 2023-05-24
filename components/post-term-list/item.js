@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { PostTermContext } from './context';
 
 export const ListItem = (props) => {
-	const { tagName: TagName, children, ...rest } = props;
+	const { tagName: TagName = 'li', children, ...rest } = props;
 
 	return <TagName {...rest}>{children}</TagName>;
 };

@@ -22,7 +22,7 @@ import { AuthorContext } from './context';
  */
 
 export const Name = (props) => {
-	const { tagName: TagName, ...rest } = props;
+	const { tagName: TagName = 'span', ...rest } = props;
 
 	/**
 	 * @type {Author}
@@ -47,7 +47,7 @@ Name.defaultProps = {
 };
 
 export const FirstName = (props) => {
-	const { tagName: TagName, ...rest } = props;
+	const { tagName: TagName = 'span', ...rest } = props;
 
 	/**
 	 * @type {Author}
@@ -66,7 +66,7 @@ FirstName.defaultProps = {
 };
 
 export const LastName = (props) => {
-	const { tagName: TagName, ...rest } = props;
+	const { tagName: TagName = 'span', ...rest } = props;
 
 	/**
 	 * @type {Author}
