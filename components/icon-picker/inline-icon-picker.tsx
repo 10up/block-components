@@ -2,6 +2,11 @@ import styled from '@emotion/styled';
 import { Dropdown } from '@wordpress/components';
 import { useCallback } from '@wordpress/element';
 
+import { DropdownProps } from '@wordpress/components/build-types/dropdown/types';
+
+// extract type from DropdownProps renderToggle function props
+type RenderToggleProps = Parameters<DropdownProps['renderToggle']>[0];
+
 import { IconPicker } from './icon-picker';
 import { Icon } from './icon';
 import React from 'react';
@@ -16,7 +21,7 @@ const StyledIconPickerDropdown = styled(IconPicker)`
 export const InlineIconPicker: FC<IconPickerProps> = (props) => {
 	const { value, ...rest } = props;
 	const IconButton = useCallback(
-		({ onToggle }: Dropdown.RenderProps) => (
+		({ onToggle }: RenderToggleProps) => (
 			<Icon name={value.name} iconSet={value.iconSet} onClick={onToggle} {...rest} />
 		),
 		[value, rest],
@@ -26,7 +31,7 @@ export const InlineIconPicker: FC<IconPickerProps> = (props) => {
 };
 
 interface IconPickerDropdownProps extends IconPickerProps {
-	renderToggle: (props: Dropdown.RenderProps) => JSX.Element;
+	renderToggle: (props: RenderToggleProps) => JSX.Element;
 };
 
 export const IconPickerDropdown: FC<IconPickerDropdownProps> = (props) => {
@@ -35,7 +40,9 @@ export const IconPickerDropdown: FC<IconPickerDropdownProps> = (props) => {
 		<Dropdown
 			className="component-icon-picker-inline-button"
 			contentClassName="component-icon-picker-inline__content"
-			position="bottom right"
+			popoverProps={ {
+				position: 'bottom center',
+			} }
 			renderToggle={renderToggle}
 			renderContent={() => <StyledIconPickerDropdown {...iconPickerProps} />}
 		/>

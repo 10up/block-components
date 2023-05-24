@@ -1,8 +1,13 @@
-// @ts-ignore
 import { Inserter } from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
 import React from 'react';
 import type { FC } from 'react';
+
+import { DropdownProps } from '@wordpress/components/build-types/dropdown/types';
+// extract IconType from Button props
+type IconType = Parameters<typeof Button>[0]['icon'];
+// extract renderToggle prop types from Dropdown
+type RenderToggleProps = Parameters<DropdownProps['renderToggle']>[0];
 
 type CustomBlockAppenderProps = {
 	/**
@@ -16,7 +21,7 @@ type CustomBlockAppenderProps = {
 	/**
 	 * The icon to use.
 	 */
-	icon?: string;
+	icon?: IconType;
 	/**
 	 * class names to be added to the button.
 	 */
@@ -41,11 +46,10 @@ export const CustomBlockAppender: FC<CustomBlockAppenderProps> = ({
 		<Inserter
 			isAppender
 			rootClientId={rootClientId}
-			renderToggle={({ onToggle, disabled }) => (
+			renderToggle={({ onToggle }: RenderToggleProps) => (
 				<Button
 					className={`tenup-${className}`}
 					onClick={onToggle}
-					disabled={disabled}
 					icon={icon}
 					{...buttonProps}
 				>

@@ -1,8 +1,6 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import { useEffect, useState, useRef } from '@wordpress/element';
-// @ts-ignore
 import { createBlock } from '@wordpress/blocks';
-// @ts-ignore
 import { InnerBlocks, store as blockEditorStore } from '@wordpress/block-editor';
 /** @jsx jsx */
 // eslint-disable-next-line no-unused-vars
