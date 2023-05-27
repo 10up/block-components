@@ -81,13 +81,13 @@ Image.defaultProps = {
 };
 
 Image.propTypes = {
-	id: PropTypes.number.isRequired,
+	id: PropTypes.number,
 	size: PropTypes.string,
 	onSelect: PropTypes.func.isRequired,
 	onChangeFocalPoint: PropTypes.func,
 	focalPoint: PropTypes.shape({
-		x: PropTypes.string,
-		y: PropTypes.string,
+		x: PropTypes.number,
+		y: PropTypes.number,
 	}),
 	labels: PropTypes.shape({
 		title: PropTypes.string,
