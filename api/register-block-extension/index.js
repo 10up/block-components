@@ -36,6 +36,10 @@ function registerBlockExtension(
 	 * @returns {boolean} true if the block is the one we want to add the extension to
 	 */
 	const shouldApplyBlockExtension = (blockType) => {
+		if (blockName === '*') {
+			return true;
+		}
+
 		if (isMultiBlock) {
 			return blockName.includes(blockType);
 		}

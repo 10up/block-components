@@ -3,13 +3,13 @@ import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, Placeholder } from '@wordpress/components';
 
-import {ContentPicker} from '@10up/block-components';
+import { ContentSearch } from '@10up/block-components';
 
 const NAMESPACE = 'example';
 
-registerBlockType( `${ NAMESPACE }/hello-world`, {
-    title: __( 'Hello World', NAMESPACE ),
-    description: __( 'Example Block to show the Post Picker in usage', NAMESPACE ),
+registerBlockType( `${ NAMESPACE }/content-search`, {
+    title: __( 'Post Searcher', NAMESPACE ),
+    description: __( 'Example Block to show the Content Search in usage', NAMESPACE ),
     icon: 'smiley',
     category: 'common',
     example: {},
@@ -26,7 +26,6 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
     edit: (props) => {
         const {
             className,
-            attributes: { selectedPost },
             setAttributes
         } = props;
 
@@ -37,25 +36,21 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
         return (
             <>
             <InspectorControls>
-                <PanelBody title={ __( 'Post Picker', NAMESPACE ) }>
-                    <ContentPicker
+                <PanelBody title={ __( 'Post Searcher', NAMESPACE ) }>
+                    <ContentSearch
                         label={ __( 'Select a Post or Page', NAMESPACE ) }
-                        onPickChange={ handlePostSelection }
-                        content={ selectedPost }
-                        maxContentItems={5}
-                        isOrderable={true}
+                        contentTypes={ [ 'page', 'post' ] }
+                        onSelectItem={ handlePostSelection }
+                        fetchInitialResults
                     />
                 </PanelBody>
             </InspectorControls>
-            <Placeholder label={ __( 'Post Picker', NAMESPACE ) } instructions={ __( 'Use the text field to search for a post', NAMESPACE) } className={ className }>
-                <ContentPicker 
-                    postTypes={ [ 'page', 'post' ] }
+            <Placeholder label={ __( 'Post Searcher', NAMESPACE ) } instructions={ __( 'Use the text field to search for a post', NAMESPACE) } className={ className }>
+                <ContentSearch
                     label={ __( 'Select a Post or Page', NAMESPACE ) }
-                    onPickChange={ handlePostSelection }
-                    content={ selectedPost }
-                    perPage={ 3 }
-                    maxContentItems={ 5 }
-                    isOrderable={ true }
+                    contentTypes={ [ 'page', 'post' ] }
+                    onSelectItem={ handlePostSelection }
+                    fetchInitialResults
                 />
             </Placeholder>
             </>
