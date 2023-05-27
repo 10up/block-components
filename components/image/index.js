@@ -58,14 +58,18 @@ const Image = (props) => {
 					</PanelBody>
 				</InspectorControls>
 			)}
-			<img src={imageUrl} alt={altText} {...rest} />
-			<MediaPlaceholder
-				labels={labels}
-				onSelect={onSelect}
-				accept="image"
-				multiple={false}
-				disableMediaButtons={imageUrl}
-			/>
+
+			{/* This DIV with position `relative` is necessary to limit the DropZone area. */}
+			<div style={{position: 'relative'}}>
+				<img src={imageUrl} alt={altText} {...rest} />
+				<MediaPlaceholder
+					labels={labels}
+					onSelect={onSelect}
+					accept="image"
+					multiple={false}
+					disableMediaButtons={imageUrl}
+				/>
+			</div>
 		</>
 	);
 };
@@ -81,7 +85,7 @@ Image.defaultProps = {
 };
 
 Image.propTypes = {
-	id: PropTypes.number,
+	id: PropTypes.number.isRequired,
 	size: PropTypes.string,
 	onSelect: PropTypes.func.isRequired,
 	onChangeFocalPoint: PropTypes.func,
