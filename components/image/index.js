@@ -60,7 +60,7 @@ const Image = (props) => {
 			)}
 
 			{/* This DIV with position `relative` is necessary to limit the DropZone area. */}
-			<div style={{position: 'relative'}}>
+			<div style={{ position: 'relative' }}>
 				<img src={imageUrl} alt={altText} {...rest} />
 				<MediaPlaceholder
 					labels={labels}
@@ -77,6 +77,7 @@ const Image = (props) => {
 export { Image };
 
 Image.defaultProps = {
+	id: 0,
 	size: 'large',
 	focalPoint: { x: 0.5, y: 0.5 },
 	onChangeFocalPoint: undefined,
@@ -85,7 +86,7 @@ Image.defaultProps = {
 };
 
 Image.propTypes = {
-	id: PropTypes.number.isRequired,
+	id: PropTypes.number,
 	size: PropTypes.string,
 	onSelect: PropTypes.func.isRequired,
 	onChangeFocalPoint: PropTypes.func,
