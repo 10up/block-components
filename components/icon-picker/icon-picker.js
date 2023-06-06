@@ -10,7 +10,7 @@ import {
 	SearchControl,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
-import { useState, memo } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 
 import { useIcons } from '../../hooks/use-icons';
 import { useFilteredList } from '../../hooks/use-filtered-list';
@@ -108,6 +108,36 @@ IconPicker.propTypes = {
 	label: PropTypes.string,
 };
 
+/**
+ * IconLabel
+ *
+ * @typedef IconLabelProps
+ * @property {object} icon icon object
+ * @property {boolean} isChecked whether the icon is checked
+ *
+ * @param {IconLabelProps} props IconLabel Props
+ * @returns {*} React Element
+ */
+const IconLabel = (props) => {
+	const { icon, isChecked } = props;
+	return (
+		<>
+			<StyledIconButton
+				isSelected={isChecked}
+				key={icon.name}
+				name={icon.name}
+				iconSet={icon.iconSet}
+			/>
+			<VisuallyHidden>{icon.label}</VisuallyHidden>
+		</>
+	);
+};
+
+IconLabel.propTypes = {
+	icon: PropTypes.object.isRequired,
+	isChecked: PropTypes.bool.isRequired,
+};
+
 const IconGrid = (props) => {
 	const { icons, selectedIcon, onChange } = props;
 
@@ -116,21 +146,11 @@ const IconGrid = (props) => {
 			{icons.map((icon) => {
 				const isChecked =
 					selectedIcon?.name === icon.name && selectedIcon?.iconSet === icon.iconSet;
-				const Label = memo(() => (
-					<>
-						<StyledIconButton
-							isSelected={isChecked}
-							key={icon.name}
-							name={icon.name}
-							iconSet={icon.iconSet}
-						/>
-						<VisuallyHidden>{icon.label}</VisuallyHidden>
-					</>
-				));
+
 				return (
 					<CheckboxControl
 						key={icon.name}
-						label={<Label />}
+						label={<IconLabel isChecked={isChecked} icon={icon} />}
 						checked={isChecked}
 						onChange={() => onChange(icon)}
 						className="component-icon-picker__checkbox-control"
