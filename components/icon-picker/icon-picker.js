@@ -145,7 +145,7 @@ const IconGrid = (props) => {
 		<StyledIconGrid orientation="vertical" className="component-icon-picker__list">
 			{icons.map((icon) => {
 				const isChecked =
-					selectedIcon?.name === icon.name && selectedIcon?.iconSet === icon.iconSet;
+					selectedIcon?.name === icon?.name && selectedIcon?.iconSet === icon?.iconSet;
 
 				return (
 					<CheckboxControl

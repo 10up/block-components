@@ -24,7 +24,7 @@ export const InlineIconPicker = (props) => {
 	const { value, ...rest } = props;
 	const IconButton = useCallback(
 		({ onToggle }) => (
-			<Icon name={value.name} iconSet={value.iconSet} onClick={onToggle} {...rest} />
+			<Icon name={value?.name} iconSet={value?.iconSet} onClick={onToggle} {...rest} />
 		),
 		[value, rest],
 	);
