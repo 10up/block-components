@@ -46,7 +46,7 @@ export const IconPickerDropdown = (props) => {
 		<Dropdown
 			className="component-icon-picker-inline-button"
 			contentClassName="component-icon-picker-inline__content"
-			position="bottom right"
+			popoverProps={{ placement: 'bottom-start' }}
 			renderToggle={renderToggle}
 			renderContent={() => <StyledIconPickerDropdown {...iconPickerProps} />}
 		/>

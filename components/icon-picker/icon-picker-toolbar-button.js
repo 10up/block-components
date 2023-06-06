@@ -32,7 +32,9 @@ export const IconPickerToolbarButton = (props) => {
 		<Dropdown
 			className="component-icon-picker-toolbar-button"
 			contentClassName="component-icon-picker-toolbar-button__content"
-			position="bottom right"
+			popoverProps={{
+				placement: 'bottom-start',
+			}}
 			renderToggle={({ isOpen, onToggle }) => (
 				<ToolbarButton onClick={onToggle} aria-expanded={isOpen} icon={buttonIcon}>
 					{buttonLabel ?? __('Select Icon')}
