@@ -35,9 +35,9 @@ const StyledIconGrid = styled(NavigableMenu)`
 `;
 
 const StyledIconButton = styled(Icon)`
-	background-color: ${({ isSelected }) => (isSelected ? 'black' : 'white')};
-	color: ${({ isSelected }) => (isSelected ? 'white' : 'black')};
-	fill: ${({ isSelected }) => (isSelected ? 'white' : 'black')};
+	background-color: ${({ selected }) => (selected ? 'black' : 'white')};
+	color: ${({ selected }) => (selected ? 'white' : 'black')};
+	fill: ${({ selected }) => (selected ? 'white' : 'black')};
 	padding: 5px;
 	border: none;
 	border-radius: 4px;
@@ -48,7 +48,7 @@ const StyledIconButton = styled(Icon)`
 	justify-content: center;
 
 	&:hover {
-		background-color: ${({ isSelected }) => (isSelected ? '#555D66' : '#f3f4f5')};
+		background-color: ${({ selected }) => (selected ? '#555D66' : '#f3f4f5')};
 	}
 
 	& svg {
@@ -123,7 +123,7 @@ const IconLabel = (props) => {
 	return (
 		<>
 			<StyledIconButton
-				isSelected={isChecked}
+				selected={isChecked}
 				key={icon.name}
 				name={icon.name}
 				iconSet={icon.iconSet}
