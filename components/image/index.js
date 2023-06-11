@@ -19,7 +19,7 @@ const Image = (props) => {
 	const hasImage = !!id;
 	const { media, isResolvingMedia } = useMedia(id);
 
-	const shouldDisplayFocalPointPicker = typeof onChangeFocalPoint === 'function';
+	const shouldDisplayFocalPointPicker = typeof onChangeFocalPoint === 'function' && hasImage;
 
 	if (!hasImage && !canEditImage) {
 		return <Placeholder className="block-editor-media-placeholder" withIllustration />;
