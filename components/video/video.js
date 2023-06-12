@@ -11,6 +11,11 @@ const Video = (props) => {
 		labels = {},
 		canEditVideo = true,
 		className = '',
+		playsInline = true,
+		autoPlay = false,
+		loop = false,
+		muted = true,
+		controls = true,
 	} = props;
 	const hasVideo = !!id;
 	const { media, isResolvingMedia } = useMedia(id);
@@ -30,22 +35,31 @@ const Video = (props) => {
 	}
 
 	const sourceUrl = media?.media_details?.sizes[size]?.source_url ?? media?.source_url;
+	const mimeType = media?.media_details?.type ?? '';
 	const altText = media?.alt_text;
 
-	return <video controls src={sourceUrl} alt={altText} className={className} />;
+	return (
+		<video
+			alt={altText}
+			className={className}
+			playsInline={playsInline}
+			autoPlay={autoPlay}
+			loop={loop}
+			muted={muted}
+			controls={controls}
+		>
+			<source src={sourceUrl} type={mimeType} />
+		</video>
+	);
 };
 
 Video.defaultProps = {
 	labels: {},
 	canEditVideo: true,
-	size: 'full',
-	className: '',
 };
 
 Video.propTypes = {
 	id: PropTypes.number.isRequired,
-	size: PropTypes.string,
-	className: PropTypes.string,
 	onSelect: PropTypes.func.isRequired,
 	labels: PropTypes.shape({
 		title: PropTypes.string,

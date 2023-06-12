@@ -9,7 +9,7 @@ import { Video } from '@10up/block-components';
 
 function BlockEdit(props) {
     const { attributes, setAttributes } = props;
-    const { videoId, focalPoint } = attributes;
+    const { videoId } = attributes;
 
     function handlevideoSelect( video ) {
         setAttributes({videoId: video.id});
@@ -22,7 +22,39 @@ function BlockEdit(props) {
             size="full"
             onSelect={handlevideoSelect}
             labels={{
-                title: 'Select Poster video',
+                title: 'Select looping background video',
+                instructions: 'Upload a media file or pick one from your media library.'
+            }}
+			autoPlay={true}
+			loop={true}
+			muted={true}
+			controls={false}
+        />
+    )
+}
+```
+
+If you'd like to make an Inspector control for this video, use `VideoControl` instead.
+
+```js
+import { Video } from '@10up/block-components';
+
+function BlockEdit(props) {
+    const { attributes, setAttributes } = props;
+    const { videoId } = attributes;
+
+    function handlevideoSelect( video ) {
+        setAttributes({videoId: video.id});
+    }
+
+    return (
+        <Video
+            id={videoId}
+            className="my-video"
+            size="full"
+            onSelect={handlevideoSelect}
+            labels={{
+                title: 'Select looping background video',
                 instructions: 'Upload a media file or pick one from your media library.'
             }}
         />
@@ -30,7 +62,46 @@ function BlockEdit(props) {
 }
 ```
 
-If you'd like to make an Inspector control for this video, use `VideoControl` instead:
+While you can set the same `autoPlay`, `loop`, and `muted` properties to the `Video` or `VideoControl` directly, you can also allow the user to control these settings by passing a `onChangeVideoOptions` callback, and a `videoOptions` setting object:
+
+```js
+import { Video } from '@10up/block-components';
+
+function BlockEdit(props) {
+    const { attributes, setAttributes } = props;
+    const {
+		videoId,
+		videoOptions = {
+			playsInline: true,
+			controls: true,
+			muted: true,
+			autoPlay: false,
+			loop: false,
+		}
+	} = attributes;
+
+    function handleVideoSelect( video ) {
+        setAttributes({videoId: video.id});
+    }
+
+	function handleChangeVideoOptions( options ) {
+		setAttributes({videoOptions: options});
+	}
+
+    return (
+        <Video
+            id={videoId}
+            className="my-video"
+            size="full"
+            onSelect={handleVideoSelect}
+            labels={{
+                title: 'Select looping background video',
+                instructions: 'Upload a media file or pick one from your media library.'
+            }}
+        />
+    )
+}
+```
 
 
 
