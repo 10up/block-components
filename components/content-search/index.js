@@ -14,17 +14,17 @@ const NAMESPACE = 'tenup-content-search';
 const listMinHeight = '46px';
 
 const ContentSearch = ({
-						   onSelectItem,
-						   placeholder,
-						   label,
-						   contentTypes,
-						   mode,
-						   perPage,
-						   queryFilter,
-						   excludeItems,
-						   renderItemType,
-						   fetchInitialResults,
-					   }) => {
+	onSelectItem,
+	placeholder,
+	label,
+	contentTypes,
+	mode,
+	perPage,
+	queryFilter,
+	excludeItems,
+	renderItemType,
+	fetchInitialResults,
+}) => {
 	const [searchString, setSearchString] = useState('');
 	const [searchQueries, setSearchQueries] = useState({});
 	const [selectedItem, setSelectedItem] = useState(null);
