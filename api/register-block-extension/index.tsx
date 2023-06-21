@@ -143,7 +143,7 @@ function registerBlockExtension(
 	);
 
 
-	const addAdditionalPropertiesToSavedMarkup = (props, block, attributes) => {
+	const addAdditionalPropertiesToSavedMarkup = (props: {[key: string]: any}, block: {name: BlockTypeName}, attributes: BlockAttributes) => {
 		// return early from the block modification
 		if (!shouldApplyBlockExtension(block.name)) {
 			return props;
