@@ -1,10 +1,15 @@
 import { useEntityProp } from '@wordpress/core-data';
 import { RichText, store as blockEditorStore } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
-import PropTypes from 'prop-types';
+import { FC } from 'react';
 import { usePost } from '../../hooks';
 
-export const PostTitle = (props) => {
+export type PostTitleProps = {
+	tagName?: keyof HTMLElementTagNameMap | undefined;
+	[key: string]: any;
+}
+
+export const PostTitle: FC<PostTitleProps> = (props) => {
 	const { tagName: TagName = 'h1', ...rest } = props;
 	const { postId, postType, isEditable } = usePost();
 
@@ -35,12 +40,4 @@ export const PostTitle = (props) => {
 			{...rest}
 		/>
 	);
-};
-
-PostTitle.propTypes = {
-	tagName: PropTypes.string,
-};
-
-PostTitle.defaultProps = {
-	tagName: 'h1',
 };

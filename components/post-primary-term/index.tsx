@@ -1,8 +1,15 @@
 import { __ } from '@wordpress/i18n';
-import PropTypes from 'prop-types';
+import { FC } from 'react';
 import { usePrimaryTerm } from '../../hooks';
 
-export const PostPrimaryTerm = (props) => {
+export type PostPrimaryTermProps = {
+	taxonomyName?: string;
+	placeholder?: string;
+	isLink?: boolean;
+	[key: string]: any;
+};
+
+export const PostPrimaryTerm: FC<PostPrimaryTermProps> = (props) => {
 	const {
 		taxonomyName = 'category',
 		placeholder = __('Select a term', 'tenup'),
@@ -32,16 +39,4 @@ export const PostPrimaryTerm = (props) => {
 	}
 
 	return <Tag {...wrapperProps}>{termString}</Tag>;
-};
-
-PostPrimaryTerm.propTypes = {
-	placeholder: PropTypes.string,
-	taxonomyName: PropTypes.string,
-	isLink: PropTypes.bool,
-};
-
-PostPrimaryTerm.defaultProps = {
-	placeholder: __('Select a Term', 'tenup'),
-	isLink: true,
-	taxonomyName: 'category',
 };
