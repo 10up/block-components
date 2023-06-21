@@ -29,18 +29,19 @@ interface IconPickerToolbarButtonProps extends IconPickerProps {
  */
 export const IconPickerToolbarButton: FC<IconPickerToolbarButtonProps> = (props) => {
 	const {
-		value: { name, iconSet },
+		value,
 		buttonLabel = __('Select Icon'),
 	} = props;
 
-	const buttonIcon = name && iconSet ? <Icon name={name} iconSet={iconSet} /> : null;
+	const buttonIcon =
+		value?.name && value?.iconSet ? <Icon name={value?.name} iconSet={value?.iconSet} /> : null;
 
 	return (
 		<Dropdown
 			className="component-icon-picker-toolbar-button"
 			contentClassName="component-icon-picker-toolbar-button__content"
 			popoverProps={{
-				position: 'bottom right',
+				placement: 'bottom-start',
 			}}
 			renderToggle={({ isOpen, onToggle }) => (
 				<ToolbarButton onClick={onToggle} aria-expanded={isOpen} icon={buttonIcon}>

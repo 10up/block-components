@@ -9,7 +9,7 @@ import {
 	SearchControl,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
-import { useState, memo } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 
 import { useIcons } from '../../hooks/use-icons';
 import { useFilteredList } from '../../hooks/use-filtered-list';
@@ -37,9 +37,9 @@ const StyledIconGrid = styled(NavigableMenu)`
 `;
 
 const StyledIconButton = styled(Icon)`
-	background-color: ${({ isSelected }) => (isSelected ? 'black' : 'white')};
-	color: ${({ isSelected }) => (isSelected ? 'white' : 'black')};
-	fill: ${({ isSelected }) => (isSelected ? 'white' : 'black')};
+	background-color: ${({ selected }) => (selected ? 'black' : 'white')};
+	color: ${({ selected }) => (selected ? 'white' : 'black')};
+	fill: ${({ selected }) => (selected ? 'white' : 'black')};
 	padding: 5px;
 	border: none;
 	border-radius: 4px;
@@ -50,7 +50,7 @@ const StyledIconButton = styled(Icon)`
 	justify-content: center;
 
 	&:hover {
-		background-color: ${({ isSelected }) => (isSelected ? '#555D66' : '#f3f4f5')};
+		background-color: ${({ selected }) => (selected ? '#555D66' : '#f3f4f5')};
 	}
 
 	& svg {
@@ -106,6 +106,26 @@ export const IconPicker: FC<IconPickerProps> = (props) => {
 	);
 };
 
+type IconLabelProps = {
+	icon: IconType;
+	isChecked: boolean;
+};
+
+const IconLabel: FC<IconLabelProps> = (props) => {
+	const { icon, isChecked } = props;
+	return (
+		<>
+			<StyledIconButton
+				selected={isChecked}
+				key={icon.name}
+				name={icon.name}
+				iconSet={icon.iconSet}
+			/>
+			<VisuallyHidden>{icon.label}</VisuallyHidden>
+		</>
+	);
+};
+
 type IconGridProps = {
 	icons: IconType[];
 	selectedIcon: IconType;
@@ -119,22 +139,12 @@ const IconGrid: FC<IconGridProps> = (props) => {
 		<StyledIconGrid orientation="vertical" className="component-icon-picker__list">
 			{icons.map((icon) => {
 				const isChecked =
-					selectedIcon?.name === icon.name && selectedIcon?.iconSet === icon.iconSet;
-				const Label = memo(() => (
-					<>
-						<StyledIconButton
-							isSelected={isChecked}
-							key={icon.name}
-							name={icon.name}
-							iconSet={icon.iconSet}
-						/>
-						<VisuallyHidden>{icon.label}</VisuallyHidden>
-					</>
-				));
+					selectedIcon?.name === icon?.name && selectedIcon?.iconSet === icon?.iconSet;
+
 				return (
 					<CheckboxControl
 						key={icon.name}
-						label={<Label />}
+						label={<IconLabel isChecked={isChecked} icon={icon} />}
 						checked={isChecked}
 						onChange={() => onChange(icon)}
 						className="component-icon-picker__checkbox-control"
