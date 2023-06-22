@@ -1,7 +1,7 @@
 import { useBlockEditContext } from '@wordpress/block-editor';
 
 type OptionalProps = {
-	value: string;
+	value: string | boolean;
 	children: React.ReactNode;
 };
 
