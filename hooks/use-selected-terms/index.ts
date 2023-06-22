@@ -4,7 +4,7 @@ import { useAllTerms } from '../use-all-terms';
 import { useSelectedTermIds } from '../use-selected-term-ids';
 import { useSelectedTermsOfSavedPost } from '../use-selected-terms-of-saved-post';
 
-export const useSelectedTerms = (taxonomyName) => {
+export const useSelectedTerms = (taxonomyName: string) => {
 	const { postId, postType, isEditable } = usePost();
 	const [isSupportedTaxonomy, hasResolvedIsSupportedTaxonomy] = useIsSupportedTaxonomy(
 		postType,

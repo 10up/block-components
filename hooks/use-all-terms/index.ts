@@ -1,7 +1,7 @@
 import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
 
-export const useAllTerms = (taxonomyName) => {
+export const useAllTerms = (taxonomyName: string) => {
 	return useSelect(
 		(select) => {
 			const { getEntityRecords, hasFinishedResolution } = select(coreStore);

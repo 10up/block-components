@@ -1,26 +1,27 @@
 import { useContext } from '@wordpress/element';
-import PropTypes from 'prop-types';
+import { FC } from 'react';
 import { PostTermContext } from './context';
 
-export const ListItem = (props) => {
+export type ListItemProps = {
+	tagName?: keyof HTMLElementTagNameMap | undefined;
+	[key: string]: any;
+};
+
+export const ListItem: FC<ListItemProps> = (props) => {
 	const { tagName: TagName = 'li', children, ...rest } = props;
 
 	return <TagName {...rest}>{children}</TagName>;
 };
 
-ListItem.propTypes = {
-	tagName: PropTypes.string,
-	children: PropTypes.node.isRequired,
+export type TermNameProps = {
+	[key: string]: any;
 };
 
-ListItem.defaultProps = {
-	tagName: 'li',
-};
-
-export const TermLink = (props) => {
+export const TermLink: FC<TermNameProps> = (props) => {
 	const { link, name } = useContext(PostTermContext);
 
 	return (
+		// @ts-ignore-next-line
 		<a href={link} inert="true" {...props}>
 			{name}
 		</a>

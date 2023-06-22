@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { useMemo } from '@wordpress/element';
-import { PostContext as PostContextContext } from './context';
+import { PostContext as PostContextContext, PostContextType } from './context';
 
 type PostContextProps = {
 	children: React.ReactNode;
@@ -12,7 +12,7 @@ type PostContextProps = {
 export const PostContext: FC<PostContextProps> = (props) => {
 	const { children, postId, postType, isEditable } = props;
 
-	const value = useMemo(
+	const value = useMemo<PostContextType>(
 		() => ({
 			postId,
 			postType,

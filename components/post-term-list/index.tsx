@@ -6,13 +6,24 @@ import {
 	PostTaxonomiesHierarchicalTermSelector,
 	PostTaxonomiesFlatTermSelector,
 } from '@wordpress/editor';
+import { FC } from 'react';
 
 import { usePopover, usePost, useSelectedTerms, useTaxonomy } from '../../hooks';
 import { Optional } from '..';
 import { PostTermContext } from './context';
 import { ListItem, TermLink } from './item';
 
-export const PostTermList = (props) => {
+export type PostTermListProps = {
+	tagName?: keyof HTMLElementTagNameMap | undefined;
+	taxonomyName: string;
+	children?:
+		| React.ReactNode
+		| ((props: { selectedTerms: Array<{ id: number; name: string }>, isEditable?: boolean }) => React.ReactNode);
+	noResultsMessage?: string;
+	[key: string]: any;
+};
+
+export const PostTermList: FC<PostTermListProps> = (props) => {
 	const {
 		tagName: TagName = 'ul',
 		taxonomyName,

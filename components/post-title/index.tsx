@@ -13,7 +13,7 @@ export const PostTitle: FC<PostTitleProps> = (props) => {
 	const { tagName: TagName = 'h1', ...rest } = props;
 	const { postId, postType, isEditable } = usePost();
 
-	const [rawTitle = '', setTitle, fullTitle] = useEntityProp(
+	const [rawTitle = '', setTitle, fullTitle] = useEntityProp<string, {rendered: string, raw?: string}>(
 		'postType',
 		postType,
 		'title',
