@@ -4,19 +4,25 @@ import { useEffect, useRef } from '@wordpress/element';
 import { v4 as uuidv4 } from 'uuid';
 import { store as editorStore } from '@wordpress/editor';
 
-
 export const Required = ({ value, children }) => {
 	const { current: componentId } = useRef( uuidv4() );
-	const { lockPostSaving, unlockPostSaving } = useDispatch( editorStore );
 
+	const {
+		lockPostSaving,
+		unlockPostSaving,
+	} = useDispatch( editorStore );
+
+	// Disable post saving when required field(s) are empty.
 	useEffect( () => {
-		if ( ! value ) {
+		if ( '' === value || null === value || undefined === value ) {
 			lockPostSaving( componentId );
 		} else {
 			unlockPostSaving( componentId );
 		}
 
-		return () => unlockPostSaving( componentId );
+		return () => {
+			unlockPostSaving( componentId );
+		}
 	}, [ value ] );
 
 	return children;
