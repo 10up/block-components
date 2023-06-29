@@ -25,3 +25,4 @@ export { PostPrimaryTerm } from './post-primary-term';
 export { PostPrimaryCategory } from './post-primary-category';
 export { RichTextCharacterLimit, getCharacterCount } from './rich-text-character-limit';
 export { CircularProgressBar, Counter } from './counter';
+export { Required } from './required';
