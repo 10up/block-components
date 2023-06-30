@@ -2,11 +2,20 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { useEffect, useState, useRef } from '@wordpress/element';
 import { createBlock } from '@wordpress/blocks';
 import { useInnerBlocksProps } from '@wordpress/block-editor';
+import deprecated from '@wordpress/deprecated';
 import PropTypes from 'prop-types';
 /** @jsx jsx */
 // eslint-disable-next-line no-unused-vars
 import { jsx, css } from '@emotion/react';
 import { ChevronLeft, ChevronRight } from './icons';
+
+deprecated('InnerBlockSlider', {
+	since: '1.15.12',
+	version: '1.16',
+	alternative:
+		'the useInnerBlocksProps hook to render the inner blocks and then use the same JS library that powers the slider on the frontend in the editor',
+	plugin: '10up Block Components',
+});
 
 const InnerBlockSlider = ({
 	parentBlockId,
