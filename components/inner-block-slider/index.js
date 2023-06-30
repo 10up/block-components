@@ -1,7 +1,7 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import { useEffect, useState, useRef } from '@wordpress/element';
 import { createBlock } from '@wordpress/blocks';
-import { InnerBlocks, useInnerBlocksProps } from '@wordpress/block-editor';
+import { useInnerBlocksProps } from '@wordpress/block-editor';
 import PropTypes from 'prop-types';
 /** @jsx jsx */
 // eslint-disable-next-line no-unused-vars
