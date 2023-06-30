@@ -11,3 +11,4 @@ import './blocks/post-featured-image';
 import './blocks/content-item';
 import './blocks/hero';
 import './blocks/post-meta';
+import './blocks/inner-blocks-slider';
