@@ -35,6 +35,14 @@ export const usePrimaryTerm = (taxonomyName) => {
 				return null;
 			}
 
+			const yoastStore = select('yoast-seo/editor');
+
+			if (!yoastStore) {
+				// eslint-disable-next-line no-console
+				console.error(`The yoast-seo/editor store does is not available.`);
+				return null;
+			}
+
 			return select('yoast-seo/editor').getPrimaryTaxonomyId(taxonomyName);
 		},
 		[
