@@ -9,13 +9,23 @@ export function usePost() {
 		isEditable: blockContextIsEditable,
 	} = usePostContext();
 
-	const { globalPostId, globalPostType } = useSelect(
-		(select) => ({
+	const { globalPostId, globalPostType } = useSelect((select) => {
+		const hasEditSiteStore = !!select('core/edit-site');
+
+		if (hasEditSiteStore) {
+			const editedPostContext = select('core/edit-site').getEditedPostContext();
+
+			return {
+				globalPostId: editedPostContext.postId,
+				globalPostType: editedPostContext.postType,
+			};
+		}
+
+		return {
 			globalPostId: select(editorStore).getCurrentPostId(),
 			globalPostType: select(editorStore).getCurrentPostType(),
-		}),
-		[],
-	);
+		};
+	}, []);
 
 	const hasBlockContext = !!blockContextPostId && !!blockContextPostType;
 
