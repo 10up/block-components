@@ -9,14 +9,12 @@ import { store as requiredFieldsStore } from './store';
 import './filters';
 
 export const Required = ({ value, children }) => {
-	const { appendComponentId, removeComponentId } = useDispatch( requiredFieldsStore );
 	const { clientId } = useBlockEditContext();
 	const { current: componentId } = useRef( uuidv4() );
 
-	const {
-		lockPostSaving,
-		unlockPostSaving,
-	} = useDispatch( editorStore );
+	const { appendComponentId, removeComponentId } = useDispatch( requiredFieldsStore );
+	const { lockPostSaving, unlockPostSaving } = useDispatch( editorStore );
+
 
 	const isEmpty = '' === value || null === value || undefined === value;
 
