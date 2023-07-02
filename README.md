@@ -30,7 +30,7 @@ A collection of components built to be used in the block editor. These component
 - [IconPicker](./components/icon-picker/)
 - [Image](./components/image/)
 - [Link](./components/link/)
-- [InnerBlockSlider](./components/inner-block-slider/)
+- [InnerBlockSlider `DEPRECATED`](./components/inner-block-slider/)
 - [IsAdmin](./components//is-admin/)
 - [MediaToolbar](./components/media-toolbar/)
 - [Optional](./components/optional/)
