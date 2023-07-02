@@ -28,7 +28,7 @@ registerBlockType( `${ NAMESPACE }/required-component-example`, {
 	},
 	transforms: {},
 	variations: [],
-	edit: ( { attributes, setAttributes } ) => {
+	edit: ( { attributes, setAttributes, isSelected } ) => {
 		const blockProps = useBlockProps();
 		const { fname, lname } = attributes;
 
