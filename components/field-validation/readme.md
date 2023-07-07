@@ -6,7 +6,7 @@ The Field Validation component enables the ability to add field validation.
 
 ### Prop: Required
 
-`<FieldValidation>` provides a `required` prop which accepts true or a string. Passing true will display the default "Required" message, while passing a string enables the use of a custom message.
+`<FieldValidation>` provides a `required` prop which accepts true or a string. Passing true will display the default response which is "Required", while passing a string enables the use of a custom response.
 
 ```js
 import { FieldValidation } from '@10up/block-components';
@@ -39,7 +39,7 @@ function BlockEdit(props) {
 
 ### Prop: Validate
 
-`<FieldValidation>` can provide more extensive validation tests, `validate` accepts an array of tests. Each test entry is an array containing a callback function and messaging.
+`<FieldValidation>` can provide more extensive validation tests, `validate` accepts an array of tests. Each test entry is an array containing a callback function and response.
 
 ```js
 import { FieldValidation } from '@10up/block-components';
@@ -102,5 +102,5 @@ function BlockEdit(props) {
 | Name       | Type              | Default  |  Description                                                   |
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
 | `value` | `string` | `undefined` | Value to validate |
-| `required` | `boolean/string` | `Required` | Required validation message |
+| `required` | `boolean/string` | `Required` | Required validation response |
 | `validate` | `array` | `[]` | Tests to validate value |
