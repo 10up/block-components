@@ -102,5 +102,5 @@ function BlockEdit(props) {
 | Name       | Type              | Default  |  Description                                                   |
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
 | `value` | `string` | `undefined` | Value to validate |
-| `required` | `boolean/string` | `Required` | Required validation response |
-| `validate` | `array` | `[]` | Tests to validate value |
+| `required` | `boolean/string` | `false/Required` | Required validation response |
+| `validate` | `array` | `false` | Tests to validate value |
