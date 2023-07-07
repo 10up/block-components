@@ -67,7 +67,7 @@ function BlockEdit(props) {
 
 ### Full example
 
-Required and validate props can be combined. The required validation will display if the value is empty, and validate will display if there is a value.
+Required and validate props can be combined. The required validation will display if the value is empty, and validate will display if there is a value available for custom tests.
 
 ```js
 import { FieldValidation } from '@10up/block-components';
@@ -80,7 +80,7 @@ function BlockEdit(props) {
         <>
             <FieldValidation
                 value={title}
-                required={__('Title is a required field', '10up-block-library')}
+                required={__('Title is a required field', '10up')}
                 validate={[
                     [ (value) => /^[a-zA-Z\s]+$/.test(value), __('Title requires a-z characters', '10up') ],
                     [ (value) => /^.{10,}$/.test(value), __('Title requires 10 characters or more', '10up') ],
