@@ -144,7 +144,7 @@ const CircularProgressBar: FC<CircularProgressBarProps> = (props) => {
 type CounterProps = {
 	count: number;
 	limit: number;
-	[x: string]: any;
+	[key: string]: any;
 };
 
 /**
