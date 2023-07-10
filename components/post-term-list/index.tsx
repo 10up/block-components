@@ -18,7 +18,7 @@ export type PostTermListProps = {
 	taxonomyName: string;
 	children?:
 		| React.ReactNode
-		| ((props: { selectedTerms: Array<{ id: number; name: string }>, isEditable?: boolean }) => React.ReactNode);
+		| ((props: { selectedTerms: { id: number; name: string }[], isEditable?: boolean }) => React.ReactNode);
 	noResultsMessage?: string;
 	[key: string]: any;
 };
