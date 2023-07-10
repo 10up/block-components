@@ -5,7 +5,7 @@ import { FC } from 'react';
 import { usePost } from '../../hooks';
 
 export type PostTitleProps = {
-	tagName?: keyof HTMLElementTagNameMap | undefined;
+	tagName?: keyof HTMLElementTagNameMap;
 	[key: string]: any;
 }
 

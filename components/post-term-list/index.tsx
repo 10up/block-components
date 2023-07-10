@@ -14,7 +14,7 @@ import { PostTermContext } from './context';
 import { ListItem, TermLink } from './item';
 
 export type PostTermListProps = {
-	tagName?: keyof HTMLElementTagNameMap | undefined;
+	tagName?: keyof HTMLElementTagNameMap;
 	taxonomyName: string;
 	children?:
 		| React.ReactNode

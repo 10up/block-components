@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { PostTermContext } from './context';
 
 export type ListItemProps = {
-	tagName?: keyof HTMLElementTagNameMap | undefined;
+	tagName?: keyof HTMLElementTagNameMap;
 	[key: string]: any;
 };
 
