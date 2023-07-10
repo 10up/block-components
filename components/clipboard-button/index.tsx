@@ -18,7 +18,7 @@ type ClipboardButtonProps = {
 export const ClipboardButton: FC<ClipboardButtonProps> = (props) => {
 	const { text, disabled, onSuccess, labels } = props;
 	const [hasCopied, setHasCopied] = useState(false);
-	const copy = labels.copy ? labels.copy : __('Copy');
+	const copy = labels.copy || __('Copy');
 	const copied = labels.copied || __('Copied');
 
 	useEffect(() => {
