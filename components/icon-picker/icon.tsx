@@ -12,7 +12,7 @@ type IconProps = {
 
 export const Icon: FC<IconProps> = (props) => {
 	const { name, iconSet, onClick, ...rest } = props;
-	const icon= useIcon(iconSet, name);
+	const icon = useIcon(iconSet, name);
 
 	if (!icon) {
 		return <Spinner />;
