@@ -5,7 +5,7 @@ The MediaToolbar component is build to quickly add a complete media editing expe
 ## Usage
 
 ```js
-const { BlockControls } = wp.blockEditor;
+import { BlockControls } from '@wordpress/block-editor';
 import { MediaToolbar } from '@10up/block-components';
 
 function BlockEdit(props) {
