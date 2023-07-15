@@ -3,6 +3,7 @@
 
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
+import classnames from 'classnames';
 
 /**
  * registerBlockExtension
@@ -12,18 +13,19 @@ import { createHigherOrderComponent } from '@wordpress/compose';
  * and getSaveContent.extraProps filters.
  *
  * @typedef BlockOptionOptions
- * @property {object}   attributes         object for new attributes that should get added to the block
- * @property {Function} classNameGenerator function that gets passed the attributes and should return a string for the classname
- * @property {Function} Edit               block edit extension function. Will only get rendered when the block is selected
- * @property {string}   extensionName      unique identifier used for the name of the addFilter calls
- * @property {string}   order              the order where the extension should be rendered. Can be 'before' or 'after'. Defaults to 'after'
+ * @property {object}   attributes           object for new attributes that should get added to the block
+ * @property {Function} classNameGenerator   function that gets passed the attributes and should return a string for the classname
+ * @property {Function} inlineStyleGenerator function that gets passed the attributes and should return an object for the inline styles
+ * @property {Function} Edit                 block edit extension function. Will only get rendered when the block is selected
+ * @property {string}   extensionName        unique identifier used for the name of the addFilter calls
+ * @property {string}   order                the order where the extension should be rendered. Can be 'before' or 'after'. Defaults to 'after'
  *
  * @param {string|string[]}    blockName name of the block or array of block names
  * @param {BlockOptionOptions} options   configuration options
  */
 function registerBlockExtension(
 	blockName,
-	{ attributes, classNameGenerator, Edit, extensionName, order = 'after' },
+	{ attributes, classNameGenerator, inlineStyleGenerator, Edit, extensionName, order = 'after' },
 ) {
 	const isMultiBlock = Array.isArray(blockName);
 
@@ -34,6 +36,10 @@ function registerBlockExtension(
 	 * @returns {boolean} true if the block is the one we want to add the extension to
 	 */
 	const shouldApplyBlockExtension = (blockType) => {
+		if (blockName === '*') {
+			return true;
+		}
+
 		if (isMultiBlock) {
 			return blockName.includes(blockType);
 		}
@@ -106,11 +112,11 @@ function registerBlockExtension(
 	);
 
 	/**
-	 * addClassNameInEditor
+	 * addAdditionalPropertiesInEditor
 	 */
-	const addClassNameInEditor = createHigherOrderComponent((BlockList) => {
+	const addAdditionalPropertiesInEditor = createHigherOrderComponent((BlockList) => {
 		return (props) => {
-			const { name, attributes } = props;
+			const { name, attributes, className, style, wrapperProps } = props;
 
 			// return early from the block modification
 			if (!shouldApplyBlockExtension(name)) {
@@ -118,53 +124,72 @@ function registerBlockExtension(
 			}
 
 			const additionalClassName = classNameGenerator(attributes);
+			const newClassName = classnames(className, additionalClassName);
 
-			if (!additionalClassName) {
+			let additionalStyles = null;
+			let newStyles = { ...style };
+			if (typeof inlineStyleGenerator === 'function') {
+				additionalStyles = inlineStyleGenerator(attributes);
+				newStyles = { ...style, ...wrapperProps?.style, ...additionalStyles };
+			}
+
+			if (!additionalClassName && !additionalStyles) {
 				return <BlockList {...props} />;
 			}
 
 			return (
 				<BlockList
 					{...props}
-					className={`${attributes.className || ''} ${additionalClassName}`}
+					className={newClassName}
+					wrapperProps={{ ...wrapperProps, style: newStyles }}
 				/>
 			);
 		};
-	}, 'addClassNameInEditor');
+	}, 'addAdditionalPropertiesInEditor');
 
 	addFilter(
 		'editor.BlockListBlock',
-		`namespace/${blockNamespace}/${extensionName}/addClassNameInEditor`,
-		addClassNameInEditor,
+		`namespace/${blockNamespace}/${extensionName}/addAdditionalPropertiesInEditor`,
+		addAdditionalPropertiesInEditor,
 	);
 
 	/**
-	 * saveSpacingAttributes
+	 * addAdditionalPropertiesToSavedMarkup
 	 *
 	 * @param {object} props      block props
 	 * @param {object} block      block object
 	 * @param {object} attributes block attributes
 	 * @returns {object}
 	 */
-	const saveSpacingAttributes = (props, block, attributes) => {
+	const addAdditionalPropertiesToSavedMarkup = (props, block, attributes) => {
+		const { className, style } = props;
+
 		// return early from the block modification
 		if (!shouldApplyBlockExtension(block.name)) {
 			return props;
 		}
 
 		const additionalClassName = classNameGenerator(attributes);
+		const newClassName = classnames(className, additionalClassName);
 
-		if (!additionalClassName) {
+		let additionalStyles = null;
+		let newStyles = { ...style };
+		if (typeof inlineStyleGenerator === 'function') {
+			additionalStyles = inlineStyleGenerator(attributes);
+			newStyles = { ...style, ...additionalStyles };
+		}
+
+		if (!additionalClassName && !additionalStyles) {
 			return props;
 		}
 
-		return { ...props, className: `${props.className || ''} ${additionalClassName}` };
+		return { ...props, className: newClassName, style: newStyles };
 	};
 
 	addFilter(
 		'blocks.getSaveContent.extraProps',
-		`namespace/${blockNamespace}/${extensionName}/saveSpacingAttributes`,
-		saveSpacingAttributes,
+		`namespace/${blockNamespace}/${extensionName}/addAdditionalPropertiesToSavedMarkup`,
+		addAdditionalPropertiesToSavedMarkup,
 	);
 }
 

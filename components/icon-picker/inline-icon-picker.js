@@ -24,7 +24,7 @@ export const InlineIconPicker = (props) => {
 	const { value, ...rest } = props;
 	const IconButton = useCallback(
 		({ onToggle }) => (
-			<Icon name={value.name} iconSet={value.iconSet} onClick={onToggle} {...rest} />
+			<Icon name={value?.name} iconSet={value?.iconSet} onClick={onToggle} {...rest} />
 		),
 		[value, rest],
 	);
@@ -46,7 +46,7 @@ export const IconPickerDropdown = (props) => {
 		<Dropdown
 			className="component-icon-picker-inline-button"
 			contentClassName="component-icon-picker-inline__content"
-			position="bottom right"
+			popoverProps={{ placement: 'bottom-start' }}
 			renderToggle={renderToggle}
 			renderContent={() => <StyledIconPickerDropdown {...iconPickerProps} />}
 		/>
