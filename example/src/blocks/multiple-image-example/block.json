@@ -22,22 +22,22 @@
         "focalPoint1": {
             "type": "object",
             "default": {
-                "x": 0.5,
-                "y": 0.5
+                "x": "0.5",
+                "y": "0.5"
             }
         },
         "focalPoint2": {
             "type": "object",
             "default": {
-                "x": 0.5,
-                "y": 0.5
+                "x": "0.5",
+                "y": "0.5"
             }
         },
         "focalPoint3": {
             "type": "object",
             "default": {
-                "x": 0.5,
-                "y": 0.5
+                "x": "0.5",
+                "y": "0.5"
             }
         }
     }
