@@ -4,65 +4,67 @@ export const InlineControlsStyleWrapper = styled('div')`
 	line-height: 0;
 	position: relative;
 
+	& *,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
 	&:hover,
 	&:focus,
 	&:focus-visible,
 	&:focus-within {
+		outline: 1px solid #1e1e1e;
+		outline-offset: -1px;
+
 		& .inline-controls {
 			opacity: 1;
 			pointer-events: all;
 		}
 	}
 
-	& .inline-controls {
+	& .inline-controls-sticky-wrapper {
 		position: absolute;
 		top: 0;
 		left: 0;
-		display: flex;
-		flex-direction: row;
-		gap: 5px;
 		width: 100%;
 		height: 100%;
-		justify-content: center;
-		align-items: center;
+	}
+
+	& .inline-controls {
+		border: 1px solid #1e1e1e;
+		border-radius: 2px;
+		display: grid;
+		gap: 1px;
+		grid-auto-flow: column;
+		grid-template-columns: repeat(auto-fit, minmax(36px, 1fr));
+		margin: 10px 10px 10px auto;
 		opacity: 0;
+		overflow: hidden;
 		pointer-events: none;
+		position: sticky;
+		top: 10px;
 		transition: opacity 250ms ease-out;
+		width: max-content;
 
-		&::after {
-			content: '';
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background-color: rgba(0, 0, 0, 0.5);
-			z-index: 0;
-		}
-
-		& > * {
-			z-index: 1;
+		& > div:not(:last-child) {
+			border-right: 1px solid #1e1e1e;
+			display: block;
+			min-width: max-content;
+			position: relative;
 		}
 
 		& .components-button {
-			--button-text: #fff;
-			--button-background: var(--wp-admin-theme-color);
-			white-space: nowrap;
+			--button-text: inherit;
+			--button-background: var(--wp--preset--color--white);
 			background: var(--button-background);
+			border-radius: 0;
 			color: var(--button-text);
-			text-decoration: none;
-			text-shadow: none;
+			height: 46px;
 			outline: 1px solid transparent;
-			width: 60px;
-			height: 60px;
-			border-radius: 50%;
-			padding: 12px;
-			border: 1px solid var(--button-background);
-
-			& svg {
-				width: 100%;
-				height: 100%;
-			}
+			padding: 6px 12px;
+			text-decoration: none;
+			white-space: nowrap;
 
 			&:focus:not(.disabled) {
 				outline: var(--wp-admin-theme-color);
@@ -70,12 +72,7 @@ export const InlineControlsStyleWrapper = styled('div')`
 
 			&:hover:not(.disabled),
 			&:active:not(.disabled) {
-				--button-text: #fff;
-				--button-background: var(--wp-admin-theme-color-darker-10);
-			}
-
-			&.remove-button {
-				padding: 18px;
+				--button-text: var(--wp-admin-theme-color);
 			}
 		}
 	}
