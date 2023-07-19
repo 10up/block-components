@@ -9,14 +9,6 @@ import PropTypes from 'prop-types';
 import { jsx, css } from '@emotion/react';
 import { ChevronLeft, ChevronRight } from './icons';
 
-deprecated('InnerBlockSlider', {
-	since: '1.15.12',
-	version: '1.16',
-	alternative:
-		'the useInnerBlocksProps hook to render the inner blocks and then use the same JS library that powers the slider on the frontend in the editor',
-	plugin: '10up Block Components',
-});
-
 const InnerBlockSlider = ({
 	parentBlockId,
 	slidesPerPage,
@@ -25,6 +17,14 @@ const InnerBlockSlider = ({
 	slideHeight,
 }) => {
 	const [currentPage, setCurrentPage] = useState(1);
+
+	deprecated('InnerBlockSlider', {
+		since: '1.15.12',
+		version: '1.16',
+		alternative:
+			'the useInnerBlocksProps hook to render the inner blocks and then use the same JS library that powers the slider on the frontend in the editor',
+		plugin: '10up Block Components',
+	});
 
 	let innerBlockTemplate = template;
 
