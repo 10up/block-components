@@ -19,14 +19,6 @@ type InnerBlockSliderProps = {
 	slideHeight: string;
 };
 
-deprecated('InnerBlockSlider', {
-	since: '1.15.12',
-	version: '1.16',
-	alternative:
-		'the useInnerBlocksProps hook to render the inner blocks and then use the same JS library that powers the slider on the frontend in the editor',
-	plugin: '10up Block Components',
-});
-
 const InnerBlockSlider: FC<InnerBlockSliderProps> = ({
 	parentBlockId,
 	slidesPerPage,
@@ -35,6 +27,14 @@ const InnerBlockSlider: FC<InnerBlockSliderProps> = ({
 	slideHeight,
 }) => {
 	const [currentPage, setCurrentPage] = useState(1);
+
+	deprecated('InnerBlockSlider', {
+		since: '1.15.12',
+		version: '1.16',
+		alternative:
+			'the useInnerBlocksProps hook to render the inner blocks and then use the same JS library that powers the slider on the frontend in the editor',
+		plugin: '10up Block Components',
+	});
 
 	let innerBlockTemplate = template;
 
