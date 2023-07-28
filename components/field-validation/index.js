@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo, forwardRef, cloneElement } from '@wordpre
 import { dispatch } from '@wordpress/data';
 import { useFloating, autoUpdate } from '@floating-ui/react-dom';
 import { v4 as uuid } from 'uuid';
+import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 
@@ -21,7 +22,7 @@ const createTestsArray = (required, validate) => {
 
 	if (required) {
 		const fn = (str) => typeof str === 'string' && str !== '';
-		const res = typeof required === 'string' ? required : __('Required', '10up-block-library');
+		const res = typeof required === 'string' ? required : __('Required', '10up-block-components');
 		tests.push([fn, res]);
 	}
 
@@ -87,9 +88,9 @@ const Error = forwardRef((props, ref) => {
 	const { responses } = props;
 
 	return (
-		<ErrorResponse className="tenup--block-components__validation-error" {...props} ref={ref}>
+		<ErrorResponse className="tenup--block-components__validation-error__response" {...props} ref={ref}>
 			{responses.map((response) => (
-				<div key={uuid()} className="tenup--block-components__validation-error__rule">
+				<div key={uuid()} className="tenup--block-components__validation-error__response-rule">
 					{response}
 				</div>
 			))}
@@ -155,9 +156,15 @@ const FieldValidation = (props) => {
 		dispatchLock(responses.length > 0);
 	}, [responses, dispatchLock]);
 
+	const fieldErorrClassName = responses.length > 0 ? 'tenup--block-components__validation-error__field' : '';
+
 	return (
 		<>
-			{cloneElement(children, { ref: reference, ...children.props })}
+			{cloneElement(children, {
+				ref: reference,
+				...children.props,
+				className: classnames(children.props?.className, fieldErorrClassName),
+			})}
 
 			{responses.length > 0 && (
 				<Error
