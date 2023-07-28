@@ -6,6 +6,7 @@ import { v4 as uuid } from 'uuid';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
+import { Global, css } from '@emotion/react';
 
 /**
  * Create Tests Array
@@ -73,9 +74,11 @@ const validateTestsArray = (value, tests) => {
  * @returns <ErrorMessage />
  */
 const ErrorResponse = styled('div')`
-	--color-warning: #f00;
-
-	color: var(--color-warning);
+	color: var(--wp--preset--color--vivid-red);
+	font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen-Sans, Ubuntu, Cantarell,
+		Helvetica Neue, sans-serif;
+	font-size: 13px;
+	font-weight: 500;
 `;
 
 /**
@@ -166,14 +169,26 @@ const FieldValidation = (props) => {
 
 	const fieldErrorClassName =
 		responses.length > 0 ? 'tenup--block-components__validation-error__field' : '';
+	const mergedClassName = classnames(children.props?.className, fieldErrorClassName);
+
+	const clonedChildren = cloneElement(children, {
+		ref: reference,
+		...children.props,
+		className: mergedClassName,
+	});
 
 	return (
 		<>
-			{cloneElement(children, {
-				ref: reference,
-				...children.props,
-				className: classnames(children.props?.className, fieldErrorClassName),
-			})}
+			<Global
+				styles={css`
+					.tenup--block-components__validation-error__field {
+						/* based on --wp--preset--color--vivid-red: #cf2e2e; */
+						background-color: rgba(207, 46, 46, 0.75);
+					}
+				`}
+			/>
+
+			{clonedChildren}
 
 			{responses.length > 0 && (
 				<Error
