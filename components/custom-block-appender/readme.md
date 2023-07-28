@@ -26,7 +26,7 @@ const MyComponent = ({clientId}) => {
 The following will ensure the render appender button will only show if the parent block or an inner block is currently selected.
 
 ```js
-import { CustomBlockAppender } from '@10up/block-components';
+import { CustomBlockAppender, useHasSelectedInnerBlock } from '@10up/block-components';
 import { useSelect } from '@wordpress/data';
 const MyComponent = ({clientId, isSelected}) => {
 
