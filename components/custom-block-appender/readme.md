@@ -30,12 +30,7 @@ import { CustomBlockAppender } from '@10up/block-components';
 import { useSelect } from '@wordpress/data';
 const MyComponent = ({clientId, isSelected}) => {
 
-    const { hasSelectedInnerBlock } = useSelect( ( select ) => {
-        const { hasSelectedInnerBlock } = select( 'core/block-editor' );
-        return {
-            hasSelectedInnerBlock: hasSelectedInnerBlock
-        };
-    } );
+    const hasSelectedInnerBlock = useHasSelectedInnerBlock();
 
     <InnerBlocks
         renderAppender={ () => {
