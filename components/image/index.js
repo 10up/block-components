@@ -19,16 +19,10 @@ const Image = (props) => {
 	const hasImage = !!id;
 	const { media, isResolvingMedia } = useMedia(id);
 
-	const shouldDisplayFocalPointPicker = typeof onChangeFocalPoint === 'function';
+	const shouldDisplayFocalPointPicker = typeof onChangeFocalPoint === 'function' && hasImage;
 
 	if (!hasImage && !canEditImage) {
 		return <Placeholder className="block-editor-media-placeholder" withIllustration />;
-	}
-
-	if (!hasImage && canEditImage) {
-		return (
-			<MediaPlaceholder labels={labels} onSelect={onSelect} accept="image" multiple={false} />
-		);
 	}
 
 	if (isResolvingMedia) {
@@ -64,7 +58,18 @@ const Image = (props) => {
 					</PanelBody>
 				</InspectorControls>
 			)}
-			<img src={imageUrl} alt={altText} {...rest} />
+
+			{/* This DIV with position `relative` is necessary to limit the DropZone area. */}
+			<div style={{ position: 'relative' }}>
+				<img src={imageUrl} alt={altText} {...rest} />
+				<MediaPlaceholder
+					labels={labels}
+					onSelect={onSelect}
+					accept="image"
+					multiple={false}
+					disableMediaButtons={imageUrl}
+				/>
+			</div>
 		</>
 	);
 };
@@ -72,6 +77,7 @@ const Image = (props) => {
 export { Image };
 
 Image.defaultProps = {
+	id: 0,
 	size: 'large',
 	focalPoint: { x: 0.5, y: 0.5 },
 	onChangeFocalPoint: undefined,
@@ -80,13 +86,13 @@ Image.defaultProps = {
 };
 
 Image.propTypes = {
-	id: PropTypes.number.isRequired,
+	id: PropTypes.number,
 	size: PropTypes.string,
 	onSelect: PropTypes.func.isRequired,
 	onChangeFocalPoint: PropTypes.func,
 	focalPoint: PropTypes.shape({
-		x: PropTypes.string,
-		y: PropTypes.string,
+		x: PropTypes.number,
+		y: PropTypes.number,
 	}),
 	labels: PropTypes.shape({
 		title: PropTypes.string,

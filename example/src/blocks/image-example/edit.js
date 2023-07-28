@@ -23,9 +23,13 @@ export function BlockEdit(props) {
 
     return (
         <>
-            <BlockControls>
-               <MediaToolbar id={imageId} onSelect={ handleImageSelection } isOptional={true} onRemove={removeImage} />
-            </BlockControls>
+            {
+                imageId && (
+                    <BlockControls>
+                        <MediaToolbar id={imageId} onSelect={ handleImageSelection } isOptional={true} onRemove={removeImage} />
+                    </BlockControls>
+                )
+            }
             <div {...blockProps}>
                 <h2>Hello World!</h2>
                 <Image id={imageId} size="large" onSelect={handleImageSelection} className="example-image" focalPoint={focalPoint} onChangeFocalPoint={handleFocalPointChange} />
