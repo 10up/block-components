@@ -97,6 +97,17 @@ function BlockEdit(props) {
 }
 ```
 
+## Styling
+
+The following elements/states are available for styling;
+
+- `.tenup--block-components__validation-error__field`
+  - State/class applied to the field when there is a validation error.
+- `.tenup--block-components__validation-error__response`
+  - The responses container element.
+- `.tenup--block-components__validation-error__response-rule`
+  - Each response rule element within the responses container.
+
 ## Props
 
 | Name       | Type              | Default  |  Description                                                   |
