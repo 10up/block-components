@@ -35,7 +35,7 @@ const MyComponent = ({clientId, isSelected}) => {
     <InnerBlocks
         renderAppender={ () => {
             return (
-                ( isSelected || hasSelectedInnerBlock( clientId, true ) ) &&
+                ( isSelected || hasSelectedInnerBlock ) &&
                 <CustomBlockAppender
                     className="custom-classname"
                     rootClientId={clientId}
