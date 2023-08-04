@@ -5,8 +5,8 @@ import {
 	CheckboxControl,
 	BaseControl,
 	NavigableMenu,
-	VisuallyHidden,
 	SearchControl,
+	Tooltip,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
 import { useState, memo, useMemo } from '@wordpress/element';
@@ -113,15 +113,16 @@ IconPicker.propTypes = {
 const IconLabel = (props) => {
 	const { icon, isChecked } = props;
 	return (
-		<>
-			<StyledIconButton
-				selected={isChecked}
-				key={icon.name}
-				name={icon.name}
-				iconSet={icon.iconSet}
-			/>
-			<VisuallyHidden>{icon.label}</VisuallyHidden>
-		</>
+		<Tooltip text={icon.label}>
+			<div>
+				<StyledIconButton
+					selected={isChecked}
+					key={icon.name}
+					name={icon.name}
+					iconSet={icon.iconSet}
+				/>
+			</div>
+		</Tooltip>
 	);
 };
 
