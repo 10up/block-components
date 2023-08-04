@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from '@wordpress/element';
 import uFuzzy from '@leeoniya/ufuzzy';
 
+// eslint-disable-next-line new-cap
 const fuzzy = new uFuzzy();
 
 /**
