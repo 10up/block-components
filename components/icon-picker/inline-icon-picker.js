@@ -8,7 +8,8 @@ import { Icon } from './icon';
 
 const StyledIconPickerDropdown = styled(IconPicker)`
 	margin: 6px;
-	width: 306px;
+	width: 248px;
+	height: 248px;
 `;
 
 /**
