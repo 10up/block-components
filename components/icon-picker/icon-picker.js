@@ -9,7 +9,7 @@ import {
 	Tooltip,
 } from '@wordpress/components';
 import { useInstanceId } from '@wordpress/compose';
-import { useState, memo, useMemo } from '@wordpress/element';
+import { useState, memo, useMemo, forwardRef } from '@wordpress/element';
 import { FixedSizeGrid as Grid, areEqual } from 'react-window';
 
 import { useIcons } from '../../hooks/use-icons';
@@ -101,6 +101,25 @@ IconPicker.propTypes = {
 };
 
 /**
+ * TooltipContent
+ *
+ * The `@wordpress/components` Tooltip component tries to clone the child element
+ * passed into it. This child will get some additional children passed in. In some cases
+ * this clashes with elements that use dangerouslySetInnerHTML. This component is a
+ * workaround for that. It will just wrap the children in a div and pass that to the
+ * Tooltip component.
+ */
+const TooltipContent = forwardRef(function TooltipContent(props, ref) {
+	const { children } = props;
+
+	return (
+		<div ref={ref} className="component-icon-picker__tooltip-content" {...props}>
+			{children}
+		</div>
+	);
+});
+
+/**
  * IconLabel
  *
  * @typedef IconLabelProps
@@ -114,14 +133,14 @@ const IconLabel = (props) => {
 	const { icon, isChecked } = props;
 	return (
 		<Tooltip text={icon.label}>
-			<div>
+			<TooltipContent>
 				<StyledIconButton
 					selected={isChecked}
 					key={icon.name}
 					name={icon.name}
 					iconSet={icon.iconSet}
 				/>
-			</div>
+			</TooltipContent>
 		</Tooltip>
 	);
 };
