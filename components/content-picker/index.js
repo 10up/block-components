@@ -49,6 +49,7 @@ const ContentPickerWrapper = styled('div')`
  * @param {boolean} props.uniqueContentItems whether or not the picker should only show unique items
  * @param {boolean} props.excludeCurrentPost whether or not to exclude the current post from the picker
  * @param {number} props.perPage number of items to show per page
+ * @param {boolean} props.fetchInitialResults whether or not to fetch initial results on mount
  * @param {string} props.pickedOrder string determining where the new item fits in the current list
  * @returns {*} React JSX
  */
@@ -67,6 +68,7 @@ const ContentPicker = ({
 	uniqueContentItems,
 	excludeCurrentPost,
 	perPage,
+	fetchInitialResults,
 	pickedOrder,
 }) => {
 	const currentPostId = select('core/editor')?.getCurrentPostId();
@@ -138,6 +140,7 @@ const ContentPicker = ({
 					mode={mode}
 					queryFilter={queryFilter}
 					perPage={perPage}
+					fetchInitialResults={fetchInitialResults}
 				/>
 			) : (
 				label && (
@@ -195,6 +198,7 @@ ContentPicker.defaultProps = {
 	excludeCurrentPost: true,
 	multiPickedLabel: __('You have selected the following items:', '10up-block-components'),
 	singlePickedLabel: __('You have selected the following item:', '10up-block-components'),
+	fetchInitialResults: false,
 	pickedOrder: 'start',
 };
 
@@ -213,6 +217,7 @@ ContentPicker.propTypes = {
 	excludeCurrentPost: PropTypes.bool,
 	maxContentItems: PropTypes.number,
 	perPage: PropTypes.number,
+	fetchInitialResults: PropTypes.bool,
 	pickedOrder: PropTypes.oneOfType([PropTypes.oneOf(['start', 'end']), PropTypes.func]),
 };
 

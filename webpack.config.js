@@ -16,5 +16,6 @@ function externalizeWpDeps({ request }, callback) {
 
 module.exports = {
 	...config,
+	devtool: 'source-map',
 	plugins: [...config.plugins, new webpack.ExternalsPlugin(null, externalizeWpDeps)],
 };

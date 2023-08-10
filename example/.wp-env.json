@@ -1,5 +1,5 @@
 {
-    "plugins": [ "." ],
+    "plugins": [ ".", "https://downloads.wordpress.org/plugin/wordpress-seo.20.9.zip" ],
     "mappings": {
         "/var/www/html/images": "./images"
     }

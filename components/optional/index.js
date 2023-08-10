@@ -11,6 +11,6 @@ Optional.defaultProps = {
 };
 
 Optional.propTypes = {
-	value: PropTypes.string,
+	value: PropTypes.string || PropTypes.bool,
 	children: PropTypes.node.isRequired,
 };

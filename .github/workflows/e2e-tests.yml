@@ -1,9 +1,5 @@
 name: Run E2E Test Suite 
-on:
-  pull_request:
-  push:
-    branches:
-      - 'develop'
+on: [push, workflow_dispatch]
 
 jobs:
   cypress:
@@ -23,6 +19,7 @@ jobs:
           build: npm run build --workspaces --if-present
           start: npm run start-test-env
           wait-on: http://localhost:8888
+          wait-on-timeout: 120
           browser: chrome
           record: true
           parallel: false

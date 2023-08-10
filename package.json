@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.14.2-next.3",
+  "version": "1.16.1",
   "description": "10up Components built for the WordPress Block Editor.",
   "main": "./dist/index.js",
   "source": "index.js",
@@ -12,8 +12,8 @@
     "test": "10up-toolkit test-unit-jest",
     "build": "10up-toolkit build",
     "start": "10up-toolkit start",
-	"build-test-env": "npm run build --workspaces --if-present",
-	"start-test-env": "npm run start-env -w example/ && npm run import-media -w example/",
+    "build-test-env": "npm run build --workspaces --if-present",
+    "start-test-env": "npm run start-env -w example/ && npm run import-media -w example/",
     "test:e2e": "cypress open",
     "prepublishOnly": "npm run build"
   },
@@ -52,10 +52,11 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@floating-ui/react-dom": "^1.0.1",
+    "@leeoniya/ufuzzy": "^1.0.8",
     "@wordpress/icons": "^9.14.0",
     "array-move": "^3.0.1",
-    "cypress": "^12.1.0",
     "prop-types": "^15.8.1",
+    "react-window": "^1.8.9",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -63,6 +64,7 @@
     "@wordpress/dependency-extraction-webpack-plugin": "^4.6.0",
     "10up-toolkit": "^4.3.1",
     "classnames": "^2.3.2",
+    "cypress": "^12.1.0",
     "cypress-localstorage-commands": "^2.2.2"
   }
 }
