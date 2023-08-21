@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 // eslint-disable-next-line no-unused-vars
 import { jsx, css } from '@emotion/react';
-import SearchItem from './SearchItem';
+import SearchItem, { defaultRenderItemType } from './SearchItem';
 /** @jsx jsx */
 
 const NAMESPACE = 'tenup-content-search';
@@ -441,10 +441,7 @@ ContentSearch.defaultProps = {
 	onSelectItem: () => {
 		console.log('Select!'); // eslint-disable-line no-console
 	},
-	renderItemType: (suggestion) => {
-		// Rename 'post_tag' to 'tag'. Ideally, the API would return the localised CPT or taxonomy label.
-		return suggestion.type === 'post_tag' ? 'tag' : suggestion.type;
-	},
+	renderItemType: defaultRenderItemType,
 	fetchInitialResults: false,
 };
 

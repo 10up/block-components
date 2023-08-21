@@ -91,14 +91,16 @@ const SearchItem = ({
 	);
 };
 
+export function defaultRenderItemType(suggestion) {
+	// Rename 'post_tag' to 'tag'. Ideally, the API would return the localised CPT or taxonomy label.
+	return suggestion.type === 'post_tag' ? 'tag' : suggestion.type;
+}
+
 SearchItem.defaultProps = {
 	id: '',
 	searchTerm: '',
 	isSelected: false,
-	renderType: (suggestion) => {
-		// Rename 'post_tag' to 'tag'. Ideally, the API would return the localised CPT or taxonomy label.
-		return suggestion.type === 'post_tag' ? 'tag' : suggestion.type;
-	},
+	renderType: defaultRenderItemType,
 };
 
 SearchItem.propTypes = {
