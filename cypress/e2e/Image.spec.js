@@ -16,7 +16,7 @@ context('Image', () => {
         cy.get('#attachment-details-alt-text').type('Test Alt Text');
         cy.get('.media-button-select').contains('Select').click();
         
-        cy.get('.wp-block-example-image-example img').scrollIntoView().should('be.visible');
+        cy.get('.wp-block-example-image-example img').scrollIntoView({offset: -50}).should('be.visible');
 
         cy.get('.wp-block-example-image-example img')
             .should('have.attr', 'alt');
@@ -34,7 +34,7 @@ context('Image', () => {
 
 		cy.wait(500);
 
-        cy.get('.wp-block-example-image-example img').scrollIntoView().should('be.visible');
+        cy.get('.wp-block-example-image-example img').scrollIntoView({offset: -50}).should('be.visible');
 
 	})
 	
