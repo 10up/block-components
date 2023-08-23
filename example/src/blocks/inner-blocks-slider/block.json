@@ -1,0 +1,13 @@
+{
+    "name": "example/inner-block-slider",
+    "apiVersion": 2,
+    "title": "Inner Block Slider - Example",
+    "description": "Example Block to show the Inner block slider in usage",
+    "icon": "smiley",
+    "category": "common",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "attributes": {}
+}

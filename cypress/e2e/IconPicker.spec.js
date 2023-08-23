@@ -11,7 +11,7 @@ context('IconPicker', () => {
 		cy.insertBlock('Icon Picker Example');
         cy.get('.component-icon-picker-inline-button').click();
         cy.get('.component-icon-picker-inline__content [placeholder="Search"]').type('tool');
-        cy.get('.component-icon-picker-inline__content').contains('Tool').click({force: true});
+        cy.get('.component-icon-picker-inline__content .components-checkbox-control').first().click({force: true});
 
         cy.savePost();
 

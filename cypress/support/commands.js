@@ -58,6 +58,8 @@ Cypress.Commands.add('createPost', (options = {}) => {
 		.contains(postType, { matchCase: false })
 		.click({ force: true });
 
+	cy.wait(100);
+
 	// close the Yoast SEO metabox
 	cy.get('.wpseo-metabox .handlediv').then(button => {
 		const isExpanded = button[0].getAttribute('aria-expanded') === 'true';

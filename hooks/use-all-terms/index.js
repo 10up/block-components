@@ -11,6 +11,7 @@ export const useAllTerms = (taxonomyName) => {
 				taxonomyName,
 				{
 					per_page: -1,
+					context: 'view',
 				},
 			];
 
