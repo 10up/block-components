@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Spinner } from '@wordpress/components';
+import { forwardRef } from '@wordpress/element';
 import { useIcon } from '../../hooks/use-icons';
 
 /**
@@ -12,7 +13,7 @@ import { useIcon } from '../../hooks/use-icons';
  * @param {IconProps} props IconProps
  * @returns {*}
  */
-export const Icon = (props) => {
+export const Icon = forwardRef(function Icon(props, ref) {
 	const { name, iconSet, onClick, ...rest } = props;
 	const icon = useIcon(iconSet, name);
 
@@ -29,9 +30,11 @@ export const Icon = (props) => {
 		iconProps.onClick = onClick;
 	}
 
-	// eslint-disable-next-line react/no-danger
-	return <div {...iconProps} dangerouslySetInnerHTML={{ __html: icon.source }} {...rest} />;
-};
+	return (
+		// eslint-disable-next-line react/no-danger
+		<div {...iconProps} dangerouslySetInnerHTML={{ __html: icon.source }} {...rest} ref={ref} />
+	);
+});
 
 Icon.defaultProps = {
 	onClick: undefined,
