@@ -10,7 +10,8 @@ import type { Icon as IconType } from '../../stores/icons/types';
 
 const StyledIconPickerDropdown = styled(IconPicker)`
 	margin: 6px;
-	width: 306px;
+	width: 248px;
+	height: 248px;
 `;
 
 interface IconPickerToolbarButtonProps extends IconPickerProps {

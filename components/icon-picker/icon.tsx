@@ -1,7 +1,7 @@
 import { Spinner } from '@wordpress/components';
+import { forwardRef } from '@wordpress/element';
 import { useIcon } from '../../hooks/use-icons';
 import React from 'react';
-import type { FC } from 'react';
 
 type IconProps = {
 	name: string;
@@ -10,7 +10,9 @@ type IconProps = {
 	[key: string]: any;
 };
 
-export const Icon: FC<IconProps> = (props) => {
+type IconRef = HTMLDivElement;
+
+export const Icon = forwardRef<IconRef,IconProps>( function Icon(props, ref) {
 	const { name, iconSet, onClick, ...rest } = props;
 	const icon = useIcon(iconSet, name);
 
@@ -29,8 +31,10 @@ export const Icon: FC<IconProps> = (props) => {
 		iconProps.onClick = onClick;
 	}
 
-	// eslint-disable-next-line react/no-danger
-	return <div {...iconProps} dangerouslySetInnerHTML={{ __html: icon.source }} {...rest} />;
-};
+	return (
+		// eslint-disable-next-line react/no-danger
+		<div {...iconProps} dangerouslySetInnerHTML={{ __html: icon.source }} {...rest} ref={ref} />
+	);
+});
 
 

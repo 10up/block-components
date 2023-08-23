@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 // eslint-disable-next-line no-unused-vars
 import { jsx, css } from '@emotion/react';
-import SearchItem from './SearchItem';
+import SearchItem, { defaultRenderItemType } from './SearchItem';
 import React from 'react';
 /** @jsx jsx */
 
@@ -35,7 +35,7 @@ export const ContentSearch = ({
 	excludeItems = [],
 	queryFilter = (query: object) => query,
 	onSelectItem = () => {},
-	renderItemType = undefined,
+	renderItemType = defaultRenderItemType,
 	fetchInitialResults = false,
 }: ContentSearchProps) => {
 	const [searchString, setSearchString] = useState('');

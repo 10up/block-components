@@ -5,6 +5,16 @@ import { Button, TextHighlight, Tooltip } from '@wordpress/components';
 import { getTextContent, create } from '@wordpress/rich-text';
 import React from 'react';
 
+type defaultRenderItemTypeProps = {
+	type: string;
+	subtype: string;
+};
+
+export function defaultRenderItemType(suggestion: defaultRenderItemTypeProps) {
+	// Rename 'post_tag' to 'tag'. Ideally, the API would return the localised CPT or taxonomy label.
+	return suggestion.type === 'post_tag' ? 'tag' : suggestion.type;
+}
+
 const ButtonStyled = styled(Button)`
 	&:hover {
 		/* Add opacity background to support future color changes */
@@ -55,7 +65,7 @@ const SearchItem = ({
 	isSelected,
 	id,
 	contentTypes,
-	renderType,
+	renderType = defaultRenderItemType,
 }: SearchItemProps) => {
 	const showType = suggestion.type && contentTypes.length > 1;
 

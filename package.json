@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.15.13",
+  "version": "1.16.2",
   "description": "10up Components built for the WordPress Block Editor.",
   "main": "./dist/index.js",
   "source": "index.ts",
@@ -53,14 +53,17 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@floating-ui/react-dom": "^1.2.1",
+    "@leeoniya/ufuzzy": "^1.0.8",
     "@wordpress/icons": "^9.24.0",
     "array-move": "^3.0.1",
     "cypress": "^12.1.0",
+    "react-window": "^1.8.9",
     "uuid": "^8.3.2",
     "wp-types": "^3.62.4"
   },
   "devDependencies": {
     "@10up/cypress-wp-utils": "github:10up/cypress-wp-utils#build",
+    "@types/react-window": "^1.8.5",
     "@types/uuid": "^9.0.0",
     "@types/wordpress__block-editor": "^11.5.1",
     "@types/wordpress__components": "^23.0.1",
@@ -69,7 +72,7 @@
     "@wordpress/core-data": "^6.10.0",
     "@wordpress/data": "^9.3.0",
     "@wordpress/dependency-extraction-webpack-plugin": "^4.16.0",
-    "10up-toolkit": "^5.2.0",
+    "10up-toolkit": "^5.2.2",
     "classnames": "^2.3.2",
     "cypress": "^12.13.0",
     "cypress-localstorage-commands": "^2.2.3"

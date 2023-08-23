@@ -3,6 +3,8 @@ const { defineConfig } = require('cypress')
 module.exports = defineConfig({
   projectId: 'dnr1ke',
   videoCompression: 15,
+  viewportWidth: 1536,
+  viewportHeight: 960,
   env: {
     username: 'admin',
     password: 'password',

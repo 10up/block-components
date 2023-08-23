@@ -15,7 +15,8 @@ import type { IconPickerProps } from './icon-picker';
 
 const StyledIconPickerDropdown = styled(IconPicker)`
 	margin: 6px;
-	width: 306px;
+	width: 248px;
+	height: 248px;
 `;
 
 export const InlineIconPicker: FC<IconPickerProps> = (props) => {
