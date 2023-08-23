@@ -153,7 +153,7 @@ IconLabel.propTypes = {
 const IconGridItem = memo((props) => {
 	const { columnIndex, rowIndex, style, data } = props;
 	const { icons, selectedIcon, onChange } = data;
-	const index = rowIndex * 5 + columnIndex + 1;
+	const index = rowIndex * 5 + columnIndex;
 	const icon = icons[index];
 	const isChecked = selectedIcon?.name === icon?.name && selectedIcon?.iconSet === icon?.iconSet;
 
