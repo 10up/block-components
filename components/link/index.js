@@ -37,13 +37,14 @@ function getSuggestionsQuery(type, kind) {
 			return { type: 'term', subtype: 'post_tag' };
 		case 'post_format':
 			return { type: 'post-format' };
+	}
+
+	switch (kind) {
+		case 'taxonomy':
+			return { type: 'term', subtype: type };
+		case 'post-type':
+			return { type: 'post', subtype: type };
 		default:
-			if (kind === 'taxonomy') {
-				return { type: 'term', subtype: type };
-			}
-			if (kind === 'post-type') {
-				return { type: 'post', subtype: type };
-			}
 			return {};
 	}
 }
