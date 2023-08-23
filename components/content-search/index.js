@@ -1,6 +1,6 @@
 import { TextControl, Spinner, NavigableMenu, Button } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
-import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
+import { useState, useRef, useEffect, useCallback, useMemo } from '@wordpress/element';
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 // eslint-disable-next-line no-unused-vars
@@ -12,6 +12,118 @@ const NAMESPACE = 'tenup-content-search';
 
 // Equalize height of list icons to match loader in order to reduce jumping.
 const listMinHeight = '46px';
+
+/**
+ * Filters results.
+ *
+ * @param {object} args Arguments.
+ * @param {Array} args.results Results.
+ * @param {Array} args.excludeItems Exclude items.
+ * @returns {Array} Filtered results.
+ */
+const filterResults = ({ results, excludeItems }) => {
+	return results.filter((result) => {
+		let keep = true;
+
+		if (excludeItems.length) {
+			keep = excludeItems.every((item) => item.id !== result.id);
+		}
+
+		return keep;
+	});
+};
+
+/**
+ * Prepares a search query based on the given keyword and page number.
+ *
+ * @param {object} args Arguments.
+ * @param {string} args.keyword The search keyword.
+ * @param {number} args.page The page number.
+ * @param {string} args.mode The search mode.
+ * @param {number} args.perPage The number of results per page.
+ * @param {Array} args.contentTypes The content types to search for.
+ * @param {Function} args.queryFilter The query filter function.
+ * @returns {string} The prepared search query.
+ */
+const prepareSearchQuery = ({ keyword, page, mode, perPage, contentTypes, queryFilter }) => {
+	let searchQuery;
+
+	switch (mode) {
+		case 'user':
+			searchQuery = `wp/v2/users/?search=${keyword}`;
+			break;
+		default:
+			searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
+				',',
+			)}&type=${mode}&_embed&per_page=${perPage}&page=${page}`;
+			break;
+	}
+
+	return queryFilter(searchQuery, {
+		perPage,
+		page,
+		contentTypes,
+		mode,
+		keyword,
+	});
+};
+
+/**
+ * Depending on the mode value, this method normalizes the format
+ * of the result array.
+ *
+ * @param {object} args Arguments.
+ * @param {string} args.mode Mode.
+ * @param {Array} args.results Result.
+ * @param {Array} args.excludeItems Exclude items.
+ * @returns {Array} Normalized results.
+ */
+const normalizeResults = ({ mode, results = [], excludeItems }) => {
+	const normalizedResults = filterResults({ results, excludeItems });
+
+	if (mode === 'user') {
+		return normalizedResults.map((item) => ({
+			id: item.id,
+			subtype: mode,
+			title: item.name,
+			type: mode,
+			url: item.link,
+		}));
+	}
+
+	return normalizedResults;
+};
+
+const listCSS = css`
+	/* stylelint-disable */
+	max-height: 350px;
+	overflow-y: auto;
+
+	&& {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+`;
+
+const loadingCSS = css`
+	/* Custom styles to reduce jumping while loading the results */
+	min-height: ${listMinHeight};
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`;
+
+const loadMoreCSS = css`
+	display: flex;
+	justify-content: center;
+	margin-top: 1em;
+
+	button {
+		/* Reduce the jumping of the width when text changes to "Loading" */
+		min-width: 90px;
+	}
+`;
 
 const ContentSearch = ({
 	onSelectItem,
@@ -30,22 +142,16 @@ const ContentSearch = ({
 	const [selectedItem, setSelectedItem] = useState(null);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [isFocused, setIsFocused] = useState(false);
+	const [fetchedInitialResults, setFetchedInitialResults] = useState(false);
 
 	const mounted = useRef(true);
+	const currentContentTypes = useRef(contentTypes);
 
-	const filterResults = useCallback(
-		(results) => {
-			return results.filter((result) => {
-				let keep = true;
-
-				if (excludeItems.length) {
-					keep = excludeItems.every((item) => item.id !== result.id);
-				}
-
-				return keep;
-			});
+	useEffect(
+		() => () => {
+			mounted.current = false;
 		},
-		[excludeItems],
+		[],
 	);
 
 	/**
@@ -78,59 +184,6 @@ const ContentSearch = ({
 		onSelectItem(item);
 	};
 
-	const prepareSearchQuery = useCallback(
-		(keyword, page) => {
-			let searchQuery;
-
-			switch (mode) {
-				case 'user':
-					searchQuery = `wp/v2/users/?search=${keyword}`;
-					break;
-				default:
-					searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
-						',',
-					)}&type=${mode}&_embed&per_page=${perPage}&page=${page}`;
-					break;
-			}
-
-			return queryFilter(searchQuery, {
-				perPage,
-				page,
-				contentTypes,
-				mode,
-				keyword,
-			});
-		},
-		[perPage, contentTypes, mode, queryFilter],
-	);
-
-	/**
-	 * Depending on the mode value, this method normalizes the format
-	 * of the result array.
-	 *
-	 * @param {string} mode ContentPicker mode.
-	 * @param {Array} result The array to be normalized.
-	 * @returns {Array} The normalizes array.
-	 */
-	const normalizeResults = useCallback(
-		(result = []) => {
-			const normalizedResults = filterResults(result);
-
-			if (mode === 'user') {
-				return normalizedResults.map((item) => ({
-					id: item.id,
-					subtype: mode,
-					title: item.name,
-					type: mode,
-					url: item.link,
-				}));
-			}
-
-			return normalizedResults;
-		},
-		[mode, filterResults],
-	);
-
 	/**
 	 * handleSearchStringChange
 	 *
@@ -141,209 +194,221 @@ const ContentSearch = ({
 	 * @param {string} keyword search query string
 	 * @param {string} page page query string
 	 */
-	const handleSearchStringChange = (keyword, page) => {
-		// Reset page and query on empty keyword.
-		if (keyword.trim() === '') {
-			setCurrentPage(1);
-		}
+	const handleSearchStringChange = useCallback(
+		(keyword, page) => {
+			// Reset page and query on empty keyword.
+			if (keyword.trim() === '') {
+				setCurrentPage(1);
+			}
 
-		const preparedQuery = prepareSearchQuery(keyword, page);
-
-		// Only do query if not cached or previously errored/cancelled
-		if (!searchQueries[preparedQuery] || searchQueries[preparedQuery].controller === 1) {
-			setSearchQueries((queries) => {
-				const newQueries = {};
-
-				// Remove errored or cancelled queries
-				Object.keys(queries).forEach((query) => {
-					if (queries[query].controller !== 1) {
-						newQueries[query] = queries[query];
-					}
-				});
-
-				newQueries[preparedQuery] = {
-					results: null,
-					controller: null,
-					currentPage: page,
-					totalPages: null,
-				};
-
-				return newQueries;
+			const preparedQuery = prepareSearchQuery({
+				keyword,
+				page,
+				mode,
+				perPage,
+				contentTypes,
+				queryFilter,
 			});
-		}
 
-		setCurrentPage(page);
+			// Only do query if not cached or previously errored/cancelled
+			if (!searchQueries[preparedQuery] || searchQueries[preparedQuery].controller === 1) {
+				setSearchQueries((queries) => {
+					const newQueries = {};
 
-		setSearchString(keyword);
-	};
+					// Remove errored or cancelled queries
+					Object.keys(queries).forEach((query) => {
+						if (queries[query].controller !== 1) {
+							newQueries[query] = queries[query];
+						}
+					});
 
-	const handleLoadMore = () => {
-		handleSearchStringChange(searchString, currentPage + 1);
-	};
+					newQueries[preparedQuery] = {
+						results: null,
+						controller: null,
+						currentPage: page,
+						totalPages: null,
+					};
+
+					return newQueries;
+				});
+			}
+
+			setCurrentPage(page);
+
+			setSearchString(keyword);
+		},
+		[searchQueries, mode, perPage, contentTypes, queryFilter],
+	);
 
 	useEffect(() => {
 		// Trigger initial fetch if enabled.
-		if (fetchInitialResults) {
+		if (fetchInitialResults && !fetchedInitialResults) {
+			setFetchedInitialResults(true);
 			handleSearchStringChange('', 1);
 		}
+	}, [fetchInitialResults, fetchedInitialResults, handleSearchStringChange]);
 
-		return () => {
-			mounted.current = false;
-		};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	// Handle a change to the content types
+	useEffect(() => {
+		if (JSON.stringify(contentTypes) !== JSON.stringify(currentContentTypes.current)) {
+			currentContentTypes.current = contentTypes;
+			setCurrentPage(1);
+			handleSearchStringChange(searchString, 1);
+		}
+	}, [contentTypes, searchString, handleSearchStringChange]);
 
 	useEffect(() => {
-		Object.keys(searchQueries).forEach((searchQueryString) => {
+		Object.keys(searchQueries).forEach(async (searchQueryString) => {
 			const searchQuery = searchQueries[searchQueryString];
 
-			if (searchQueryString !== prepareSearchQuery(searchString, currentPage)) {
-				if (searchQuery.controller && typeof searchQuery.controller === 'object') {
+			if (
+				searchQueryString !==
+				prepareSearchQuery({
+					keyword: searchString,
+					page: currentPage,
+					mode,
+					perPage,
+					contentTypes,
+					queryFilter,
+				})
+			) {
+				if (searchQuery.controller?.abort) {
 					searchQuery.controller.abort();
 				}
 			} else if (searchQuery.results === null && searchQuery.controller === null) {
 				const controller = new AbortController();
 
-				apiFetch({
-					path: searchQueryString,
-					signal: controller.signal,
-					parse: false,
-				})
-					.then((results) => {
-						const totalPages = parseInt(
-							results.headers && results.headers.get('X-WP-TotalPages'),
-							10,
-						);
-
-						// Parse, because we set parse to false to get the headers.
-						results.json().then((results) => {
-							if (mounted.current === false) {
-								return;
-							}
-							const normalizedResults = normalizeResults(results);
-
-							setSearchQueries((queries) => {
-								const newQueries = { ...queries };
-
-								if (typeof newQueries[searchQueryString] === 'undefined') {
-									newQueries[searchQueryString] = {
-										results: null,
-										controller: null,
-										totalPages: null,
-									};
-								}
-
-								newQueries[searchQueryString].results = normalizedResults;
-								newQueries[searchQueryString].totalPages = totalPages;
-								newQueries[searchQueryString].controller = 0;
-
-								return newQueries;
-							});
-						});
-					})
-					.catch((error) => {
-						// fetch_error means the request was aborted
-						if (error.code !== 'fetch_error') {
-							setSearchQueries((queries) => {
-								const newQueries = { ...queries };
-
-								if (typeof newQueries[searchQueryString] === 'undefined') {
-									newQueries[searchQueryString] = {
-										results: null,
-										controller: null,
-									};
-								}
-
-								newQueries[searchQueryString].controller = 1;
-								newQueries[searchQueryString].results = [];
-
-								return newQueries;
-							});
-						}
+				try {
+					const resultsResponse = await apiFetch({
+						path: searchQueryString,
+						signal: controller.signal,
+						parse: false,
 					});
 
-				setSearchQueries((queries) => {
-					const newQueries = { ...queries };
+					const totalPages = parseInt(
+						resultsResponse.headers?.get('X-WP-TotalPages') ?? '0',
+						10,
+					);
 
-					newQueries[searchQueryString].controller = controller;
+					let results = await resultsResponse.json();
 
-					return newQueries;
-				});
+					if (results && !Array.isArray(results)) {
+						results = [results];
+					}
+
+					const normalizedResults = normalizeResults({ results, mode, excludeItems });
+
+					if (!mounted.current) {
+						return;
+					}
+
+					setSearchQueries((queries) => ({
+						...queries,
+						[searchQueryString]: {
+							results: normalizedResults,
+							controller: 0,
+							totalPages,
+						},
+					}));
+				} catch (error) {
+					if (error.code !== 'fetch_error' && mounted.current) {
+						setSearchQueries((queries) => ({
+							...queries,
+							[searchQueryString]: {
+								results: [],
+								controller: 1,
+							},
+						}));
+					}
+				}
+
+				if (!mounted.current) {
+					return;
+				}
+
+				setSearchQueries((queries) => ({
+					...queries,
+					[searchQueryString]: {
+						...queries[searchQueryString],
+						controller,
+					},
+				}));
 			}
 		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [searchQueries, searchString, currentPage]);
+	}, [
+		searchQueries,
+		searchString,
+		currentPage,
+		mode,
+		excludeItems,
+		perPage,
+		contentTypes,
+		queryFilter,
+	]);
 
-	let searchResults = null;
-	let isLoading = true;
-	let showLoadMore = false;
+	const { searchResults, isLoading, showLoadMore } = useMemo(() => {
+		let results = null;
+		let isLoading = true;
+		let showLoadMore = false;
 
-	for (let i = 1; i <= currentPage; i++) {
-		// eslint-disable-next-line no-loop-func
-		Object.keys(searchQueries).forEach((searchQueryString) => {
-			const searchQuery = searchQueries[searchQueryString];
+		const searchQueryKeys = Object.keys(searchQueries);
 
-			if (searchQueryString === prepareSearchQuery(searchString, i)) {
-				if (searchQuery.results !== null) {
-					if (searchResults === null) {
-						searchResults = [];
-					}
+		for (let i = 1; i <= currentPage; i++) {
+			for (const searchQueryString of searchQueryKeys) {
+				const searchQuery = searchQueries[searchQueryString];
 
-					searchResults = searchResults.concat(searchQuery.results);
-
-					// If on last page, maybe show load more button
-					if (i === currentPage) {
-						isLoading = false;
-
-						if (searchQuery.totalPages > searchQuery.currentPage) {
-							showLoadMore = true;
+				if (
+					searchQueryString ===
+					prepareSearchQuery({
+						keyword: searchString,
+						page: i,
+						mode,
+						perPage,
+						contentTypes,
+						queryFilter,
+					})
+				) {
+					if (searchQuery.results !== null) {
+						if (results === null) {
+							results = [];
 						}
+
+						results = results.concat(searchQuery.results);
+
+						if (i === currentPage) {
+							isLoading = false;
+
+							if (searchQuery.totalPages > searchQuery.currentPage) {
+								showLoadMore = true;
+							}
+						}
+					} else if (searchQuery.controller === 1 && i === currentPage) {
+						isLoading = false;
+						showLoadMore = false;
 					}
-				} else if (searchQuery.controller === 1 && i === currentPage) {
-					isLoading = false;
-					showLoadMore = false;
 				}
 			}
-		});
-	}
+		}
 
-	if (searchResults !== null) {
-		searchResults = filterResults(searchResults);
-	}
+		if (results !== null) {
+			results = filterResults({ results, excludeItems });
+		}
+
+		return { searchResults: results, isLoading, showLoadMore };
+	}, [
+		searchQueries,
+		searchString,
+		currentPage,
+		excludeItems,
+		mode,
+		perPage,
+		contentTypes,
+		queryFilter,
+	]);
+
 	const hasSearchString = !!searchString.length;
 	const hasSearchResults = searchResults && !!searchResults.length;
 	const hasInitialResults = fetchInitialResults && isFocused;
-
-	const listCSS = css`
-		/* stylelint-disable */
-		max-height: 350px;
-		overflow-y: auto;
-
-		&& {
-			margin: 0;
-			padding: 0;
-			list-style: none;
-		}
-	`;
-
-	const loadingCSS = css`
-		/* Custom styles to reduce jumping while loading the results */
-		min-height: ${listMinHeight};
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	`;
-
-	const loadMoreCSS = css`
-		display: flex;
-		justify-content: center;
-		margin-top: 1em;
-
-		button {
-			/* Reduce the jumping of the width when text changes to "Loading" */
-			min-width: 90px;
-		}
-	`;
 
 	return (
 		<NavigableMenu onNavigate={handleOnNavigate} orientation="vertical">
@@ -410,7 +475,9 @@ const ContentSearch = ({
 					{!isLoading && hasSearchResults && showLoadMore && (
 						<div css={loadMoreCSS}>
 							<Button
-								onClick={handleLoadMore}
+								onClick={() => {
+									handleSearchStringChange(searchString, currentPage + 1);
+								}}
 								type="button"
 								className="components-button is-secondary"
 							>
