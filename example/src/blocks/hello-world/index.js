@@ -2,7 +2,7 @@ import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/block-editor';
 import { PanelBody, Placeholder } from '@wordpress/components';
-
+import {TermPicker} from '@10up/block-components';
 import {ContentPicker} from '@10up/block-components';
 
 const NAMESPACE = 'example';
@@ -45,6 +45,10 @@ registerBlockType( `${ NAMESPACE }/hello-world`, {
                         maxContentItems={5}
                         isOrderable={true}
                     />
+                </PanelBody>
+
+                <PanelBody>
+                    <TermPicker />
                 </PanelBody>
             </InspectorControls>
             <Placeholder label={ __( 'Post Picker', NAMESPACE ) } instructions={ __( 'Use the text field to search for a post', NAMESPACE) } className={ className }>
