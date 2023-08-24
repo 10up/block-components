@@ -6,6 +6,15 @@ import { Button, TextHighlight, Tooltip } from '@wordpress/components';
 import { getTextContent, create } from '@wordpress/rich-text';
 
 const ButtonStyled = styled(Button)`
+	display: flex;
+	text-align: left;
+	width: 100%;
+	justify-content: space-between;
+	align-items: center;
+	border-radius: 2px !important;
+	padding: 2em 0.7em !important;
+	overflow: hidden;
+
 	&:hover {
 		/* Add opacity background to support future color changes */
 		/* Reduce background from #ddd to 0.05 for text contrast  */
@@ -18,6 +27,9 @@ const ButtonStyled = styled(Button)`
 
 	.block-editor-link-control__search-item-type {
 		background-color: rgba(0, 0, 0, 0.05);
+		padding: 2px 4px;
+		text-transform: capitalize;
+		border-radius: 2px;
 	}
 `;
 

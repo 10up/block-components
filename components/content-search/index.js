@@ -318,12 +318,9 @@ const ContentSearch = ({
 		/* stylelint-disable */
 		max-height: 350px;
 		overflow-y: auto;
-
-		&& {
-			margin: 0;
-			padding: 0;
-			list-style: none;
-		}
+		list-style: none !important;
+		margin: 0;
+		padding: 0;
 	`;
 
 	const loadingCSS = css`
