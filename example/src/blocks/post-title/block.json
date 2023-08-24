@@ -1,0 +1,19 @@
+{
+	"apiVersion": 2,
+	"name": "example/custom-post-title",
+	"title": "Custom Post Title",
+	"icon": "smiley",
+	"category": "common",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"attributes": {},
+	"variations": [],
+	"usesContext": [
+		"postId",
+		"postType",
+		"queryId"
+	],
+	"editorScript": "file:./index.js"
+}
