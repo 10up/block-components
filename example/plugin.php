@@ -29,6 +29,17 @@ add_action( 'init', __NAMESPACE__ . '\register_block' );
  */
 function register_block() {
 
+	if ( file_exists( EXAMPLE_PLUGIN_BLOCK_DIST_DIR ) ) {
+		$block_json_files = glob( EXAMPLE_PLUGIN_BLOCK_DIST_DIR . '*/block.json' );
+		foreach ( $block_json_files as $filename ) {
+			$block_folder = dirname( $filename );
+			register_block_type( $block_folder );
+		};
+	};
+};
+
+add_action( 'enqueue_block_assets', __NAMESPACE__ . '\enqueue_block_editor_scripts' );
+function enqueue_block_editor_scripts() {
 	$asset_file = include EXAMPLE_PLUGIN_DIST_PATH . 'index.asset.php';
 
 	wp_enqueue_script(
@@ -38,15 +49,7 @@ function register_block() {
 		$asset_file['version'],
 		true
 	);
-
-	if ( file_exists( EXAMPLE_PLUGIN_BLOCK_DIST_DIR ) ) {
-		$block_json_files = glob( EXAMPLE_PLUGIN_BLOCK_DIST_DIR . '*/block.json' );
-		foreach ( $block_json_files as $filename ) {
-			$block_folder = dirname( $filename );
-			register_block_type( $block_folder );
-		};
-	};
-};
+}
 
 function register_book_custom_post_type() {
 	$labels = array(
