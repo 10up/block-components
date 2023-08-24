@@ -1,0 +1,19 @@
+{
+	"apiVersion": 2,
+	"name": "example/content-search",
+	"title": "Post Searcher",
+    "description": "Example Block to show the Content Search in usage",
+    "icon": "smiley",
+    "category": "common",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "selectedPost": {
+            "type": "array"
+        }
+    },
+    "variations": [],
+	"editorScript": "file:./index.js"
+}

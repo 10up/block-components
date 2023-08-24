@@ -1,0 +1,16 @@
+{
+	"apiVersion": 2,
+	"name": "example/content-item",
+	"title": "Content Item",
+	"icon": "smiley",
+	"category": "common",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"attributes": {},
+	"variations": [],
+	"usesContext": ["postId", "postType", "queryId"],
+	"ancestor": ["core/post-template"],
+	"editorScript": "file:./index.js"
+}

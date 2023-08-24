@@ -1,0 +1,19 @@
+{
+	"name": "example/rich-text-character-limit",
+	"apiVersion": 2,
+	"title": "Rich Text Character Limit",
+	"description": "Example Block to show the Rich Text Character Limit in usage",
+	"icon": "smiley",
+	"category": "common",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"editorScript": "file:./index.js"
+}
