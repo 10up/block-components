@@ -17,8 +17,8 @@ namespace HelloWorld;
 // Useful global constants.
 define( 'EXAMPLE_PLUGIN_TEMPLATE_URL', plugin_dir_url( __FILE__ ) );
 define( 'EXAMPLE_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-define( 'EXAMPLE_PLUGIN_DIST_PATH', EXAMPLE_PLUGIN_PATH . 'dist/' );
-define( 'EXAMPLE_PLUGIN_DIST_URL', EXAMPLE_PLUGIN_TEMPLATE_URL . '/dist/' );
+define( 'EXAMPLE_PLUGIN_DIST_PATH', EXAMPLE_PLUGIN_PATH . 'build/' );
+define( 'EXAMPLE_PLUGIN_DIST_URL', EXAMPLE_PLUGIN_TEMPLATE_URL . '/build/' );
 define( 'EXAMPLE_PLUGIN_INC', EXAMPLE_PLUGIN_PATH . 'includes/' );
 define( 'EXAMPLE_PLUGIN_BLOCK_DIR', EXAMPLE_PLUGIN_INC . 'blocks/' );
 define( 'EXAMPLE_PLUGIN_BLOCK_DIST_DIR', EXAMPLE_PLUGIN_PATH . 'build/blocks/' );
@@ -28,6 +28,17 @@ add_action( 'init', __NAMESPACE__ . '\register_block' );
  * Register the block
  */
 function register_block() {
+
+	$asset_file = include EXAMPLE_PLUGIN_DIST_PATH . 'index.asset.php';
+
+	wp_enqueue_script(
+		'example-block-editor-script',
+		EXAMPLE_PLUGIN_DIST_URL . 'index.js',
+		$asset_file['dependencies'],
+		$asset_file['version'],
+		true
+	);
+
 	if ( file_exists( EXAMPLE_PLUGIN_BLOCK_DIST_DIR ) ) {
 		$block_json_files = glob( EXAMPLE_PLUGIN_BLOCK_DIST_DIR . '*/block.json' );
 		foreach ( $block_json_files as $filename ) {
