@@ -9,5 +9,6 @@
     "supports": {
         "html": false
     },
-    "attributes": {}
+    "attributes": {},
+	"editorScript": "file:./index.js"
 }
