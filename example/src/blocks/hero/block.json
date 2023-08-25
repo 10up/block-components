@@ -1,0 +1,14 @@
+{
+	"apiVersion": 2,
+	"name": "example/hero",
+	"title": "Hero",
+	"category": "common",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"attributes": {},
+	"variations": [],
+	"parent": ["core/post-content"],
+	"editorScript": "file:./index.js"
+}
