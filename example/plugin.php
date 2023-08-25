@@ -39,6 +39,10 @@ function register_block() {
 };
 
 add_action( 'enqueue_block_assets', __NAMESPACE__ . '\enqueue_block_editor_scripts' );
+
+/**
+ * Enqueue Block Editor Scripts
+ */
 function enqueue_block_editor_scripts() {
 	$asset_file = include EXAMPLE_PLUGIN_DIST_PATH . 'index.asset.php';
 
@@ -51,12 +55,15 @@ function enqueue_block_editor_scripts() {
 	);
 }
 
+/**
+ * Register Book Custom Post Type
+ */
 function register_book_custom_post_type() {
 	$labels = array(
-		'name'               => __( 'Books', 'tenup' ),
-		'singular_name'      => __( 'Book', 'tenup' ),
-		'menu_name'          => __( 'Books', 'tenup' ),
-		'view_item'          => __( 'View book', 'tenup' ),
+		'name'          => __( 'Books', 'tenup' ),
+		'singular_name' => __( 'Book', 'tenup' ),
+		'menu_name'     => __( 'Books', 'tenup' ),
+		'view_item'     => __( 'View book', 'tenup' ),
 	);
 
 	$args = [
@@ -79,32 +86,48 @@ function register_book_custom_post_type() {
 		'capability_type'     => 'post',
 		'show_in_rest'        => true,
 	];
-	
+
 	register_post_type( 'books', $args );
 
-	register_post_meta( 'books', 'author', [
-		'type'         => 'string',
-		'single'       => true,
-		'show_in_rest' => true,
-	] );
-	
-	register_post_meta( 'books', 'isbn', [
-		'type'         => 'string',
-		'single'       => true,
-		'show_in_rest' => true,
-	] );
-	
-	register_post_meta( 'books', 'price', [
-		'type'         => 'number',
-		'single'       => true,
-		'show_in_rest' => true,
-	] );
-	
-	register_post_meta( 'books', 'is_featured', [
-		'type'         => 'boolean',
-		'single'       => true,
-		'show_in_rest' => true,
-	] );
+	register_post_meta(
+		'books',
+		'author',
+		[
+			'type'         => 'string',
+			'single'       => true,
+			'show_in_rest' => true,
+		]
+	);
+
+	register_post_meta(
+		'books',
+		'isbn',
+		[
+			'type'         => 'string',
+			'single'       => true,
+			'show_in_rest' => true,
+		]
+	);
+
+	register_post_meta(
+		'books',
+		'price',
+		[
+			'type'         => 'number',
+			'single'       => true,
+			'show_in_rest' => true,
+		]
+	);
+
+	register_post_meta(
+		'books',
+		'is_featured',
+		[
+			'type'         => 'boolean',
+			'single'       => true,
+			'show_in_rest' => true,
+		]
+	);
 }
 
 add_action( 'init', __NAMESPACE__ . '\register_book_custom_post_type' );
