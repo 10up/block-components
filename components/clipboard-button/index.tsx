@@ -9,17 +9,33 @@ type ClipboardButtonProps = {
 	text: string;
 	disabled: boolean;
 	onSuccess: Function;
-	labels: {
-		copy?: string;
-		copied?: string;
+	labels?: {
+		copy: string;
+		copied: string;
 	};
 };
 
 export const ClipboardButton: FC<ClipboardButtonProps> = (props) => {
-	const { text, disabled, onSuccess, labels } = props;
+	const {
+		text = '',
+		disabled = false,
+		onSuccess = () => {},
+		labels = undefined
+	} = props;
 	const [hasCopied, setHasCopied] = useState(false);
-	const copy = labels.copy || __('Copy');
-	const copied = labels.copied || __('Copied');
+
+	let copy = __('Copy');
+	let copied = __('Copied');
+
+	if( typeof labels === 'object' ) {
+		if( labels.hasOwnProperty('copy') ){
+			copy = labels.copy;
+		}
+
+		if( labels.hasOwnProperty('copied') ) {
+			copied = labels.copied;
+		}
+	}
 
 	useEffect(() => {
 		let timerId: number;
