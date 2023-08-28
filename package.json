@@ -15,7 +15,7 @@
     "build-test-env": "npm run build --workspaces --if-present",
     "start-test-env": "npm run start-env -w example/ && npm run import-media -w example/",
     "test:e2e": "cypress open",
-    "prepublishOnly": "npm ci && npm run build"
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
