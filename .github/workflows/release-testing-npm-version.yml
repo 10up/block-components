@@ -1,4 +1,4 @@
-name: Publish new version to NPM
+name: Publish new testing version to NPM
 on: [pull_request]
 concurrency: 
   group: ${{ github.head_ref || github.run_id }}
@@ -43,7 +43,7 @@ jobs:
 
       - name: npm update version and release
         run: |
-          npm version prerelease --preid=testing-${{ github.event.number}}-${{ github.run_number}}}
+          npm version prerelease --preid=testing-${{ github.event.number}}-${{ github.run_number}}
           npm publish --tag testing-${{ github.event.number}}
         env:
            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
