@@ -1,0 +1,19 @@
+{
+	"apiVersion": 2,
+    "name": "example/links-repeater",
+    "title": "Links Repeater",
+    "description": "Example Block to show the Link Component in usage",
+    "icon": "smiley",
+    "category": "common",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "links": {
+			"type": "array",
+			"default": []
+		}
+    },
+	"editorScript": "file:./index.js"
+}
