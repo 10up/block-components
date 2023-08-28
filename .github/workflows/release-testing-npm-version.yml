@@ -31,3 +31,12 @@ jobs:
       
       - name: push release commit to repo
         run: git push
+
+      - name: get-npm-version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.3.1
+
+      - uses: mshick/add-pr-comment@v2
+        with:
+         message: |
+           :tada: A new testing version of this package has been published to NPM. You can install it with `npm install @10up/block-components@${{ steps.package-version.outputs.current-version}}
