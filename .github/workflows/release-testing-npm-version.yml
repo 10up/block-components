@@ -44,4 +44,4 @@ jobs:
       - uses: mshick/add-pr-comment@v2
         with:
          message: |
-           :tada: A new testing version of this package has been published to NPM. You can install it with `npm install @10up/block-components@${{ steps.package-version.outputs.current-version}}
+           :tada: A new testing version of this package has been published to NPM. You can install it with `npm install @10up/block-components@${{ steps.package-version.outputs.current-version}}` 
