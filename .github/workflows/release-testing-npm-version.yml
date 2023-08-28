@@ -30,7 +30,7 @@ jobs:
            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       
       - name: push release commit to repo
-        run: git push
+        run: git push origin HEAD ${{ github.head_ref }}
 
       - name: get-npm-version
         id: package-version
