@@ -1,0 +1,42 @@
+name: Publish new version to NPM
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release Type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+        - patch
+        - minor
+        - major
+concurrency: 
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+jobs:
+  build_and_release:
+    environment: production
+    if: github.ref == 'refs/heads/trunk'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - name: Configure git user name and email
+        run: |
+            git config user.name "10up Bot"
+            git config user.email "pr@10up.com"
+
+      - name: npm update version and release
+        run: |
+          npm version ${{ github.event.inputs.release_type }}
+          npm publish
+        env:
+           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
+      - name: push release commit to repo
+        run: git push
