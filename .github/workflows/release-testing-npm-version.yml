@@ -1,0 +1,54 @@
+name: Publish new testing version to NPM
+on: [pull_request]
+concurrency: 
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+jobs:
+  build_and_release:
+    environment: testing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Cache node modules
+        id: cache-npm
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-node-modules
+        with:
+          # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+        name: List the state of node modules
+        continue-on-error: true
+        run: npm list
+      
+      - name: Configure git user name and email
+        run: |
+            git config user.name "10up Bot"
+            git config user.email "pr@10up.com"
+
+      - name: Install all npm packages
+        run: npm install
+
+      - name: npm update version and release
+        run: |
+          npm version prerelease --preid=testing-${{ github.event.number}}.${{ github.run_number}}
+          npm publish --tag testing-${{ github.event.number}}
+        env:
+           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - uses: mshick/add-pr-comment@v2
+        with:
+         message: |
+           :tada: A new testing version of this package has been published to NPM. You can install it with `npm install @10up/block-components@testing-${{ github.event.number}}`
