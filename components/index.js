@@ -8,7 +8,7 @@ export { ContentPicker } from './content-picker';
 export { DragHandle } from './drag-handle';
 export { ColorSetting } from './color-settings';
 export { ClipboardButton } from './clipboard-button';
-export { Repeater } from './repeater';
+export { Repeater as AbstractRepeater, AttributeRepeater as Repeater } from './repeater';
 export { Link } from './link';
 export { MediaToolbar } from './media-toolbar';
 export { Image } from './image';
