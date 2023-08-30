@@ -47,7 +47,7 @@ export const AttributeRepeater = ({ children, attribute, addButton, allowReorder
 	};
 
 	return (
-		<Repeater
+		<AbstractRepeater
 			addButton={addButton}
 			allowReordering={allowReordering}
 			onChange={handleOnChange}
@@ -55,7 +55,7 @@ export const AttributeRepeater = ({ children, attribute, addButton, allowReorder
 			defaultValue={defaultRepeaterData}
 		>
 			{children}
-		</Repeater>
+		</AbstractRepeater>
 	);
 };
 
@@ -71,7 +71,7 @@ export const AttributeRepeater = ({ children, attribute, addButton, allowReorder
  * @param {Array} props.defaultValue array of default Repeater items.
  * @returns {*} React JSX
  */
-export const Repeater = ({
+export const AbstractRepeater = ({
 	children,
 	addButton,
 	allowReordering,
@@ -209,6 +209,40 @@ export const Repeater = ({
 	);
 };
 
+export const Repeater = ({
+	children,
+	addButton,
+	allowReordering,
+	onChange,
+	value,
+	defaultValue,
+	attribute,
+}) => {
+	if (attribute) {
+		return (
+			<AttributeRepeater
+				attribute={attribute}
+				addButton={addButton}
+				allowReordering={allowReordering}
+			>
+				{children}
+			</AttributeRepeater>
+		);
+	}
+
+	return (
+		<AbstractRepeater
+			addButton={addButton}
+			allowReordering={allowReordering}
+			onChange={onChange}
+			value={value}
+			defaultValue={defaultValue}
+		>
+			{children}
+		</AbstractRepeater>
+	);
+};
+
 /**
  * The Sortable Item Component.
  *
@@ -252,12 +286,17 @@ const SortableItem = ({ children, item, setItem, removeItem, id }) => {
 	return clonedRepeaterChild;
 };
 
-Repeater.defaultProps = {
-	addButton: null,
-	allowReordering: false,
+Repeater.propTypes = {
+	children: PropTypes.func.isRequired,
+	addButton: PropTypes.func,
+	attribute: PropTypes.string,
+	allowReordering: PropTypes.bool,
+	onChange: PropTypes.func.isRequired,
+	value: PropTypes.array.isRequired,
+	defaultValue: PropTypes.array.isRequired,
 };
 
-AttributeRepeater.defaultProps = {
+Repeater.defaultProps = {
 	attribute: 'items',
 	addButton: null,
 	allowReordering: false,
@@ -270,13 +309,24 @@ AttributeRepeater.propTypes = {
 	allowReordering: PropTypes.bool,
 };
 
-Repeater.propTypes = {
+AttributeRepeater.defaultProps = {
+	attribute: 'items',
+	addButton: null,
+	allowReordering: false,
+};
+
+AbstractRepeater.propTypes = {
 	children: PropTypes.func.isRequired,
 	addButton: PropTypes.func,
 	allowReordering: PropTypes.bool,
 	onChange: PropTypes.func.isRequired,
 	value: PropTypes.array.isRequired,
 	defaultValue: PropTypes.array.isRequired,
+};
+
+AbstractRepeater.defaultProps = {
+	addButton: null,
+	allowReordering: false,
 };
 
 SortableItem.defaultProps = {
