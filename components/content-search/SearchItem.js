@@ -2,7 +2,12 @@ import PropTypes from 'prop-types';
 import styled from '@emotion/styled';
 import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
-import { Button, TextHighlight, Tooltip } from '@wordpress/components';
+import {
+	Button,
+	TextHighlight,
+	Tooltip,
+	__experimentalTruncate as Truncate,
+} from '@wordpress/components';
 import { getTextContent, create } from '@wordpress/rich-text';
 
 const ButtonStyled = styled(Button)`
@@ -11,8 +16,9 @@ const ButtonStyled = styled(Button)`
 	width: 100%;
 	justify-content: space-between;
 	align-items: center;
-	border-radius: 2px !important;
-	padding: 2em 0.7em !important;
+	border-radius: 2px;
+	height: auto !important;
+	padding: 0.3em 0.7em;
 	overflow: hidden;
 
 	&:hover {
@@ -30,6 +36,11 @@ const ButtonStyled = styled(Button)`
 		padding: 2px 4px;
 		text-transform: capitalize;
 		border-radius: 2px;
+	}
+
+	.block-editor-link-control__search-item-header {
+		display: flex;
+		flex-direction: column;
 	}
 `;
 
@@ -90,7 +101,9 @@ const SearchItem = ({
 							paddingRight: !showType ? 0 : null,
 						}}
 					>
-						{filterURLForDisplay(safeDecodeURI(suggestion.url)) || ''}
+						<Truncate numberOfLines={1} limit={55} ellipsizeMode="middle">
+							{filterURLForDisplay(safeDecodeURI(suggestion.url)) || ''}
+						</Truncate>
 					</span>
 				</span>
 				{showType && (
