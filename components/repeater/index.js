@@ -293,13 +293,14 @@ Repeater.propTypes = {
 	allowReordering: PropTypes.bool,
 	onChange: PropTypes.func.isRequired,
 	value: PropTypes.array.isRequired,
-	defaultValue: PropTypes.array.isRequired,
+	defaultValue: PropTypes.array,
 };
 
 Repeater.defaultProps = {
-	attribute: 'items',
+	attribute: null,
 	addButton: null,
 	allowReordering: false,
+	defaultValue: [],
 };
 
 AttributeRepeater.propTypes = {
@@ -310,7 +311,7 @@ AttributeRepeater.propTypes = {
 };
 
 AttributeRepeater.defaultProps = {
-	attribute: 'items',
+	attribute: null,
 	addButton: null,
 	allowReordering: false,
 };
@@ -321,12 +322,13 @@ AbstractRepeater.propTypes = {
 	allowReordering: PropTypes.bool,
 	onChange: PropTypes.func.isRequired,
 	value: PropTypes.array.isRequired,
-	defaultValue: PropTypes.array.isRequired,
+	defaultValue: PropTypes.array,
 };
 
 AbstractRepeater.defaultProps = {
 	addButton: null,
 	allowReordering: false,
+	defaultValue: [],
 };
 
 SortableItem.defaultProps = {
