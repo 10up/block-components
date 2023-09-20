@@ -5,10 +5,11 @@ import {
 	store as blockEditorStore,
 } from '@wordpress/block-editor';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { PostMeta } from '@10up/block-components';
+import { PostMeta, PostContext } from '@10up/block-components';
 
 export const BlockEdit = (props) => {
-	const { attributes, setAttributes, name } = props;
+	const { attributes, setAttributes, name, context } = props;
+	const { postId, postType } = context;
 	const { metaKey } = attributes;
 	const blockProps = useBlockProps();
 
@@ -46,7 +47,9 @@ export const BlockEdit = (props) => {
 
 	return (
 		<div {...blockProps}>
-			<PostMeta metaKey={metaKey} placeholder="Meta Value" />
+			<PostContext postId={postId} postType={postType}>
+				<PostMeta metaKey={metaKey} placeholder="Meta Value" />
+			</PostContext>
 		</div>
 	);
 };
