@@ -44,7 +44,7 @@ jobs:
 
       - name: npm update version and release
         run: |
-          npm version ${{ github.event.inputs.release_type }} --git-tag-version=${{ github.event.inputs.dry_run == 'false' }}
+          npm version ${{ github.event.inputs.release_type }} --git-tag-version=${{ github.event.inputs.dry_run == 'true' }}
           npm publish --dry-run=${{ github.event.inputs.dry_run }}
         env:
            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
