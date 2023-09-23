@@ -51,6 +51,7 @@ const ContentPickerWrapper = styled.div`
  * @param {boolean} props.excludeCurrentPost whether or not to exclude the current post from the picker
  * @param {number} props.perPage number of items to show per page
  * @param {boolean} props.fetchInitialResults whether or not to fetch initial results on mount
+ * @param {string} props.pickedOrder string determining where the new item fits in the current list
  * @returns {*} React JSX
  */
 const ContentPicker = ({
@@ -69,6 +70,7 @@ const ContentPicker = ({
 	excludeCurrentPost,
 	perPage,
 	fetchInitialResults,
+	pickedOrder,
 }) => {
 	const currentPostId = select('core/editor')?.getCurrentPostId();
 
@@ -86,14 +88,21 @@ const ContentPicker = ({
 	}
 
 	const handleSelect = (item) => {
-		const newItems = [
-			{
-				id: item.id,
-				uuid: uuidv4(),
-				type: 'subtype' in item ? item.subtype : item.type,
-			},
-			...content,
-		];
+		const newItem = {
+			id: item.id,
+			uuid: uuidv4(),
+			type: 'subtype' in item ? item.subtype : item.type,
+		};
+		let newItems = [];
+
+		if (pickedOrder instanceof Function) {
+			newItems = pickedOrder(newItem, content);
+		} else if (pickedOrder === 'start') {
+			newItems = [newItem, ...content];
+		} else if (pickedOrder === 'end') {
+			newItems = [...content, newItem];
+		}
+
 		onPickChange(newItems);
 	};
 
@@ -196,6 +205,7 @@ ContentPicker.defaultProps = {
 	multiPickedLabel: __('You have selected the following items:', '10up-block-components'),
 	singlePickedLabel: __('You have selected the following item:', '10up-block-components'),
 	fetchInitialResults: false,
+	pickedOrder: 'start',
 };
 
 ContentPicker.propTypes = {
@@ -214,6 +224,7 @@ ContentPicker.propTypes = {
 	maxContentItems: PropTypes.number,
 	perPage: PropTypes.number,
 	fetchInitialResults: PropTypes.bool,
+	pickedOrder: PropTypes.oneOfType([PropTypes.oneOf(['start', 'end']), PropTypes.func]),
 };
 
 export { ContentPicker };
