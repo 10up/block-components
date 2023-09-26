@@ -3,15 +3,41 @@ import apiFetch from '@wordpress/api-fetch';
 import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
-// eslint-disable-next-line no-unused-vars
-import { jsx, css } from '@emotion/react';
+import styled from '@emotion/styled';
 import SearchItem, { defaultRenderItemType } from './SearchItem';
-/** @jsx jsx */
+import { StyledComponentContext } from '../styled-components-context';
 
 const NAMESPACE = 'tenup-content-search';
 
 // Equalize height of list icons to match loader in order to reduce jumping.
 const listMinHeight = '46px';
+
+const List = styled.ul`
+	max-height: 350px;
+	overflow-y: auto;
+	list-style: none !important;
+	margin: 0;
+	padding: 0;
+`;
+
+const StyledSpinner = styled(Spinner)`
+	/* Custom styles to reduce jumping while loading the results */
+	min-height: ${listMinHeight};
+	display: flex;
+	align-items: center;
+	justify-content: center;
+`;
+
+const LoadingContainer = styled.div`
+	display: flex;
+	justify-content: center;
+	margin-top: 1em;
+
+	button {
+		/* Reduce the jumping of the width when text changes to "Loading" */
+		min-width: 90px;
+	}
+`;
 
 const ContentSearch = ({
 	onSelectItem,
@@ -314,116 +340,82 @@ const ContentSearch = ({
 	const hasSearchResults = searchResults && !!searchResults.length;
 	const hasInitialResults = fetchInitialResults && isFocused;
 
-	const listCSS = css`
-		/* stylelint-disable */
-		max-height: 350px;
-		overflow-y: auto;
-		list-style: none !important;
-		margin: 0;
-		padding: 0;
-	`;
-
-	const loadingCSS = css`
-		/* Custom styles to reduce jumping while loading the results */
-		min-height: ${listMinHeight};
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	`;
-
-	const loadMoreCSS = css`
-		display: flex;
-		justify-content: center;
-		margin-top: 1em;
-
-		button {
-			/* Reduce the jumping of the width when text changes to "Loading" */
-			min-width: 90px;
-		}
-	`;
-
 	return (
-		<NavigableMenu onNavigate={handleOnNavigate} orientation="vertical">
-			<TextControl
-				label={label}
-				value={searchString}
-				onChange={(newSearchString) => {
-					handleSearchStringChange(newSearchString, 1);
-				}}
-				placeholder={placeholder}
-				autoComplete="off"
-				onFocus={() => {
-					setIsFocused(true);
-				}}
-				onBlur={() => {
-					setIsFocused(false);
-				}}
-			/>
+		<StyledComponentContext cacheKey="tenup-component-content-search">
+			<NavigableMenu onNavigate={handleOnNavigate} orientation="vertical">
+				<TextControl
+					label={label}
+					value={searchString}
+					onChange={(newSearchString) => {
+						handleSearchStringChange(newSearchString, 1);
+					}}
+					placeholder={placeholder}
+					autoComplete="off"
+					onFocus={() => {
+						setIsFocused(true);
+					}}
+					onBlur={() => {
+						setIsFocused(false);
+					}}
+				/>
 
-			{hasSearchString || hasInitialResults ? (
-				<>
-					<ul className={`${NAMESPACE}-list`} css={listCSS}>
-						{isLoading && currentPage === 1 && (
-							<div css={loadingCSS}>
-								<Spinner />
-							</div>
+				{hasSearchString || hasInitialResults ? (
+					<>
+						<List className={`${NAMESPACE}-list`}>
+							{isLoading && currentPage === 1 && <StyledSpinner />}
+
+							{!isLoading && !hasSearchResults && (
+								<li
+									className={`${NAMESPACE}-list-item components-button`}
+									style={{
+										color: 'inherit',
+										cursor: 'default',
+										paddingLeft: '3px',
+									}}
+								>
+									{__('Nothing found.', '10up-block-components')}
+								</li>
+							)}
+							{(!isLoading || currentPage > 1) &&
+								searchResults.map((item, index) => {
+									if (!item.title.length) {
+										return null;
+									}
+
+									return (
+										<li
+											key={item.id}
+											className={`${NAMESPACE}-list-item`}
+											style={{
+												marginBottom: '0',
+											}}
+										>
+											<SearchItem
+												onClick={() => handleItemSelection(item)}
+												searchTerm={searchString}
+												suggestion={item}
+												contentTypes={contentTypes}
+												isSelected={selectedItem === index + 1}
+												renderType={renderItemType}
+											/>
+										</li>
+									);
+								})}
+						</List>
+
+						{!isLoading && hasSearchResults && showLoadMore && (
+							<LoadingContainer>
+								<Button onClick={handleLoadMore} variant="secondary">
+									{__('Load more', '10up-block-components')}
+								</Button>
+							</LoadingContainer>
 						)}
 
-						{!isLoading && !hasSearchResults && (
-							<li
-								className={`${NAMESPACE}-list-item components-button`}
-								style={{ color: 'inherit', cursor: 'default', paddingLeft: '3px' }}
-							>
-								{__('Nothing found.', '10up-block-components')}
-							</li>
-						)}
-						{(!isLoading || currentPage > 1) &&
-							searchResults.map((item, index) => {
-								if (!item.title.length) {
-									return null;
-								}
-
-								return (
-									<li
-										key={item.id}
-										className={`${NAMESPACE}-list-item`}
-										style={{
-											marginBottom: '0',
-										}}
-									>
-										<SearchItem
-											onClick={() => handleItemSelection(item)}
-											searchTerm={searchString}
-											suggestion={item}
-											contentTypes={contentTypes}
-											isSelected={selectedItem === index + 1}
-											renderType={renderItemType}
-										/>
-									</li>
-								);
-							})}
-					</ul>
-
-					{!isLoading && hasSearchResults && showLoadMore && (
-						<div css={loadMoreCSS}>
-							<Button
-								onClick={handleLoadMore}
-								type="button"
-								className="components-button is-secondary"
-							>
-								{__('Load more', '10up-block-components')}
-							</Button>
-						</div>
-					)}
-
-					{isLoading && currentPage > 1 && (
-						<div css={loadMoreCSS}>
-							<Spinner />
-						</div>
-					)}
-				</>
-			) : null}
-		</NavigableMenu>
+						{isLoading && currentPage > 1 && <StyledSpinner />}
+					</>
+				) : null}
+			</NavigableMenu>
+		</StyledComponentContext>
 	);
 };
 

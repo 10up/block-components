@@ -16,6 +16,7 @@ import { __experimentalLinkControl as LinkControl, RichText } from '@wordpress/b
 /**
  * Internal Dependencies
  */
+import { StyledComponentContext } from '../styled-components-context';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 
 /**
@@ -138,7 +139,7 @@ const Link = ({
 	}, [url, value]);
 
 	return (
-		<>
+		<StyledComponentContext cacheKey="tenup-component-link">
 			<StylesRichTextLink
 				tagName="a"
 				className={classnames('tenup-block-components-link__label', className)}
@@ -194,7 +195,7 @@ const Link = ({
 					/>
 				</Popover>
 			)}
-		</>
+		</StyledComponentContext>
 	);
 };
 
