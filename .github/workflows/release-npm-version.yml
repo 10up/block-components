@@ -11,14 +11,6 @@ on:
         - patch
         - minor
         - major
-      dry_run:
-        description: 'Dry Run'
-        required: true
-        default: 'false'
-        type: choice
-        options:
-        - true
-        - false
 concurrency: 
   group: ${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
@@ -44,8 +36,8 @@ jobs:
 
       - name: npm update version and release
         run: |
-          npm version ${{ github.event.inputs.release_type }} --git-tag-version=${{ github.event.inputs.dry_run == 'true' }}
-          npm publish --dry-run=${{ github.event.inputs.dry_run }}
+          npm version ${{ github.event.inputs.release_type }}
+          npm publish
         env:
            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       
