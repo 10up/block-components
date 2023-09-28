@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { ContentSearch } from '../content-search';
 import SortableList from './SortableList';
 import { StyledComponentContext } from '../styled-components-context';
+import { defaultRenderItemType } from '../content-search/SearchItem';
 
 const NAMESPACE = 'tenup-content-picker';
 
@@ -51,6 +52,7 @@ const ContentPickerWrapper = styled.div`
  * @param {boolean} props.excludeCurrentPost whether or not to exclude the current post from the picker
  * @param {number} props.perPage number of items to show per page
  * @param {boolean} props.fetchInitialResults whether or not to fetch initial results on mount
+ * @param {Function} props.renderItemType callback to render the item type
  * @returns {*} React JSX
  */
 const ContentPicker = ({
@@ -69,6 +71,7 @@ const ContentPicker = ({
 	excludeCurrentPost,
 	perPage,
 	fetchInitialResults,
+	renderItemType,
 }) => {
 	const currentPostId = select('core/editor')?.getCurrentPostId();
 
@@ -134,6 +137,7 @@ const ContentPicker = ({
 						queryFilter={queryFilter}
 						perPage={perPage}
 						fetchInitialResults={fetchInitialResults}
+						renderItemType={renderItemType}
 					/>
 				) : (
 					label && (
@@ -196,6 +200,7 @@ ContentPicker.defaultProps = {
 	multiPickedLabel: __('You have selected the following items:', '10up-block-components'),
 	singlePickedLabel: __('You have selected the following item:', '10up-block-components'),
 	fetchInitialResults: false,
+	renderItemType: defaultRenderItemType,
 };
 
 ContentPicker.propTypes = {
@@ -214,6 +219,7 @@ ContentPicker.propTypes = {
 	maxContentItems: PropTypes.number,
 	perPage: PropTypes.number,
 	fetchInitialResults: PropTypes.bool,
+	renderItemType: PropTypes.func,
 };
 
 export { ContentPicker };
