@@ -1,9 +1,20 @@
-import { MediaPlaceholder, InspectorControls } from '@wordpress/block-editor';
+import { MediaPlaceholder, InspectorControls, MediaReplaceFlow } from '@wordpress/block-editor';
 import { useContext, useMemo, Children, createContext } from '@wordpress/element';
-import { Spinner, FocalPointPicker, PanelBody, Placeholder } from '@wordpress/components';
+import {
+	Spinner,
+	FocalPointPicker,
+	PanelBody,
+	Placeholder,
+	ToolbarButton,
+} from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
 
+/**
+ * Internal Dependencies
+ */
+import { StyledComponentContext } from '../styled-components-context';
+import { InlineControlsStyleWrapper } from './styles';
 import { useMedia } from '../../hooks/use-media';
 
 export const ImageContext = createContext();
@@ -18,6 +29,9 @@ const ImageWrapper = (props) => {
 		labels = {},
 		canEditImage = true,
 		children,
+		hasInlineControls = false,
+		isOptional = true,
+		onRemove,
 		...rest
 	} = props;
 	const hasImage = !!id;
@@ -93,6 +107,22 @@ const ImageWrapper = (props) => {
 		<ImageContext.Provider value={imageContext}>
 			<Figure>
 				<Image {...rest} />
+				{hasImage && !!hasInlineControls && (
+					<div className="inline-controls-sticky-wrapper">
+						<div className="inline-controls">
+							<MediaReplaceFlow
+								mediaUrl={imageUrl}
+								onSelect={onSelect}
+								name={__('Replace')}
+							/>
+							{!!isOptional && (
+								<ToolbarButton onClick={onRemove} className="remove-button">
+									{__('Remove')}
+								</ToolbarButton>
+							)}
+						</div>
+					</div>
+				)}
 			</Figure>
 		</ImageContext.Provider>
 	);
@@ -106,6 +136,10 @@ ImageWrapper.defaultProps = {
 	onChangeFocalPoint: undefined,
 	labels: {},
 	canEditImage: true,
+	hasInlineControls: false,
+	isOptional: true,
+	onRemove: undefined,
+	children: [],
 };
 
 ImageWrapper.propTypes = {
@@ -122,16 +156,32 @@ ImageWrapper.propTypes = {
 		instructions: PropTypes.string,
 	}),
 	canEditImage: PropTypes.bool,
+	hasInlineControls: PropTypes.bool,
+	isOptional: PropTypes.bool,
+	onRemove: PropTypes.func,
+	children: PropTypes.array,
 };
 
 const Figure = (props) => {
-	const { children, style, ...rest } = props;
+	const { style, children, ...rest } = props;
 
 	return (
-		<figure style={{ position: 'relative', ...style }} {...rest}>
-			{children}
-		</figure>
+		<StyledComponentContext cacheKey="tenup-component-image">
+			<InlineControlsStyleWrapper {...style} {...rest}>
+				{children}
+			</InlineControlsStyleWrapper>
+		</StyledComponentContext>
 	);
+};
+
+Figure.defaultProps = {
+	style: {},
+	children: [],
+};
+
+Figure.propTypes = {
+	style: PropTypes.object,
+	children: PropTypes.array,
 };
 
 const Image = (props) => {
@@ -155,7 +205,7 @@ const Image = (props) => {
 			objectPosition: `${focalPoint.x * 100}% ${focalPoint.y * 100}%`,
 		};
 
-		props.style = {
+		props.styles = {
 			...style,
 			...focalPointStyle,
 		};
@@ -195,4 +245,12 @@ const Image = (props) => {
 			)}
 		</>
 	);
+};
+
+Image.defaultProps = {
+	style: {},
+};
+
+Image.propTypes = {
+	style: PropTypes.object,
 };
