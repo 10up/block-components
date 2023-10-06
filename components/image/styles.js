@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
 
 export const InlineControlsStyleWrapper = styled('figure')`
+	line-height: 0;
 	position: relative;
 	margin: 0;
-	line-height: 0;
 
 	& img {
+		max-width: 100%;
 		min-width: 100%;
 		min-height: 100%;
 	}
@@ -31,11 +32,11 @@ export const InlineControlsStyleWrapper = styled('figure')`
 	}
 
 	& .inline-controls-sticky-wrapper {
+		height: 100%;
+		left: 0;
 		position: absolute;
 		top: 0;
-		left: 0;
 		width: 100%;
-		height: 100%;
 	}
 
 	& .inline-controls {
