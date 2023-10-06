@@ -7,7 +7,7 @@ import { __ } from '@wordpress/i18n';
 export const ImageContext = createContext();
 
 export const Media = (props) => {
-	const { style } = props;
+	const { style, ...rest } = props;
 	const {
 		imageUrl,
 		altText,
@@ -56,8 +56,8 @@ export const Media = (props) => {
 				<img
 					src={imageUrl}
 					alt={altText}
-					style={{ ...style, focalPointStyle }}
-					{...props}
+					style={{ ...style, ...focalPointStyle }}
+					{...rest}
 				/>
 			)}
 			{canEditImage && (
