@@ -1,18 +1,20 @@
 import styled from '@emotion/styled';
 
 export const InlineControlsStyleWrapper = styled('figure')`
-	line-height: 0;
 	position: relative;
-	margin-bottom: 0;
+	margin: 0;
+	line-height: 0;
 
 	& img {
-		max-width: 100%;
+		min-width: 100%;
+		min-height: 100%;
 	}
 
 	& *,
 	*::before,
 	*::after {
 		box-sizing: border-box;
+		line-height: initial;
 	}
 
 	&:hover,
