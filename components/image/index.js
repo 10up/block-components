@@ -1,23 +1,15 @@
-import { MediaPlaceholder, InspectorControls, MediaReplaceFlow } from '@wordpress/block-editor';
-import { useContext, useMemo, Children, createContext } from '@wordpress/element';
-import {
-	Spinner,
-	FocalPointPicker,
-	PanelBody,
-	Placeholder,
-	ToolbarButton,
-} from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { MediaPlaceholder } from '@wordpress/block-editor';
+import { useMemo, Children } from '@wordpress/element';
 import PropTypes from 'prop-types';
 
 /**
  * Internal Dependencies
  */
 import { StyledComponentContext } from '../styled-components-context';
+import { Media, ImageContext } from './media';
+import { InlineControls } from './inline-controls';
 import { InlineControlsStyleWrapper } from './styles';
 import { useMedia } from '../../hooks/use-media';
-
-export const ImageContext = createContext();
 
 const ImageWrapper = (props) => {
 	const {
@@ -59,6 +51,9 @@ const ImageWrapper = (props) => {
 			isResolvingMedia,
 			shouldDisplayFocalPointPicker,
 			hasImage,
+			hasInlineControls,
+			isOptional,
+			onRemove,
 		};
 	}, [
 		id,
@@ -73,6 +68,9 @@ const ImageWrapper = (props) => {
 		isResolvingMedia,
 		shouldDisplayFocalPointPicker,
 		hasImage,
+		hasInlineControls,
+		isOptional,
+		onRemove,
 	]);
 
 	if (hasRenderCallback) {
@@ -84,6 +82,9 @@ const ImageWrapper = (props) => {
 			labels,
 			canEditImage,
 			onSelect,
+			hasInlineControls,
+			isOptional,
+			onRemove,
 		});
 	}
 
@@ -106,22 +107,14 @@ const ImageWrapper = (props) => {
 	return (
 		<ImageContext.Provider value={imageContext}>
 			<Figure>
-				<Image {...rest} />
+				<Media {...rest} />
 				{hasImage && !!hasInlineControls && (
-					<div className="inline-controls-sticky-wrapper">
-						<div className="inline-controls">
-							<MediaReplaceFlow
-								mediaUrl={imageUrl}
-								onSelect={onSelect}
-								name={__('Replace')}
-							/>
-							{!!isOptional && (
-								<ToolbarButton onClick={onRemove} className="remove-button">
-									{__('Remove')}
-								</ToolbarButton>
-							)}
-						</div>
-					</div>
+					<InlineControls
+						imageUrl={imageUrl}
+						onSelect={onSelect}
+						isOptional={isOptional}
+						onRemove={onRemove}
+					/>
 				)}
 			</Figure>
 		</ImageContext.Provider>
@@ -182,75 +175,4 @@ Figure.defaultProps = {
 Figure.propTypes = {
 	style: PropTypes.object,
 	children: PropTypes.array,
-};
-
-const Image = (props) => {
-	const { style } = props;
-	const {
-		imageUrl,
-		altText,
-		labels,
-		onSelect,
-		isResolvingMedia,
-		shouldDisplayFocalPointPicker,
-		focalPoint,
-		onChangeFocalPoint,
-		canEditImage,
-		hasImage,
-	} = useContext(ImageContext);
-
-	if (shouldDisplayFocalPointPicker) {
-		const focalPointStyle = {
-			objectFit: 'cover',
-			objectPosition: `${focalPoint.x * 100}% ${focalPoint.y * 100}%`,
-		};
-
-		props.styles = {
-			...style,
-			...focalPointStyle,
-		};
-	}
-
-	if (isResolvingMedia) {
-		return <Spinner />;
-	}
-
-	if (!hasImage && !canEditImage) {
-		return <Placeholder className="block-editor-media-placeholder" withIllustration />;
-	}
-
-	return (
-		<>
-			{shouldDisplayFocalPointPicker && (
-				<InspectorControls>
-					<PanelBody title={__('Image Settings')}>
-						<FocalPointPicker
-							label={__('Focal Point Picker')}
-							url={imageUrl}
-							value={focalPoint}
-							onChange={onChangeFocalPoint}
-						/>
-					</PanelBody>
-				</InspectorControls>
-			)}
-			{hasImage && <img src={imageUrl} alt={altText} {...props} />}
-			{canEditImage && (
-				<MediaPlaceholder
-					labels={labels}
-					onSelect={onSelect}
-					accept="image"
-					multiple={false}
-					disableMediaButtons={imageUrl}
-				/>
-			)}
-		</>
-	);
-};
-
-Image.defaultProps = {
-	style: {},
-};
-
-Image.propTypes = {
-	style: PropTypes.object,
 };
