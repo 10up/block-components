@@ -22,7 +22,8 @@ export function BlockEdit(props) {
             className="example-image"
             focalPoint={focalPoint1}
             onChangeFocalPoint={(value) => setAttributes({focalPoint1: value})}
-            hasInlineControls={true} onRemove={() => setAttributes({image1: null})}
+            hasInlineControls={true}
+            onRemove={() => setAttributes({image1: null})}
             isOptional={false}
             />
 
@@ -33,7 +34,8 @@ export function BlockEdit(props) {
             className="example-image"
             focalPoint={focalPoint2}
             onChangeFocalPoint={(value) => setAttributes({focalPoint2: value})}
-            hasInlineControls={true} onRemove={() => setAttributes({image2: null})}
+            hasInlineControls={true}
+            onRemove={() => setAttributes({image2: null})}
             />
 
             <Image
@@ -43,7 +45,8 @@ export function BlockEdit(props) {
             className="example-image"
             focalPoint={focalPoint3}
             onChangeFocalPoint={(value) => setAttributes({focalPoint3: value})}
-            hasInlineControls={true} onRemove={() => setAttributes({image3: null})}
+            hasInlineControls={true}
+            onRemove={() => setAttributes({image3: null})}
             />
         </div>
     )

@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 /**
  * Internal Dependencies
  */
-import { StyledComponentContext } from '../styled-components-context';
+
 import { Media, ImageContext } from './media';
+import { Figure } from './figure';
 import { InlineControls } from './inline-controls';
-import { InlineControlsStyleWrapper } from './styles';
 import { useMedia } from '../../hooks/use-media';
 
 const ImageWrapper = (props) => {
@@ -152,27 +152,5 @@ ImageWrapper.propTypes = {
 	hasInlineControls: PropTypes.bool,
 	isOptional: PropTypes.bool,
 	onRemove: PropTypes.func,
-	children: PropTypes.array,
-};
-
-const Figure = (props) => {
-	const { style, children, ...rest } = props;
-
-	return (
-		<StyledComponentContext cacheKey="tenup-component-image">
-			<InlineControlsStyleWrapper {...style} {...rest}>
-				{children}
-			</InlineControlsStyleWrapper>
-		</StyledComponentContext>
-	);
-};
-
-Figure.defaultProps = {
-	style: {},
-	children: [],
-};
-
-Figure.propTypes = {
-	style: PropTypes.object,
 	children: PropTypes.array,
 };
