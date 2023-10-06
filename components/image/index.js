@@ -121,6 +121,8 @@ const ImageWrapper = (props) => {
 	);
 };
 
+ImageWrapper.Figure = Figure;
+
 export { ImageWrapper as Image };
 
 ImageWrapper.defaultProps = {
