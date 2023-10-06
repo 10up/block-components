@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { StyledComponentContext } from '../styled-components-context';
-import { InlineControlsStyleWrapper } from './styles';
+import { StyledComponentContext } from '../../styled-components-context';
+import { InlineControlsStyleWrapper } from '../styles';
 
 export const Figure = (props) => {
 	const { style, children, ...rest } = props;

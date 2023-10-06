@@ -5,10 +5,7 @@ import PropTypes from 'prop-types';
 /**
  * Internal Dependencies
  */
-
-import { Media, ImageContext } from './media';
-import { Figure } from './figure';
-import { InlineControls } from './inline-controls';
+import { Media, ImageContext, Figure, InlineControls } from './child-components';
 import { useMedia } from '../../hooks/use-media';
 
 const ImageWrapper = (props) => {
