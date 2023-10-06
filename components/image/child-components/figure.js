@@ -7,7 +7,7 @@ export const Figure = (props) => {
 
 	return (
 		<StyledComponentContext cacheKey="tenup-component-image">
-			<InlineControlsStyleWrapper {...style} {...rest}>
+			<InlineControlsStyleWrapper style={{ ...style }} {...rest}>
 				{children}
 			</InlineControlsStyleWrapper>
 		</StyledComponentContext>
@@ -16,10 +16,10 @@ export const Figure = (props) => {
 
 Figure.defaultProps = {
 	style: {},
-	children: [],
+	children: undefined,
 };
 
 Figure.propTypes = {
 	style: PropTypes.object,
-	children: PropTypes.array,
+	children: PropTypes.node,
 };
