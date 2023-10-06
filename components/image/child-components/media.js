@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import { MediaPlaceholder, InspectorControls } from '@wordpress/block-editor';
 import { useContext, createContext } from '@wordpress/element';
+import { MediaPlaceholder, InspectorControls } from '@wordpress/block-editor';
 import { Spinner, FocalPointPicker, PanelBody, Placeholder } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
@@ -21,15 +21,12 @@ export const Media = (props) => {
 		hasImage,
 	} = useContext(ImageContext);
 
+	let focalPointStyle = {};
+
 	if (shouldDisplayFocalPointPicker) {
-		const focalPointStyle = {
+		focalPointStyle = {
 			objectFit: 'cover',
 			objectPosition: `${focalPoint.x * 100}% ${focalPoint.y * 100}%`,
-		};
-
-		props.styles = {
-			...style,
-			...focalPointStyle,
 		};
 	}
 
@@ -55,7 +52,14 @@ export const Media = (props) => {
 					</PanelBody>
 				</InspectorControls>
 			)}
-			{hasImage && <img src={imageUrl} alt={altText} {...props} />}
+			{hasImage && (
+				<img
+					src={imageUrl}
+					alt={altText}
+					style={{ ...style, focalPointStyle }}
+					{...props}
+				/>
+			)}
 			{canEditImage && (
 				<MediaPlaceholder
 					labels={labels}
