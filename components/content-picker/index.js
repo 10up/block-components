@@ -6,6 +6,8 @@ import { __ } from '@wordpress/i18n';
 import { v4 as uuidv4 } from 'uuid';
 import { ContentSearch } from '../content-search';
 import SortableList from './SortableList';
+import { StyledComponentContext } from '../styled-components-context';
+import { defaultRenderItemType } from '../content-search/SearchItem';
 
 const NAMESPACE = 'tenup-content-picker';
 
@@ -13,7 +15,7 @@ const NAMESPACE = 'tenup-content-picker';
  * Unfortunately, we had to use !important because on PickedItem we couldn't @emotion/styled css
  * as it was breaking sortability from react-sortable-hoc
  */
-const StyleWrapper = styled('div')`
+const StyleWrapper = styled.div`
 	& .block-editor-link-control__search-item {
 		cursor: default;
 
@@ -27,7 +29,7 @@ const StyleWrapper = styled('div')`
  * Without this, the flex parents will limit the width of the picker. Fixes view when the results
  * all have short titles.
  */
-const ContentPickerWrapper = styled('div')`
+const ContentPickerWrapper = styled.div`
 	width: 100%;
 `;
 
@@ -50,6 +52,7 @@ const ContentPickerWrapper = styled('div')`
  * @param {boolean} props.excludeCurrentPost whether or not to exclude the current post from the picker
  * @param {number} props.perPage number of items to show per page
  * @param {boolean} props.fetchInitialResults whether or not to fetch initial results on mount
+ * @param {Function} props.renderItemType callback to render the item type
  * @returns {*} React JSX
  */
 const ContentPicker = ({
@@ -68,6 +71,7 @@ const ContentPicker = ({
 	excludeCurrentPost,
 	perPage,
 	fetchInitialResults,
+	renderItemType,
 }) => {
 	const currentPostId = select('core/editor')?.getCurrentPostId();
 
@@ -120,55 +124,61 @@ const ContentPicker = ({
 	}, [content, currentPostId, excludeCurrentPost, uniqueContentItems]);
 
 	return (
-		<ContentPickerWrapper className={NAMESPACE}>
-			{!content.length || (content.length && content.length < maxContentItems) ? (
-				<ContentSearch
-					placeholder={placeholder}
-					label={label}
-					excludeItems={excludeItems}
-					onSelectItem={handleSelect}
-					contentTypes={contentTypes}
-					mode={mode}
-					queryFilter={queryFilter}
-					perPage={perPage}
-					fetchInitialResults={fetchInitialResults}
-				/>
-			) : (
-				label && (
-					<div
-						style={{
-							marginBottom: '8px',
-						}}
-					>
-						{label}
-					</div>
-				)
-			)}
+		<StyledComponentContext cacheKey="tenup-component-content-picker">
+			<ContentPickerWrapper className={NAMESPACE}>
+				{!content.length || (content.length && content.length < maxContentItems) ? (
+					<ContentSearch
+						placeholder={placeholder}
+						label={label}
+						excludeItems={excludeItems}
+						onSelectItem={handleSelect}
+						contentTypes={contentTypes}
+						mode={mode}
+						queryFilter={queryFilter}
+						perPage={perPage}
+						fetchInitialResults={fetchInitialResults}
+						renderItemType={renderItemType}
+					/>
+				) : (
+					label && (
+						<div
+							style={{
+								marginBottom: '8px',
+							}}
+						>
+							{label}
+						</div>
+					)
+				)}
 
-			{Boolean(content?.length) && (
-				<StyleWrapper>
-					<span
-						style={{
-							marginTop: '15px',
-							marginBottom: '2px',
-							display: 'block',
-						}}
-					>
-						{content.length > 1 ? multiPickedLabel : singlePickedLabel}
-					</span>
+				{Boolean(content?.length) && (
+					<StyleWrapper>
+						<span
+							style={{
+								marginTop: '15px',
+								marginBottom: '2px',
+								display: 'block',
+							}}
+						>
+							{content.length > 1 ? multiPickedLabel : singlePickedLabel}
+						</span>
 
-					<ul className="block-editor-link-control__search-items">
-						<SortableList
-							posts={content}
-							handleItemDelete={onDeleteItem}
-							isOrderable={isOrderable}
-							mode={mode}
-							setPosts={onPickChange}
-						/>
-					</ul>
-				</StyleWrapper>
-			)}
-		</ContentPickerWrapper>
+						<ul
+							className="block-editor-link-control__search-items"
+							style={{ padding: 0 }}
+						>
+							<SortableList
+								posts={content}
+								handleItemDelete={onDeleteItem}
+								isOrderable={isOrderable}
+								mode={mode}
+								setPosts={onPickChange}
+							/>
+						</ul>
+					</StyleWrapper>
+				)}
+			</ContentPickerWrapper>
+		</StyledComponentContext>
 	);
 };
 
@@ -190,6 +200,7 @@ ContentPicker.defaultProps = {
 	multiPickedLabel: __('You have selected the following items:', '10up-block-components'),
 	singlePickedLabel: __('You have selected the following item:', '10up-block-components'),
 	fetchInitialResults: false,
+	renderItemType: defaultRenderItemType,
 };
 
 ContentPicker.propTypes = {
@@ -208,6 +219,7 @@ ContentPicker.propTypes = {
 	maxContentItems: PropTypes.number,
 	perPage: PropTypes.number,
 	fetchInitialResults: PropTypes.bool,
+	renderItemType: PropTypes.func,
 };
 
 export { ContentPicker };

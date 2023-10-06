@@ -14,66 +14,56 @@
 
 namespace HelloWorld;
 
+// Useful global constants.
+define( 'EXAMPLE_PLUGIN_TEMPLATE_URL', plugin_dir_url( __FILE__ ) );
+define( 'EXAMPLE_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+define( 'EXAMPLE_PLUGIN_DIST_PATH', EXAMPLE_PLUGIN_PATH . 'build/' );
+define( 'EXAMPLE_PLUGIN_DIST_URL', EXAMPLE_PLUGIN_TEMPLATE_URL . '/build/' );
+define( 'EXAMPLE_PLUGIN_INC', EXAMPLE_PLUGIN_PATH . 'includes/' );
+define( 'EXAMPLE_PLUGIN_BLOCK_DIR', EXAMPLE_PLUGIN_INC . 'blocks/' );
+define( 'EXAMPLE_PLUGIN_BLOCK_DIST_DIR', EXAMPLE_PLUGIN_PATH . 'build/blocks/' );
+
 add_action( 'init', __NAMESPACE__ . '\register_block' );
 /**
  * Register the block
  */
 function register_block() {
 
-	$dir               = dirname( __FILE__ );
-	$script_asset_path = "$dir/build/index.asset.php";
-	$index_js          = 'build/index.js';
-	$script_asset      = require $script_asset_path;
-	wp_register_script(
-		'editor-script',
-		plugins_url( $index_js, __FILE__ ),
-		$script_asset['dependencies'],
-		$script_asset['version'],
-		false
-	);
-
-	register_block_type(
-		'example/hello-world',
-		[
-			'editor_script' => 'editor-script',
-		]
-	);
-
-	register_block_type(
-		__DIR__ . '/src/blocks/link-example',
-		[
-			'editor_script'   => 'editor-script',
-			'render_callback' => function( $attributes, $content, $block ) {
-				$title = $attributes['title'];
-
-				$link_one_url   = isset( $attributes['url'] ) ? $attributes['url'] : '';
-				$link_one_label = isset( $attributes['text'] ) ? $attributes['text'] : '';
-
-				$link_two_url   = isset( $attributes['urlTwo'] ) ? $attributes['urlTwo'] : '';
-				$link_two_label = isset( $attributes['textTwo'] ) ? $attributes['textTwo'] : '';
-
-				$wrapper_attributes = get_block_wrapper_attributes();
-
-				ob_start();
-				?>
-				<div <?php echo wp_kses_post( $wrapper_attributes ); ?>>
-					<h2><?php echo wp_kses_post( $title ); ?></h2>
-					<a href="<?php echo esc_url( $link_one_url ); ?>"><?php echo wp_kses_post( $link_one_label ); ?></a>
-					<a href="<?php echo esc_url( $link_two_url ); ?>"><?php echo wp_kses_post( $link_two_label ); ?></a>
-				</div>
-				<?php
-				return ob_get_clean();
-			},
-		]
-	);
+	if ( file_exists( EXAMPLE_PLUGIN_BLOCK_DIST_DIR ) ) {
+		$block_json_files = glob( EXAMPLE_PLUGIN_BLOCK_DIST_DIR . '*/block.json' );
+		foreach ( $block_json_files as $filename ) {
+			$block_folder = dirname( $filename );
+			register_block_type( $block_folder );
+		};
+	};
 };
 
+add_action( 'enqueue_block_assets', __NAMESPACE__ . '\enqueue_block_editor_scripts' );
+
+/**
+ * Enqueue Block Editor Scripts
+ */
+function enqueue_block_editor_scripts() {
+	$asset_file = include EXAMPLE_PLUGIN_DIST_PATH . 'index.asset.php';
+
+	wp_enqueue_script(
+		'example-block-editor-script',
+		EXAMPLE_PLUGIN_DIST_URL . 'index.js',
+		$asset_file['dependencies'],
+		$asset_file['version'],
+		true
+	);
+}
+
+/**
+ * Register Book Custom Post Type
+ */
 function register_book_custom_post_type() {
 	$labels = array(
-		'name'               => __( 'Books', 'tenup' ),
-		'singular_name'      => __( 'Book', 'tenup' ),
-		'menu_name'          => __( 'Books', 'tenup' ),
-		'view_item'          => __( 'View book', 'tenup' ),
+		'name'          => __( 'Books', 'tenup' ),
+		'singular_name' => __( 'Book', 'tenup' ),
+		'menu_name'     => __( 'Books', 'tenup' ),
+		'view_item'     => __( 'View book', 'tenup' ),
 	);
 
 	$args = [
@@ -96,32 +86,48 @@ function register_book_custom_post_type() {
 		'capability_type'     => 'post',
 		'show_in_rest'        => true,
 	];
-	
+
 	register_post_type( 'books', $args );
 
-	register_post_meta( 'books', 'author', [
-		'type'         => 'string',
-		'single'       => true,
-		'show_in_rest' => true,
-	] );
-	
-	register_post_meta( 'books', 'isbn', [
-		'type'         => 'string',
-		'single'       => true,
-		'show_in_rest' => true,
-	] );
-	
-	register_post_meta( 'books', 'price', [
-		'type'         => 'number',
-		'single'       => true,
-		'show_in_rest' => true,
-	] );
-	
-	register_post_meta( 'books', 'is_featured', [
-		'type'         => 'boolean',
-		'single'       => true,
-		'show_in_rest' => true,
-	] );
+	register_post_meta(
+		'books',
+		'author',
+		[
+			'type'         => 'string',
+			'single'       => true,
+			'show_in_rest' => true,
+		]
+	);
+
+	register_post_meta(
+		'books',
+		'isbn',
+		[
+			'type'         => 'string',
+			'single'       => true,
+			'show_in_rest' => true,
+		]
+	);
+
+	register_post_meta(
+		'books',
+		'price',
+		[
+			'type'         => 'number',
+			'single'       => true,
+			'show_in_rest' => true,
+		]
+	);
+
+	register_post_meta(
+		'books',
+		'is_featured',
+		[
+			'type'         => 'boolean',
+			'single'       => true,
+			'show_in_rest' => true,
+		]
+	);
 }
 
 add_action( 'init', __NAMESPACE__ . '\register_book_custom_post_type' );

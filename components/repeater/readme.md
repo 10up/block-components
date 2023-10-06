@@ -21,8 +21,10 @@ export function BlockEdit(props) {
     return (
         <Repeater attribute="items">
             {( item, index, setItem, removeItem ) => (
-                <TextControl key={index} value={item} onChange={(value) => setItem(value)} />
-                <Button icon={close} label={__('Remove')} onClick={removeItem}/>
+                <>
+                    <TextControl key={index} value={item} onChange={(value) => setItem(value)} />
+                    <Button icon={close} label={__('Remove')} onClick={removeItem}/>
+                </>
             )}
         </Repeater>
     );

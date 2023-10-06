@@ -8,5 +8,10 @@
 			"type": "string",
 			"default": ""
 		}
-	}
+	},
+	"usesContext": [
+		"postId",
+		"postType"
+	],
+	"editorScript": "file:./index.js"
 }
