@@ -21,6 +21,7 @@ const ImageWrapper = (props) => {
 		hasInlineControls = false,
 		isOptional = true,
 		onRemove,
+		style,
 		...rest
 	} = props;
 	const hasImage = !!id;
@@ -103,17 +104,19 @@ const ImageWrapper = (props) => {
 
 	return (
 		<ImageContext.Provider value={imageContext}>
-			<Figure>
-				<Media {...rest} />
-				{hasImage && !!hasInlineControls && (
+			{hasImage && !!hasInlineControls ? (
+				<Figure style={{ ...style }} {...rest}>
+					<Media />
 					<InlineControls
 						imageUrl={imageUrl}
 						onSelect={onSelect}
 						isOptional={isOptional}
 						onRemove={onRemove}
 					/>
-				)}
-			</Figure>
+				</Figure>
+			) : (
+				<Media style={{ display: 'block', ...style }} {...rest} />
+			)}
 		</ImageContext.Provider>
 	);
 };
@@ -129,7 +132,8 @@ ImageWrapper.defaultProps = {
 	hasInlineControls: false,
 	isOptional: true,
 	onRemove: undefined,
-	children: [],
+	children: undefined,
+	style: {},
 };
 
 ImageWrapper.propTypes = {
@@ -149,5 +153,6 @@ ImageWrapper.propTypes = {
 	hasInlineControls: PropTypes.bool,
 	isOptional: PropTypes.bool,
 	onRemove: PropTypes.func,
-	children: PropTypes.array,
+	children: PropTypes.node,
+	style: PropTypes.object,
 };
