@@ -35,7 +35,7 @@ const Image = (props) => {
 		return <Spinner />;
 	}
 
-	const imageUrl = media?.media_details?.sizes[size]?.source_url ?? media?.source_url;
+	const imageUrl = media?.media_details?.sizes?.[size]?.source_url ?? media?.source_url;
 	const altText = media?.alt_text;
 
 	if (shouldDisplayFocalPointPicker) {
