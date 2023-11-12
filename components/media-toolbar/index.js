@@ -13,7 +13,7 @@ import { useMedia } from '../../hooks/use-media';
  * This should be used on components that have optional images.
  *
  * @param {object} props options
- * @returns {object} markup of the ToolbarGroup
+ * @returns {React.ReactElement} markup of the ToolbarGroup
  */
 export const MediaToolbar = (props) => {
 	const { onSelect, onRemove, isOptional = false, id } = props;
