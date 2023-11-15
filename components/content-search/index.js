@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 // eslint-disable-next-line no-unused-vars
 import { jsx, css } from '@emotion/react';
-import SearchItem from './SearchItem';
+import SearchItem, { defaultRenderItemType } from './SearchItem';
 /** @jsx jsx */
 
 const NAMESPACE = 'tenup-content-search';
@@ -441,7 +441,7 @@ ContentSearch.defaultProps = {
 	onSelectItem: () => {
 		console.log('Select!'); // eslint-disable-line no-console
 	},
-	renderItemType: undefined,
+	renderItemType: defaultRenderItemType,
 	fetchInitialResults: false,
 };
 

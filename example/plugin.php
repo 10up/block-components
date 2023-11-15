@@ -125,3 +125,11 @@ function register_book_custom_post_type() {
 }
 
 add_action( 'init', __NAMESPACE__ . '\register_book_custom_post_type' );
+
+
+add_action(
+	'after_setup_theme',
+	function() {
+		remove_theme_support( 'core-block-patterns' );
+	}
+);

@@ -25,7 +25,7 @@ function BlockEdit(props) {
             enforce={true}
             tagName="h2"
             value={title}
-			placeholder={ __( 'Enter some text', NAMESPACE ) }
+            placeholder={ __( 'Enter some text', NAMESPACE ) }
             onChange={(title) => setAttributes({title})}
             allowedFormats={[
                 'core/bold',

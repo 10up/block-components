@@ -1,7 +1,8 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import { useEffect, useState, useRef } from '@wordpress/element';
 import { createBlock } from '@wordpress/blocks';
-import { InnerBlocks } from '@wordpress/block-editor';
+import { useInnerBlocksProps } from '@wordpress/block-editor';
+import deprecated from '@wordpress/deprecated';
 import PropTypes from 'prop-types';
 /** @jsx jsx */
 // eslint-disable-next-line no-unused-vars
@@ -16,6 +17,14 @@ const InnerBlockSlider = ({
 	slideHeight,
 }) => {
 	const [currentPage, setCurrentPage] = useState(1);
+
+	deprecated('InnerBlockSlider', {
+		since: '1.15.12',
+		version: '1.16',
+		alternative:
+			'the useInnerBlocksProps hook to render the inner blocks and then use the same JS library that powers the slider on the frontend in the editor',
+		plugin: '10up Block Components',
+	});
 
 	let innerBlockTemplate = template;
 
@@ -81,26 +90,30 @@ const InnerBlockSlider = ({
 		width: ${totalWidth}%;
 		transform: translate3d(-${moveOffset}%, 0px, 0px);
 		${slideHeight ? `height: ${slideHeight};` : ''}
+		display: flex;
+		flex-wrap: nowrap;
 
-		.block-editor-block-list__layout > div {
+		& > .wp-block {
 			width: ${slideSlotWidth}%;
 		}
 	`;
+
+	const innerBlocksProps = useInnerBlocksProps(
+		{ className: 'slides', ref: slides },
+		{
+			template: innerBlockTemplate,
+			orientation: 'horizontal',
+			allowedBlocks: [allowedBlock],
+		},
+	);
 
 	const prevEnabled = currentPage > 1;
 	const nextEnabled = currentPage < totalPages;
 
 	return (
 		<div className="inner-block-slider">
-			<div className="slides-outer">
-				<div className="slides" css={slidesCSS} ref={slides}>
-					<InnerBlocks
-						allowedBlocks={[allowedBlock]}
-						orientation="horizontal"
-						template={innerBlockTemplate}
-						__experimentalCaptureToolbars
-					/>
-				</div>
+			<div className="slides-outer" style={{ overflow: 'hidden' }}>
+				<div {...innerBlocksProps} css={slidesCSS} />
 			</div>
 			<div className="navigation">
 				{[...Array(totalPages).keys()].map((i) => (
