@@ -29,9 +29,10 @@ function BlockEdit(props) {
             onSelect={handleImageSelect}
             focalPoint={focalPoint}
             onChangeFocalPoint={handleFocalPointChange}
+            allowedTypes={['image/gif']}
             labels={{
-                title: 'Select Poster Image',
-                instructions: 'Upload a media file or pick one from your media library.'
+                title: 'Select Gif Image',
+                instructions: 'Upload a GIF or pick one from your media library.'
             }}
         />
     )
@@ -52,4 +53,5 @@ function BlockEdit(props) {
 | `onChangeFocalPoint` | `function` | `undefined` | Callback that gets called with the new focal point when it changes. (Is required for the FocalPointPicker to appear) |
 | `labels` | `object` | `{}` | Pass in an object of labels to be used by the `MediaPlaceholder` component under the hook. Allows the sub properties `title` and `instructions` |
 | `canEditImage` | `boolean` | `true` | whether or not the image can be edited by in the context its getting viewed. Controls whether a placeholder or upload controls should be shown when no image is present |
+| `allowedTypes` | `array` | `['image']` | Array of [unique file type specifiers](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/file#unique_file_type_specifiers): file extensions, [MIME types](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types), `image` |
 | `...rest` | `*` | `null` | any additional attributes you want to pass to the underlying `img` tag |
