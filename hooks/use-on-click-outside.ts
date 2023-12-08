@@ -6,13 +6,13 @@ import { useEffect, useRef } from '@wordpress/element';
  * @param {Function} onClickOutside callback that will get invoked when the user clicks outside of the target
  * @returns {object} ref to the target element
  */
-export function useOnClickOutside(onClickOutside) {
-	const ref = useRef();
+export function useOnClickOutside<TElementType extends HTMLElement>(onClickOutside: (event: TouchEvent | MouseEvent) => void) {
+	const ref = useRef<TElementType>(null);
 	useEffect(
 		() => {
-			const listener = (event) => {
+			const listener = (event: MouseEvent | TouchEvent) => {
 				// Do nothing if clicking ref's element or descendent elements
-				if (!ref.current || ref.current.contains(event.target)) {
+				if (!ref.current || ref.current.contains(event.target as Node)) {
 					return;
 				}
 				onClickOutside(event);

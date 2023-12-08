@@ -3,7 +3,6 @@
  */
 import classnames from 'classnames';
 import styled from '@emotion/styled';
-import PropTypes from 'prop-types';
 
 /**
  * WordPress dependencies
@@ -19,6 +18,9 @@ import { __experimentalLinkControl as LinkControl, RichText } from '@wordpress/b
 import { StyledComponentContext } from '../styled-components-context';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 
+type Type = 'post' | 'page' | 'category' | 'tag' | 'post_format' | '';
+type Kind = 'taxonomy' | 'post-type' | '';
+
 /**
  * Given the Link block's type attribute, return the query params to give to
  * /wp/v2/search.
@@ -27,7 +29,7 @@ import { useOnClickOutside } from '../../hooks/use-on-click-outside';
  * @param {string} kind Link block's entity of kind (post-type|taxonomy)
  * @returns {{ type?: string, subtype?: string }} Search query params.
  */
-function getSuggestionsQuery(type, kind) {
+function getSuggestionsQuery(type: Type, kind: Kind) {
 	switch (type) {
 		case 'post':
 		case 'page':
@@ -38,6 +40,8 @@ function getSuggestionsQuery(type, kind) {
 			return { type: 'term', subtype: 'post_tag' };
 		case 'post_format':
 			return { type: 'post-format' };
+		default:
+			break;
 	}
 
 	switch (kind) {
@@ -50,7 +54,7 @@ function getSuggestionsQuery(type, kind) {
 	}
 }
 
-const StylesRichTextLink = styled(RichText)`
+const StyledRichTextLink = styled(RichText)`
 	--color--warning: #f00;
 
 	/* Reset margins for this block alone. */
@@ -83,46 +87,77 @@ const StylesRichTextLink = styled(RichText)`
 	}
 `;
 
+interface LinkProps {
+	/**
+	 * The text to show inside the link
+	 */
+	value?: string;
+	/**
+	 * Post or Page, used to autosuggest content for URL
+	 */
+	type?: Type;
+	/**
+	 * Should the link open in a new tab?
+	 */
+	opensInNewTab: boolean;
+	/**
+	 * The actual link to be set as href
+	 */
+	url?: string;
+	/**
+	 * Callback when the URL is changed
+	 */
+	onLinkChange: (link: string) => void;
+	/**
+	 * Callback when the link's text is changed
+	 */
+	onTextChange: (text: string) => void;
+	/**
+	 * Callback when the URL is changed
+	 */
+	onLinkRemove?: () => void;
+	/**
+	 * Page or Post
+	 */
+	kind?: Kind;
+	/**
+	 * Text visible before actual value is inserted
+	 */
+	placeholder?: string;
+	/**
+	 * html class to be applied to the anchor element
+	 */
+	className?: string;
+}
+
 /**
  * Link component that can be used inside other Gutenberg blocks for setting up URLs.
  *
  * The link should not be visible if the block is not focused. This will maintain nicer
  * visuals in the block editor as a whole.
- *
- * @param {...object} props								All properties passed to the component.
- * @param {string} props.value 							The text to show inside the link
- * @param {string} props.type 							Post or Page, used to autosuggest content for URL
- * @param {boolean} props.opensInNewTab 				Should the link open in a new tab?
- * @param {string} props.url 							The actual link to be set as href
- * @param {Function} props.onLinkChange 				Callback when the URL is changed
- * @param {Function} props.onLinkRemove 				Callback when the URL is changed
- * @param {Function} props.onTextChange 				Callback when the link's text is changed
- * @param {string} props.kind 							Page or Post
- * @param {string} props.placeholder 					Text visible before actual value is inserted
- * @param {string} props.className 					    html class to be applied to the anchor element
- *
- * @returns {*} The rendered component.
  */
-const Link = ({
-	value,
-	type,
-	opensInNewTab,
-	url,
-	onLinkChange,
-	onTextChange,
-	onLinkRemove,
-	kind,
-	placeholder,
-	className,
-	...rest
-}) => {
-	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
-	const [isValidLink, setIsValidLink] = useState(false);
+export const Link = (props: LinkProps) => {
+	const {
+		value = '',
+		type = '',
+		opensInNewTab,
+		url = '',
+		onLinkChange,
+		onTextChange,
+		onLinkRemove,
+		kind = '',
+		placeholder = __('Link text ...', '10up-block-components'),
+		className,
+		...rest
+	} = props;
+
+	const [isPopoverVisible, setIsPopoverVisible] = useState<boolean>(false);
+	const [isValidLink, setIsValidLink] = useState<boolean>(false);
 	const openPopover = () => setIsPopoverVisible(true);
 	const closePopover = () => setIsPopoverVisible(false);
 
-	const linkRef = useRef();
-	const popoverRef = useOnClickOutside(closePopover);
+	const linkRef = useRef<HTMLAnchorElement>(null);
+	const popoverRef = useOnClickOutside<HTMLDivElement>(closePopover);
 
 	const link = {
 		url,
@@ -141,7 +176,7 @@ const Link = ({
 
 	return (
 		<StyledComponentContext cacheKey="tenup-component-link">
-			<StylesRichTextLink
+			<StyledRichTextLink
 				tagName="a"
 				className={classnames('tenup-block-components-link__label', className)}
 				value={value}
@@ -199,28 +234,3 @@ const Link = ({
 		</StyledComponentContext>
 	);
 };
-
-Link.defaultProps = {
-	value: undefined,
-	url: undefined,
-	className: undefined,
-	onLinkRemove: null,
-	type: '',
-	kind: '',
-	placeholder: __('Link text ...', '10up-block-components'),
-};
-
-Link.propTypes = {
-	value: PropTypes.string,
-	url: PropTypes.string,
-	onLinkChange: PropTypes.func.isRequired,
-	onLinkRemove: PropTypes.func,
-	onTextChange: PropTypes.func.isRequired,
-	opensInNewTab: PropTypes.bool.isRequired,
-	type: PropTypes.string,
-	kind: PropTypes.string,
-	className: PropTypes.string,
-	placeholder: PropTypes.string,
-};
-
-export { Link };

@@ -62,6 +62,8 @@
   },
   "devDependencies": {
     "@10up/cypress-wp-utils": "github:10up/cypress-wp-utils#build",
+    "@types/wordpress__block-editor": "^11.5.8",
+    "@wordpress/block-editor": "^12.15.0",
     "@wordpress/dependency-extraction-webpack-plugin": "^4.6.0",
     "10up-toolkit": "^4.3.1",
     "classnames": "^2.3.2",
