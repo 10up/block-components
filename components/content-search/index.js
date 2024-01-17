@@ -1,4 +1,4 @@
-import { TextControl, Spinner, NavigableMenu, Button } from '@wordpress/components';
+import { Spinner, NavigableMenu, Button, SearchControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
 import PropTypes from 'prop-types';
@@ -343,8 +343,7 @@ const ContentSearch = ({
 	return (
 		<StyledComponentContext cacheKey="tenup-component-content-search">
 			<NavigableMenu onNavigate={handleOnNavigate} orientation="vertical">
-				<TextControl
-					label={label}
+				<SearchControl 
 					value={searchString}
 					onChange={(newSearchString) => {
 						handleSearchStringChange(newSearchString, 1);
@@ -357,6 +356,8 @@ const ContentSearch = ({
 					onBlur={() => {
 						setIsFocused(false);
 					}}
+					size="compact"
+					style={{border: "1px solid rgb(30, 30, 30)"}}
 				/>
 
 				{hasSearchString || hasInitialResults ? (
