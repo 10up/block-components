@@ -360,7 +360,6 @@ const ContentSearch = ({
 					onBlur={() => {
 						setIsFocused(false);
 					}}
-					style={{ border: '1px solid rgb(30, 30, 30)' }}
 				/>
 
 				{hasSearchString || hasInitialResults ? (
