@@ -345,6 +345,7 @@ const ContentSearch = ({
 		<StyledComponentContext cacheKey="tenup-component-content-search">
 			<NavigableMenu onNavigate={handleOnNavigate} orientation="vertical">
 				<SearchControl
+					__next40pxDefaultSize
 					value={searchString}
 					onChange={(newSearchString) => {
 						handleSearchStringChange(newSearchString, 1);
