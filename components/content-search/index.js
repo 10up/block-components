@@ -343,7 +343,7 @@ const ContentSearch = ({
 	return (
 		<StyledComponentContext cacheKey="tenup-component-content-search">
 			<NavigableMenu onNavigate={handleOnNavigate} orientation="vertical">
-				<SearchControl 
+				<SearchControl
 					value={searchString}
 					onChange={(newSearchString) => {
 						handleSearchStringChange(newSearchString, 1);
@@ -357,7 +357,7 @@ const ContentSearch = ({
 						setIsFocused(false);
 					}}
 					size="compact"
-					style={{border: "1px solid rgb(30, 30, 30)"}}
+					style={{ border: '1px solid rgb(30, 30, 30)' }}
 				/>
 
 				{hasSearchString || hasInitialResults ? (
