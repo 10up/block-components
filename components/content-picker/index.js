@@ -38,6 +38,7 @@ const ContentPickerWrapper = styled.div`
  *
  * @param {object} props React props
  * @param {string} props.label label for the picker
+ * @param {boolean} props.hideLabelFromVision whether or not to hide the label from vision
  * @param {string} props.mode mode of the picker
  * @param {Array} props.contentTypes array of content types to filter by
  * @param {string} props.placeholder placeholder text for the search input
@@ -57,6 +58,7 @@ const ContentPickerWrapper = styled.div`
  */
 const ContentPicker = ({
 	label,
+	hideLabelFromVision,
 	mode,
 	contentTypes,
 	placeholder,
@@ -130,6 +132,7 @@ const ContentPicker = ({
 					<ContentSearch
 						placeholder={placeholder}
 						label={label}
+						hideLabelFromVision={hideLabelFromVision}
 						excludeItems={excludeItems}
 						onSelectItem={handleSelect}
 						contentTypes={contentTypes}
@@ -184,6 +187,7 @@ const ContentPicker = ({
 
 ContentPicker.defaultProps = {
 	label: '',
+	hideLabelFromVision: true,
 	mode: 'post',
 	onPickChange: (ids) => {
 		console.log('Content picker list change', ids); // eslint-disable-line no-console
@@ -209,6 +213,7 @@ ContentPicker.propTypes = {
 	placeholder: PropTypes.string,
 	mode: PropTypes.oneOf(['post', 'user', 'term']),
 	label: PropTypes.string,
+	hideLabelFromVision: PropTypes.bool,
 	multiPickedLabel: PropTypes.string,
 	singlePickedLabel: PropTypes.string,
 	isOrderable: PropTypes.bool,

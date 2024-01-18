@@ -43,6 +43,7 @@ const ContentSearch = ({
 	onSelectItem,
 	placeholder,
 	label,
+	hideLabelFromVision,
 	contentTypes,
 	mode,
 	perPage,
@@ -348,6 +349,8 @@ const ContentSearch = ({
 					onChange={(newSearchString) => {
 						handleSearchStringChange(newSearchString, 1);
 					}}
+					label={label}
+					hideLabelFromVision={hideLabelFromVision}
 					placeholder={placeholder}
 					autoComplete="off"
 					onFocus={() => {
@@ -425,6 +428,7 @@ ContentSearch.defaultProps = {
 	placeholder: '',
 	perPage: 20,
 	label: '',
+	hideLabelFromVision: true,
 	mode: 'post',
 	excludeItems: [],
 	queryFilter: (query) => query,
@@ -443,6 +447,7 @@ ContentSearch.propTypes = {
 	placeholder: PropTypes.string,
 	excludeItems: PropTypes.array,
 	label: PropTypes.string,
+	hideLabelFromVision: PropTypes.bool,
 	perPage: PropTypes.number,
 	renderItemType: PropTypes.func,
 	fetchInitialResults: PropTypes.bool,
