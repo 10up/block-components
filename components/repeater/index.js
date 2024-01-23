@@ -42,6 +42,8 @@ export const AttributeRepeater = ({ children, attribute, addButton, allowReorder
 		};
 	});
 
+	defaultRepeaterData[0].id = uuid();
+
 	const handleOnChange = (value) => {
 		updateBlockAttributes(clientId, { [attribute]: value });
 	};

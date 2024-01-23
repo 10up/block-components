@@ -14,6 +14,7 @@ const Image = (props) => {
 		onChangeFocalPoint,
 		labels = {},
 		canEditImage = true,
+		allowedTypes = ['image'],
 		...rest
 	} = props;
 	const hasImage = !!id;
@@ -27,7 +28,13 @@ const Image = (props) => {
 
 	if (!hasImage && canEditImage) {
 		return (
-			<MediaPlaceholder labels={labels} onSelect={onSelect} accept="image" multiple={false} />
+			<MediaPlaceholder
+				labels={labels}
+				onSelect={onSelect}
+				accept="image"
+				multiple={false}
+				allowedTypes={allowedTypes}
+			/>
 		);
 	}
 
@@ -77,6 +84,7 @@ Image.defaultProps = {
 	onChangeFocalPoint: undefined,
 	labels: {},
 	canEditImage: true,
+	allowedTypes: ['image'],
 };
 
 Image.propTypes = {
@@ -84,6 +92,7 @@ Image.propTypes = {
 	size: PropTypes.string,
 	onSelect: PropTypes.func.isRequired,
 	onChangeFocalPoint: PropTypes.func,
+	allowedTypes: PropTypes.array,
 	focalPoint: PropTypes.shape({
 		x: PropTypes.string,
 		y: PropTypes.string,

@@ -1,4 +1,4 @@
-import { TextControl, Spinner, NavigableMenu, Button } from '@wordpress/components';
+import { Spinner, NavigableMenu, Button, SearchControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
 import PropTypes from 'prop-types';
@@ -43,6 +43,7 @@ const ContentSearch = ({
 	onSelectItem,
 	placeholder,
 	label,
+	hideLabelFromVision,
 	contentTypes,
 	mode,
 	perPage,
@@ -343,12 +344,14 @@ const ContentSearch = ({
 	return (
 		<StyledComponentContext cacheKey="tenup-component-content-search">
 			<NavigableMenu onNavigate={handleOnNavigate} orientation="vertical">
-				<TextControl
-					label={label}
+				<SearchControl
+					__next40pxDefaultSize
 					value={searchString}
 					onChange={(newSearchString) => {
 						handleSearchStringChange(newSearchString, 1);
 					}}
+					label={label}
+					hideLabelFromVision={hideLabelFromVision}
 					placeholder={placeholder}
 					autoComplete="off"
 					onFocus={() => {
@@ -424,6 +427,7 @@ ContentSearch.defaultProps = {
 	placeholder: '',
 	perPage: 20,
 	label: '',
+	hideLabelFromVision: true,
 	mode: 'post',
 	excludeItems: [],
 	queryFilter: (query) => query,
@@ -442,6 +446,7 @@ ContentSearch.propTypes = {
 	placeholder: PropTypes.string,
 	excludeItems: PropTypes.array,
 	label: PropTypes.string,
+	hideLabelFromVision: PropTypes.bool,
 	perPage: PropTypes.number,
 	renderItemType: PropTypes.func,
 	fetchInitialResults: PropTypes.bool,
