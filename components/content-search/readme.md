@@ -26,7 +26,8 @@ function MyComponent( props ) {
 |-----------------------|------------|--------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
 | `onSelectItem`        | `function` | `undefined`                          | Function called when a searched item is clicked                                                                                  |
 | `queryFilter`         | `function` | `(query, parametersObject) => query` | Function called to allow you to customize the query before it's made. It's advisable to use `useCallback` to save this parameter |
-| `label`               | `string`   | `''`                                 | Renders a label for the Search Field.                                                                                            |
+| `label`               | `string`   | `''`                                 | Renders a label for the Search Field.
+| `hideLabelFromVision` | `bool`     | `true`                               | Whether to hide the label                                                                                           |
 | `mode`                | `string`   | `'post'`                             | One of: `post`, `user`, `term`                                                                                                   |
 | `placeholder`         | `string`   | `''`                                 | Renders placeholder text inside the Search Field.                                                                                |
 | `contentTypes`        | `array`    | `[ 'post', 'page' ]`                 | Names of the post types or taxonomies that should get searched                                                                   |

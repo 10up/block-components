@@ -1,0 +1,19 @@
+{
+	"apiVersion": 2,
+	"name": "example/content-picker",
+	"title": "Content Picker",
+    "description": "Example Block to show the Content Picker in usage",
+    "icon": "excerpt-view",
+    "category": "common",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "selectedPosts": {
+            "type": "array"
+        }
+    },
+    "variations": [],
+	"editorScript": "file:./index.js"
+}
