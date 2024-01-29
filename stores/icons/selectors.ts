@@ -1,5 +1,4 @@
 /* eslint-disable no-prototype-builtins */
-
 import { IconSet } from "./types";
 
 type IconStoreState = {
