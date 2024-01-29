@@ -36,6 +36,7 @@ const ButtonStyled = styled(Button)`
 		padding: 2px 4px;
 		text-transform: capitalize;
 		border-radius: 2px;
+		flex-shrink: 0;
 	}
 
 	.block-editor-link-control__search-item-header {
