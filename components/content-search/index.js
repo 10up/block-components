@@ -17,7 +17,7 @@ const List = styled.ul`
 	overflow-y: auto;
 	list-style: none !important;
 	margin: 0;
-	padding: 0;
+	padding: 0 !important;
 `;
 
 const StyledSpinner = styled(Spinner)`

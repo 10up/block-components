@@ -43,6 +43,11 @@ const ButtonStyled = styled(Button)`
 		display: flex;
 		flex-direction: column;
 	}
+
+	mark {
+		padding: 0 !important;
+		margin: 0 !important;
+	}
 `;
 
 /**
