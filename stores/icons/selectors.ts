@@ -1,4 +1,10 @@
 /* eslint-disable no-prototype-builtins */
+import { IconSet } from "./types";
+
+type IconStoreState = {
+	iconSets: { [key: string]: IconSet };
+};
+
 /**
  * Returns all icons sets
  *
@@ -6,7 +12,7 @@
  *
  * @returns {Array?} Icon Sets.
  */
-export function getIconSets(state) {
+export function getIconSets(state: IconStoreState) {
 	const { iconSets } = state;
 	return Object.values(iconSets);
 }
@@ -19,7 +25,7 @@ export function getIconSets(state) {
  *
  * @returns {object?} Icon Set.
  */
-export function getIconSet(state, name) {
+export function getIconSet(state: IconStoreState, name: string) {
 	const { iconSets } = state;
 	const iconSet = iconSets[name] ?? [];
 	return iconSet;
@@ -33,7 +39,7 @@ export function getIconSet(state, name) {
  *
  * @returns {Array?} List of Icons.
  */
-export function getIcons(state, name) {
+export function getIcons(state: IconStoreState, name: string) {
 	const { iconSets } = state;
 	return iconSets?.hasOwnProperty(name) ? iconSets[name]?.icons ?? [] : [];
 }
@@ -47,7 +53,7 @@ export function getIcons(state, name) {
  *
  * @returns {object?} Icon.
  */
-export function getIcon(state, name, iconName) {
+export function getIcon(state: IconStoreState, name: string, iconName: string) {
 	const { iconSets } = state;
 	return iconSets?.hasOwnProperty(name)
 		? iconSets[name]?.icons?.find((item) => item.name === iconName) ?? []
