@@ -1,12 +1,12 @@
-import { MediaPlaceholder, InspectorControls } from '@wordpress/block-editor';
-import { useContext, useMemo, Children, createContext } from '@wordpress/element';
-import { Spinner, FocalPointPicker, PanelBody, Placeholder } from '@wordpress/components';
-import { __ } from '@wordpress/i18n';
+import { MediaPlaceholder } from '@wordpress/block-editor';
+import { useMemo, Children } from '@wordpress/element';
 import PropTypes from 'prop-types';
 
+/**
+ * Internal Dependencies
+ */
+import { Media, ImageContext, Figure, InlineControls } from './child-components';
 import { useMedia } from '../../hooks/use-media';
-
-export const ImageContext = createContext();
 
 const ImageWrapper = (props) => {
 	const {
@@ -18,6 +18,10 @@ const ImageWrapper = (props) => {
 		labels = {},
 		canEditImage = true,
 		children,
+		hasInlineControls = false,
+		isOptional = true,
+		onRemove,
+		style,
 		...rest
 	} = props;
 	const hasImage = !!id;
@@ -45,6 +49,9 @@ const ImageWrapper = (props) => {
 			isResolvingMedia,
 			shouldDisplayFocalPointPicker,
 			hasImage,
+			hasInlineControls,
+			isOptional,
+			onRemove,
 		};
 	}, [
 		id,
@@ -59,6 +66,9 @@ const ImageWrapper = (props) => {
 		isResolvingMedia,
 		shouldDisplayFocalPointPicker,
 		hasImage,
+		hasInlineControls,
+		isOptional,
+		onRemove,
 	]);
 
 	if (hasRenderCallback) {
@@ -70,6 +80,9 @@ const ImageWrapper = (props) => {
 			labels,
 			canEditImage,
 			onSelect,
+			hasInlineControls,
+			isOptional,
+			onRemove,
 		});
 	}
 
@@ -91,12 +104,24 @@ const ImageWrapper = (props) => {
 
 	return (
 		<ImageContext.Provider value={imageContext}>
-			<Figure>
-				<Image {...rest} />
-			</Figure>
+			{hasImage && !!hasInlineControls ? (
+				<Figure style={{ ...style }} {...rest}>
+					<Media />
+					<InlineControls
+						imageUrl={imageUrl}
+						onSelect={onSelect}
+						isOptional={isOptional}
+						onRemove={onRemove}
+					/>
+				</Figure>
+			) : (
+				<Media style={{ display: 'block', ...style }} {...rest} />
+			)}
 		</ImageContext.Provider>
 	);
 };
+
+ImageWrapper.Figure = Figure;
 
 export { ImageWrapper as Image };
 
@@ -106,6 +131,11 @@ ImageWrapper.defaultProps = {
 	onChangeFocalPoint: undefined,
 	labels: {},
 	canEditImage: true,
+	hasInlineControls: false,
+	isOptional: true,
+	onRemove: undefined,
+	children: undefined,
+	style: {},
 };
 
 ImageWrapper.propTypes = {
@@ -122,77 +152,9 @@ ImageWrapper.propTypes = {
 		instructions: PropTypes.string,
 	}),
 	canEditImage: PropTypes.bool,
-};
-
-const Figure = (props) => {
-	const { children, style, ...rest } = props;
-
-	return (
-		<figure style={{ position: 'relative', ...style }} {...rest}>
-			{children}
-		</figure>
-	);
-};
-
-const Image = (props) => {
-	const { style } = props;
-	const {
-		imageUrl,
-		altText,
-		labels,
-		onSelect,
-		isResolvingMedia,
-		shouldDisplayFocalPointPicker,
-		focalPoint,
-		onChangeFocalPoint,
-		canEditImage,
-		hasImage,
-	} = useContext(ImageContext);
-
-	if (shouldDisplayFocalPointPicker) {
-		const focalPointStyle = {
-			objectFit: 'cover',
-			objectPosition: `${focalPoint.x * 100}% ${focalPoint.y * 100}%`,
-		};
-
-		props.style = {
-			...style,
-			...focalPointStyle,
-		};
-	}
-
-	if (isResolvingMedia) {
-		return <Spinner />;
-	}
-
-	if (!hasImage && !canEditImage) {
-		return <Placeholder className="block-editor-media-placeholder" withIllustration />;
-	}
-
-	return (
-		<>
-			{shouldDisplayFocalPointPicker && (
-				<InspectorControls>
-					<PanelBody title={__('Image Settings')}>
-						<FocalPointPicker
-							label={__('Focal Point Picker')}
-							url={imageUrl}
-							value={focalPoint}
-							onChange={onChangeFocalPoint}
-						/>
-					</PanelBody>
-				</InspectorControls>
-			)}
-			{hasImage && <img src={imageUrl} alt={altText} {...props} />}
-			{canEditImage && (
-				<MediaPlaceholder
-					labels={labels}
-					onSelect={onSelect}
-					accept="image"
-					multiple={false}
-					disableMediaButtons={imageUrl}
-				/>
-			)}
-		</>
-	);
+	hasInlineControls: PropTypes.bool,
+	isOptional: PropTypes.bool,
+	onRemove: PropTypes.func,
+	children: PropTypes.node,
+	style: PropTypes.object,
 };
