@@ -1,4 +1,8 @@
 /* eslint-disable default-param-last */
+
+import { IconSetAction } from "./actions";
+import { IconSet } from "./types";
+
 /**
  * Reducer managing the block style variations.
  *
@@ -7,7 +11,7 @@
  *
  * @returns {object} Updated state.
  */
-export default function reducer(state = { iconSets: {} }, action) {
+export default function reducer(state: { iconSets: {[key: string]: IconSet} } = { iconSets: {} }, action: IconSetAction) {
 	switch (action.type) {
 		case 'REGISTER_ICON_SET':
 			return {

@@ -12,15 +12,16 @@ const fuzzy = new uFuzzy();
  * @param {string?} property name of the prop
  * @returns {Array} filtered list
  */
-export function useFilteredList(list = [], searchTerm = '', property = 'name') {
+export function useFilteredList<TListItem extends {[key: string]: string}>(list: TListItem[] = [], searchTerm = '', property: keyof TListItem = 'name') {
 	const [filteredList, setFilteredList] = useState(list);
 
 	const propertyList = useMemo(() => list.map((item) => item[property]), [list, property]);
 
 	const filterList = useCallback(
-		(searchTerm) => {
+		(searchTerm: string) => {
 			const matchedNames = fuzzy.filter(propertyList, searchTerm);
-			return matchedNames.map((index) => list[index]);
+			const results = matchedNames?.map((index) => list[index]) || [];
+			return results;
 		},
 		[propertyList, list],
 	);

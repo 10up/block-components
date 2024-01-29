@@ -3,7 +3,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.17.2",
+  "version": "1.17.4",
   "description": "10up Components built for the WordPress Block Editor.",
   "main": "./dist/index.js",
   "source": "index.js",
@@ -46,6 +46,7 @@
   },
   "homepage": "https://github.com/10up/block-components.git#readme",
   "dependencies": {
+    "@10up/block-components": "^1.17.2",
     "@dnd-kit/core": "^6.0.6",
     "@dnd-kit/modifiers": "^6.0.1",
     "@dnd-kit/sortable": "^7.0.1",
@@ -62,10 +63,13 @@
   },
   "devDependencies": {
     "@10up/cypress-wp-utils": "github:10up/cypress-wp-utils#build",
+    "@types/jest": "^29.5.11",
+    "@wordpress/data": "^9.12.13",
     "@wordpress/dependency-extraction-webpack-plugin": "^4.6.0",
+    "@wordpress/element": "^5.19.13",
     "10up-toolkit": "^4.3.1",
     "classnames": "^2.3.2",
-    "cypress": "^12.1.0",
+    "cypress": "^13.6.3",
     "cypress-localstorage-commands": "^2.2.2"
   }
 }

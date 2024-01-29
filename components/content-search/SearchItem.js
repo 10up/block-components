@@ -36,11 +36,17 @@ const ButtonStyled = styled(Button)`
 		padding: 2px 4px;
 		text-transform: capitalize;
 		border-radius: 2px;
+		flex-shrink: 0;
 	}
 
 	.block-editor-link-control__search-item-header {
 		display: flex;
 		flex-direction: column;
+	}
+
+	mark {
+		padding: 0 !important;
+		margin: 0 !important;
 	}
 `;
 

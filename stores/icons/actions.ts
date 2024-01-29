@@ -1,3 +1,5 @@
+import { IconSet } from "./types";
+
 /**
  * Returns an action object used in signalling that new block styles have been added.
  *
@@ -5,11 +7,11 @@
  *
  * @returns {object} Action object.
  */
-export function registerIconSet(iconSet) {
+export function registerIconSet(iconSet: IconSet) {
 	return {
 		type: 'REGISTER_ICON_SET',
 		iconSet,
-	};
+	} as const;
 }
 
 /**
@@ -19,9 +21,11 @@ export function registerIconSet(iconSet) {
  *
  * @returns {object} Action object.
  */
-export function removeIconSet(name) {
+export function removeIconSet(name: string) {
 	return {
 		type: 'REMOVE_ICON_SET',
 		name,
-	};
+	} as const;
 }
+
+export type IconSetAction = ReturnType<typeof registerIconSet> | ReturnType<typeof removeIconSet>;
