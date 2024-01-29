@@ -49,7 +49,7 @@ const StyledIconButton = styled(Icon)`
 		max-height: 100%;
 		max-width: 100%;
 		height: auto;
-		width: auto;
+		width: 100%;
 		object-fit: contain;
 	}
 `;
