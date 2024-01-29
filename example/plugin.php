@@ -139,3 +139,23 @@ add_action(
 		remove_theme_support( 'core-block-patterns' );
 	}
 );
+
+
+/**
+ * Remove page level patterns
+ */
+function example_remove_page_level_patterns() {
+	$patterns = \WP_Block_Patterns_Registry::get_instance()->get_all_registered();
+	foreach ( $patterns as $pattern ) {
+		if (
+			! empty( $pattern['blockTypes'] ) &&
+			in_array( 'core/post-content', $pattern['blockTypes'] )
+		) {
+			unregister_block_pattern( $pattern['name'] );
+			$pattern['blockTypes'] = array_diff( $pattern['blockTypes'], array( 'core/post-content' ) );
+			register_block_pattern( $pattern['name'], $pattern );
+		}
+	}
+}
+
+add_action( 'init', __NAMESPACE__ . '\example_remove_page_level_patterns' );
