@@ -1,6 +1,7 @@
 import { Spinner, NavigableMenu, Button, SearchControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
+import { addQueryArgs } from '@wordpress/url';
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import styled from '@emotion/styled';
@@ -112,12 +113,20 @@ const ContentSearch = ({
 
 			switch (mode) {
 				case 'user':
-					searchQuery = `wp/v2/users/?search=${keyword}`;
+					searchQuery = addQueryArgs('wp/v2/users', {
+						search: keyword,
+					});
 					break;
 				default:
-					searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
-						',',
-					)}&type=${mode}&_embed&per_page=${perPage}&page=${page}`;
+					searchQuery = addQueryArgs('wp/v2/search', {
+						search: keyword,
+						subtype: contentTypes.join(','),
+						type: mode,
+						_embed: true,
+						per_page: perPage,
+						page,
+					});
+
 					break;
 			}
 
