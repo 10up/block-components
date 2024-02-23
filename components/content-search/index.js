@@ -412,7 +412,7 @@ const ContentSearch = ({
 											{RenderItemComponent ? (
 												<RenderItemComponent
 													item={item}
-													onClick={selectItem}
+													onSelect={selectItem}
 													searchTerm={searchString}
 													contentTypes={contentTypes}
 													isSelected={isSelected}
