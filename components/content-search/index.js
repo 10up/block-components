@@ -50,6 +50,7 @@ const ContentSearch = ({
 	queryFilter,
 	excludeItems,
 	renderItemType,
+	renderItem: RenderItemComponent,
 	fetchInitialResults,
 }) => {
 	const [searchString, setSearchString] = useState('');
@@ -385,6 +386,12 @@ const ContentSearch = ({
 										return null;
 									}
 
+									const isSelected = selectedItem === index + 1;
+
+									const selectItem = () => {
+										handleItemSelection(item);
+									};
+
 									return (
 										<li
 											key={item.id}
@@ -393,14 +400,25 @@ const ContentSearch = ({
 												marginBottom: '0',
 											}}
 										>
-											<SearchItem
-												onClick={() => handleItemSelection(item)}
-												searchTerm={searchString}
-												suggestion={item}
-												contentTypes={contentTypes}
-												isSelected={selectedItem === index + 1}
-												renderType={renderItemType}
-											/>
+											{RenderItemComponent ? (
+												<RenderItemComponent
+													item={item}
+													onClick={selectItem}
+													searchTerm={searchString}
+													contentTypes={contentTypes}
+													isSelected={isSelected}
+													renderType={renderItemType}
+												/>
+											) : (
+												<SearchItem
+													onClick={selectItem}
+													searchTerm={searchString}
+													suggestion={item}
+													contentTypes={contentTypes}
+													isSelected={isSelected}
+													renderType={renderItemType}
+												/>
+											)}
 										</li>
 									);
 								})}
@@ -435,6 +453,7 @@ ContentSearch.defaultProps = {
 		console.log('Select!'); // eslint-disable-line no-console
 	},
 	renderItemType: defaultRenderItemType,
+	renderItem: undefined,
 	fetchInitialResults: false,
 };
 
@@ -449,6 +468,7 @@ ContentSearch.propTypes = {
 	hideLabelFromVision: PropTypes.bool,
 	perPage: PropTypes.number,
 	renderItemType: PropTypes.func,
+	renderItem: PropTypes.func,
 	fetchInitialResults: PropTypes.bool,
 };
 
