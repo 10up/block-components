@@ -2,7 +2,7 @@ import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
 import type { Plugin } from '@wordpress/core-data';
 
-const ACTIVE_STATUSES: string[] = ['active', 'network-active'];
+const ACTIVE_STATUSES = ['active', 'network-active'] as const;
 
 /**
  * Custom hook to check if a plugin is active and whether its resolution has finished.
@@ -22,8 +22,8 @@ export const useIsPluginActive = (pluginName: string): [boolean, boolean] => {
 
 			const isPluginActive: boolean = ACTIVE_STATUSES.includes(plugin?.status);
 
-			return [isPluginActive, hasResolvedPlugins] as [boolean, boolean];
+			return [isPluginActive, hasResolvedPlugins];
 		},
 		[pluginName],
-	);
+	) as [boolean, boolean];
 };
