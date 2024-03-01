@@ -1,6 +1,7 @@
 import { Spinner, NavigableMenu, Button, SearchControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { useState, useRef, useEffect, useCallback } from '@wordpress/element';
+import { addQueryArgs } from '@wordpress/url';
 import PropTypes from 'prop-types';
 import { __ } from '@wordpress/i18n';
 import styled from '@emotion/styled';
@@ -50,6 +51,7 @@ const ContentSearch = ({
 	queryFilter,
 	excludeItems,
 	renderItemType,
+	renderItem: RenderItemComponent,
 	fetchInitialResults,
 }) => {
 	const [searchString, setSearchString] = useState('');
@@ -111,12 +113,20 @@ const ContentSearch = ({
 
 			switch (mode) {
 				case 'user':
-					searchQuery = `wp/v2/users/?search=${keyword}`;
+					searchQuery = addQueryArgs('wp/v2/users', {
+						search: keyword,
+					});
 					break;
 				default:
-					searchQuery = `wp/v2/search/?search=${keyword}&subtype=${contentTypes.join(
-						',',
-					)}&type=${mode}&_embed&per_page=${perPage}&page=${page}`;
+					searchQuery = addQueryArgs('wp/v2/search', {
+						search: keyword,
+						subtype: contentTypes.join(','),
+						type: mode,
+						_embed: true,
+						per_page: perPage,
+						page,
+					});
+
 					break;
 			}
 
@@ -385,6 +395,12 @@ const ContentSearch = ({
 										return null;
 									}
 
+									const isSelected = selectedItem === index + 1;
+
+									const selectItem = () => {
+										handleItemSelection(item);
+									};
+
 									return (
 										<li
 											key={item.id}
@@ -393,14 +409,25 @@ const ContentSearch = ({
 												marginBottom: '0',
 											}}
 										>
-											<SearchItem
-												onClick={() => handleItemSelection(item)}
-												searchTerm={searchString}
-												suggestion={item}
-												contentTypes={contentTypes}
-												isSelected={selectedItem === index + 1}
-												renderType={renderItemType}
-											/>
+											{RenderItemComponent ? (
+												<RenderItemComponent
+													item={item}
+													onSelect={selectItem}
+													searchTerm={searchString}
+													contentTypes={contentTypes}
+													isSelected={isSelected}
+													renderType={renderItemType}
+												/>
+											) : (
+												<SearchItem
+													onClick={selectItem}
+													searchTerm={searchString}
+													suggestion={item}
+													contentTypes={contentTypes}
+													isSelected={isSelected}
+													renderType={renderItemType}
+												/>
+											)}
 										</li>
 									);
 								})}
@@ -435,6 +462,7 @@ ContentSearch.defaultProps = {
 		console.log('Select!'); // eslint-disable-line no-console
 	},
 	renderItemType: defaultRenderItemType,
+	renderItem: undefined,
 	fetchInitialResults: false,
 };
 
@@ -449,6 +477,7 @@ ContentSearch.propTypes = {
 	hideLabelFromVision: PropTypes.bool,
 	perPage: PropTypes.number,
 	renderItemType: PropTypes.func,
+	renderItem: PropTypes.func,
 	fetchInitialResults: PropTypes.bool,
 };
 
