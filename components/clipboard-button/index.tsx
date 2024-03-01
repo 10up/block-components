@@ -1,17 +1,54 @@
-import PropTypes from 'prop-types';
 import { useCopyToClipboard } from '@wordpress/compose';
 import { useState, useEffect } from '@wordpress/element';
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
-export const ClipboardButton = (props) => {
-	const { text, disabled, onSuccess, labels } = props;
+interface ClipboardButtonProps {
+	/**
+	 * The text to copy to the clipboard.
+	 */
+	text: string;
+
+	/**
+	 * Boolean to disable the button.
+	 */
+	disabled: boolean;
+
+	/**
+	 * Function to run when the text is successfully copied.
+	 */
+	onSuccess: Function;
+
+	/**
+	 * Labels for the button.
+	 */
+	labels: ButtonLabels;
+}
+
+interface ButtonLabels {
+	/**
+	 * Label for the button when it's ready to copy.
+	 */
+	copy?: string;
+
+	/**
+	 * Label for the button when the text has been copied.
+	 */
+	copied?: string;
+}
+
+export const ClipboardButton: React.FC<ClipboardButtonProps> = ({
+	text,
+	disabled,
+	onSuccess,
+	labels,
+}) => {
 	const [hasCopied, setHasCopied] = useState(false);
 	const copy = labels.copy ? labels.copy : __('Copy');
 	const copied = labels.copied ? labels.copied : __('Copied');
 
 	useEffect(() => {
-		let timerId;
+		let timerId: undefined | number;
 
 		if (hasCopied) {
 			timerId = setTimeout(() => {
@@ -53,11 +90,4 @@ ClipboardButton.defaultProps = {
 	disabled: false,
 	onSuccess: () => {},
 	labels: {},
-};
-
-ClipboardButton.propTypes = {
-	text: PropTypes.string,
-	disabled: PropTypes.bool,
-	onSuccess: PropTypes.func,
-	labels: PropTypes.object,
 };
