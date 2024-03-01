@@ -6,9 +6,9 @@ import { useEffect, useRef, useState } from '@wordpress/element';
  * @param {string} scriptSource Source URL of the script to be loaded.
  * @returns {HTMLScriptElement} The script tag.
  */
-export const useScript = (scriptSource) => {
-	const scriptElement = useRef();
-	const [scriptLoaded, setScriptLoaded] = useState(false);
+export const useScript = (scriptSource: string): { hasLoaded: boolean, scriptElement: HTMLScriptElement | null } => {
+	const scriptElement = useRef<HTMLScriptElement | null>(null);
+	const [scriptLoaded, setScriptLoaded] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (window) {
