@@ -1,5 +1,10 @@
 import { useSelect } from '@wordpress/data';
 
+interface IsAdminProps {
+	fallback: React.ReactNode | null;
+	children: React.ReactNode;
+}
+
 /**
  * IsAdmin
  *
@@ -8,12 +13,15 @@ import { useSelect } from '@wordpress/data';
  * fallback component via the fallback prop.
  *
  * @param {object} props react props
- * @param {*} props.fallback fallback component
- * @param {*} props.children child components
- * @returns {*}
+ * @param {React.ReactNode|null} props.fallback fallback component
+ * @param {React.ReactNode} props.children child components
+ * @returns {null|React.ReactNode}
  */
-export const IsAdmin = ({ fallback = null, children }) => {
-	const hasAdminPermissions = useSelect(
+export const IsAdmin: React.FC<IsAdminProps> = ({
+	fallback = null,
+	children,
+}): null | React.ReactNode => {
+	const hasAdminPermissions: boolean = useSelect(
 		(select) => select('core').canUser('read', 'users?roles=1'),
 		[],
 	);
