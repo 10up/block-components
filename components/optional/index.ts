@@ -1,7 +1,14 @@
 import { useBlockEditContext } from '@wordpress/block-editor';
 
 interface OptionalProps {
+	/**
+	 * The value to check for truthiness.
+	 */
 	value?: string | number | boolean;
+
+	/**
+	 * The children to render if the value is truthy.
+	 */
 	children: React.ReactNode;
 }
 
