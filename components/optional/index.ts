@@ -13,7 +13,7 @@ interface OptionalProps {
 }
 
 export const Optional: React.FC<OptionalProps> = ({
-	value,
+	value = '',
 	children,
 }) => {
 	const { isSelected } = useBlockEditContext();
