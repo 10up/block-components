@@ -11,7 +11,7 @@ const ACTIVE_STATUSES = ['active', 'network-active'] as const;
  * @returns A tuple containing two boolean values: the first indicating whether the plugin is active, 
  * and the second indicating whether the resolution for the plugin has finished.
  */
-export const useIsPluginActive = (pluginName: string): [boolean, boolean] => {
+export const useIsPluginActive = (pluginName: string) => {
 	return useSelect(
 		(select) => {
 			const storeSelectors = select(coreStore);
