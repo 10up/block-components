@@ -22,7 +22,7 @@ interface IsAdminProps {
 export const IsAdmin: React.FC<IsAdminProps> = ({
 	fallback = null,
 	children,
-}): null | React.ReactNode => {
+}) => {
 	const hasAdminPermissions: boolean = useSelect(
 		(select) => select('core').canUser('read', 'users?roles=1'),
 		[],
