@@ -3,18 +3,16 @@ import { RichText, store as blockEditorStore } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
 import { usePost } from '../../hooks';
 
-/**
- * Defines an object type with property `tagName` with type E.
- * `tagName` is the HTML tag name (e.g., "h1", "a") that can be used in JSX.
- */
-type PolymorphicTagNameProp<E extends React.ElementType> = {
-	tagName?: E;
-};
+interface PostTitleProps<T extends React.ElementType> {
+	tagName?: T;
+}
 
-type PolymorphicProps<E extends React.ElementType> = React.PropsWithChildren<React.ComponentPropsWithoutRef<E> & PolymorphicTagNameProp<E>>;
+type PostTitlePropsWithOmit<T extends React.ElementType> = PostTitleProps<T> & Omit<React.ComponentPropsWithoutRef<T>, keyof PostTitleProps<T>>;
 
-const defaultElement = 'h1';
-export function PostTitle<E extends React.ElementType = typeof defaultElement>( { tagName, ...rest }: PolymorphicProps<E> ) {
+export const PostTitle = <T extends React.ElementType = 'h1'>({
+	tagName,
+	...rest
+}: PostTitlePropsWithOmit<T> ) => {
 	const { postId, postType, isEditable } = usePost();
 
 	const [rawTitle = '', setTitle, fullTitle] = useEntityProp(
@@ -29,7 +27,7 @@ export function PostTitle<E extends React.ElementType = typeof defaultElement>( 
 		[],
 	);
 
-	const TagName = tagName ?? defaultElement;
+	const TagName = tagName ?? 'h1';
 
 	if (!isEditable) {
 		// eslint-disable-next-line react/no-danger
@@ -51,14 +49,3 @@ export function PostTitle<E extends React.ElementType = typeof defaultElement>( 
 PostTitle.defaultProps = {
 	tagName: 'h1',
 };
-
-function LOL() {
-	return (
-		<>
-			<PostTitle tagName='h1' id="lol" />
-			<PostTitle tagName='h1' href="lol" />
-			<PostTitle tagName='a' href="lol" />
-			<PostTitle tagName='div' clipPath='what' />
-		</>
-	);
-}
