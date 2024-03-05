@@ -54,6 +54,7 @@ const ContentPickerWrapper = styled.div`
  * @param {number} props.perPage number of items to show per page
  * @param {boolean} props.fetchInitialResults whether or not to fetch initial results on mount
  * @param {Function} props.renderItemType callback to render the item type
+ * @param {Function} props.renderItem react component to render the search result item
  * @returns {*} React JSX
  */
 const ContentPicker = ({
@@ -74,6 +75,7 @@ const ContentPicker = ({
 	perPage,
 	fetchInitialResults,
 	renderItemType,
+	renderItem,
 }) => {
 	const currentPostId = select('core/editor')?.getCurrentPostId();
 
@@ -141,6 +143,7 @@ const ContentPicker = ({
 						perPage={perPage}
 						fetchInitialResults={fetchInitialResults}
 						renderItemType={renderItemType}
+						renderItem={renderItem}
 					/>
 				) : (
 					label && (
@@ -205,6 +208,7 @@ ContentPicker.defaultProps = {
 	singlePickedLabel: __('You have selected the following item:', '10up-block-components'),
 	fetchInitialResults: false,
 	renderItemType: defaultRenderItemType,
+	renderItem: undefined,
 };
 
 ContentPicker.propTypes = {
@@ -225,6 +229,7 @@ ContentPicker.propTypes = {
 	perPage: PropTypes.number,
 	fetchInitialResults: PropTypes.bool,
 	renderItemType: PropTypes.func,
+	renderItem: PropTypes.func,
 };
 
 export { ContentPicker };
