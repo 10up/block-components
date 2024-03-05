@@ -184,32 +184,35 @@ const ContentSearch = ({
 			setCurrentPage(1);
 		}
 
-		const preparedQuery = prepareSearchQuery(keyword, page);
+		// Let's search the content when at least 3 letters typed.
+		if (keyword.length >= 3) {
+			const preparedQuery = prepareSearchQuery(keyword, page);
 
-		// Only do query if not cached or previously errored/cancelled
-		if (!searchQueries[preparedQuery] || searchQueries[preparedQuery].controller === 1) {
-			setSearchQueries((queries) => {
-				const newQueries = {};
+			// Only do query if not cached or previously errored/cancelled
+			if (!searchQueries[preparedQuery] || searchQueries[preparedQuery].controller === 1) {
+				setSearchQueries((queries) => {
+					const newQueries = {};
 
-				// Remove errored or cancelled queries
-				Object.keys(queries).forEach((query) => {
-					if (queries[query].controller !== 1) {
-						newQueries[query] = queries[query];
-					}
+					// Remove errored or cancelled queries
+					Object.keys(queries).forEach((query) => {
+						if (queries[query].controller !== 1) {
+							newQueries[query] = queries[query];
+						}
+					});
+
+					newQueries[preparedQuery] = {
+						results: null,
+						controller: null,
+						currentPage: page,
+						totalPages: null,
+					};
+
+					return newQueries;
 				});
+			}
 
-				newQueries[preparedQuery] = {
-					results: null,
-					controller: null,
-					currentPage: page,
-					totalPages: null,
-				};
-
-				return newQueries;
-			});
+			setCurrentPage(page);
 		}
-
-		setCurrentPage(page);
 
 		setSearchString(keyword);
 	};
