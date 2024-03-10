@@ -2,12 +2,18 @@ import { __ } from '@wordpress/i18n';
 import { DateTimePicker } from '@wordpress/components';
 import { getSettings, dateI18n } from '@wordpress/date';
 import { useEntityProp } from '@wordpress/core-data';
-import PropTypes from 'prop-types';
 import { usePopover } from '../../hooks/use-popover';
 import { usePost } from '../../hooks';
+import type { Dispatch, SetStateAction } from 'react';
+import type { DateSettings } from '@wordpress/date';
 
-export const PostDatePicker = ({ date, setDate }) => {
-	const settings = getSettings();
+interface PostDatePickerProps {
+	date?: string;
+	setDate: Dispatch<SetStateAction<string>>;
+}
+
+export const PostDatePicker: React.FC<PostDatePickerProps> = ({ date, setDate }) => {
+	const settings: DateSettings = getSettings();
 	// To know if the current time format is a 12 hour time, look for "a".
 	// Also make sure this "a" is not escaped by a "/".
 	const is12Hour = /a(?!\\)/i.test(
@@ -22,19 +28,29 @@ export const PostDatePicker = ({ date, setDate }) => {
 	return <DateTimePicker currentDate={date} onChange={setDate} is12Hour={is12Hour} />;
 };
 
-PostDatePicker.propTypes = {
-	date: PropTypes.string.isRequired,
-	setDate: PropTypes.func.isRequired,
-};
+interface PostDateProps {
+	/**
+	 * The placeholder to show when no date is set.
+	 */
+	placeholder: string;
 
-export const PostDate = (props) => {
-	const { placeholder = __('No date set', 'tenup'), format, ...rest } = props;
+	/**
+	 * The date format to use.
+	 */
+	format?: string;
 
+	/**
+	 * Remaining props to pass to the time element.
+	 */
+	[key: string]: any;
+}
+
+export const PostDate: React.FC<PostDateProps> = ({ placeholder = __('No date set', 'tenup'), format, ...rest}) => {
 	const { postId, postType, isEditable } = usePost();
 
-	const [date, setDate] = useEntityProp('postType', postType, 'date', postId);
-	const [siteFormat] = useEntityProp('root', 'site', 'date_format');
-	const settings = getSettings();
+	const [date, setDate]: [string|undefined, Dispatch<SetStateAction<string>>] = useEntityProp('postType', postType, 'date', postId);
+	const [siteFormat]: [string|undefined] = useEntityProp('root', 'site', 'date_format');
+	const settings: DateSettings = getSettings();
 	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 	const resolvedFormat = format || siteFormat || settings.formats.date;
@@ -56,7 +72,6 @@ export const PostDate = (props) => {
 		<>
 			<time
 				dateTime={dateI18n('c', date, timezone)}
-				pubdate={dateI18n('c', date, timezone)}
 				itemProp="datePublished"
 				{...parentProps}
 			>
@@ -71,12 +86,3 @@ export const PostDate = (props) => {
 	);
 };
 
-PostDate.propTypes = {
-	placeholder: PropTypes.string,
-	format: PropTypes.string,
-};
-
-PostDate.defaultProps = {
-	placeholder: __('No date set', 'tenup'),
-	format: undefined,
-};
