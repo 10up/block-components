@@ -3,16 +3,16 @@ import { RichText, store as blockEditorStore } from '@wordpress/block-editor';
 import { useSelect } from '@wordpress/data';
 import { usePost } from '../../hooks';
 
-interface PostTitleProps<T extends React.ElementType> {
-	tagName?: T;
+interface PostTitleProps<TElementType extends React.ElementType> {
+	tagName?: TElementType;
 }
 
-type PostTitlePropsWithOmit<T extends React.ElementType> = PostTitleProps<T> & Omit<React.ComponentPropsWithoutRef<T>, keyof PostTitleProps<T>>;
+type PostTitlePropsWithOmit<TElementType extends React.ElementType> = PostTitleProps<TElementType> & Omit<React.ComponentPropsWithoutRef<TElementType>, keyof PostTitleProps<TElementType>>;
 
-export const PostTitle = <T extends React.ElementType = 'h1'>({
+export const PostTitle = <TElementType extends React.ElementType = 'h1'>({
 	tagName,
 	...rest
-}: PostTitlePropsWithOmit<T> ) => {
+}: PostTitlePropsWithOmit<TElementType> ) => {
 	const { postId, postType, isEditable } = usePost();
 
 	const [rawTitle = '', setTitle, fullTitle] = useEntityProp(
