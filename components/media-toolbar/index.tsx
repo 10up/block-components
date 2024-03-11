@@ -1,8 +1,30 @@
 import { __ } from '@wordpress/i18n';
 import { MediaReplaceFlow, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { ToolbarGroup, ToolbarButton } from '@wordpress/components';
-import PropTypes from 'prop-types';
 import { useMedia } from '../../hooks/use-media';
+import type { Attachment } from '@wordpress/core-data';
+
+interface MediaToolbarProps {
+	/**
+	 * Callback to handle the selection of a media.
+	 */
+	onSelect: (media: Attachment) => void;
+
+	/**
+	 * Callback to handle the removal of a media.
+	 */
+	onRemove: (event: React.MouseEvent<HTMLButtonElement>) => void;
+
+	/**
+	 * Wether or not the Remove Image button should be shown.
+	 */
+	isOptional?: boolean;
+
+	/**
+	 * The ID of the media, in this case the image.
+	 */
+	id: number;
+}
 
 /**
  * MediaToolbar
@@ -15,9 +37,7 @@ import { useMedia } from '../../hooks/use-media';
  * @param {object} props options
  * @returns {React.ReactElement} markup of the ToolbarGroup
  */
-export const MediaToolbar = (props) => {
-	const { onSelect, onRemove, isOptional = false, id } = props;
-
+export const MediaToolbar: React.FC<MediaToolbarProps> = ( { onSelect, onRemove, isOptional = false, id } ) => {
 	const hasImage = !!id;
 	const { media } = useMedia(id);
 
@@ -50,15 +70,4 @@ export const MediaToolbar = (props) => {
 			)}
 		</ToolbarGroup>
 	);
-};
-
-MediaToolbar.defaultProps = {
-	isOptional: false,
-};
-
-MediaToolbar.propTypes = {
-	id: PropTypes.number.isRequired,
-	onSelect: PropTypes.func.isRequired,
-	onRemove: PropTypes.func.isRequired,
-	isOptional: PropTypes.bool,
 };
