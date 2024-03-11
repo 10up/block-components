@@ -19,7 +19,3 @@ export const Optional: React.FC<OptionalProps> = ({
 	const { isSelected } = useBlockEditContext();
 	return (isSelected || !!value) && children;
 };
-
-Optional.defaultProps = {
-	value: '',
-};
