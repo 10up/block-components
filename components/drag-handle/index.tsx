@@ -1,10 +1,13 @@
+import type { SVGProps } from 'react';
+
 /**
  * Renders an SVG drag handle.
  *
  * @param {object} props The prop object.
  * @returns {*} React JSX
  */
-export const DragHandle = (props) => (
+
+export const DragHandle: React.FC<SVGProps<SVGSVGElement>> = (props) => (
 	<svg
 		style={{ marginRight: '10px', cursor: 'grab', flexShrink: 0 }}
 		width="18"
