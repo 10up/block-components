@@ -18,7 +18,7 @@ function BlockEdit(props) {
     }
 
     return (
-        <img src={ media.source_url } alt={image.alt} />
+        <img src={ media.source_url } alt={ media.alt_text } />
     );
 }
 ```
