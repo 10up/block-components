@@ -13,5 +13,5 @@ export function useTaxonomy(taxonomyName: string) {
 			return [taxonomy, hasResolvedTaxonomy];
 		},
 		[taxonomyName],
-	) as [ Taxonomy, boolean ];
+	) as [ Taxonomy | undefined, boolean ];
 }
