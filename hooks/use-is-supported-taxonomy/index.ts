@@ -16,5 +16,5 @@ export const useIsSupportedTaxonomy = (postType: string, taxonomyName: string) =
 			return [!!isSupportedTaxonomy, hasResolvedPostType];
 		},
 		[postType, taxonomyName],
-	) as [boolean, boolean];
+	) as [isSupportedTaxonomy: boolean, hasResolvedPostType: boolean];
 };
