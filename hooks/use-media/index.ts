@@ -10,11 +10,15 @@ export function useMedia(id: number) {
 			const mediaParameters = [id, { context: 'view' }];
 
 			return {
-				media: ( getMedia(...mediaParameters) ) as Attachment | undefined,
-				isResolvingMedia: ( isResolving('getMedia', mediaParameters) ) as boolean,
-				hasResolvedMedia: ( hasFinishedResolution('getMedia', mediaParameters) ) as boolean,
+				media: getMedia(...mediaParameters),
+				isResolvingMedia: isResolving('getMedia', mediaParameters),
+				hasResolvedMedia: hasFinishedResolution('getMedia', mediaParameters),
 			};
 		},
 		[id],
-	);
+	) as {
+		media: Attachment | undefined;
+		isResolvingMedia: boolean;
+		hasResolvedMedia: boolean;
+	};
 }
