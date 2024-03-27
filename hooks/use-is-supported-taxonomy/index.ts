@@ -1,7 +1,7 @@
 import { useSelect } from '@wordpress/data';
 import { store as coreStore } from '@wordpress/core-data';
 
-export const useIsSupportedTaxonomy = (postType, taxonomyName) => {
+export const useIsSupportedTaxonomy = (postType: string, taxonomyName: string) => {
 	return useSelect(
 		(select) => {
 			const postTypeObject = select(coreStore).getPostType(postType);
@@ -16,5 +16,5 @@ export const useIsSupportedTaxonomy = (postType, taxonomyName) => {
 			return [!!isSupportedTaxonomy, hasResolvedPostType];
 		},
 		[postType, taxonomyName],
-	);
+	) as [isSupportedTaxonomy: boolean, hasResolvedPostType: boolean];
 };
