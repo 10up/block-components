@@ -2,7 +2,7 @@ import { Spinner, NavigableMenu, Button, SearchControl } from '@wordpress/compon
 import { useState, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import styled from '@emotion/styled';
-import { useDebouncedInput, useMergeRefs } from '@wordpress/compose';
+import { useMergeRefs } from '@wordpress/compose';
 import { QueryClient, QueryClientProvider, useInfiniteQuery } from '@tanstack/react-query';
 import SearchItem from './SearchItem';
 import { StyledComponentContext } from '../styled-components-context';
@@ -12,6 +12,7 @@ import type {
 	QueryFilter,
 	RenderItemComponentProps,
 } from './types';
+import { useDebouncedInput } from '../../hooks/use-debounced-input';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
 import { NormalizedSuggestion, fetchSearchResults } from './utils';
 
