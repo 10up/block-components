@@ -1,5 +1,5 @@
 {
-	"apiVersion": 3,
+	"apiVersion": 2,
 	"name": "example/color-settings-example",
 	"title": "Color Settings Component Example",
 	"description": "Example Block to show the Color settings component",
