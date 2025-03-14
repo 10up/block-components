@@ -48,7 +48,7 @@ export const BlockEdit = (props) => {
 
 	return (
 		<div {...blockProps}>
-			<PostContext postId={postId} postType={postType}>
+			<PostContext postId={postId} postType={postType} isEditable={true}>
 				<PostMeta metaKey={metaKey} placeholder="Meta Value" />
 			</PostContext>
 		</div>

@@ -82,9 +82,14 @@ Cypress.Commands.add('savePost', () => {
 });
 
 Cypress.Commands.add('insertBlock', (blockName) => {
-	cy.get('button[aria-label="Add block"]').first().click();
-	cy.focused().type(blockName);
-	cy.get('.block-editor-inserter__quick-inserter-results button').contains(blockName).click();
+	cy.get('button[aria-label="Toggle block inserter"]').first().then($button => {
+		if ($button.attr('aria-pressed') !== 'true') {
+			cy.wrap($button).click();
+		}
+	});
+	cy.get('.components-input-control__input').first().clear();
+	cy.get('.components-input-control__input').first().type(blockName);
+	cy.get('.block-editor-block-types-list__item').contains(blockName).click();
 });
 
 Cypress.Commands.add('openSettingsSidebar', () => {
