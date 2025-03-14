@@ -14,13 +14,13 @@ context('Link', () => {
         cy.get('.tenup-block-components-link__label').first().click();
         cy.wait(50);
         cy.get('.tenup-block-components-link__label').first().scrollIntoView({offset: {top: 100}}).type('First Link Label', { delay: 50, waitForAnimations: true });
-        cy.get('.block-editor-url-input__input').first().type('https://10up.com/{enter}', { delay: 50, waitForAnimations: true });
+        cy.get('.components-input-control__input').first().type('https://10up.com/{enter}', { delay: 50, waitForAnimations: true });
 
         // create the second link
         cy.get('.tenup-block-components-link__label').eq(1).click();
         cy.wait(50);
         cy.get('.tenup-block-components-link__label').eq(1).type('Second Link Label', { delay: 50, waitForAnimations: true });
-        cy.get('.block-editor-url-input__input').first().type('https://10up.com/our-work/{enter}', { delay: 50, waitForAnimations: true });
+        cy.get('.components-input-control__input').first().type('https://10up.com/our-work/{enter}', { delay: 50, waitForAnimations: true });
         
         cy.savePost();
 
