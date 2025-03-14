@@ -102,6 +102,8 @@ const SortableList: React.FC<SortableListProps> = ({
 					fields.push('name');
 				} else if (mode === 'post') {
 					fields.push('title');
+					fields.push('url');
+					fields.push('subtype');
 				} else {
 					fields.push('name');
 					fields.push('taxonomy');
