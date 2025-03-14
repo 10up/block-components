@@ -2,7 +2,8 @@ import { useEntityProp } from '@wordpress/core-data';
 import { usePost } from '../../hooks';
 import { Image } from '../image';
 
-interface PostFeaturedImageProps extends Omit<React.ComponentProps<typeof Image>, 'id' | 'onSelect' | 'canEditImage'> {}
+interface PostFeaturedImageProps
+	extends Omit<React.ComponentProps<typeof Image>, 'id' | 'onSelect' | 'canEditImage'> {}
 
 export const PostFeaturedImage = (props: PostFeaturedImageProps) => {
 	const { postId, postType, isEditable } = usePost();

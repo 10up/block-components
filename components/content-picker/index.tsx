@@ -35,7 +35,11 @@ const ContentPickerWrapper = styled.div`
 	width: 100%;
 `;
 
-interface ContentPickerProps {
+export type ContentPickerOptions = {
+	inputDelay: number;
+};
+
+export interface ContentPickerProps {
 	label?: string;
 	hideLabelFromVision?: boolean;
 	mode?: ContentSearchMode;
@@ -55,6 +59,7 @@ interface ContentPickerProps {
 	renderItemType?: (props: NormalizedSuggestion) => string;
 	renderItem?: (props: RenderItemComponentProps) => JSX.Element;
 	PickedItemPreviewComponent?: React.ComponentType<{ item: PickedItemType }>;
+	options?: ContentPickerOptions;
 }
 
 export const ContentPicker: React.FC<ContentPickerProps> = ({
@@ -79,7 +84,10 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 	renderItemType = defaultRenderItemType,
 	renderItem = undefined,
 	PickedItemPreviewComponent = undefined,
+	options,
 }) => {
+	const searchOptions =
+		options && options.inputDelay ? { inputDelay: options.inputDelay } : undefined;
 	const currentPostId = select('core/editor')?.getCurrentPostId();
 
 	/**
@@ -147,6 +155,7 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 						fetchInitialResults={fetchInitialResults}
 						renderItemType={renderItemType}
 						renderItem={renderItem}
+						options={searchOptions}
 					/>
 				) : (
 					label && (

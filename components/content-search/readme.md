@@ -35,3 +35,4 @@ function MyComponent( props ) {
 | `perPage`             | `number`   | `50`                                 | Number of items to show during search                                                                                            |
 | `renderItemType`      | `function` | `undefined`                          | Function called to override the item type label in `SearchItem`. Must return the new label.                                      |
 | `fetchInitialResults` | `bool`     | `false`                              | Fetch initial results to present when focusing the search input                                                                  |
+| `options.inputDelay`  | `number`   | `undefined`                           | Debounce delay passed to the internal search input, defaults to 350ms                                                             |

@@ -72,9 +72,7 @@ export const MediaToolbar: React.FC<MediaToolbarProps> = ({
 						name={mergedLabels.replace}
 					/>
 					{!!isOptional && (
-						<ToolbarButton onClick={onRemove}>
-							{mergedLabels.remove}
-						</ToolbarButton>
+						<ToolbarButton onClick={onRemove}>{mergedLabels.remove}</ToolbarButton>
 					)}
 				</>
 			) : (
@@ -82,9 +80,7 @@ export const MediaToolbar: React.FC<MediaToolbarProps> = ({
 					<MediaUpload
 						onSelect={onSelect}
 						render={({ open }) => (
-							<ToolbarButton onClick={open}>
-								{mergedLabels.add}
-							</ToolbarButton>
+							<ToolbarButton onClick={open}>{mergedLabels.add}</ToolbarButton>
 						)}
 					/>
 				</MediaUploadCheck>
