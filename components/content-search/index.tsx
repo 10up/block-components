@@ -66,11 +66,9 @@ const StyledNoResults = styled.li`
 	padding-left: 3px;
 `;
 
-const ContentSearchNoResults: React.FC = () => (
-	<StyledNoResults className="tenup-content-search-list-item components-button">
-		{__('Nothing found.', '10up-block-components')}
-	</StyledNoResults>
-);
+export type ContentSearchOptions = {
+	inputDelay: number;
+};
 
 export interface ContentSearchProps {
 	onSelectItem: (item: NormalizedSuggestion) => void;
@@ -85,7 +83,14 @@ export interface ContentSearchProps {
 	renderItemType?: (props: NormalizedSuggestion) => string;
 	renderItem?: (props: RenderItemComponentProps) => JSX.Element;
 	fetchInitialResults?: boolean;
+	options?: ContentSearchOptions;
 }
+
+const ContentSearchNoResults: React.FC = () => (
+	<StyledNoResults className="tenup-content-search-list-item components-button">
+		{__('Nothing found.', '10up-block-components')}
+	</StyledNoResults>
+);
 
 const ContentSearch: React.FC<ContentSearchProps> = ({
 	onSelectItem = () => {
@@ -102,8 +107,11 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 	renderItemType = undefined,
 	renderItem: SearchResultItem = SearchItem,
 	fetchInitialResults,
+	options,
 }) => {
-	const [searchInput, setSearchString, searchString] = useDebouncedInput('');
+	const debounceOptions =
+		options && options.inputDelay ? { delay: options.inputDelay } : undefined;
+	const [searchInput, setSearchString, searchString] = useDebouncedInput('', debounceOptions);
 	const [isFocused, setIsFocused] = useState(false);
 	const searchContainer = useRef<HTMLDivElement>(null);
 

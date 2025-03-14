@@ -15,7 +15,7 @@ type DebouncedInputOptions = {
  */
 export function useDebouncedInput(
 	defaultValue: string = '',
-	options: DebouncedInputOptions = { delay: 500 },
+	options: DebouncedInputOptions = { delay: 350 },
 ): [string, (value: string) => void, string] {
 	const [input, setInput] = useState<string>(defaultValue);
 	const [debouncedInput, setDebouncedState] = useState(defaultValue);
