@@ -134,6 +134,7 @@ interface FetchSearchResultsArgs {
 	contentTypes: Array<string>;
 	queryFilter: QueryFilter;
 	excludeItems: Array<IdentifiableObject>;
+	signal?: AbortSignal;
 }
 
 export async function fetchSearchResults({
@@ -144,6 +145,7 @@ export async function fetchSearchResults({
 	contentTypes,
 	queryFilter,
 	excludeItems,
+	signal,
 }: FetchSearchResultsArgs) {
 	const searchQueryString = prepareSearchQuery({
 		keyword,
@@ -156,6 +158,7 @@ export async function fetchSearchResults({
 	const response = await apiFetch<Response>({
 		path: searchQueryString,
 		parse: false,
+		signal,
 	});
 
 	const totalPages = parseInt(

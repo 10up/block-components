@@ -121,7 +121,7 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 	const { status, data, error, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } =
 		useInfiniteQuery({
 			queryKey: ['search', searchString, contentTypes.join(','), mode, perPage, queryFilter],
-			queryFn: async ({ pageParam = 1 }) =>
+			queryFn: async ({ pageParam = 1, signal }) =>
 				fetchSearchResults({
 					keyword: searchString,
 					page: pageParam,
@@ -130,6 +130,7 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 					contentTypes,
 					queryFilter,
 					excludeItems,
+					signal,
 				}),
 			getNextPageParam: (lastPage) => lastPage.nextPage,
 			getPreviousPageParam: (firstPage) => firstPage.previousPage,
