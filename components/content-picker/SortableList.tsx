@@ -97,7 +97,21 @@ const SortableList: React.FC<SortableListProps> = ({
 			const { getEntityRecord, hasFinishedResolution } = select(coreStore);
 
 			return posts.reduce<{ [key: string]: PickedItemType | null }>((acc, item) => {
-				const getEntityRecordParameters = [entityKind, item.type, item.id] as const;
+				const fields = ['link', 'type', 'id'];
+				if (mode === 'user') {
+					fields.push('name');
+				} else if (mode === 'post') {
+					fields.push('title');
+				} else {
+					fields.push('name');
+					fields.push('taxonomy');
+				}
+				const getEntityRecordParameters = [
+					entityKind,
+					item.type,
+					item.id,
+					{ _fields: fields },
+				] as const;
 				const result = getEntityRecord<Post | Term | User>(...getEntityRecordParameters);
 
 				if (result) {
