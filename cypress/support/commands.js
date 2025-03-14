@@ -84,7 +84,7 @@ Cypress.Commands.add('savePost', () => {
 Cypress.Commands.add('insertBlock', (blockName) => {
 	cy.get('button[aria-label="Add block"]').first().click();
 	cy.focused().type(blockName);
-	cy.get('button').contains(blockName).click();
+	cy.get('.block-editor-inserter__quick-inserter-results button').contains(blockName).click();
 });
 
 Cypress.Commands.add('openSettingsSidebar', () => {
