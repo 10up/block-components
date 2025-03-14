@@ -51,7 +51,7 @@ export const prepareSearchQuery = ({
 		case 'user':
 			searchQuery = addQueryArgs('wp/v2/users', {
 				search: keyword,
-				_fields: ['id', 'link', 'type', 'name', 'subtype'],
+				_fields: ['id', 'link', 'url', 'type', 'name', 'subtype'],
 			});
 			break;
 		default:
@@ -62,7 +62,7 @@ export const prepareSearchQuery = ({
 				_embed: true,
 				per_page: perPage,
 				page,
-				_fields: ['id', 'url', 'type', 'title', 'subtype'],
+				_fields: ['id', 'link', 'url', 'type', 'title', 'subtype'],
 			});
 
 			break;
