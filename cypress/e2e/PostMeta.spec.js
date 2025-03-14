@@ -25,8 +25,8 @@ context('Post Meta', () => {
         // Author
         cy.get('.wp-block-example-post-meta .block-editor-block-variation-picker__variation').first().click();
 
-        cy.get('.wp-block-example-post-meta .block-editor-rich-text__editable[metakey="author"]').focus().clear().type('This is a test');
-        cy.get('.wp-block-example-post-meta .block-editor-rich-text__editable[metakey="author"]').should('have.text', 'This is a test');
+        cy.get('.wp-block-example-post-meta .block-editor-rich-text__editable').focus().clear().type('This is a test');
+        cy.get('.wp-block-example-post-meta .block-editor-rich-text__editable').should('have.text', 'This is a test');
     })
 
     it('Allows a number to be entered into the post meta field', () => {
@@ -49,7 +49,7 @@ context('Post Meta', () => {
     it('Saves the data into post meta', () => {
         // Author
         cy.get('.wp-block-example-post-meta .block-editor-block-variation-picker__variation').first().click();
-        cy.get('.wp-block-example-post-meta .block-editor-rich-text__editable[metakey="author"]').focus().clear().type('This is a test');
+        cy.get('.wp-block-example-post-meta .block-editor-rich-text__editable').focus().clear().type('This is a test');
 
         // Reset
         cy.get('.block-editor-block-breadcrumb__button').contains('Book').click();
