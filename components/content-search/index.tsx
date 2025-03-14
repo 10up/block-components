@@ -2,7 +2,7 @@ import { Spinner, NavigableMenu, Button, SearchControl } from '@wordpress/compon
 import { useState, useRef } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import styled from '@emotion/styled';
-import { useMergeRefs } from '@wordpress/compose';
+import { useDebouncedInput, useMergeRefs } from '@wordpress/compose';
 import { QueryClient, QueryClientProvider, useInfiniteQuery } from '@tanstack/react-query';
 import SearchItem from './SearchItem';
 import { StyledComponentContext } from '../styled-components-context';
@@ -102,7 +102,7 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 	renderItem: SearchResultItem = SearchItem,
 	fetchInitialResults,
 }) => {
-	const [searchString, setSearchString] = useState('');
+	const [searchInput, setSearchString, searchString] = useDebouncedInput('');
 	const [isFocused, setIsFocused] = useState(false);
 	const searchContainer = useRef<HTMLDivElement>(null);
 
@@ -147,7 +147,7 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 	return (
 		<StyledNavigableMenu ref={mergedRef} orientation="vertical">
 			<StyledSearchControl
-				value={searchString}
+				value={searchInput}
 				onChange={(newSearchString: string) => {
 					setSearchString(newSearchString);
 				}}
