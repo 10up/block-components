@@ -16,14 +16,14 @@ context('ColorSettings', () => {
 
     it('Allows the user to use a custom color and displays it', () => {
         cy.get('.components-color-palette__custom-color-button').first().click();
-        cy.get('.components-input-control__input').focus().clear().type('ff9400');
+        cy.get('[data-wp-component="ColorPicker"] .components-input-control__input').focus().clear().type('ff9400');
         cy.get('.components-color-palette__custom-color-name').first().should('have.text', 'Custom');
         cy.get('.components-color-palette__custom-color-value').first().should('have.text', '#ff9400');
     })
 
     it('Allows the user to clear the color', () => {
         cy.get('.components-color-palette__custom-color-button').first().click();
-        cy.get('.components-input-control__input').focus().clear().type('ff9400');
+        cy.get('[data-wp-component="ColorPicker"] .components-input-control__input').focus().clear().type('ff9400');
         cy.get('.components-color-palette__custom-color-name').first().should('have.text', 'Custom');
         cy.get('.components-color-palette__custom-color-value').first().should('have.text', '#ff9400');
 
