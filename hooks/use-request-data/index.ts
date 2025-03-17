@@ -27,6 +27,7 @@ export const useRequestData = (entity: string, kind: string, query: Record<strin
 			return {
 				// @ts-ignore-next-line - The type definitions for the data package are incomplete.
 				data: select(coreStore)[functionToCall](entity, kind, query),
+				// @ts-ignore-next-line - The type definitions for the data package are incomplete.
 				isLoading: select('core/data').isResolving(coreStore, functionToCall, [
 					entity,
 					kind,
