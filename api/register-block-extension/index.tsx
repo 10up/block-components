@@ -37,12 +37,12 @@ function registerBlockExtension(
 	}: BlockOptionOptions,
 ): void {
 	const isMultiBlock = Array.isArray(blockName);
-
+	
 	const shouldApplyBlockExtension = (blockType: string): boolean => {
 		if (blockName === '*' || blockName === 'all') {
 			return true;
 		}
-
+		
 		if (isMultiBlock) {
 			return blockName.includes(blockType);
 		}
@@ -53,6 +53,7 @@ function registerBlockExtension(
 		blockName = 'all';
 	}
 
+	// @ts-expect-error isMultiBlock verifies if this is an Array and supports join or not.
 	const blockNamespace = isMultiBlock ? blockName.join('-') : blockName;
 
 	const addAttributesToBlock = (settings: Record<string, any>, name: string) => {
