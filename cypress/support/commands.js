@@ -68,6 +68,11 @@ Cypress.Commands.add('createPost', (options = {}) => {
 		}
 	});
 
+	// Disable the pre-publish sidebar
+	cy.window().then((win) => {
+		win.wp.data.dispatch('core/editor').disablePublishSidebar();
+	});
+
 	cy.wait(100);
 
 	if (title !== '') {
