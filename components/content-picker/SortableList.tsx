@@ -16,6 +16,7 @@ import { useCallback, useState, useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { Post, User, store as coreStore } from '@wordpress/core-data';
+import { applyFilters } from '@wordpress/hooks';
 import styled from '@emotion/styled';
 import PickedItem, { PickedItemType } from './PickedItem';
 import { DraggableChip } from './DraggableChip';
@@ -96,7 +97,7 @@ const SortableList: React.FC<SortableListProps> = ({
 			// @ts-ignore-next-line - The WordPress types are missing the hasFinishedResolution method.
 			const { getEntityRecord, hasFinishedResolution } = select(coreStore);
 
-			const fields = ['link', 'type', 'id'];
+			let fields = ['link', 'type', 'id'];
 
 			if (mode === 'user') {
 				fields.push('name');
@@ -108,6 +109,15 @@ const SortableList: React.FC<SortableListProps> = ({
 				fields.push('name');
 				fields.push('taxonomy');
 			}
+
+			/**
+			 * Filter the fields to be fetched from the API.
+			 *
+			 * @param {string[]} fields - The fields to be fetched.
+			 * @param {ContentSearchMode} mode - The mode of the content picker.
+			 * @returns {string[]} - The filtered fields.
+			 */
+			fields = applyFilters('tenup.contentPicker.queryFields', fields, mode) as string[];
 
 			return posts.reduce<{ [key: string]: PickedItemType | null }>((acc, item) => {
 				const getEntityRecordParameters = [
