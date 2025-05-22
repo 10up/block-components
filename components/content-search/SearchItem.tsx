@@ -42,7 +42,7 @@ const SearchItemTitle = styled.span<{ showType: boolean }>`
 	padding-right: ${({ showType }) => (showType ? 0 : undefined)};
 `;
 
-const SearchItemInfo = styled.span<{ showType: boolean }>`
+const SearchItemURL = styled.span<{ showType: boolean }>`
 	padding-right: ${({ showType }) => (showType ? 0 : undefined)};
 `;
 
@@ -94,11 +94,11 @@ const SearchItem: React.FC<RenderItemComponentProps> = ({
 					<SearchItemTitle showType={showType}>
 						<StyledTextHighlight text={titleContent} highlight={searchTerm} />
 					</SearchItemTitle>
-					<SearchItemInfo aria-hidden showType={showType}>
+					<SearchItemURL aria-hidden showType={showType}>
 						<Truncate numberOfLines={1} limit={55} ellipsizeMode="middle">
 							{filterURLForDisplay(safeDecodeURI(suggestion.url)) || ''}
 						</Truncate>
-					</SearchItemInfo>
+					</SearchItemURL>
 				</SearchItemHeader>
 				{showType && <SearchItemType>{renderType(suggestion)}</SearchItemType>}
 			</SearchItemWrapper>
