@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
+import { safeHTML } from '@wordpress/dom';
 import { decodeEntities } from '@wordpress/html-entities';
 import { __ } from '@wordpress/i18n';
 import { close, chevronUp, chevronDown } from '@wordpress/icons';
@@ -21,6 +22,7 @@ export type PickedItemType = {
 	uuid: string;
 	title: string;
 	url: string;
+	details: string;
 };
 
 const PickedItemContainer = styled.div<{ isDragging?: boolean; isOrderable?: boolean }>`
@@ -116,6 +118,17 @@ const ItemURL = styled.span`
 	text-overflow: ellipsis;
 `;
 
+const ItemDetails = styled('div')`
+	font-size: 0.75rem;
+	line-height: 1.4;
+	color: #757575;
+	margin-top: 4px;
+
+	& p:first-of-type {
+		margin-top: 0;
+	}
+`;
+
 const MoveButton = styled(Button)`
 	&.components-button.has-icon {
 		min-width: 20px;
@@ -168,7 +181,7 @@ interface PickedItemProps {
  * @returns {*} React JSX
  */
 const PickedItemPreview: React.FC<{ item: PickedItemType }> = ({ item }) => {
-	const { title, url, description } = item;
+	const { title, url, details } = item;
 	const decodedTitle = decodeEntities(title);
 	return (
 		<>
@@ -177,6 +190,13 @@ const PickedItemPreview: React.FC<{ item: PickedItemType }> = ({ item }) => {
 					{decodedTitle}
 				</Truncate>
 			</ItemTitle>
+			{details && (
+				<ItemDetails
+					dangerouslySetInnerHTML={{
+						__html: safeHTML(details),
+					}}
+				/>
+			)}
 			{url && <ItemURL>{filterURLForDisplay(safeDecodeURI(url)) || ''}</ItemURL>}
 		</>
 	);
