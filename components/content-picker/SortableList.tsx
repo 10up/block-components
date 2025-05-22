@@ -157,6 +157,19 @@ const SortableList: React.FC<SortableListProps> = ({
 						};
 					}
 
+					/**
+					 * Filter the item before it is returned.
+					 *
+					 * @param {PickedItemType} newItem - The item to be returned.
+					 * @param {Post | Term | User} result - The result from the getEntityRecord function.
+					 * @returns {PickedItemType} - The filtered item.
+					 */
+					newItem = applyFilters(
+						'tenup.contentPicker.pickedItem',
+						newItem,
+						result,
+					) as Partial<PickedItemType>;
+
 					if (item.uuid) {
 						newItem.uuid = item.uuid;
 					}
