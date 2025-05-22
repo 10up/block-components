@@ -22,7 +22,7 @@ export type PickedItemType = {
 	uuid: string;
 	title: string;
 	url: string;
-	details: string;
+	info: string;
 };
 
 const PickedItemContainer = styled.div<{ isDragging?: boolean; isOrderable?: boolean }>`
@@ -118,7 +118,7 @@ const ItemURL = styled.span`
 	text-overflow: ellipsis;
 `;
 
-const ItemDetails = styled('div')`
+const ItemInfo = styled('div')`
 	font-size: 0.75rem;
 	line-height: 1.4;
 	color: #757575;
@@ -181,7 +181,7 @@ interface PickedItemProps {
  * @returns {*} React JSX
  */
 const PickedItemPreview: React.FC<{ item: PickedItemType }> = ({ item }) => {
-	const { title, url, details } = item;
+	const { title, url, info } = item;
 	const decodedTitle = decodeEntities(title);
 	return (
 		<>
@@ -190,10 +190,10 @@ const PickedItemPreview: React.FC<{ item: PickedItemType }> = ({ item }) => {
 					{decodedTitle}
 				</Truncate>
 			</ItemTitle>
-			{details && (
-				<ItemDetails
+			{info && (
+				<ItemInfo
 					dangerouslySetInnerHTML={{
-						__html: safeHTML(details),
+						__html: safeHTML(info),
 					}}
 				/>
 			)}
