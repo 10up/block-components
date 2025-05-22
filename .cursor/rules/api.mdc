@@ -1,6 +1,6 @@
 ---
 description: 
-globs: 
+globs: api/**.*
 alwaysApply: false
 ---
 # API Development Guidelines
