@@ -168,7 +168,8 @@ interface PickedItemProps {
  * @returns {*} React JSX
  */
 const PickedItemPreview: React.FC<{ item: PickedItemType }> = ({ item }) => {
-	const decodedTitle = decodeEntities(item.title);
+	const { title, url, description } = item;
+	const decodedTitle = decodeEntities(title);
 	return (
 		<>
 			<ItemTitle>
@@ -176,7 +177,7 @@ const PickedItemPreview: React.FC<{ item: PickedItemType }> = ({ item }) => {
 					{decodedTitle}
 				</Truncate>
 			</ItemTitle>
-			{item.url && <ItemURL>{filterURLForDisplay(safeDecodeURI(item.url)) || ''}</ItemURL>}
+			{url && <ItemURL>{filterURLForDisplay(safeDecodeURI(url)) || ''}</ItemURL>}
 		</>
 	);
 };
