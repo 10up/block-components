@@ -35,6 +35,7 @@ When developing components for @10up/block-components:
 - Use @emotion/styled for CSS-in-JS styling
 - Follow WordPress design patterns where appropriate
 - Maintain consistency with other WordPress admin UI elements
+- When possible use components from the @wordpress/components package
 - Style components to be responsive by default
 
 @components/content-picker/index.tsx
