@@ -17,11 +17,11 @@ namespace HelloWorld;
 // Useful global constants.
 define( 'EXAMPLE_PLUGIN_TEMPLATE_URL', plugin_dir_url( __FILE__ ) );
 define( 'EXAMPLE_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
-define( 'EXAMPLE_PLUGIN_DIST_PATH', EXAMPLE_PLUGIN_PATH . 'build/' );
-define( 'EXAMPLE_PLUGIN_DIST_URL', EXAMPLE_PLUGIN_TEMPLATE_URL . '/build/' );
+define( 'EXAMPLE_PLUGIN_DIST_PATH', EXAMPLE_PLUGIN_PATH . 'dist/' );
+define( 'EXAMPLE_PLUGIN_DIST_URL', EXAMPLE_PLUGIN_TEMPLATE_URL . '/dist/' );
 define( 'EXAMPLE_PLUGIN_INC', EXAMPLE_PLUGIN_PATH . 'includes/' );
 define( 'EXAMPLE_PLUGIN_BLOCK_DIR', EXAMPLE_PLUGIN_INC . 'blocks/' );
-define( 'EXAMPLE_PLUGIN_BLOCK_DIST_DIR', EXAMPLE_PLUGIN_PATH . 'build/blocks/' );
+define( 'EXAMPLE_PLUGIN_BLOCK_DIST_DIR', EXAMPLE_PLUGIN_PATH . 'dist/blocks/' );
 
 add_action( 'init', __NAMESPACE__ . '\register_block' );
 /**
@@ -44,11 +44,11 @@ add_action( 'enqueue_block_assets', __NAMESPACE__ . '\enqueue_block_editor_scrip
  * Enqueue Block Editor Scripts
  */
 function enqueue_block_editor_scripts() {
-	$asset_file = include EXAMPLE_PLUGIN_DIST_PATH . 'index.asset.php';
+	$asset_file = include EXAMPLE_PLUGIN_DIST_PATH . 'js/index.asset.php';
 
 	wp_enqueue_script(
 		'example-block-editor-script',
-		EXAMPLE_PLUGIN_DIST_URL . 'index.js',
+		EXAMPLE_PLUGIN_DIST_URL . 'js/index.js',
 		$asset_file['dependencies'],
 		$asset_file['version'],
 		true
