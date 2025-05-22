@@ -96,7 +96,7 @@ const SortableList: React.FC<SortableListProps> = ({
 			// @ts-ignore-next-line - The WordPress types are missing the hasFinishedResolution method.
 			const { getEntityRecord, hasFinishedResolution } = select(coreStore);
 
-			let fields = ['link', 'type', 'id'];
+			const fields = ['link', 'type', 'id'];
 
 			if (mode === 'user') {
 				fields.push('name');
