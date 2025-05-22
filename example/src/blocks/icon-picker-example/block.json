@@ -15,6 +15,13 @@
 			"default": {
 				"iconSet": "example/theme",
 				"name": "cloud"
+			},
+			"limitedPaletteIcon": {
+				"type": "object",
+				"default": {
+					"iconSet": "example/limited-palette",
+					"name": "brush-5"
+				}
 			}
 		}
 	},
