@@ -1,0 +1,28 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# 10up Block Components
+
+This is a collection of React components, hooks, and utilities built for the WordPress Block Editor (Gutenberg).
+
+## General Guidelines
+
+- Use TypeScript for all new code
+- Follow WordPress coding standards and best practices
+- Components should be modular and reusable
+- React functional components with hooks are preferred over class components
+- Use named exports rather than default exports
+- Export components from index.ts files
+- All components should have appropriate PropTypes or TypeScript interfaces
+- Write well-documented code with JSDoc comments
+
+## Coding Style
+
+- Use tabs for indentation
+- Follow ESLint rules as configured in the project
+- Use async/await for asynchronous code
+- Use @emotion/styled for styling components
+- Use WordPress i18n functions for translatable strings
+- Use WordPress dependencies through imports, not global variables

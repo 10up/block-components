@@ -1,0 +1,40 @@
+---
+description: 
+globs: components/**.*
+alwaysApply: false
+---
+# Component Development Guidelines
+
+When developing components for @10up/block-components:
+
+## Component Structure
+
+- Each component should be in its own directory under `components/`
+- Each component directory should include an `index.tsx` file that exports the component
+- Include a `readme.md` file with documentation for the component
+- Complex components can be split into multiple files within the component directory
+
+## Component Requirements
+
+- Components should accept well-typed props with TypeScript interfaces
+- Every component should be wrapped with `StyledComponentContext` if using styled components
+- Components should use the WordPress i18n functions for text
+- Include namespace constants for CSS classes 
+- Use semantic HTML elements
+- Consider accessibility in all component designs
+- Components should be tested thoroughly
+
+## Post-related Components
+
+- Post-related components should interact with the WordPress data store or PostContext
+- Post-related components should support dynamic data retrieval
+- When working with post data, use the existing PostContext where available
+
+## Styling Components
+
+- Use @emotion/styled for CSS-in-JS styling
+- Follow WordPress design patterns where appropriate
+- Maintain consistency with other WordPress admin UI elements
+- Style components to be responsive by default
+
+@components/content-picker/index.tsx
