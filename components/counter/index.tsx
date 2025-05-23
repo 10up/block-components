@@ -1,5 +1,5 @@
 import { forwardRef } from '@wordpress/element';
-import cx from 'classnames';
+import clsx from 'clsx';
 import styled from '@emotion/styled';
 import { ForwardRefExoticComponent, PropsWithoutRef, RefAttributes, FC } from 'react';
 import { StyledComponentContext } from '../styled-components-context';
@@ -82,7 +82,7 @@ const CircularProgressBar: FC<CircularProgressBarProps> = ({ percentage }) => {
 				height="20"
 				viewBox="0 0 200 200"
 				version="1.1"
-				className={cx('tenup--block-components__circular-progress', {
+				className={clsx('tenup--block-components__circular-progress', {
 					'is-over-limit': isOverLimit,
 					'is-approaching-limit': isApproachingLimit && !isOverLimit,
 				})}

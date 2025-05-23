@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import classnames from 'classnames';
+import clsx from 'clsx';
 import styled from '@emotion/styled';
 
 /**
@@ -152,7 +152,7 @@ export const Link: FC<LinkProps> = ({
 		<StyledComponentContext cacheKey="tenup-component-link">
 			<StylesRichTextLink
 				tagName="a"
-				className={classnames('tenup-block-components-link__label', className)}
+				className={clsx('tenup-block-components-link__label', className)}
 				value={value}
 				onChange={onTextChange}
 				aria-label={__('Link text', '10up-block-components')}

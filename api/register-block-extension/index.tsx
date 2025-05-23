@@ -1,6 +1,6 @@
 import { addFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
-import classnames from 'classnames';
+import clsx from 'clsx';
 import { FC } from 'react';
 
 interface BlockEditProps {
@@ -37,12 +37,12 @@ function registerBlockExtension(
 	}: BlockOptionOptions,
 ): void {
 	const isMultiBlock = Array.isArray(blockName);
-	
+
 	const shouldApplyBlockExtension = (blockType: string): boolean => {
 		if (blockName === '*' || blockName === 'all') {
 			return true;
 		}
-		
+
 		if (isMultiBlock) {
 			return blockName.includes(blockType);
 		}
@@ -50,7 +50,7 @@ function registerBlockExtension(
 	};
 
 	if (blockName === '*') {
-		blockName = 'all';
+		blockName = 'all'; // eslint-disable-line no-param-reassign
 	}
 
 	// @ts-expect-error isMultiBlock verifies if this is an Array and supports join or not.
@@ -114,7 +114,7 @@ function registerBlockExtension(
 			}
 
 			const additionalClassName = classNameGenerator(attributes);
-			const newClassName = classnames(className, additionalClassName);
+			const newClassName = clsx(className, additionalClassName);
 
 			let additionalStyles = null;
 			let newStyles = { ...style };
@@ -155,7 +155,7 @@ function registerBlockExtension(
 		}
 
 		const additionalClassName = classNameGenerator(attributes);
-		const newClassName = classnames(className, additionalClassName);
+		const newClassName = clsx(className, additionalClassName);
 
 		let additionalStyles = null;
 		let newStyles = { ...style };
