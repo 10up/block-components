@@ -48,10 +48,6 @@
 		"url": "https://github.com/10up/block-components.git/issues"
 	},
 	"homepage": "https://github.com/10up/block-components.git#readme",
-	"engines": {
-		"react": "^18.3.0",
-		"react-dom": "^18.3.0"
-	},
 	"peerDependencies": {
 		"react": "^18.3.0",
 		"react-dom": "^18.3.0"
