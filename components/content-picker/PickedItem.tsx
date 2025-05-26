@@ -21,8 +21,8 @@ export type PickedItemType = {
 	type: string;
 	uuid: string;
 	title: string;
-	url: string;
-	info: string;
+	url?: string;
+	info?: string;
 };
 
 const PickedItemContainer = styled.div<{ isDragging?: boolean; isOrderable?: boolean }>`
