@@ -131,30 +131,37 @@ const SortableList: React.FC<SortableListProps> = ({
 				if (result) {
 					let newItem: Partial<PickedItemType>;
 
-					if (mode === 'post') {
-						const post = result as Post;
-						newItem = {
-							title: post.title.rendered,
-							url: post.link,
-							id: post.id,
-							type: post.type,
-						};
-					} else if (mode === 'user') {
-						const user = result as User;
-						newItem = {
-							title: user.name,
-							url: user.link,
-							id: user.id,
-							type: 'user',
-						};
-					} else {
-						const taxonomy = result as Term;
-						newItem = {
-							title: taxonomy.name,
-							url: taxonomy.link,
-							id: taxonomy.id,
-							type: taxonomy.taxonomy,
-						};
+					switch (mode) {
+						case 'post': {
+							const post = result as Post;
+							newItem = {
+								title: post.title.rendered,
+								url: post.link,
+								id: post.id,
+								type: post.type,
+							};
+							break;
+						}
+						case 'user': {
+							const user = result as User;
+							newItem = {
+								title: user.name,
+								url: user.link,
+								id: user.id,
+								type: 'user',
+							};
+							break;
+						}
+						default: {
+							const taxonomy = result as Term;
+							newItem = {
+								title: taxonomy.name,
+								url: taxonomy.link,
+								id: taxonomy.id,
+								type: taxonomy.taxonomy,
+							};
+							break;
+						}
 					}
 
 					/**
