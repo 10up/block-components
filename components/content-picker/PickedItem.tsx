@@ -186,6 +186,7 @@ const PickedItemPreview: React.FC<{ item: PickedItemType }> = ({ item }) => {
 					{decodedTitle}
 				</Truncate>
 			</ItemTitle>
+			{url && <ItemURL>{filterURLForDisplay(safeDecodeURI(url)) || ''}</ItemURL>}
 			{info && (
 				<ItemInfo
 					dangerouslySetInnerHTML={{
@@ -196,7 +197,6 @@ const PickedItemPreview: React.FC<{ item: PickedItemType }> = ({ item }) => {
 					}}
 				/>
 			)}
-			{url && <ItemURL>{filterURLForDisplay(safeDecodeURI(url)) || ''}</ItemURL>}
 		</>
 	);
 };

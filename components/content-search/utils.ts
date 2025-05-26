@@ -2,6 +2,7 @@
 import type { WP_REST_API_User, WP_REST_API_Search_Result } from 'wp-types';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
+import { applyFilters } from '@wordpress/hooks';
 import type { ContentSearchMode, QueryFilter } from './types';
 
 interface IdentifiableObject extends Object {
@@ -47,11 +48,28 @@ export const prepareSearchQuery = ({
 }: PrepareSearchQueryArgs): string => {
 	let searchQuery;
 
+	let fields = ['link', 'type', 'id', 'url', 'subtype'];
+
+	if (mode === 'user') {
+		fields.push('name');
+	} else {
+		fields.push('title');
+	}
+
+	/**
+	 * Filter the fields to be fetched from the API.
+	 *
+	 * @param {string[]} fields - The fields to be fetched.
+	 * @param {ContentSearchMode} mode - The mode of the content search.
+	 * @returns {string[]} - The filtered fields.
+	 */
+	fields = applyFilters('tenup.contentSearch.queryFields', fields, mode) as string[];
+
 	switch (mode) {
 		case 'user':
 			searchQuery = addQueryArgs('wp/v2/users', {
 				search: keyword,
-				_fields: ['id', 'link', 'url', 'type', 'name', 'subtype'],
+				_fields: fields,
 			});
 			break;
 		default:
@@ -62,7 +80,7 @@ export const prepareSearchQuery = ({
 				_embed: true,
 				per_page: perPage,
 				page,
-				_fields: ['id', 'link', 'url', 'type', 'title', 'subtype'],
+				_fields: fields,
 			});
 
 			break;
@@ -97,29 +115,52 @@ export const normalizeResults = ({
 	title: string;
 	type: ContentSearchMode | string;
 	url: string;
+	info?: string;
 }> => {
 	const filteredResults = filterOutExcludedItems({ results, excludeItems });
 	return filteredResults.map((item) => {
+		let newItem: {
+			id: number;
+			subtype: ContentSearchMode | string;
+			title: string;
+			type: ContentSearchMode | string;
+			url: string;
+			info?: string;
+		};
+
 		switch (mode) {
 			case 'user':
 				const userItem = item as WP_REST_API_User;
-				return {
+				newItem = {
 					id: userItem.id,
 					subtype: mode,
 					title: userItem.name,
 					type: mode,
 					url: userItem.link,
 				};
+				break;
 			default:
 				const searchItem = item as WP_REST_API_Search_Result;
-				return {
+				newItem = {
 					id: searchItem.id as number,
 					subtype: searchItem.subtype,
 					title: searchItem.title,
 					type: searchItem.type,
 					url: searchItem.url,
 				};
+				break;
 		}
+
+		/**
+		 * Filter the new item before returning it.
+		 *
+		 * @param {object} newItem - The item to be returned.
+		 * @param {object} item - The original item from the search result.
+		 * @return {object} - The filtered item.
+		 */
+		newItem = applyFilters('tenup.contentSearch.searchResult', newItem, item) as typeof newItem;
+
+		return newItem;
 	});
 };
 

@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import DOMPurify from 'dompurify';
 import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
 import {
@@ -14,10 +15,10 @@ import { NormalizedSuggestion } from './utils';
 const SearchItemWrapper = styled(Button)`
 	&&& {
 		display: flex;
+		flex-direction: column;
 		text-align: left;
 		width: 100%;
-		justify-content: space-between;
-		align-items: center;
+		align-items: flex-start;
 		border-radius: 2px;
 		box-sizing: border-box;
 		height: auto !important;
@@ -32,6 +33,14 @@ const SearchItemWrapper = styled(Button)`
 	}
 `;
 
+const SearchItemHeaderWrapper = styled.span`
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: space-between;
+	align-items: center;
+`;
+
 const SearchItemHeader = styled.span`
 	display: flex;
 	flex-direction: column;
@@ -44,6 +53,13 @@ const SearchItemTitle = styled.span<{ showType: boolean }>`
 
 const SearchItemURL = styled.span<{ showType: boolean }>`
 	padding-right: ${({ showType }) => (showType ? 0 : undefined)};
+`;
+
+const SearchItemInfo = styled.span`
+	font-size: 0.75rem;
+	line-height: 1.4;
+	color: #757575;
+	margin-top: 4px;
 `;
 
 const SearchItemType = styled.span`
@@ -81,26 +97,41 @@ const SearchItem: React.FC<RenderItemComponentProps> = ({
 	contentTypes,
 	renderType = defaultRenderItemType,
 }) => {
-	const showType = !!(suggestion.type && contentTypes.length > 1);
+	const { type, title, url, info } = suggestion;
+	const showType = !!(type && contentTypes.length > 1);
 
-	const richTextContent = create({ html: suggestion.title });
+	const richTextContent = create({ html: title });
 	const textContent = getTextContent(richTextContent);
 	const titleContent = decodeEntities(textContent);
 
 	return (
-		<Tooltip text={decodeEntities(suggestion.title)}>
+		<Tooltip text={decodeEntities(title)}>
 			<SearchItemWrapper id={id} onClick={onClick}>
-				<SearchItemHeader>
-					<SearchItemTitle showType={showType}>
-						<StyledTextHighlight text={titleContent} highlight={searchTerm} />
-					</SearchItemTitle>
-					<SearchItemURL aria-hidden showType={showType}>
-						<Truncate numberOfLines={1} limit={55} ellipsizeMode="middle">
-							{filterURLForDisplay(safeDecodeURI(suggestion.url)) || ''}
-						</Truncate>
-					</SearchItemURL>
-				</SearchItemHeader>
-				{showType && <SearchItemType>{renderType(suggestion)}</SearchItemType>}
+				<SearchItemHeaderWrapper>
+					<SearchItemHeader>
+						<SearchItemTitle showType={showType}>
+							<StyledTextHighlight text={titleContent} highlight={searchTerm} />
+						</SearchItemTitle>
+						{url && (
+							<SearchItemURL aria-hidden showType={showType}>
+								<Truncate numberOfLines={1} limit={55} ellipsizeMode="middle">
+									{filterURLForDisplay(safeDecodeURI(url)) || ''}
+								</Truncate>
+							</SearchItemURL>
+						)}
+					</SearchItemHeader>
+					{showType && <SearchItemType>{renderType(suggestion)}</SearchItemType>}
+				</SearchItemHeaderWrapper>
+				{info && (
+					<SearchItemInfo
+						dangerouslySetInnerHTML={{
+							__html: DOMPurify.sanitize(info, {
+								ALLOWED_TAGS: ['br', 'strong', 'em'],
+								ALLOWED_ATTR: [],
+							}),
+						}}
+					/>
+				)}
 			</SearchItemWrapper>
 		</Tooltip>
 	);
