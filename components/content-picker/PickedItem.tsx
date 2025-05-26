@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import DOMPurify from 'dompurify';
 import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
-import { safeHTML } from '@wordpress/dom';
 import { decodeEntities } from '@wordpress/html-entities';
 import { __ } from '@wordpress/i18n';
 import { close, chevronUp, chevronDown } from '@wordpress/icons';
@@ -118,15 +118,11 @@ const ItemURL = styled.span`
 	text-overflow: ellipsis;
 `;
 
-const ItemInfo = styled('div')`
+const ItemInfo = styled.span`
 	font-size: 0.75rem;
 	line-height: 1.4;
 	color: #757575;
 	margin-top: 4px;
-
-	& p:first-of-type {
-		margin-top: 0;
-	}
 `;
 
 const MoveButton = styled(Button)`
@@ -193,7 +189,10 @@ const PickedItemPreview: React.FC<{ item: PickedItemType }> = ({ item }) => {
 			{info && (
 				<ItemInfo
 					dangerouslySetInnerHTML={{
-						__html: safeHTML(info),
+						__html: DOMPurify.sanitize(info, {
+							ALLOWED_TAGS: ['br', 'strong', 'em'],
+							ALLOWED_ATTR: [],
+						}),
 					}}
 				/>
 			)}
