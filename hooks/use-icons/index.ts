@@ -27,14 +27,14 @@ const useIcons = (iconSet = '') => {
 	useEffect(() => {
 		if (iconSet) {
 			setIcons(transformIcons(rawIcons as IconSet));
+		} else {
+			setIcons(
+				Object.values(rawIcons).reduce(
+					(rawIcons, iconSet) => [...rawIcons, ...transformIcons(iconSet)],
+					[],
+				),
+			);
 		}
-
-		setIcons(
-			Object.values(rawIcons).reduce(
-				(rawIcons, iconSet) => [...rawIcons, ...transformIcons(iconSet)],
-				[],
-			),
-		);
 	}, [rawIcons, iconSet]);
 
 	return icons;

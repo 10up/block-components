@@ -200,12 +200,17 @@ export type IconPickerProps = Omit<React.ComponentProps<typeof BaseControl>, 'ch
 	 * Change handler for when a new icon is selected
 	 */
 	onChange: (icon: { name: string; iconSet: string }) => void;
+	/**
+	 * Optionally specify the icon set to use
+	 * If not specified, all icon sets will be used
+	 */
+	iconSet?: string;
 };
 
 export const IconPicker: React.FC<IconPickerProps> = (props) => {
-	const { value, onChange, label = '', ...rest } = props;
+	const { value, onChange, iconSet, label = '', ...rest } = props;
 
-	const icons = useIcons();
+	const icons = useIcons(iconSet ? iconSet : '');
 
 	const instanceId = useInstanceId(IconPicker);
 	const id = `icon-picker-${instanceId}`;
