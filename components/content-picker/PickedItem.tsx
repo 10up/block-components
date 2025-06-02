@@ -21,9 +21,14 @@ export type PickedItemType = {
 	uuid: string;
 	title: string;
 	url: string;
+	status?: string; // Optional status field for checking trashed posts
 };
 
-const PickedItemContainer = styled.div<{ isDragging?: boolean; isOrderable?: boolean }>`
+const PickedItemContainer = styled.div<{
+	isDragging?: boolean;
+	isOrderable?: boolean;
+	isDeleted?: boolean;
+}>`
 	box-sizing: border-box;
 	position: relative;
 	display: flex;
@@ -33,9 +38,18 @@ const PickedItemContainer = styled.div<{ isDragging?: boolean; isOrderable?: boo
 	min-height: 36px;
 	max-width: 100%;
 	width: 100%;
-	color: #1e1e1e;
-	opacity: ${({ isDragging }) => (isDragging ? 0.5 : 1)};
-	background: ${({ isDragging }) => (isDragging ? '#f0f0f0' : 'transparent')};
+	color: ${({ isDeleted }) => (isDeleted ? '#cc1818' : '#1e1e1e')};
+	opacity: ${({ isDragging, isDeleted }) => {
+		if (isDragging) return 0.5;
+		if (isDeleted) return 0.7;
+		return 1;
+	}};
+	background: ${({ isDragging, isDeleted }) => {
+		if (isDragging) return '#f0f0f0';
+		if (isDeleted) return '#fef7f7';
+		return 'transparent';
+	}};
+	border: ${({ isDeleted }) => (isDeleted ? '1px solid #f0b7b7' : 'none')};
 	border-radius: 2px;
 	transition: background-color 0.1s linear;
 	cursor: ${({ isDragging, isOrderable }) => {
@@ -45,7 +59,7 @@ const PickedItemContainer = styled.div<{ isDragging?: boolean; isOrderable?: boo
 	touch-action: none;
 
 	&:hover {
-		background: #f0f0f0;
+		background: ${({ isDeleted }) => (isDeleted ? '#fef0f0' : '#f0f0f0')};
 
 		.move-up-button,
 		.move-down-button,
@@ -100,11 +114,12 @@ const ItemContent = styled.div`
 	transition: padding-left 0.1s linear;
 `;
 
-const ItemTitle = styled.span`
+const ItemTitle = styled.span<{ isDeleted?: boolean }>`
 	font-size: 0.875rem;
 	line-height: 1.4;
 	font-weight: 500;
-	color: #1e1e1e;
+	color: ${({ isDeleted }) => (isDeleted ? '#cc1818' : '#1e1e1e')};
+	font-style: ${({ isDeleted }) => (isDeleted ? 'italic' : 'normal')};
 `;
 
 const ItemURL = styled.span`
@@ -157,6 +172,7 @@ interface PickedItemProps {
 	onMoveUp?: () => void;
 	onMoveDown?: () => void;
 	PickedItemPreviewComponent?: React.ComponentType<{ item: PickedItemType }>;
+	isDeleted?: boolean;
 }
 
 /**
@@ -165,18 +181,24 @@ interface PickedItemProps {
  * @component
  * @param {object} props - The component props.
  * @param {PickedItemType} props.item - The picked item to display.
+ * @param {boolean} props.isDeleted - Whether the item has been deleted.
  * @returns {*} React JSX
  */
-const PickedItemPreview: React.FC<{ item: PickedItemType }> = ({ item }) => {
+const PickedItemPreview: React.FC<{ item: PickedItemType; isDeleted?: boolean }> = ({
+	item,
+	isDeleted = false,
+}) => {
 	const decodedTitle = decodeEntities(item.title);
 	return (
 		<>
-			<ItemTitle>
+			<ItemTitle isDeleted={isDeleted}>
 				<Truncate title={decodedTitle} aria-label={decodedTitle}>
 					{decodedTitle}
 				</Truncate>
 			</ItemTitle>
-			{item.url && <ItemURL>{filterURLForDisplay(safeDecodeURI(item.url)) || ''}</ItemURL>}
+			{item.url && !isDeleted && (
+				<ItemURL>{filterURLForDisplay(safeDecodeURI(item.url)) || ''}</ItemURL>
+			)}
 		</>
 	);
 };
@@ -198,6 +220,7 @@ const PickedItem: React.FC<PickedItemProps> = ({
 	onMoveUp,
 	onMoveDown,
 	PickedItemPreviewComponent,
+	isDeleted = false,
 }) => {
 	const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
 		id,
@@ -220,6 +243,7 @@ const PickedItem: React.FC<PickedItemProps> = ({
 				{...listeners}
 				isDragging={isDragging}
 				isOrderable={isOrderable}
+				isDeleted={isDeleted}
 			>
 				{isOrderable && (
 					<DragHandleWrapper isDragging={isDragging}>
@@ -230,7 +254,7 @@ const PickedItem: React.FC<PickedItemProps> = ({
 					{PickedItemPreviewComponent ? (
 						<PickedItemPreviewComponent item={item} />
 					) : (
-						<PickedItemPreview item={item} />
+						<PickedItemPreview item={item} isDeleted={isDeleted} />
 					)}
 				</ItemContent>
 				<ButtonContainer>
