@@ -9,6 +9,7 @@
 	"source": "index.ts",
 	"types": "./dist/index.d.ts",
 	"scripts": {
+		"prepublishOnly": "npm run build",
 		"lint": "10up-toolkit lint-js",
 		"test": "10up-toolkit test-unit-jest",
 		"build": "npm run clean-dist && 10up-toolkit build",
