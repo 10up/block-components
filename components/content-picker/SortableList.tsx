@@ -127,7 +127,7 @@ const SortableList: React.FC<SortableListProps> = ({
 							url: post.link,
 							id: post.id,
 							type: post.type,
-							status: (post as any).status, // Include status for trashed post detection
+							status: post.status, // Include status for trashed post detection
 						};
 					} else if (mode === 'user') {
 						const user = result as User;
