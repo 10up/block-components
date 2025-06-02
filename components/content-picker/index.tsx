@@ -141,7 +141,7 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 	return (
 		<StyledComponentContext cacheKey="tenup-component-content-picker">
 			<ContentPickerWrapper className={NAMESPACE}>
-				{!content.length || (content.length && content.length <= maxContentItems) ? (
+				{!content.length || (content.length && content.length < maxContentItems) ? (
 					<ContentSearch
 						placeholder={placeholder}
 						label={label}
@@ -158,7 +158,8 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 						options={searchOptions}
 					/>
 				) : (
-					label && (
+					label &&
+					!hideLabelFromVision && (
 						<div
 							style={{
 								marginBottom: '8px',
