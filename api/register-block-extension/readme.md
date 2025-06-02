@@ -35,7 +35,7 @@ const additionalAttributes = {
  * @param {object} props block props
  * @returns {JSX}
  */
-function BlockEdit(props) {...}
+function BlockEdit(props) {...}
 
 /**
  * generateClassNames
@@ -46,7 +46,7 @@ function BlockEdit(props) {...}
  * @param {object} attributes block attributes
  * @returns {string}
  */
-function generateClassNames(attributes) {...}
+function generateClassNames(attributes) {...}
 
 /**
  * generateInlineStyles
@@ -57,7 +57,7 @@ function generateClassNames(attributes) {...}
  * @param {object} attributes block attributes
  * @returns {string}
  */
-function generateInlineStyles(attributes) {...}
+function generateInlineStyles(attributes) {...}
 
 registerBlockExtension(
  'core/group', // also supports adding multiple blocks as an array
@@ -83,3 +83,38 @@ registerBlockExtension(
 | options.inlineStyleGenerator | `function` | Function that gets passed the attributes of the block to generate an inline style object |
 | options.Edit               | `function` | BlockEdit component like in `registerBlockType` only without the actual block. So only using slots like the `InspectorControls` is advised. |
 | options.order               | `string` | The order in which the extension should be called in relation to the original BlockEdit component. Can be `before` or `after`. Defaults to `after` |
+
+---
+
+# unregisterBlockExtension
+
+The `unregisterBlockExtension` API allows you to remove block extensions that were previously registered using `registerBlockExtension`. This is particularly useful in child themes or plugins where you need to override or remove functionality provided by a parent theme or another plugin.
+
+## Usage
+
+```js
+import { unregisterBlockExtension } from '@10up/block-components';
+
+// Unregister a previously registered block extension
+unregisterBlockExtension('core/group', 'background-patterns');
+
+// Works with multiple blocks too (same as registerBlockExtension)
+unregisterBlockExtension(['core/group', 'core/columns'], 'background-patterns');
+
+// Works with the wildcard selector
+unregisterBlockExtension('*', 'background-patterns');
+```
+
+## Parameters
+
+| Name          | Type             | Description                                                          |
+|---------------|------------------|----------------------------------------------------------------------|
+| blockName     | `string|string[]`| Name of the block or array with multiple block names to unregister the extension from. Also supports `'*'` or `'all'` to target all blocks |
+| extensionName | `string`         | Unique identifier of the extension to unregister                     |
+
+## Notes
+
+- The function safely handles cases where the extension was never registered or has already been unregistered
+- Both parameters are required - the function will return early if either is missing
+- The `blockName` parameter must match exactly what was used when registering the extension
+- For multi-block registrations, you must use the same array of block names or unregister each block individually
