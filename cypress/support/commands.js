@@ -87,7 +87,7 @@ Cypress.Commands.add('savePost', () => {
 });
 
 Cypress.Commands.add('insertBlock', (blockName) => {
-	cy.get('button[aria-label="Toggle block inserter"]').first().then($button => {
+	cy.get('button[aria-label="Block Inserter"]').first().then($button => {
 		if ($button.attr('aria-pressed') !== 'true') {
 			cy.wrap($button).click();
 		}
