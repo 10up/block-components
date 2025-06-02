@@ -169,7 +169,7 @@ const Counter: ForwardRefExoticComponent<
 	return (
 		<StyledComponentContext cacheKey="tenup-component-counter">
 			<StyledCounter
-				className={cx('tenup--block-components__character-count', {
+				className={clsx('tenup--block-components__character-count', {
 					'is-over-limit': count > limit,
 				})}
 				ref={ref}
