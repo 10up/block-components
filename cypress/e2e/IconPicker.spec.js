@@ -9,8 +9,8 @@ context('IconPicker', () => {
 	it('allows the user to use the post picker to change an icon and displays it', () => {
 		cy.createPost({title: 'Icon Picker Example'});
 		cy.insertBlock('Icon Picker Example');
-        cy.get('.component-icon-picker-inline-button').click();
-        cy.get('.component-icon-picker-inline__content [placeholder="Search"]').type('tool');
+        cy.get('.component-icon-picker-inline-button').first().click();
+        cy.get('.component-icon-picker-inline__content [placeholder="Search"]').first().type('tool');
         cy.get('.component-icon-picker-inline__content .components-checkbox-control').first().click({force: true});
 
         cy.savePost();
