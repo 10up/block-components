@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { select } from '@wordpress/data';
 import { useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { VisuallyHidden } from '@wordpress/components';
 import { v4 as uuidv4 } from 'uuid';
 import { ContentSearch } from '../content-search';
 import SortableList from './SortableList';
@@ -158,7 +159,10 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 						options={searchOptions}
 					/>
 				) : (
-					label && (
+					label &&
+					(hideLabelFromVision ? (
+						<VisuallyHidden>{label}</VisuallyHidden>
+					) : (
 						<div
 							style={{
 								marginBottom: '8px',
@@ -166,7 +170,7 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 						>
 							{label}
 						</div>
-					)
+					))
 				)}
 
 				{Boolean(content?.length) && (
