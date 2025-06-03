@@ -104,6 +104,7 @@ interface LinkProps {
 	kind?: string;
 	placeholder?: string;
 	className?: string;
+	ariaLabel?: string;
 }
 
 /*
@@ -123,6 +124,7 @@ export const Link: FC<LinkProps> = ({
 	kind = '',
 	placeholder = __('Link text ...', '10up-block-components'),
 	className = undefined,
+	ariaLabel = undefined,
 	...rest
 }) => {
 	const [isPopoverVisible, setIsPopoverVisible] = useState(false);
@@ -155,7 +157,7 @@ export const Link: FC<LinkProps> = ({
 				className={clsx('tenup-block-components-link__label', className)}
 				value={value}
 				onChange={onTextChange}
-				aria-label={__('Link text', '10up-block-components')}
+				aria-label={ariaLabel || value || __('Link text', '10up-block-components')}
 				placeholder={placeholder}
 				__unstablePastePlainText
 				allowedFormats={[]}
