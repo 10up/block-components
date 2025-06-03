@@ -1,4 +1,4 @@
-import { addFilter } from '@wordpress/hooks';
+import { addFilter, removeFilter } from '@wordpress/hooks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import clsx from 'clsx';
 import { FC } from 'react';
@@ -178,4 +178,46 @@ function registerBlockExtension(
 	);
 }
 
-export { registerBlockExtension };
+/**
+ * Unregister a block extension that was previously registered using registerBlockExtension.
+ *
+ * @param {string|string[]} blockName - The name of the block or an array of block names to unregister the extension from.
+ * @param {string} extensionName - The name of the extension to unregister.
+ */
+function unregisterBlockExtension(blockName: string | string[], extensionName: string): void {
+	if (!blockName || !extensionName) {
+		return;
+	}
+
+	const isMultiBlock = Array.isArray(blockName);
+
+	if (blockName === '*') {
+		blockName = 'all'; // eslint-disable-line no-param-reassign
+	}
+
+	// @ts-expect-error isMultiBlock verifies if this is an Array and supports join or not.
+	const blockNamespace = isMultiBlock ? blockName.join('-') : blockName;
+
+	// Remove all the filters that were added by registerBlockExtension
+	removeFilter(
+		'blocks.registerBlockType',
+		`namespace/${blockNamespace}/${extensionName}/addAttributesToBlock`,
+	);
+
+	removeFilter(
+		'editor.BlockEdit',
+		`namespace/${blockNamespace}/${extensionName}/addSettingsToBlock`,
+	);
+
+	removeFilter(
+		'editor.BlockListBlock',
+		`namespace/${blockNamespace}/${extensionName}/addAdditionalPropertiesInEditor`,
+	);
+
+	removeFilter(
+		'blocks.getSaveContent.extraProps',
+		`namespace/${blockNamespace}/${extensionName}/addAdditionalPropertiesToSavedMarkup`,
+	);
+}
+
+export { registerBlockExtension, unregisterBlockExtension };
