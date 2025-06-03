@@ -15,6 +15,30 @@ A collection of components built to be used in the block editor. These component
 2. Within your block editor code, import the relevant component(s) e.g. `import { ContentPicker } from '@10up/block-components';`
 3. We highly recommend you use [10up-toolkit](https://github.com/10up/10up-toolkit) to build your block files as it handles dependency extraction for you.
 
+## Importing individual modules
+
+As of [v1.20.6](https://github.com/10up/block-components/releases/tag/v1.20.6), you can now import individual modules directly to reduce bundle size.
+
+Instead of importing from the base entry point:
+```jsx
+import { ContentPicker } from '@10up/block-components';
+import { useAllTerms } from '@10up/block-components';
+import { registerBlockExtension } from '@10up/block-components';
+import { iconStore } from '@10up/block-components';
+```
+
+You can import `components`, `hooks`, `apis`, and `stores` individually from their specific paths:
+```jsx
+import { ContentPicker } from '@10up/block-components/components/content-picker';
+import { useAllTerms } from '@10up/block-components/hooks/use-all-terms';
+import { registerBlockExtension } from '@10up/block-components/api/register-block-extension';
+import { iconStore } from '@10up/block-components/stores/icons';
+```
+
+This approach offers improved tree-shaking and results in smaller bundles, especially when only using a subset of the library.
+
+The original import paths are still fully supported and will continue to work as expected.
+
 ## APIs
 
 - [registerBlockExtension](./api/register-block-extension/)
