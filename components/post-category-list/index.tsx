@@ -6,3 +6,6 @@ export const PostCategoryList = ({
 	noResultsMessage = __('Please select a category', 'tenup'),
 	...rest
 }) => <PostTermList taxonomyName={taxonomyName} noResultsMessage={noResultsMessage} {...rest} />;
+
+PostCategoryList.ListItem = PostTermList.ListItem;
+PostCategoryList.TermLink = PostTermList.TermLink;
