@@ -46,6 +46,63 @@ import { renderToString } from '@wordpress/element';
 import { registerIcons } from '@10up/block-components';
 
 registerIcons({
+    name: 'example/limited-palette',
+    label: "Example",
+    icons: [
+        {
+            source: renderToString( <CoreIcon icon={arrowDown} />),
+            name: "arrowDown-5",
+            label: "arrowDown"
+        },
+        {
+            source: renderToString( <CoreIcon icon={arrowLeft} />),
+            name: "arrowLeft-5",
+            label: "arrowLeft"
+        },
+        {
+            source: renderToString( <CoreIcon icon={arrowRight} />),
+            name: "arrowRight-5",
+            label: "arrowRight"
+        },
+        {
+            source: renderToString( <CoreIcon icon={arrowUp} />),
+            name: "arrowUp-5",
+            label: "arrowUp"
+        },
+        {
+            source: renderToString( <CoreIcon icon={aspectRatio} />),
+            name: "aspectRatio-5",
+            label: "aspectRatio"
+        },
+        {
+            source: renderToString( <CoreIcon icon={atSymbol} />),
+            name: "atSymbol-5",
+            label: "atSymbol"
+        },
+        {
+            source: renderToString( <CoreIcon icon={audio} />),
+            name: "audio-5",
+            label: "audio"
+        },
+        {
+            source: renderToString( <CoreIcon icon={backup} />),
+            name: "backup-5",
+            label: "backup"
+        },
+        {
+            source: renderToString( <CoreIcon icon={blockTable} />),
+            name: "blockTable-5",
+            label: "blockTable"
+        },
+        {
+            source: renderToString( <CoreIcon icon={brush} />),
+            name: "brush-5",
+            label: "brush"
+        },
+    ]
+})
+
+registerIcons({
     name: 'example/theme',
     label: "Example",
     icons: [

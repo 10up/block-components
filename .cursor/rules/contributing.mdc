@@ -1,0 +1,48 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Contributing Guidelines
+
+When contributing to the @10up/block-components project, follow these guidelines:
+
+## Code Contribution Process
+
+- Fork the repository
+- Create a feature branch from the `develop` branch
+- Follow the coding standards and guidelines
+- Submit a pull request back to the `develop` branch
+- Ensure all tests pass
+- Include appropriate documentation
+
+## Component Contributions
+
+- All new components should have a clear, focused purpose
+- Components should be reusable and configurable
+- Include appropriate PropTypes or TypeScript interfaces
+- Document the component's usage in a readme.md file
+- Export the component from the appropriate index.ts file
+- Consider adding tests for the component
+
+## Documentation
+
+- Include JSDoc comments for all functions, methods, and components
+- Document props, parameters, and return values
+- Update existing documentation when changing functionality
+- Provide usage examples in component readme files
+
+## Testing
+
+- Add tests for new functionality
+- Update tests when changing existing code
+- Ensure backwards compatibility when possible
+- Test in both editor and frontend contexts when applicable
+
+## Versioning
+
+- Follow semantic versioning
+- Breaking changes should be clearly documented
+- Deprecate features before removing them when possible
+
+@CONTRIBUTING.md

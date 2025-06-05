@@ -1,0 +1,41 @@
+---
+description: 
+globs: hooks/**.*
+alwaysApply: false
+---
+# Hooks Development Guidelines
+
+The @10up/block-components library provides a variety of custom hooks to handle WordPress Block Editor functionality.
+
+## Hook Structure
+
+- Each hook should be in its own directory under `hooks/`
+- The hook directory should include an `index.ts` file that exports the hook
+- Include a `readme.md` file with documentation for the hook
+- Consider related hooks that might be used together
+
+## Hook Implementation
+
+- Hooks should follow the React Hooks API design principles
+- Begin hook names with `use` prefix (e.g., `usePost`, `useMedia`)
+- Use TypeScript for type safety
+- Properly handle dependencies in useEffect and useMemo hooks
+- Handle loading, error, and success states appropriately
+- Implement cleanup functions in useEffect when needed
+
+## API Interaction
+
+- Use the WordPress data store when working with core data
+- Use proper error handling for API requests
+- Consider implement caching for expensive operations
+- Support pagination where appropriate
+
+## WordPress-Specific Hooks
+
+- Post-related hooks should work with the global post context
+- Term-related hooks should handle taxonomies correctly
+- Block-related hooks should follow WordPress Block Editor patterns
+- Consider editor-specific vs. frontend usage when appropriate
+
+@hooks/use-post/index.ts
+@hooks/use-media/index.ts

@@ -48,4 +48,9 @@ export function BlockEdit(props) {
 
 _The recommended approach for adding an icon picker to your custom block is using the `InlineIconPicker` as it delivers the best user experience._
 
-In order to add icons to become available to the icon picker you need to use the [`registerIcons`](../../api/register-icons/) function.
+In order to add icons to become available to the icon picker you need to use the
+[`registerIcons`](../../api/register-icons/) function.
+
+You can optionally include the `iconSet` property to the `IconPicker`,
+`InlineIconPicker`, and `IconPickerToolbarButton` to limit the icons available
+in the picker if necessary.

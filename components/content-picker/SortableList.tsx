@@ -105,6 +105,7 @@ const SortableList: React.FC<SortableListProps> = ({
 				fields.push('title');
 				fields.push('url');
 				fields.push('subtype');
+				fields.push('status'); // Include status to check for trashed posts
 			} else {
 				fields.push('name');
 				fields.push('taxonomy');
@@ -139,6 +140,7 @@ const SortableList: React.FC<SortableListProps> = ({
 								url: post.link,
 								id: post.id,
 								type: post.type,
+								status: post.status, // Include status for trashed post detection
 							};
 							break;
 						}
@@ -238,7 +240,73 @@ const SortableList: React.FC<SortableListProps> = ({
 	const renderItems = (items: Array<PickedItemType>) => {
 		return items.map((post, index) => {
 			const preparedItem = preparedItems[post.uuid];
-			if (!preparedItem) return null;
+
+			// If the item doesn't exist (was deleted) or is trashed, show a placeholder with remove option
+			if (!preparedItem) {
+				return (
+					<PickedItem
+						isOrderable={hasMultiplePosts && isOrderable}
+						key={post.uuid}
+						handleItemDelete={handleItemDelete}
+						item={{
+							id: post.id,
+							type: post.type,
+							uuid: post.uuid,
+							title: __('(Item no longer exists)', '10up-block-components'),
+							url: '',
+						}}
+						mode={mode}
+						id={post.uuid}
+						positionInSet={index + 1}
+						setSize={items.length}
+						onMoveUp={() => {
+							if (index === 0) return;
+							setPosts(arrayMove(posts, index, index - 1));
+						}}
+						onMoveDown={() => {
+							if (index === items.length - 1) return;
+							setPosts(arrayMove(posts, index, index + 1));
+						}}
+						PickedItemPreviewComponent={PickedItemPreviewComponent}
+						isDeleted
+					/>
+				);
+			}
+
+			// Check if the post is trashed (only for post mode)
+			const isTrashOrDeleted =
+				mode === 'post' && preparedItem && preparedItem.status === 'trash';
+
+			if (isTrashOrDeleted) {
+				return (
+					<PickedItem
+						isOrderable={hasMultiplePosts && isOrderable}
+						key={post.uuid}
+						handleItemDelete={handleItemDelete}
+						item={{
+							id: preparedItem.id,
+							type: preparedItem.type,
+							uuid: preparedItem.uuid,
+							title: __('(Item in trash)', '10up-block-components'),
+							url: preparedItem.url,
+						}}
+						mode={mode}
+						id={post.uuid}
+						positionInSet={index + 1}
+						setSize={items.length}
+						onMoveUp={() => {
+							if (index === 0) return;
+							setPosts(arrayMove(posts, index, index - 1));
+						}}
+						onMoveDown={() => {
+							if (index === items.length - 1) return;
+							setPosts(arrayMove(posts, index, index + 1));
+						}}
+						PickedItemPreviewComponent={PickedItemPreviewComponent}
+						isDeleted
+					/>
+				);
+			}
 
 			const handleMoveUp = () => {
 				if (index === 0) return;

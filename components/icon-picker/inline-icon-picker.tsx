@@ -17,6 +17,11 @@ interface InlineIconPickerProps extends IconPickerProps {
 	 * @param props
 	 */
 	renderToggle: (props: { onToggle: () => void }) => React.JSX.Element;
+	/**
+	 * Optionally specify the icon set to use
+	 * If not specified, all icon sets will be used
+	 */
+	iconSet?: string;
 }
 
 export const IconPickerDropdown: React.FC<InlineIconPickerProps> = (props) => {
