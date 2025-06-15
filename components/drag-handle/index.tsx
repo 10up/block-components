@@ -8,7 +8,7 @@ import type { HTMLAttributes } from 'react';
  */
 
 export const DragHandle: React.FC<HTMLAttributes<HTMLSpanElement>> = (props) => (
-	<span {...props}>
+	<span {...props} style={{ cursor: props['aria-pressed'] ? 'grabbing' : 'grab' }}>
 		<svg
 			style={{ marginRight: '10px', cursor: 'grab', flexShrink: 0 }}
 			width="18"
