@@ -1,4 +1,5 @@
 import { __ } from '@wordpress/i18n';
+import { decodeEntities } from '@wordpress/html-entities';
 import { usePrimaryTerm } from '../../hooks';
 
 interface PostPrimaryTermProps {
@@ -50,5 +51,5 @@ export const PostPrimaryTerm = ({
 		wrapperProps.href = termUrl;
 	}
 
-	return <Tag {...wrapperProps}>{termString}</Tag>;
+	return <Tag {...wrapperProps}>{decodeEntities(termString)}</Tag>;
 };

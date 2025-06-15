@@ -66,14 +66,13 @@ export const MediaToolbar: React.FC<MediaToolbarProps> = ({
 			{hasImage ? (
 				<>
 					<MediaReplaceFlow
+						mediaId={id}
 						mediaUrl={media?.source_url}
 						onSelect={onSelect}
 						name={mergedLabels.replace}
 					/>
 					{!!isOptional && (
-						<ToolbarButton onClick={onRemove}>
-							{mergedLabels.remove}
-						</ToolbarButton>
+						<ToolbarButton onClick={onRemove}>{mergedLabels.remove}</ToolbarButton>
 					)}
 				</>
 			) : (
@@ -81,9 +80,7 @@ export const MediaToolbar: React.FC<MediaToolbarProps> = ({
 					<MediaUpload
 						onSelect={onSelect}
 						render={({ open }) => (
-							<ToolbarButton onClick={open}>
-								{mergedLabels.add}
-							</ToolbarButton>
+							<ToolbarButton onClick={open}>{mergedLabels.add}</ToolbarButton>
 						)}
 					/>
 				</MediaUploadCheck>

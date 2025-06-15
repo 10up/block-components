@@ -44,13 +44,8 @@ context('PostFeaturedImage', () => {
 
         cy.get('[data-tab-id="edit-post/document"]').click();
 
-        cy.get('.components-button.components-panel__body-toggle').contains('Featured image').then($button => {
-            if ($button.attr('aria-expanded') === 'false') {
-                cy.get('.components-button.components-panel__body-toggle').contains('Featured image').click();
-            }
-        })
 
-        cy.get('.editor-post-featured-image img').should('exist').then(($a) => {
+        cy.get('.editor-post-featured-image__preview-image').should('exist').then(($a) => {
             const src1 = $a.attr('src');
             const cleanedSrc1 = src1.replace(/-\d+x\d+(?=\.\w+$)/, '');
 
@@ -65,7 +60,7 @@ context('PostFeaturedImage', () => {
             });
         });
 
-        cy.get('.components-button.editor-post-featured-image__action').contains('Remove').click();
+        cy.get('.editor-post-featured-image__action').contains('Remove').click({force: true});
         cy.get('.wp-block-example-custom-post-featured-image__image').should('not.exist');
     })
 })

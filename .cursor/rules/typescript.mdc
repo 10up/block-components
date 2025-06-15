@@ -1,0 +1,53 @@
+---
+description: 
+globs: *.tsx,*.ts
+alwaysApply: false
+---
+# TypeScript Guidelines
+
+The @10up/block-components library uses TypeScript for type safety and better developer experience.
+
+## Types and Interfaces
+
+- Use interfaces for object shapes that will be extended or implemented
+- Use type aliases for unions, intersections, or simple object types
+- Export interface and type definitions for public APIs
+- Use descriptive names for types and interfaces
+- Place shared types in separate files when used across multiple components
+
+## Best Practices
+
+- Use explicit return types for functions and methods
+- Use proper typing for React props and state
+- Define strong typing for WordPress data structures
+- Use generics when appropriate for reusable components and functions
+- Avoid `any` type when possible; use `unknown` instead when type is genuinely unknown
+- Use type guards and type assertions when necessary
+
+## WordPress-Specific Types
+
+- Use types from `@wordpress` packages where available
+- Use `wp-types` for additional WordPress type definitions
+- For custom WordPress data, create appropriate interfaces
+
+## Example Type Definitions
+
+```typescript
+// Component Props interface
+export interface ContentPickerProps {
+  label?: string;
+  contentTypes?: string[];
+  placeholder?: string;
+  onPickChange?: (ids: any[]) => void;
+  maxContentItems?: number;
+  content?: any[];
+}
+
+// WordPress-specific types
+import { Post } from '@wordpress/core-data';
+
+// Generic types
+export type SortableDirection = 'horizontal' | 'vertical';
+```
+
+@components/content-picker/index.tsx

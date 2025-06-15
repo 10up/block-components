@@ -1,0 +1,14 @@
+{
+	"apiVersion": 3,
+	"name": "example/primary-category",
+	"title": "Post Primary Category",
+	"icon": "archive",
+	"category": "common",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"attributes": {},
+	"variations": [],
+	"editorScript": "file:./index.ts"
+}

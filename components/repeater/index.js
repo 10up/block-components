@@ -1,3 +1,4 @@
+// @ts-ignore
 import { useBlockEditContext, store as blockEditorStore } from '@wordpress/block-editor';
 import { store as blocksStore } from '@wordpress/blocks';
 import { useSelect, dispatch } from '@wordpress/data';
@@ -26,13 +27,18 @@ import { CSS } from '@dnd-kit/utilities';
 import { DragHandle } from '../drag-handle';
 
 /**
+ * @typedef {object} IndexedItem
+ * @property {string} id Identifier of the item
+ */
+
+/**
  * The Sortable Item Component.
  *
  * @param {object} props React props
  * @param {Function} props.children Render prop to render the children.
  * @param {object} props.item The repeater item object.
- * @param {Function} props.setItem A function to set state of a repeater item.
- * @param {Function} props.removeItem A function to delete a repeater item.
+ * @param {Function|null} props.setItem A function to set state of a repeater item.
+ * @param {Function|null} props.removeItem A function to delete a repeater item.
  * @param {string} props.id A string identifier for a repeater item.
  * @returns {*} React JSX
  */
@@ -73,11 +79,11 @@ const SortableItem = ({ children, item = {}, setItem = null, removeItem = null, 
  *
  * @param {object} props React props
  * @param {Function} props.children Render prop to render the children.
- * @param {string} props.addButton render prop to customize the "Add item" button.
+ * @param {Function|null} props.addButton render prop to customize the "Add item" button.
  * @param {boolean} props.allowReordering boolean to toggle reordering of Repeater items.
  * @param {Function} props.onChange callback function to update the block attribute.
- * @param {Array} props.value array of Repeater items.
- * @param {Array} props.defaultValue array of default Repeater items.
+ * @param {Array<IndexedItem>} props.value array of Repeater items.
+ * @param {Array<IndexedItem>} props.defaultValue array of default Repeater items.
  * @returns {*} React JSX
  */
 export const AbstractRepeater = ({
@@ -95,13 +101,24 @@ export const AbstractRepeater = ({
 		}),
 	);
 
+	/**
+	 * Handle drag event completion
+	 *
+	 * @param {import('@dnd-kit/core').DragEndEvent} event End of drag event
+	 */
 	function handleDragEnd(event) {
 		const { active, over } = event;
 
-		if (active.id !== over.id) {
+		if (active.id !== over?.id) {
+			/**
+			 * Set of items to move.
+			 *
+			 * @param {Array<IndexedItem>} items Set of indexed items
+			 * @returns {Array<IndexedItem>} Changed set of items
+			 */
 			const moveArray = (items) => {
 				const oldIndex = items.findIndex((item) => item.id === active.id);
-				const newIndex = items.findIndex((item) => item.id === over.id);
+				const newIndex = items.findIndex((item) => item.id === over?.id);
 
 				return arrayMove(items, oldIndex, newIndex);
 			};
@@ -132,7 +149,7 @@ export const AbstractRepeater = ({
 	/**
 	 * Updates the item currently being edited.
 	 *
-	 * @param {string|number|boolean} newValue The value that should be used to updated the item.
+	 * @param {object|string|number|boolean} newValue The value that should be used to updated the item.
 	 * @param {number} index The index at which the item should be updated.
 	 */
 	function setItem(newValue, index) {
@@ -158,6 +175,14 @@ export const AbstractRepeater = ({
 	 */
 	function removeItem(index) {
 		const valueCopy = JSON.parse(JSON.stringify(value)).filter(
+			/**
+			 * Filter out the item to remove.
+			 *
+			 * @param {IndexedItem} item Item to remove
+			 * @param {number} innerIndex Current index
+			 * @returns {boolean}
+			 */
+			// @ts-ignore
 			(item, innerIndex) => index !== innerIndex,
 		);
 		onChange(valueCopy);
@@ -179,19 +204,44 @@ export const AbstractRepeater = ({
 							return (
 								<SortableItem
 									item={item}
-									setItem={(val) => setItem(val, key)}
+									setItem={
+										/**
+										 * Add/update callback
+										 *
+										 * @param {object|string|number|boolean} val Value to set
+										 * @returns {void}
+										 */
+										(val) => setItem(val, key)
+									}
 									removeItem={() => removeItem(key)}
 									key={item.id}
 									id={item.id}
 								>
-									{(item, id, setItem, removeItem) => {
-										return children(
-											item,
-											id,
-											(val) => setItem(val, key),
-											() => removeItem(key),
-										);
-									}}
+									{
+										/**
+										 * Mapped set of sortable items
+										 *
+										 * @param {IndexedItem} item Current Item
+										 * @param {string} id Current Item ID
+										 * @param {Function} setItem Callback to add/update an item
+										 * @param {Function} removeItem Callback to remove an item
+										 * @returns {*} React JSX
+										 */
+										(item, id, setItem, removeItem) => {
+											return children(
+												item,
+												id,
+												/**
+												 * Add/update callback
+												 *
+												 * @param {object|string|number|boolean} val Value to set
+												 * @returns {void}
+												 */
+												(val) => setItem(val, key),
+												() => removeItem(key),
+											);
+										}
+									}
 								</SortableItem>
 							);
 						})}
@@ -202,6 +252,12 @@ export const AbstractRepeater = ({
 					return children(
 						item,
 						item.id,
+						/**
+						 * Add/update callback
+						 *
+						 * @param {object|string|number|boolean} val Value to set
+						 * @returns {void}
+						 */
 						(val) => setItem(val, key),
 						() => removeItem(key),
 					);
@@ -218,6 +274,16 @@ export const AbstractRepeater = ({
 	);
 };
 
+/**
+ * Attribute Repeater Component.
+ *
+ * @param {object} props React props
+ * @param {Function} props.children Render prop to render the children.
+ * @param {Function|null} props.addButton render prop to customize the "Add item" button.
+ * @param {boolean} props.allowReordering boolean to toggle reordering of Repeater items.
+ * @param {string|null} props.attribute Attribute name.
+ * @returns {*} React JSX
+ */
 export const AttributeRepeater = ({
 	children,
 	attribute = null,
@@ -227,24 +293,39 @@ export const AttributeRepeater = ({
 	const { clientId, name } = useBlockEditContext();
 	const { updateBlockAttributes } = dispatch(blockEditorStore);
 
-	const attributeValue = useSelect((select) => {
-		const attributes = select(blockEditorStore).getBlockAttributes(clientId);
-		return attributes[attribute] || [];
-	});
+	const attributeValue = useSelect(
+		(select) => {
+			// @ts-ignore
+			const attributes = select(blockEditorStore).getBlockAttributes(clientId);
+			return attributes[attribute] || [];
+		},
+		[attribute, clientId],
+	);
 
-	const { defaultRepeaterData } = useSelect((select) => {
-		return {
-			defaultRepeaterData:
-				select(blocksStore).getBlockType(name).attributes[attribute].default,
-		};
-	});
+	const { defaultRepeaterData } = useSelect(
+		(select) => {
+			return {
+				defaultRepeaterData:
+					// @ts-ignore
+					select(blocksStore).getBlockType(name).attributes[attribute].default,
+			};
+		},
+		[attribute],
+	);
 
 	if (defaultRepeaterData.length) {
 		defaultRepeaterData[0].id = uuid();
 	}
 
+	/**
+	 * Update a blocks attributes
+	 *
+	 * @param {string} value Attribute value
+	 */
 	const handleOnChange = (value) => {
-		updateBlockAttributes(clientId, { [attribute]: value });
+		if (attribute !== null) {
+			updateBlockAttributes(clientId, { [attribute]: value });
+		}
 	};
 
 	return (
@@ -260,6 +341,19 @@ export const AttributeRepeater = ({
 	);
 };
 
+/**
+ * Repeater Component.
+ *
+ * @param {object} props React props
+ * @param {Function} props.children Render prop to render the children.
+ * @param {Function|null} props.addButton render prop to customize the "Add item" button.
+ * @param {boolean} props.allowReordering boolean to toggle reordering of Repeater items.
+ * @param {Function} props.onChange callback function to update the block attribute.
+ * @param {Array<IndexedItem>} props.value array of Repeater items.
+ * @param {Array<IndexedItem>} props.defaultValue array of default Repeater items.
+ * @param {string|null} props.attribute Attribute name.
+ * @returns {*} React JSX
+ */
 export const Repeater = ({
 	children,
 	addButton = null,

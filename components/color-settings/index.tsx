@@ -49,7 +49,7 @@ interface ColorSettingProps {
 	/**
 	 * Callback called when a color is selected.
 	 */
-	onChange: (color: string) => void;
+	onChange: (newColor?: string | undefined, index?: number | undefined) => void;
 }
 
 interface Color {

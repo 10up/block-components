@@ -51,6 +51,7 @@ export const prepareSearchQuery = ({
 		case 'user':
 			searchQuery = addQueryArgs('wp/v2/users', {
 				search: keyword,
+				_fields: ['id', 'link', 'url', 'type', 'name', 'subtype'],
 			});
 			break;
 		default:
@@ -61,6 +62,7 @@ export const prepareSearchQuery = ({
 				_embed: true,
 				per_page: perPage,
 				page,
+				_fields: ['id', 'link', 'url', 'type', 'title', 'subtype'],
 			});
 
 			break;
@@ -132,6 +134,7 @@ interface FetchSearchResultsArgs {
 	contentTypes: Array<string>;
 	queryFilter: QueryFilter;
 	excludeItems: Array<IdentifiableObject>;
+	signal?: AbortSignal;
 }
 
 export async function fetchSearchResults({
@@ -142,6 +145,7 @@ export async function fetchSearchResults({
 	contentTypes,
 	queryFilter,
 	excludeItems,
+	signal,
 }: FetchSearchResultsArgs) {
 	const searchQueryString = prepareSearchQuery({
 		keyword,
@@ -154,6 +158,7 @@ export async function fetchSearchResults({
 	const response = await apiFetch<Response>({
 		path: searchQueryString,
 		parse: false,
+		signal,
 	});
 
 	const totalPages = parseInt(

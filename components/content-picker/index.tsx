@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { select } from '@wordpress/data';
 import { useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { VisuallyHidden } from '@wordpress/components';
 import { v4 as uuidv4 } from 'uuid';
 import { ContentSearch } from '../content-search';
 import SortableList from './SortableList';
@@ -35,7 +36,11 @@ const ContentPickerWrapper = styled.div`
 	width: 100%;
 `;
 
-interface ContentPickerProps {
+export type ContentPickerOptions = {
+	inputDelay: number;
+};
+
+export interface ContentPickerProps {
 	label?: string;
 	hideLabelFromVision?: boolean;
 	mode?: ContentSearchMode;
@@ -54,6 +59,8 @@ interface ContentPickerProps {
 	fetchInitialResults?: boolean;
 	renderItemType?: (props: NormalizedSuggestion) => string;
 	renderItem?: (props: RenderItemComponentProps) => JSX.Element;
+	PickedItemPreviewComponent?: React.ComponentType<{ item: PickedItemType }>;
+	options?: ContentPickerOptions;
 }
 
 export const ContentPicker: React.FC<ContentPickerProps> = ({
@@ -77,7 +84,11 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 	fetchInitialResults = false,
 	renderItemType = defaultRenderItemType,
 	renderItem = undefined,
+	PickedItemPreviewComponent = undefined,
+	options,
 }) => {
+	const searchOptions =
+		options && options.inputDelay ? { inputDelay: options.inputDelay } : undefined;
 	const currentPostId = select('core/editor')?.getCurrentPostId();
 
 	/**
@@ -145,9 +156,13 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 						fetchInitialResults={fetchInitialResults}
 						renderItemType={renderItemType}
 						renderItem={renderItem}
+						options={searchOptions}
 					/>
 				) : (
-					label && (
+					label &&
+					(hideLabelFromVision ? (
+						<VisuallyHidden>{label}</VisuallyHidden>
+					) : (
 						<div
 							style={{
 								marginBottom: '8px',
@@ -155,7 +170,7 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 						>
 							{label}
 						</div>
-					)
+					))
 				)}
 
 				{Boolean(content?.length) && (
@@ -180,6 +195,7 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 								isOrderable={isOrderable}
 								mode={mode}
 								setPosts={onPickChange}
+								PickedItemPreviewComponent={PickedItemPreviewComponent}
 							/>
 						</ul>
 					</StyleWrapper>

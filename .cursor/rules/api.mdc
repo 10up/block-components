@@ -1,0 +1,59 @@
+---
+description: 
+globs: api/**.*
+alwaysApply: false
+---
+# API Development Guidelines
+
+The @10up/block-components library includes API utilities for extending the WordPress Block Editor.
+
+## API Design
+
+- APIs should be simple and intuitive to use
+- Follow the WordPress plugin API patterns when possible
+- Use TypeScript for type safety and documentation
+- Provide backward compatibility for existing implementations
+- Design for extensibility
+
+## API Components
+
+- `registerBlockExtension`: Used to extend existing blocks with additional functionality
+- `registerIcons`: Used to register custom icons for use in the block editor
+
+## Implementation Guidelines
+
+- Include clear error handling and validation
+- Provide meaningful error messages
+- Document all parameters and return values
+- Consider edge cases and default values
+- Use WordPress core utilities when available
+
+## Example Use Cases
+
+```typescript
+// Registering icons
+import { registerIcons } from '@10up/block-components';
+
+registerIcons({
+  myCustomIcon: <svg>...</svg>,
+});
+
+// Extending a block
+import { registerBlockExtension } from '@10up/block-components';
+
+registerBlockExtension('core/paragraph', {
+  extensionName: 'custom-extension',
+  attributes: {
+    customAttribute: {
+      type: 'string',
+      default: '',
+    },
+  },
+  edit: (props) => {
+    // Custom edit component
+  },
+});
+```
+
+@api/register-block-extension/index.ts
+@api/register-icons/index.ts
