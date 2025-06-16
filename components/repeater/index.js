@@ -66,7 +66,7 @@ const SortableItem = ({ children, item = {}, setItem = null, removeItem = null, 
 				: repeaterItem.props.className,
 		},
 		[
-			<DragHandle className="repeater-item__drag-handle" {...attributes} {...listeners} />,
+			<DragHandle className="repeater-item__drag-handle" {...attributes} {...listeners} isDragging={ isDragging } />,
 			repeaterItem.props.children,
 		],
 	);

@@ -1,14 +1,17 @@
 import type { HTMLAttributes } from 'react';
 
+interface DragHandleProps extends HTMLAttributes<HTMLSpanElement> {
+	isDragging?: boolean;
+}
+
 /**
  * Renders an SVG drag handle.
  *
  * @param {object} props The prop object.
  * @returns {*} React JSX
  */
-
-export const DragHandle: React.FC<HTMLAttributes<HTMLSpanElement>> = (props) => (
-	<span {...props} style={{ cursor: props['aria-pressed'] ? 'grabbing' : 'grab' }}>
+export const DragHandle: React.FC<DragHandleProps> = (props) => (
+	<span {...props} style={{ cursor: props.isDragging ? 'grabbing' : 'grab' }}>
 		<svg
 			style={{ marginRight: '10px', cursor: 'grab', flexShrink: 0 }}
 			width="18"
