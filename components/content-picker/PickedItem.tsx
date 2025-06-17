@@ -184,7 +184,7 @@ interface PickedItemProps {
  * @param {boolean} props.isDeleted - Whether the item has been deleted.
  * @returns {*} React JSX
  */
-const PickedItemPreview: React.FC<{ item: PickedItemType; isDeleted?: boolean }> = ({
+export const PickedItemPreview: React.FC<{ item: PickedItemType; isDeleted?: boolean }> = ({
 	item,
 	isDeleted = false,
 }) => {
