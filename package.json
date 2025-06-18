@@ -13,10 +13,18 @@
 			"import": {
 				"types": "./dist/index.d.ts",
 				"default": "./dist/index.js"
+			},
+			"require": {
+				"types": "./dist/index.d.ts",
+				"default": "./dist/index.js"
 			}
 		},
 		"./api/*": {
 			"import": {
+				"types": "./dist/api/*/index.d.ts",
+				"default": "./dist/api/*/index.js"
+			},
+			"require": {
 				"types": "./dist/api/*/index.d.ts",
 				"default": "./dist/api/*/index.js"
 			}
@@ -25,16 +33,28 @@
 			"import": {
 				"types": "./dist/components/*/index.d.ts",
 				"default": "./dist/components/*/index.js"
+			},
+			"require": {
+				"types": "./dist/components/*/index.d.ts",
+				"default": "./dist/components/*/index.js"
 			}
 		},
 		"./hooks/*": {
 			"import": {
 				"types": "./dist/hooks/*/index.d.ts",
 				"default": "./dist/hooks/*/index.js"
+			},
+			"require": {
+				"types": "./dist/hooks/*/index.d.ts",
+				"default": "./dist/hooks/*/index.js"
 			}
 		},
 		"./stores/*": {
 			"import": {
+				"types": "./dist/stores/*/index.d.ts",
+				"default": "./dist/stores/*/index.js"
+			},
+			"require": {
 				"types": "./dist/stores/*/index.d.ts",
 				"default": "./dist/stores/*/index.js"
 			}
