@@ -1,5 +1,7 @@
 name: Run Unit Test Suite 
 on: [push, workflow_dispatch]
+permissions:
+  contents: read
 
 jobs:
   jest:
