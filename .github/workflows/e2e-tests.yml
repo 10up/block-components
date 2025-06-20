@@ -1,5 +1,7 @@
 name: Run E2E Test Suite 
 on: [push, workflow_dispatch]
+permissions:
+  contents: read
 
 jobs:
   cypress:
