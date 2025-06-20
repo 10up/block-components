@@ -1,5 +1,7 @@
 name: Lint Pull Request
 on: [push, workflow_dispatch]
+permissions:
+  contents: read
 
 jobs:
   eslint:
