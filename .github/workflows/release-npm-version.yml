@@ -1,4 +1,7 @@
 name: Publish new version to NPM
+permissions:
+  contents: write
+  packages: write
 on:
   workflow_dispatch:
     inputs:
