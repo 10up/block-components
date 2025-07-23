@@ -136,7 +136,7 @@
 		"@wordpress/data": "^10.19.1",
 		"@wordpress/dependency-extraction-webpack-plugin": "^5.8.0",
 		"@wordpress/element": "^6.19.1",
-		"10up-toolkit": "^6.4.1",
+		"10up-toolkit": "^6.5.0",
 		"cypress": "^13.8.1",
 		"cypress-localstorage-commands": "^2.2.5"
 	},
