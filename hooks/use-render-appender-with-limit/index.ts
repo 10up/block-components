@@ -1,3 +1,4 @@
+import React from 'react';
 import { useSelect } from '@wordpress/data';
 import {
 	store as blockEditorStore,
@@ -5,11 +6,11 @@ import {
 	InnerBlocks,
 } from '@wordpress/block-editor';
 
-export function useRenderAppenderWithLimit(limit: number, buttonAppender = false) {
+export function useRenderAppenderWithLimit(
+	limit: number,
+	appender: React.ComponentType = InnerBlocks.DefaultBlockAppender,
+) {
 	const { clientId } = useBlockEditContext();
-	const appenderType = buttonAppender
-		? InnerBlocks.ButtonBlockAppender
-		: InnerBlocks.DefaultBlockAppender;
 
 	return useSelect(
 		(select) => {
@@ -17,7 +18,7 @@ export function useRenderAppenderWithLimit(limit: number, buttonAppender = false
 			const { innerBlocks } = select(blockEditorStore).getBlock(clientId);
 			const numberOfInnerBlocks = innerBlocks.length;
 			const shouldRenderAppender = numberOfInnerBlocks < limit;
-			return shouldRenderAppender ? appenderType : false;
+			return shouldRenderAppender ? appender : false;
 		},
 		[clientId, limit],
 	);
