@@ -148,6 +148,7 @@ export const normalizeResults = ({
 	type: ContentSearchMode | string;
 	url: string;
 	info?: string;
+	embedded?: WP_REST_API_Search_Result['_embedded'] | WP_REST_API_User['_embedded'];
 }> => {
 	const filteredResults = filterOutExcludedItems({ results, excludeItems });
 	return filteredResults.map((item) => {
@@ -158,6 +159,7 @@ export const normalizeResults = ({
 			type: ContentSearchMode | string;
 			url: string;
 			info?: string;
+			embedded?: WP_REST_API_Search_Result['_embedded'] | WP_REST_API_User['_embedded'];
 		};
 
 		switch (mode) {
@@ -169,6 +171,7 @@ export const normalizeResults = ({
 					title: toPlainTextTitle(userItem.name),
 					type: mode,
 					url: userItem.link,
+					embedded: userItem._embedded,
 				};
 				break;
 			default:
@@ -179,6 +182,7 @@ export const normalizeResults = ({
 					title: toPlainTextTitle(searchItem.title),
 					type: searchItem.type,
 					url: searchItem.url,
+					embedded: searchItem._embedded,
 				};
 				break;
 		}
