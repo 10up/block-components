@@ -78,6 +78,13 @@ export const prepareSearchQuery = ({
 		fields = queryFieldsFilter(fields, mode);
 	}
 
+	if (!fields.includes('_links')) {
+		fields.push('_links');
+	}
+	if (!fields.includes('_embedded')) {
+		fields.push('_embedded');
+	}
+
 	switch (mode) {
 		case 'user':
 			searchQuery = addQueryArgs('wp/v2/users', {
