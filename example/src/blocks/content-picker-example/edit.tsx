@@ -20,7 +20,7 @@ const renderItemType = ( props ) => {
 		<>
 			{ subtype ? subtype : type }
 			<br />
-			<small>{ postDate.toLocaleDateString() }</small>
+			<time datetime={ postDate.toISOString() }>{ postDate.toLocaleDateString() }</time>
 		</>
 	);
 };
