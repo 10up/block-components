@@ -71,6 +71,7 @@ export const BlockEdit = (props) => {
 			queryFilter={queryFilter}
 			queryFieldsFilter={queryFieldsFilter}
 			searchResultFilter={searchResultFilter}
+			includeEmbeds
 			renderItemType={renderItemType}
 			fetchInitialResults
 		/>
