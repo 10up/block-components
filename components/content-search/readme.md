@@ -67,6 +67,7 @@ function MyComponent( props ) {
 | `queryFilter`         | `function` | `(query, parametersObject) => query` | Function called to allow you to customize the query before it's made. It's advisable to use `useCallback` to save this parameter |
 | `queryFieldsFilter`   | `function` | `undefined`                          | Function to customize which fields are fetched from the API. Receives `(fields: string[], mode: ContentSearchMode) => string[]`. It's advisable to use `useCallback` to save this parameter. |
 | `searchResultFilter`  | `function` | `undefined`                          | Function to customize the normalized search result item. Receives `(item: NormalizedSuggestion, originalResult: WP_REST_API_Search_Result \| WP_REST_API_User) => NormalizedSuggestion`. It's advisable to use `useCallback` to save this parameter. |
+| `includeEmbeds`       | `bool, string, array` | `undefined` | Whether to include embedded items in the search results. A string or array of strings can be passed to specify the specific embeds. |
 | `label`               | `string`   | `''`                                 | Renders a label for the Search Field.
 | `hideLabelFromVision` | `bool`     | `true`                               | Whether to hide the label                                                                                           |
 | `mode`                | `string`   | `'post'`                             | One of: `post`, `user`, `term`                                                                                                   |
