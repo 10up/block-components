@@ -50,6 +50,7 @@ interface PrepareSearchQueryArgs {
 	contentTypes: Array<string>;
 	queryFilter: QueryFilter;
 	queryFieldsFilter?: QueryFieldsFilter;
+	includeEmbeds?: boolean;
 }
 
 /*
@@ -63,6 +64,7 @@ export const prepareSearchQuery = ({
 	contentTypes,
 	queryFilter,
 	queryFieldsFilter,
+	includeEmbeds = false,
 }: PrepareSearchQueryArgs): string => {
 	let searchQuery;
 
@@ -78,17 +80,20 @@ export const prepareSearchQuery = ({
 		fields = queryFieldsFilter(fields, mode);
 	}
 
-	if (!fields.includes('_links')) {
-		fields.push('_links');
-	}
-	if (!fields.includes('_embedded')) {
-		fields.push('_embedded');
+	if (includeEmbeds) {
+		if (!fields.includes('_links')) {
+			fields.push('_links');
+		}
+		if (!fields.includes('_embedded')) {
+			fields.push('_embedded');
+		}
 	}
 
 	switch (mode) {
 		case 'user':
 			searchQuery = addQueryArgs('wp/v2/users', {
 				search: keyword,
+				...(includeEmbeds ? { _embed: true } : {}),
 				_fields: fields,
 			});
 			break;
@@ -97,7 +102,7 @@ export const prepareSearchQuery = ({
 				search: keyword,
 				subtype: contentTypes.join(','),
 				type: mode,
-				_embed: true,
+				...(includeEmbeds ? { _embed: true } : {}),
 				per_page: perPage,
 				page,
 				_fields: fields,
@@ -112,6 +117,7 @@ export const prepareSearchQuery = ({
 		contentTypes,
 		mode,
 		keyword,
+		includeEmbeds,
 	});
 };
 
@@ -120,6 +126,7 @@ interface NormalizeResultsArgs {
 	results: WP_REST_API_Search_Result[] | WP_REST_API_User[];
 	excludeItems: Array<IdentifiableObject>;
 	searchResultFilter?: SearchResultFilter;
+	includeEmbeds?: boolean;
 }
 
 /**
@@ -136,7 +143,7 @@ export const toPlainTextTitle = (input: string | undefined | null): string => {
 	const doc = new DOMParser().parseFromString(String(input), 'text/html');
 	const text = doc.body.textContent ?? '';
 
-	return decodeEntities(text).replace(/\u00A0/g, ' ').trim();
+	return decodeEntities(text).replace(/ /g, ' ').trim();
 };
 
 /*
@@ -148,6 +155,7 @@ export const normalizeResults = ({
 	results,
 	excludeItems,
 	searchResultFilter,
+	includeEmbeds = false,
 }: NormalizeResultsArgs): Array<{
 	id: number;
 	subtype: ContentSearchMode | string;
@@ -178,7 +186,7 @@ export const normalizeResults = ({
 					title: toPlainTextTitle(userItem.name),
 					type: mode,
 					url: userItem.link,
-					embedded: userItem._embedded,
+					...(includeEmbeds ? { embedded: userItem._embedded } : {}),
 				};
 				break;
 			default:
@@ -189,7 +197,7 @@ export const normalizeResults = ({
 					title: toPlainTextTitle(searchItem.title),
 					type: searchItem.type,
 					url: searchItem.url,
-					embedded: searchItem._embedded,
+					...(includeEmbeds ? { embedded: searchItem._embedded } : {}),
 				};
 				break;
 		}
@@ -214,6 +222,7 @@ interface FetchSearchResultsArgs {
 	queryFilter: QueryFilter;
 	queryFieldsFilter?: QueryFieldsFilter;
 	searchResultFilter?: SearchResultFilter;
+	includeEmbeds?: boolean;
 	excludeItems: Array<IdentifiableObject>;
 	signal?: AbortSignal;
 }
@@ -227,6 +236,7 @@ export async function fetchSearchResults({
 	queryFilter,
 	queryFieldsFilter,
 	searchResultFilter,
+	includeEmbeds,
 	excludeItems,
 	signal,
 }: FetchSearchResultsArgs) {
@@ -238,6 +248,7 @@ export async function fetchSearchResults({
 		contentTypes,
 		queryFilter,
 		queryFieldsFilter,
+		includeEmbeds,
 	});
 	const response = await apiFetch<Response>({
 		path: searchQueryString,
@@ -261,7 +272,13 @@ export async function fetchSearchResults({
 			break;
 	}
 
-	const normalizedResults = normalizeResults({ results, excludeItems, mode, searchResultFilter });
+	const normalizedResults = normalizeResults({
+		results,
+		excludeItems,
+		mode,
+		searchResultFilter,
+		includeEmbeds,
+	});
 
 	const hasNextPage = totalPages > page;
 	const hasPreviousPage = page > 1;

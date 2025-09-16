@@ -31,6 +31,7 @@ export interface QueryArgs {
 	contentTypes: Array<string>;
 	mode: ContentSearchMode;
 	keyword: string;
+	includeEmbeds?: boolean;
 }
 
 export type QueryFilter = (query: string, args: QueryArgs) => string;
