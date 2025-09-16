@@ -16,6 +16,7 @@ import { decodeEntities } from '@wordpress/html-entities';
  */
 import type {
 	ContentSearchMode,
+	QueryArgs,
 	QueryFilter,
 	QueryFieldsFilter,
 	SearchResultFilter,
@@ -50,7 +51,7 @@ interface PrepareSearchQueryArgs {
 	contentTypes: Array<string>;
 	queryFilter: QueryFilter;
 	queryFieldsFilter?: QueryFieldsFilter;
-	includeEmbeds?: boolean;
+	includeEmbeds?: QueryArgs['includeEmbeds'];
 }
 
 /*
@@ -93,7 +94,7 @@ export const prepareSearchQuery = ({
 		case 'user':
 			searchQuery = addQueryArgs('wp/v2/users', {
 				search: keyword,
-				...(includeEmbeds ? { _embed: true } : {}),
+				...(includeEmbeds ? { _embed: includeEmbeds } : {}),
 				_fields: fields,
 			});
 			break;
@@ -102,7 +103,7 @@ export const prepareSearchQuery = ({
 				search: keyword,
 				subtype: contentTypes.join(','),
 				type: mode,
-				...(includeEmbeds ? { _embed: true } : {}),
+				...(includeEmbeds ? { _embed: includeEmbeds } : {}),
 				per_page: perPage,
 				page,
 				_fields: fields,
@@ -126,7 +127,7 @@ interface NormalizeResultsArgs {
 	results: WP_REST_API_Search_Result[] | WP_REST_API_User[];
 	excludeItems: Array<IdentifiableObject>;
 	searchResultFilter?: SearchResultFilter;
-	includeEmbeds?: boolean;
+	includeEmbeds?: QueryArgs['includeEmbeds'];
 }
 
 /**
@@ -222,7 +223,7 @@ interface FetchSearchResultsArgs {
 	queryFilter: QueryFilter;
 	queryFieldsFilter?: QueryFieldsFilter;
 	searchResultFilter?: SearchResultFilter;
-	includeEmbeds?: boolean;
+	includeEmbeds?: QueryArgs['includeEmbeds'];
 	excludeItems: Array<IdentifiableObject>;
 	signal?: AbortSignal;
 }

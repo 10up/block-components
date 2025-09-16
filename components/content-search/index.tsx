@@ -9,6 +9,7 @@ import { StyledComponentContext } from '../styled-components-context';
 import type {
 	ContentSearchMode,
 	IdentifiableObject,
+	QueryArgs,
 	QueryFilter,
 	QueryFieldsFilter,
 	RenderItemComponentProps,
@@ -83,7 +84,7 @@ export interface ContentSearchProps {
 	queryFilter?: QueryFilter;
 	queryFieldsFilter?: QueryFieldsFilter;
 	searchResultFilter?: SearchResultFilter;
-	includeEmbeds?: boolean;
+	includeEmbeds?: QueryArgs['includeEmbeds'];
 	excludeItems?: Array<IdentifiableObject>;
 	renderItemType?: (props: NormalizedSuggestion) => string;
 	renderItem?: (props: RenderItemComponentProps) => JSX.Element;
