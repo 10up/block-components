@@ -79,3 +79,33 @@ function MyComponent( props ) {
 | `renderItem`          | `function` | `undefined`                          | Function to customize the rendering of each search result item. Receives `RenderItemComponentProps` and must return a JSX element. |
 | `fetchInitialResults` | `bool`     | `false`                              | Fetch initial results to present when focusing the search input                                                                  |
 | `options.inputDelay`  | `number`   | `undefined`                           | Debounce delay passed to the internal search input, defaults to 350ms                                                             |
+
+## Search Result Item Customization
+
+There are a number of vectors for customizing how search results are rendered. You can customize the item type label (e.g. "Post", "Page", "Category") by passing a function to the `renderItemType` prop. This function returns a string and receives a single `suggestion` argument, an object with the following shape:
+
+```js
+{
+	id: number;
+	subtype: string;
+	title: string;
+	type: string;
+	url: string;
+	embedded?: object;
+}
+```
+
+You can also customize the entire item by passing a function to the `renderItem` prop. This function should be a React component that receives these props:
+
+```js
+{
+    item: object; // The suggestion object (see above).
+    onSelect: () => void;
+    searchTerm: string;
+    id: string;
+    contentTypes: string[];
+    renderType: ( suggestion: object ) => string;
+}
+```
+
+You may need more than the default suggestion fields to render your custom item. The search endpoint is limited (by design) in what fields it returns, but you can use the linking & embedding functionality of the REST API to include the entire post object (or term, or user) in the response via the `embedded` prop. To do this, pass the `includeEmbeds` prop, which can be a boolean (to include all embeds), a string (to include a single embed type), or an array of strings (to include multiple embed types). This is useful if you want to display additional information about a post, such as its publication date. See the [content search example](example/src/blocks/content-search-example/edit.tsx) for a demonstration of this in action.
