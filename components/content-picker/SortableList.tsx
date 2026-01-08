@@ -1,3 +1,6 @@
+/**
+ * External dependencies
+ */
 import {
 	DndContext,
 	closestCenter,
@@ -11,16 +14,24 @@ import {
 	defaultDropAnimation,
 } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import styled from '@emotion/styled';
+
+/**
+ * WordPress dependencies
+ */
 import { __experimentalTreeGrid as TreeGrid } from '@wordpress/components';
 import { useCallback, useState, useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { Post, User, store as coreStore } from '@wordpress/core-data';
-import { applyFilters } from '@wordpress/hooks';
-import styled from '@emotion/styled';
+
+/**
+ * Internal dependencies
+ */
 import PickedItem, { PickedItemType } from './PickedItem';
 import { DraggableChip } from './DraggableChip';
-import { ContentSearchMode } from '../content-search/types';
+import { ContentSearchMode, QueryFieldsFilter } from '../content-search/types';
+import type { PickedItemFilter } from './index';
 
 const dropAnimation = {
 	...defaultDropAnimation,
@@ -34,6 +45,8 @@ interface SortableListProps {
 	mode: ContentSearchMode;
 	setPosts: (posts: Array<PickedItemType>) => void;
 	PickedItemPreviewComponent?: React.ComponentType<{ item: PickedItemType }>;
+	queryFieldsFilter?: QueryFieldsFilter;
+	pickedItemFilter?: PickedItemFilter;
 }
 
 type Term = {
@@ -85,6 +98,8 @@ const SortableList: React.FC<SortableListProps> = ({
 	mode = 'post',
 	setPosts,
 	PickedItemPreviewComponent,
+	queryFieldsFilter,
+	pickedItemFilter,
 }) => {
 	const hasMultiplePosts = posts.length > 1;
 	const [activeId, setActiveId] = useState<string | null>(null);
@@ -111,14 +126,9 @@ const SortableList: React.FC<SortableListProps> = ({
 				fields.push('taxonomy');
 			}
 
-			/**
-			 * Filter the fields to be fetched from the API.
-			 *
-			 * @param {string[]} fields - The fields to be fetched.
-			 * @param {ContentSearchMode} mode - The mode of the content picker.
-			 * @returns {string[]} - The filtered fields.
-			 */
-			fields = applyFilters('tenup.contentPicker.queryFields', fields, mode) as string[];
+			if (queryFieldsFilter) {
+				fields = queryFieldsFilter(fields, mode);
+			}
 
 			return posts.reduce<{ [key: string]: PickedItemType | null }>((acc, item) => {
 				const getEntityRecordParameters = [
@@ -166,18 +176,9 @@ const SortableList: React.FC<SortableListProps> = ({
 						}
 					}
 
-					/**
-					 * Filter the item before it is returned.
-					 *
-					 * @param {PickedItemType} newItem - The item to be returned.
-					 * @param {Post | Term | User} result - The result from the getEntityRecord function.
-					 * @returns {PickedItemType} - The filtered item.
-					 */
-					newItem = applyFilters(
-						'tenup.contentPicker.pickedItem',
-						newItem,
-						result,
-					) as Partial<PickedItemType>;
+					if (pickedItemFilter) {
+						newItem = pickedItemFilter(newItem, result);
+					}
 
 					if (item.uuid) {
 						newItem.uuid = item.uuid;
@@ -191,7 +192,7 @@ const SortableList: React.FC<SortableListProps> = ({
 				return acc;
 			}, {});
 		},
-		[posts, entityKind],
+		[posts, entityKind, queryFieldsFilter, pickedItemFilter, mode],
 	);
 
 	const items = posts.map((item) => item.uuid);

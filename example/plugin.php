@@ -34,9 +34,9 @@ function register_block() {
 		foreach ( $block_json_files as $filename ) {
 			$block_folder = dirname( $filename );
 			register_block_type( $block_folder );
-		};
-	};
-};
+		}
+	}
+}
 
 add_action( 'enqueue_block_assets', __NAMESPACE__ . '\enqueue_block_editor_scripts' );
 
@@ -135,7 +135,7 @@ add_action( 'init', __NAMESPACE__ . '\register_book_custom_post_type' );
 
 add_action(
 	'after_setup_theme',
-	function() {
+	function () {
 		remove_theme_support( 'core-block-patterns' );
 	}
 );

@@ -1,9 +1,19 @@
 /* eslint-disable no-case-declarations */
+/**
+ * External dependencies
+ */
 import type { WP_REST_API_User, WP_REST_API_Search_Result } from 'wp-types';
+
+/**
+ * WordPress dependencies
+ */
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
-import { applyFilters } from '@wordpress/hooks';
-import type { ContentSearchMode, QueryFilter } from './types';
+
+/**
+ * Types
+ */
+import type { ContentSearchMode, QueryFilter, QueryFieldsFilter, SearchResultFilter } from './types';
 
 interface IdentifiableObject extends Object {
 	id: number;
@@ -33,6 +43,7 @@ interface PrepareSearchQueryArgs {
 	perPage: number;
 	contentTypes: Array<string>;
 	queryFilter: QueryFilter;
+	queryFieldsFilter?: QueryFieldsFilter;
 }
 
 /*
@@ -45,6 +56,7 @@ export const prepareSearchQuery = ({
 	perPage,
 	contentTypes,
 	queryFilter,
+	queryFieldsFilter,
 }: PrepareSearchQueryArgs): string => {
 	let searchQuery;
 
@@ -56,14 +68,9 @@ export const prepareSearchQuery = ({
 		fields.push('title');
 	}
 
-	/**
-	 * Filter the fields to be fetched from the API.
-	 *
-	 * @param {string[]} fields - The fields to be fetched.
-	 * @param {ContentSearchMode} mode - The mode of the content search.
-	 * @returns {string[]} - The filtered fields.
-	 */
-	fields = applyFilters('tenup.contentSearch.queryFields', fields, mode) as string[];
+	if (queryFieldsFilter) {
+		fields = queryFieldsFilter(fields, mode);
+	}
 
 	switch (mode) {
 		case 'user':
@@ -99,6 +106,7 @@ interface NormalizeResultsArgs {
 	mode: ContentSearchMode;
 	results: WP_REST_API_Search_Result[] | WP_REST_API_User[];
 	excludeItems: Array<IdentifiableObject>;
+	searchResultFilter?: SearchResultFilter;
 }
 
 /*
@@ -109,6 +117,7 @@ export const normalizeResults = ({
 	mode,
 	results,
 	excludeItems,
+	searchResultFilter,
 }: NormalizeResultsArgs): Array<{
 	id: number;
 	subtype: ContentSearchMode | string;
@@ -151,14 +160,9 @@ export const normalizeResults = ({
 				break;
 		}
 
-		/**
-		 * Filter the new item before returning it.
-		 *
-		 * @param {object} newItem - The item to be returned.
-		 * @param {object} item - The original item from the search result.
-		 * @return {object} - The filtered item.
-		 */
-		newItem = applyFilters('tenup.contentSearch.searchResult', newItem, item) as typeof newItem;
+		if (searchResultFilter) {
+			newItem = searchResultFilter(newItem, item);
+		}
 
 		return newItem;
 	});
@@ -174,6 +178,8 @@ interface FetchSearchResultsArgs {
 	perPage: number;
 	contentTypes: Array<string>;
 	queryFilter: QueryFilter;
+	queryFieldsFilter?: QueryFieldsFilter;
+	searchResultFilter?: SearchResultFilter;
 	excludeItems: Array<IdentifiableObject>;
 	signal?: AbortSignal;
 }
@@ -185,6 +191,8 @@ export async function fetchSearchResults({
 	perPage,
 	contentTypes,
 	queryFilter,
+	queryFieldsFilter,
+	searchResultFilter,
 	excludeItems,
 	signal,
 }: FetchSearchResultsArgs) {
@@ -195,6 +203,7 @@ export async function fetchSearchResults({
 		perPage,
 		contentTypes,
 		queryFilter,
+		queryFieldsFilter,
 	});
 	const response = await apiFetch<Response>({
 		path: searchQueryString,
@@ -218,7 +227,7 @@ export async function fetchSearchResults({
 			break;
 	}
 
-	const normalizedResults = normalizeResults({ results, excludeItems, mode });
+	const normalizedResults = normalizeResults({ results, excludeItems, mode, searchResultFilter });
 
 	const hasNextPage = totalPages > page;
 	const hasPreviousPage = page > 1;
