@@ -1,4 +1,5 @@
 import React from 'react';
+import { useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, Placeholder } from '@wordpress/components';
@@ -15,6 +16,19 @@ export const BlockEdit = (props) => {
 		setAttributes({ selectedPost: post })
 	}
 
+	const queryFieldsFilter = useCallback((fields, mode) => {
+		if (mode === 'post') {
+			fields.push('excerpt');
+		}
+		return fields;
+	}, []);
+
+	const searchResultFilter = useCallback((item, result) => {
+		item.url = '';
+		item.info = `<strong>ID:</strong> ${result.id}<br>${result.excerpt || ''}`;
+		return item;
+	}, []);
+
 	const blockProps = useBlockProps();
 
 	return (
@@ -26,6 +40,8 @@ export const BlockEdit = (props) => {
 						contentTypes={['page', 'post']}
 						onSelectItem={handlePostSelection}
 						fetchInitialResults
+						queryFieldsFilter={queryFieldsFilter}
+						searchResultFilter={searchResultFilter}
 					/>
 				</PanelBody>
 			</InspectorControls>
@@ -42,6 +58,8 @@ export const BlockEdit = (props) => {
 						contentTypes={['page', 'post']}
 						onSelectItem={handlePostSelection}
 						fetchInitialResults
+						queryFieldsFilter={queryFieldsFilter}
+						searchResultFilter={searchResultFilter}
 					/>
 				</Placeholder>
 			</div>

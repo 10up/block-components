@@ -13,7 +13,12 @@ import { addQueryArgs } from '@wordpress/url';
 /**
  * Types
  */
-import type { ContentSearchMode, QueryFilter, QueryFieldsFilter, SearchResultFilter } from './types';
+import type {
+	ContentSearchMode,
+	QueryFilter,
+	QueryFieldsFilter,
+	SearchResultFilter,
+} from './types';
 
 interface IdentifiableObject extends Object {
 	id: number;
