@@ -135,7 +135,7 @@ const SortableList: React.FC<SortableListProps> = ({
 					entityKind,
 					item.type,
 					item.id,
-					{ _fields: fields },
+					{ _fields: fields, context: 'view' },
 				] as const;
 				const result = getEntityRecord<Post | Term | User>(...getEntityRecordParameters);
 

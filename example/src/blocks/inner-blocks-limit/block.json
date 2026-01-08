@@ -1,0 +1,17 @@
+{
+  "name": "example/inner-block-limit",
+  "apiVersion": 3,
+  "title": "Inner Block Limit - Example",
+  "description": "Example Block to show the usage of the useRenderAppenderWithLimit hook",
+  "icon": "smiley",
+  "category": "common",
+  "example": {},
+  "supports": {
+    "html": false
+  },
+  "attributes": {},
+  "allowedBlocks": [
+    "example/hello-world"
+  ],
+  "editorScript": "file:./index.ts"
+}

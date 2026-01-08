@@ -1,4 +1,7 @@
 name: Publish @next version to NPM
+permissions:
+  contents: write
+  packages: write
 on:
   pull_request:
     branches:
