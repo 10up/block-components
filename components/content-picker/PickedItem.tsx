@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import DOMPurify from 'dompurify';
+import { safeHTML } from '@wordpress/dom';
 import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
 import { __ } from '@wordpress/i18n';
@@ -212,10 +212,7 @@ const PickedItemPreview: React.FC<{ item: PickedItemType; isDeleted?: boolean }>
 			{info && (
 				<ItemInfo
 					dangerouslySetInnerHTML={{
-						__html: DOMPurify.sanitize(info, {
-							ALLOWED_TAGS: ['br', 'strong', 'em'],
-							ALLOWED_ATTR: [],
-						}),
+						__html: safeHTML(info),
 					}}
 				/>
 			)}

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import DOMPurify from 'dompurify';
+import { safeHTML } from '@wordpress/dom';
 import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
 import {
@@ -125,10 +125,7 @@ const SearchItem: React.FC<RenderItemComponentProps> = ({
 				{info && (
 					<SearchItemInfo
 						dangerouslySetInnerHTML={{
-							__html: DOMPurify.sanitize(info, {
-								ALLOWED_TAGS: ['br', 'strong', 'em'],
-								ALLOWED_ATTR: [],
-							}),
+							__html: safeHTML(info),
 						}}
 					/>
 				)}

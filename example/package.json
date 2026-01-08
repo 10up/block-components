@@ -26,7 +26,6 @@
 	},
 	"dependencies": {
 		"@10up/block-components": "file:../dist/index.js",
-		"@wordpress/icons": "^9.48.0",
-		"dompurify": "^3.2.6"
+		"@wordpress/icons": "^9.48.0"
 	}
 }

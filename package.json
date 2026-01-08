@@ -101,7 +101,6 @@
 		"@wordpress/icons": "^10.0.0",
 		"array-move": "^4.0.0",
 		"clsx": "^2.1.1",
-		"dompurify": "^3.2.6",
 		"react-window": "^1.8.10",
 		"uuid": "^9.0.1",
 		"wp-types": "^3.65.0"
