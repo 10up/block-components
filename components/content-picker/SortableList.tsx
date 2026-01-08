@@ -32,6 +32,7 @@ import PickedItem, { PickedItemType } from './PickedItem';
 import { DraggableChip } from './DraggableChip';
 import { ContentSearchMode, QueryFieldsFilter } from '../content-search/types';
 import type { PickedItemFilter } from './index';
+import { Term } from './types';
 
 const dropAnimation = {
 	...defaultDropAnimation,
@@ -48,18 +49,6 @@ interface SortableListProps {
 	queryFieldsFilter?: QueryFieldsFilter;
 	pickedItemFilter?: PickedItemFilter;
 }
-
-type Term = {
-	count: number;
-	description: string;
-	id: number;
-	link: string;
-	meta: Record<string, unknown>;
-	name: string;
-	parent: number;
-	slug: string;
-	taxonomy: string;
-};
 
 function getEntityKind(mode: ContentSearchMode) {
 	let type;

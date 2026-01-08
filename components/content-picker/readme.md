@@ -41,9 +41,8 @@ function MyComponent( props ) {
     }, [] );
 
     const searchResultFilter = useCallback( (item, result) => {
-        item.url = '';
-        item.info = `<strong>ID:</strong> ${result.id}<br>${result.excerpt}`;
-        return item;
+        const info = `<strong>ID:</strong> ${result.id}<br>${result.excerpt}`;
+        return { ...item, url: '', info };
     }, [] );
 
     const pickedItemFilter = useCallback( (item, result) => {
@@ -71,7 +70,7 @@ function MyComponent( props ) {
 |----------------------|------------|----------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `onPickChange`        | `function` | `undefined`          | Callback function the list of picked content gets changed                                                                                                                                                                                                                                                                                                                                                              |
 | `queryFilter`         | `function` | `undefined`          | Function called to allow you to customize the query before is made. It's advisable to use `useCallback` to save this parameter                                                                                                                                                                                                                                                                                         |
-| `queryFieldsFilter`   | `function` | `undefined`          | Function to customize which fields are fetched from the API for both search and picked items. Receives `(fields: string[], mode: ContentSearchMode) => string[]`. It's advisable to use `useCallback` to save this parameter. |
+| `queryFieldsFilter`   | `function` | `undefined`          | Function to customize which fields are fetched from the API for both search and picked items. Receives `(fields: string[], mode: ContentSearchMode) => string[]`. When requesting additional fields from the WordPress REST API search endpoint, you may need to register those fields in PHP using `register_rest_field` so that they are available on search results as well as on picked items. It's advisable to use `useCallback` to save this parameter. |
 | `searchResultFilter`  | `function` | `undefined`          | Function to customize the normalized search result item. Receives `(item: NormalizedSuggestion, originalResult: WP_REST_API_Search_Result \| WP_REST_API_User) => NormalizedSuggestion`. It's advisable to use `useCallback` to save this parameter. |
 | `pickedItemFilter`    | `function` | `undefined`          | Function to customize the picked item before it's displayed in the list. Receives `(item: Partial<PickedItemType>, originalResult: Post \| Term \| User) => Partial<PickedItemType>`. It's advisable to use `useCallback` to save this parameter. |
 | `label`               | `string`   | `''`                 | Renders a label for the Search Field.

@@ -39,9 +39,11 @@ function MyComponent( props ) {
     }, [] );
 
     const searchResultFilter = useCallback( (item, result) => {
-        item.url = '';
-        item.info = `<strong>ID:</strong> ${result.id}<br>${result.excerpt}`;
-        return item;
+        return {
+            ...item,
+            url: '',
+            info: `<strong>ID:</strong> ${result.id}<br>${result.excerpt}`,
+        };
     }, [] );
 
     return (

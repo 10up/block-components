@@ -3,6 +3,7 @@ import { select } from '@wordpress/data';
 import { useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { VisuallyHidden } from '@wordpress/components';
+import { Post, User } from '@wordpress/core-data';
 import { v4 as uuidv4 } from 'uuid';
 import { ContentSearch } from '../content-search';
 import SortableList from './SortableList';
@@ -17,10 +18,11 @@ import {
 } from '../content-search/types';
 import { NormalizedSuggestion } from '../content-search/utils';
 import { PickedItemType } from './PickedItem';
+import { Term } from './types';
 
 export type PickedItemFilter = (
 	item: Partial<PickedItemType>,
-	originalResult: any,
+	originalResult: Post | Term | User,
 ) => Partial<PickedItemType>;
 
 const NAMESPACE = 'tenup-content-picker';
