@@ -2,6 +2,7 @@
 import type { WP_REST_API_User, WP_REST_API_Search_Result } from 'wp-types';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
+import { decodeEntities } from '@wordpress/html-entities';
 import type { ContentSearchMode, QueryFilter } from './types';
 
 interface IdentifiableObject extends Object {
@@ -82,6 +83,23 @@ interface NormalizeResultsArgs {
 	results: WP_REST_API_Search_Result[] | WP_REST_API_User[];
 	excludeItems: Array<IdentifiableObject>;
 }
+
+/**
+ * Convert a WP "rendered" title (which can contain HTML + entities) into plain text.
+ * - Strips any HTML tags.
+ * - Decodes HTML entities.
+ * - Normalizes NBSP and trims.
+ */
+export const toPlainTextTitle = (input: string | undefined | null): string => {
+	if (!input) {
+		return '';
+	}
+
+	const doc = new DOMParser().parseFromString(String(input), 'text/html');
+	const text = doc.body.textContent ?? '';
+
+	return decodeEntities(text).replace(/\u00A0/g, ' ').trim();
+};
 
 /*
  * Depending on the mode value, this method normalizes the format
