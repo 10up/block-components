@@ -28,11 +28,45 @@ The `develop` branch is the development branch which means it contains the next 
 
 ## Local Environment
 
-This repository contains a local environment setup using the `@wordpress/env` package. Before you can start that environment you will need to run `npm ci` in both the repository root and `example` directory. This will install the required dependencies.
+This repository contains a local environment setup using the `@wordpress/env` package and uses npm workspaces to manage dependencies for both the root package and the `example` workspace.
 
-Next, run `npm run build` in both the root and `example` directories to build and compile the needed assets or if you want to watch for changes instead, use `npm run start`.
+### Installation
 
-Lastly, navigate your terminal to the `example` directory and run `npm run wp-env start` to start the local environment. The environment should be available at [http://localhost:8888](http://localhost:8888) and the credentials to login to the admin are: `admin` `password`.
+From the repository root, run:
+
+```bash
+npm ci
+```
+
+This will install all dependencies for both the root package and the `example` workspace automatically.
+
+### Building
+
+To build the assets, run from the repository root:
+
+```bash
+npm run build
+```
+
+This will build both the main package and the example workspace. Alternatively, if you want to watch for changes during development, use:
+
+```bash
+npm run start
+```
+
+You can also build workspaces individually if needed:
+- From root: `npm run build` (builds main package)
+- From example: `npm run build` (builds example workspace)
+
+### Starting the Local Environment
+
+From the repository root, run:
+
+```bash
+npm run start-test-env
+```
+
+This will start the WordPress environment and import test media. The environment should be available at [http://localhost:8888](http://localhost:8888) and the credentials to login to the admin are: `admin` `password`.
 
 ## Working on a new or existing component
 

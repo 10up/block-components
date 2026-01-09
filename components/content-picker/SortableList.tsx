@@ -1,3 +1,6 @@
+/**
+ * External dependencies
+ */
 import {
 	DndContext,
 	closestCenter,
@@ -11,15 +14,25 @@ import {
 	defaultDropAnimation,
 } from '@dnd-kit/core';
 import { arrayMove, SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import styled from '@emotion/styled';
+
+/**
+ * WordPress dependencies
+ */
 import { __experimentalTreeGrid as TreeGrid } from '@wordpress/components';
 import { useCallback, useState, useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { useSelect } from '@wordpress/data';
 import { Post, User, store as coreStore } from '@wordpress/core-data';
-import styled from '@emotion/styled';
+
+/**
+ * Internal dependencies
+ */
 import PickedItem, { PickedItemType } from './PickedItem';
 import { DraggableChip } from './DraggableChip';
-import { ContentSearchMode } from '../content-search/types';
+import { ContentSearchMode, QueryFieldsFilter } from '../content-search/types';
+import type { PickedItemFilter } from './index';
+import { Term } from './types';
 
 const dropAnimation = {
 	...defaultDropAnimation,
@@ -33,19 +46,9 @@ interface SortableListProps {
 	mode: ContentSearchMode;
 	setPosts: (posts: Array<PickedItemType>) => void;
 	PickedItemPreviewComponent?: React.ComponentType<{ item: PickedItemType }>;
+	queryFieldsFilter?: QueryFieldsFilter;
+	pickedItemFilter?: PickedItemFilter;
 }
-
-type Term = {
-	count: number;
-	description: string;
-	id: number;
-	link: string;
-	meta: Record<string, unknown>;
-	name: string;
-	parent: number;
-	slug: string;
-	taxonomy: string;
-};
 
 function getEntityKind(mode: ContentSearchMode) {
 	let type;
@@ -84,6 +87,8 @@ const SortableList: React.FC<SortableListProps> = ({
 	mode = 'post',
 	setPosts,
 	PickedItemPreviewComponent,
+	queryFieldsFilter,
+	pickedItemFilter,
 }) => {
 	const hasMultiplePosts = posts.length > 1;
 	const [activeId, setActiveId] = useState<string | null>(null);
@@ -96,19 +101,25 @@ const SortableList: React.FC<SortableListProps> = ({
 			// @ts-ignore-next-line - The WordPress types are missing the hasFinishedResolution method.
 			const { getEntityRecord, hasFinishedResolution } = select(coreStore);
 
+			let fields = ['link', 'type', 'id'];
+
+			if (mode === 'user') {
+				fields.push('name');
+			} else if (mode === 'post') {
+				fields.push('title');
+				fields.push('url');
+				fields.push('subtype');
+				fields.push('status'); // Include status to check for trashed posts
+			} else {
+				fields.push('name');
+				fields.push('taxonomy');
+			}
+
+			if (queryFieldsFilter) {
+				fields = queryFieldsFilter(fields, mode);
+			}
+
 			return posts.reduce<{ [key: string]: PickedItemType | null }>((acc, item) => {
-				const fields = ['link', 'type', 'id'];
-				if (mode === 'user') {
-					fields.push('name');
-				} else if (mode === 'post') {
-					fields.push('title');
-					fields.push('url');
-					fields.push('subtype');
-					fields.push('status'); // Include status to check for trashed posts
-				} else {
-					fields.push('name');
-					fields.push('taxonomy');
-				}
 				const getEntityRecordParameters = [
 					entityKind,
 					item.type,
@@ -120,31 +131,42 @@ const SortableList: React.FC<SortableListProps> = ({
 				if (result) {
 					let newItem: Partial<PickedItemType>;
 
-					if (mode === 'post') {
-						const post = result as Post;
-						newItem = {
-							title: post.title.rendered,
-							url: post.link,
-							id: post.id,
-							type: post.type,
-							status: post.status, // Include status for trashed post detection
-						};
-					} else if (mode === 'user') {
-						const user = result as User;
-						newItem = {
-							title: user.name,
-							url: user.link,
-							id: user.id,
-							type: 'user',
-						};
-					} else {
-						const taxonomy = result as Term;
-						newItem = {
-							title: taxonomy.name,
-							url: taxonomy.link,
-							id: taxonomy.id,
-							type: taxonomy.taxonomy,
-						};
+					switch (mode) {
+						case 'post': {
+							const post = result as Post;
+							newItem = {
+								title: post.title.rendered,
+								url: post.link,
+								id: post.id,
+								type: post.type,
+								status: post.status, // Include status for trashed post detection
+							};
+							break;
+						}
+						case 'user': {
+							const user = result as User;
+							newItem = {
+								title: user.name,
+								url: user.link,
+								id: user.id,
+								type: 'user',
+							};
+							break;
+						}
+						default: {
+							const taxonomy = result as Term;
+							newItem = {
+								title: taxonomy.name,
+								url: taxonomy.link,
+								id: taxonomy.id,
+								type: taxonomy.taxonomy,
+							};
+							break;
+						}
+					}
+
+					if (pickedItemFilter) {
+						newItem = pickedItemFilter(newItem, result);
 					}
 
 					if (item.uuid) {
@@ -159,7 +181,7 @@ const SortableList: React.FC<SortableListProps> = ({
 				return acc;
 			}, {});
 		},
-		[posts, entityKind],
+		[posts, entityKind, queryFieldsFilter, pickedItemFilter, mode],
 	);
 
 	const items = posts.map((item) => item.uuid);

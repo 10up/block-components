@@ -3,14 +3,27 @@ import { select } from '@wordpress/data';
 import { useMemo } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { VisuallyHidden } from '@wordpress/components';
+import { Post, User } from '@wordpress/core-data';
 import { v4 as uuidv4 } from 'uuid';
 import { ContentSearch } from '../content-search';
 import SortableList from './SortableList';
 import { StyledComponentContext } from '../styled-components-context';
 import { defaultRenderItemType } from '../content-search/SearchItem';
-import { ContentSearchMode, QueryFilter, RenderItemComponentProps } from '../content-search/types';
+import {
+	ContentSearchMode,
+	QueryFilter,
+	QueryFieldsFilter,
+	RenderItemComponentProps,
+	SearchResultFilter,
+} from '../content-search/types';
 import { NormalizedSuggestion } from '../content-search/utils';
 import { PickedItemType } from './PickedItem';
+import { Term } from './types';
+
+export type PickedItemFilter = (
+	item: Partial<PickedItemType>,
+	originalResult: Post | Term | User,
+) => Partial<PickedItemType>;
 
 const NAMESPACE = 'tenup-content-picker';
 
@@ -48,6 +61,9 @@ export interface ContentPickerProps {
 	placeholder?: string;
 	onPickChange?: (ids: any[]) => void;
 	queryFilter?: QueryFilter;
+	queryFieldsFilter?: QueryFieldsFilter;
+	searchResultFilter?: SearchResultFilter;
+	pickedItemFilter?: PickedItemFilter;
 	maxContentItems?: number;
 	isOrderable?: boolean;
 	singlePickedLabel?: string;
@@ -73,6 +89,9 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 		console.log('Content picker list change', ids); // eslint-disable-line no-console
 	},
 	queryFilter = undefined,
+	queryFieldsFilter,
+	searchResultFilter,
+	pickedItemFilter,
 	maxContentItems = 1,
 	isOrderable = false,
 	singlePickedLabel = __('You have selected the following item:', '10up-block-components'),
@@ -152,6 +171,8 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 						contentTypes={contentTypes}
 						mode={mode}
 						queryFilter={queryFilter}
+						queryFieldsFilter={queryFieldsFilter}
+						searchResultFilter={searchResultFilter}
 						perPage={perPage}
 						fetchInitialResults={fetchInitialResults}
 						renderItemType={renderItemType}
@@ -196,6 +217,8 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 								mode={mode}
 								setPosts={onPickChange}
 								PickedItemPreviewComponent={PickedItemPreviewComponent}
+								queryFieldsFilter={queryFieldsFilter}
+								pickedItemFilter={pickedItemFilter}
 							/>
 						</ul>
 					</StyleWrapper>

@@ -10,7 +10,9 @@ import type {
 	ContentSearchMode,
 	IdentifiableObject,
 	QueryFilter,
+	QueryFieldsFilter,
 	RenderItemComponentProps,
+	SearchResultFilter,
 } from './types';
 import { useDebouncedInput } from '../../hooks/use-debounced-input';
 import { useOnClickOutside } from '../../hooks/use-on-click-outside';
@@ -79,6 +81,8 @@ export interface ContentSearchProps {
 	mode?: ContentSearchMode;
 	perPage?: number;
 	queryFilter?: QueryFilter;
+	queryFieldsFilter?: QueryFieldsFilter;
+	searchResultFilter?: SearchResultFilter;
 	excludeItems?: Array<IdentifiableObject>;
 	renderItemType?: (props: NormalizedSuggestion) => string;
 	renderItem?: (props: RenderItemComponentProps) => JSX.Element;
@@ -103,6 +107,8 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 	mode = 'post',
 	perPage = 20,
 	queryFilter = (query: string) => query,
+	queryFieldsFilter,
+	searchResultFilter,
 	excludeItems = [],
 	renderItemType = undefined,
 	renderItem: SearchResultItem = SearchItem,
@@ -129,7 +135,16 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 
 	const { status, data, error, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } =
 		useInfiniteQuery({
-			queryKey: ['search', searchString, contentTypes.join(','), mode, perPage, queryFilter],
+			queryKey: [
+				'search',
+				searchString,
+				contentTypes.join(','),
+				mode,
+				perPage,
+				queryFilter,
+				queryFieldsFilter,
+				searchResultFilter,
+			],
 			queryFn: async ({ pageParam = 1, signal }) =>
 				fetchSearchResults({
 					keyword: searchString,
@@ -138,6 +153,8 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 					perPage,
 					contentTypes,
 					queryFilter,
+					queryFieldsFilter,
+					searchResultFilter,
 					excludeItems,
 					signal,
 				}),

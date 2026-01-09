@@ -1,5 +1,16 @@
+/**
+ * External dependencies
+ */
+import type { WP_REST_API_User, WP_REST_API_Search_Result } from 'wp-types';
+
+/**
+ * Internal dependencies
+ */
 import { NormalizedSuggestion } from './utils';
 
+/**
+ * Types
+ */
 export interface IdentifiableObject {
 	id: number;
 }
@@ -35,5 +46,12 @@ export interface RenderItemComponentProps {
 }
 
 export type ContentSearchMode = 'post' | 'user' | 'term';
+
+export type QueryFieldsFilter = (fields: string[], mode: ContentSearchMode) => string[];
+
+export type SearchResultFilter = (
+	item: NormalizedSuggestion,
+	originalResult: WP_REST_API_Search_Result | WP_REST_API_User
+) => NormalizedSuggestion;
 
 export type Modify<T, R> = Omit<T, keyof R> & R;
