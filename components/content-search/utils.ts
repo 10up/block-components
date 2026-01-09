@@ -124,7 +124,7 @@ export const normalizeResults = ({
 				return {
 					id: userItem.id,
 					subtype: mode,
-					title: userItem.name,
+					title: toPlainTextTitle(userItem.name),
 					type: mode,
 					url: userItem.link,
 				};
@@ -133,7 +133,7 @@ export const normalizeResults = ({
 				return {
 					id: searchItem.id as number,
 					subtype: searchItem.subtype,
-					title: searchItem.title,
+					title: toPlainTextTitle(searchItem.title),
 					type: searchItem.type,
 					url: searchItem.url,
 				};

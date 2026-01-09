@@ -20,6 +20,7 @@ import styled from '@emotion/styled';
 import PickedItem, { PickedItemType } from './PickedItem';
 import { DraggableChip } from './DraggableChip';
 import { ContentSearchMode } from '../content-search/types';
+import { toPlainTextTitle } from '../content-search/utils';
 
 const dropAnimation = {
 	...defaultDropAnimation,
@@ -123,7 +124,7 @@ const SortableList: React.FC<SortableListProps> = ({
 					if (mode === 'post') {
 						const post = result as Post;
 						newItem = {
-							title: post.title.rendered,
+							title: toPlainTextTitle(post.title.rendered),
 							url: post.link,
 							id: post.id,
 							type: post.type,
@@ -132,7 +133,7 @@ const SortableList: React.FC<SortableListProps> = ({
 					} else if (mode === 'user') {
 						const user = result as User;
 						newItem = {
-							title: user.name,
+							title: toPlainTextTitle(user.name),
 							url: user.link,
 							id: user.id,
 							type: 'user',
@@ -140,7 +141,7 @@ const SortableList: React.FC<SortableListProps> = ({
 					} else {
 						const taxonomy = result as Term;
 						newItem = {
-							title: taxonomy.name,
+							title: toPlainTextTitle(taxonomy.name),
 							url: taxonomy.link,
 							id: taxonomy.id,
 							type: taxonomy.taxonomy,
