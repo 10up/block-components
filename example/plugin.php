@@ -34,9 +34,9 @@ function register_block() {
 		foreach ( $block_json_files as $filename ) {
 			$block_folder = dirname( $filename );
 			register_block_type( $block_folder );
-		};
-	};
-};
+		}
+	}
+}
 
 add_action( 'enqueue_block_assets', __NAMESPACE__ . '\enqueue_block_editor_scripts' );
 
@@ -132,10 +132,26 @@ function register_book_custom_post_type() {
 
 add_action( 'init', __NAMESPACE__ . '\register_book_custom_post_type' );
 
+function add_search_result_field() {
+
+	register_rest_field(
+		'search-result',
+		'excerpt',
+		[
+			'get_callback'    => function ( $post ) {
+				return get_the_excerpt( $post['id'] );
+			},
+			'update_callback' => null,
+			'schema'          => null,
+		]
+	);
+}
+
+add_action( 'rest_api_init', __NAMESPACE__ . '\add_search_result_field' );
 
 add_action(
 	'after_setup_theme',
-	function() {
+	function () {
 		remove_theme_support( 'core-block-patterns' );
 	}
 );
@@ -151,7 +167,6 @@ function remove_core_patterns() {
 		unregister_block_pattern( $pattern['name'] );
 	}
 }
-
 
 /**
  * Remove page level patterns

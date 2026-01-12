@@ -1,9 +1,25 @@
 /* eslint-disable no-case-declarations */
+/**
+ * External dependencies
+ */
 import type { WP_REST_API_User, WP_REST_API_Search_Result } from 'wp-types';
+
+/**
+ * WordPress dependencies
+ */
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
-import type { ContentSearchMode, QueryFilter } from './types';
+
+/**
+ * Types
+ */
+import type {
+	ContentSearchMode,
+	QueryFilter,
+	QueryFieldsFilter,
+	SearchResultFilter,
+} from './types';
 
 interface IdentifiableObject extends Object {
 	id: number;
@@ -33,6 +49,7 @@ interface PrepareSearchQueryArgs {
 	perPage: number;
 	contentTypes: Array<string>;
 	queryFilter: QueryFilter;
+	queryFieldsFilter?: QueryFieldsFilter;
 }
 
 /*
@@ -45,14 +62,27 @@ export const prepareSearchQuery = ({
 	perPage,
 	contentTypes,
 	queryFilter,
+	queryFieldsFilter,
 }: PrepareSearchQueryArgs): string => {
 	let searchQuery;
+
+	let fields = ['link', 'type', 'id', 'url', 'subtype'];
+
+	if (mode === 'user') {
+		fields.push('name');
+	} else {
+		fields.push('title');
+	}
+
+	if (queryFieldsFilter) {
+		fields = queryFieldsFilter(fields, mode);
+	}
 
 	switch (mode) {
 		case 'user':
 			searchQuery = addQueryArgs('wp/v2/users', {
 				search: keyword,
-				_fields: ['id', 'link', 'url', 'type', 'name', 'subtype'],
+				_fields: fields,
 			});
 			break;
 		default:
@@ -63,7 +93,7 @@ export const prepareSearchQuery = ({
 				_embed: true,
 				per_page: perPage,
 				page,
-				_fields: ['id', 'link', 'url', 'type', 'title', 'subtype'],
+				_fields: fields,
 			});
 
 			break;
@@ -82,6 +112,7 @@ interface NormalizeResultsArgs {
 	mode: ContentSearchMode;
 	results: WP_REST_API_Search_Result[] | WP_REST_API_User[];
 	excludeItems: Array<IdentifiableObject>;
+	searchResultFilter?: SearchResultFilter;
 }
 
 /**
@@ -109,35 +140,54 @@ export const normalizeResults = ({
 	mode,
 	results,
 	excludeItems,
+	searchResultFilter,
 }: NormalizeResultsArgs): Array<{
 	id: number;
 	subtype: ContentSearchMode | string;
 	title: string;
 	type: ContentSearchMode | string;
 	url: string;
+	info?: string;
 }> => {
 	const filteredResults = filterOutExcludedItems({ results, excludeItems });
 	return filteredResults.map((item) => {
+		let newItem: {
+			id: number;
+			subtype: ContentSearchMode | string;
+			title: string;
+			type: ContentSearchMode | string;
+			url: string;
+			info?: string;
+		};
+
 		switch (mode) {
 			case 'user':
 				const userItem = item as WP_REST_API_User;
-				return {
+				newItem = {
 					id: userItem.id,
 					subtype: mode,
 					title: toPlainTextTitle(userItem.name),
 					type: mode,
 					url: userItem.link,
 				};
+				break;
 			default:
 				const searchItem = item as WP_REST_API_Search_Result;
-				return {
+				newItem = {
 					id: searchItem.id as number,
 					subtype: searchItem.subtype,
 					title: toPlainTextTitle(searchItem.title),
 					type: searchItem.type,
 					url: searchItem.url,
 				};
+				break;
 		}
+
+		if (searchResultFilter) {
+			newItem = searchResultFilter(newItem, item);
+		}
+
+		return newItem;
 	});
 };
 
@@ -151,6 +201,8 @@ interface FetchSearchResultsArgs {
 	perPage: number;
 	contentTypes: Array<string>;
 	queryFilter: QueryFilter;
+	queryFieldsFilter?: QueryFieldsFilter;
+	searchResultFilter?: SearchResultFilter;
 	excludeItems: Array<IdentifiableObject>;
 	signal?: AbortSignal;
 }
@@ -162,6 +214,8 @@ export async function fetchSearchResults({
 	perPage,
 	contentTypes,
 	queryFilter,
+	queryFieldsFilter,
+	searchResultFilter,
 	excludeItems,
 	signal,
 }: FetchSearchResultsArgs) {
@@ -172,6 +226,7 @@ export async function fetchSearchResults({
 		perPage,
 		contentTypes,
 		queryFilter,
+		queryFieldsFilter,
 	});
 	const response = await apiFetch<Response>({
 		path: searchQueryString,
@@ -195,7 +250,7 @@ export async function fetchSearchResults({
 			break;
 	}
 
-	const normalizedResults = normalizeResults({ results, excludeItems, mode });
+	const normalizedResults = normalizeResults({ results, excludeItems, mode, searchResultFilter });
 
 	const hasNextPage = totalPages > page;
 	const hasPreviousPage = page > 1;

@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { safeHTML } from '@wordpress/dom';
 import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
 import { __ } from '@wordpress/i18n';
@@ -20,8 +21,9 @@ export type PickedItemType = {
 	type: string;
 	uuid: string;
 	title: string;
-	url: string;
+	url?: string;
 	status?: string; // Optional status field for checking trashed posts
+	info?: string;
 };
 
 const PickedItemContainer = styled.div<{
@@ -131,6 +133,13 @@ const ItemURL = styled.span`
 	text-overflow: ellipsis;
 `;
 
+const ItemInfo = styled.span`
+	font-size: 0.75rem;
+	line-height: 1.4;
+	color: #757575;
+	margin-top: 4px;
+`;
+
 const MoveButton = styled(Button)`
 	&.components-button.has-icon {
 		min-width: 20px;
@@ -188,7 +197,8 @@ export const PickedItemPreview: React.FC<{ item: PickedItemType; isDeleted?: boo
 	item,
 	isDeleted = false,
 }) => {
-	const decodedTitle = decodeEntities(item.title);
+	const { title, url, info } = item;
+	const decodedTitle = decodeEntities(title);
 	return (
 		<>
 			<ItemTitle isDeleted={isDeleted}>
@@ -196,8 +206,15 @@ export const PickedItemPreview: React.FC<{ item: PickedItemType; isDeleted?: boo
 					{decodedTitle}
 				</Truncate>
 			</ItemTitle>
-			{item.url && !isDeleted && (
-				<ItemURL>{filterURLForDisplay(safeDecodeURI(item.url)) || ''}</ItemURL>
+			{url && !isDeleted && (
+				<ItemURL>{filterURLForDisplay(safeDecodeURI(url)) || ''}</ItemURL>
+			)}
+			{info && (
+				<ItemInfo
+					dangerouslySetInnerHTML={{
+						__html: safeHTML(info),
+					}}
+				/>
 			)}
 		</>
 	);
