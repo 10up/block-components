@@ -9,6 +9,7 @@ import type { WP_REST_API_User, WP_REST_API_Search_Result } from 'wp-types';
  */
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
+import { decodeEntities } from '@wordpress/html-entities';
 
 /**
  * Types
@@ -114,6 +115,23 @@ interface NormalizeResultsArgs {
 	searchResultFilter?: SearchResultFilter;
 }
 
+/**
+ * Convert a WP "rendered" title (which can contain HTML + entities) into plain text.
+ * - Strips any HTML tags.
+ * - Decodes HTML entities.
+ * - Normalizes NBSP and trims.
+ */
+export const toPlainTextTitle = (input: string | undefined | null): string => {
+	if (!input) {
+		return '';
+	}
+
+	const doc = new DOMParser().parseFromString(String(input), 'text/html');
+	const text = doc.body.textContent ?? '';
+
+	return decodeEntities(text).replace(/\u00A0/g, ' ').trim();
+};
+
 /*
  * Depending on the mode value, this method normalizes the format
  * of the result array.
@@ -148,7 +166,7 @@ export const normalizeResults = ({
 				newItem = {
 					id: userItem.id,
 					subtype: mode,
-					title: userItem.name,
+					title: toPlainTextTitle(userItem.name),
 					type: mode,
 					url: userItem.link,
 				};
@@ -158,7 +176,7 @@ export const normalizeResults = ({
 				newItem = {
 					id: searchItem.id as number,
 					subtype: searchItem.subtype,
-					title: searchItem.title,
+					title: toPlainTextTitle(searchItem.title),
 					type: searchItem.type,
 					url: searchItem.url,
 				};
