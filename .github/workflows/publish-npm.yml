@@ -25,8 +25,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   release_production:
-    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/trunk'
-    environment: production
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -82,7 +81,6 @@ jobs:
 
   release_testing:
     if: github.event_name == 'pull_request' && github.event.pull_request.merged != true
-    environment: testing
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
