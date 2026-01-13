@@ -9,7 +9,7 @@ export function useTaxonomy(taxonomyName: string) {
 			const { getTaxonomy, hasFinishedResolution } = select(coreStore);
 
 			const hasResolvedTaxonomy = hasFinishedResolution('getTaxonomy', [taxonomyName]);
-			const taxonomy: Taxonomy = getTaxonomy(taxonomyName);
+			const taxonomy: Taxonomy<'edit'> | undefined = getTaxonomy(taxonomyName);
 
 			return [taxonomy, hasResolvedTaxonomy];
 		},
