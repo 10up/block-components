@@ -30,6 +30,7 @@ import { Post, User, store as coreStore } from '@wordpress/core-data';
  */
 import PickedItem, { PickedItemType } from './PickedItem';
 import { DraggableChip } from './DraggableChip';
+import { toPlainTextTitle } from '../content-search/utils';
 import { ContentSearchMode, QueryFieldsFilter } from '../content-search/types';
 import type { PickedItemFilter } from './index';
 import { Term } from './types';
@@ -135,7 +136,7 @@ const SortableList: React.FC<SortableListProps> = ({
 						case 'post': {
 							const post = result as Post;
 							newItem = {
-								title: post.title.rendered,
+								title: toPlainTextTitle(post.title.rendered),
 								url: post.link,
 								id: post.id,
 								type: post.type,
@@ -146,7 +147,7 @@ const SortableList: React.FC<SortableListProps> = ({
 						case 'user': {
 							const user = result as User;
 							newItem = {
-								title: user.name,
+								title: toPlainTextTitle(user.name),
 								url: user.link,
 								id: user.id,
 								type: 'user',
@@ -156,7 +157,7 @@ const SortableList: React.FC<SortableListProps> = ({
 						default: {
 							const taxonomy = result as Term;
 							newItem = {
-								title: taxonomy.name,
+								title: toPlainTextTitle(taxonomy.name),
 								url: taxonomy.link,
 								id: taxonomy.id,
 								type: taxonomy.taxonomy,
