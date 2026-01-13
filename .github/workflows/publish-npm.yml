@@ -35,6 +35,12 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
       
+      - name: Upgrade npm to latest
+        run: npm install -g npm@latest
+      
+      - name: Verify npm version
+        run: npm --version
+      
       - name: Configure git user name and email
         run: |
             git config user.name "10up Bot"
@@ -61,6 +67,9 @@ jobs:
           node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
+      
+      - name: Upgrade npm to latest
+        run: npm install -g npm@latest
       
       - name: Install all npm packages
         run: npm ci
@@ -91,6 +100,9 @@ jobs:
           node-version-file: '.nvmrc'
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
+      
+      - name: Upgrade npm to latest
+        run: npm install -g npm@latest
       
       - name: Configure git user name and email
         run: |
