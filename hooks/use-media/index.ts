@@ -6,14 +6,14 @@ export function useMedia(id: number) {
 	return useSelect(
 		(select) => {
 			// @ts-ignore-next-line - The type definitions for the core store are incomplete.
-			const { getMedia, isResolving, hasFinishedResolution } = select(coreStore);
+			const { getEntityRecord, isResolving, hasFinishedResolution } = select(coreStore);
 
-			const mediaParameters = [id, { context: 'view' }];
+			const mediaParameters = ['postType', 'attachment', id, { context: 'view' }] as const;
 
 			return {
-				media: getMedia(...mediaParameters),
-				isResolvingMedia: isResolving('getMedia', mediaParameters),
-				hasResolvedMedia: hasFinishedResolution('getMedia', mediaParameters),
+				media: getEntityRecord(...mediaParameters),
+				isResolvingMedia: isResolving('getEntityRecord', mediaParameters),
+				hasResolvedMedia: hasFinishedResolution('getEntityRecord', mediaParameters),
 			};
 		},
 		[id],

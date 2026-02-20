@@ -27,8 +27,10 @@ context('Image', () => {
 
         cy.savePost();
 
-		// click on the View Post snackbar item
-		cy.get('.components-snackbar a').click();
+		  // click on the View Post snackbar item
+      cy.get('.components-snackbar a').invoke('removeAttr', 'target').click();
+
+      cy.wait(500);
 
         // return to the editor
         cy.get('a').contains('Edit Page').click();
