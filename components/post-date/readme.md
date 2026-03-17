@@ -23,4 +23,5 @@ function BlockEdit() {
 | ---------- | ----------------- | -------- | -------------------------------------------------------------- |
 | `placeholder` | `string` | `No date set` |  |
 | `format` | `string` |  | Uses the WordPress date format setting of the site |
+| `timezone` | `string` |  | Uses the WordPress site timezone when not provided |
 | `...rest` | `object` | `{}` |  |
