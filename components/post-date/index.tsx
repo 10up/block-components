@@ -39,6 +39,12 @@ interface PostDateProps {
 	format?: string;
 
 	/**
+	 * The timezone to use for formatting.
+	 * When not provided, dateI18n falls back to the WordPress site timezone.
+	 */
+	timezone?: string;
+
+	/**
 	 * Remaining props to pass to the time element.
 	 */
 	[key: string]: unknown;
@@ -47,6 +53,7 @@ interface PostDateProps {
 export const PostDate: React.FC<PostDateProps> = ({
 	placeholder = __('No date set', 'tenup'),
 	format,
+	timezone,
 	...rest
 }) => {
 	const { postId, postType, isEditable } = usePost();
@@ -54,7 +61,6 @@ export const PostDate: React.FC<PostDateProps> = ({
 	const [date, setDate] = useEntityProp('postType', postType, 'date', postId as string);
 	const [siteFormat] = useEntityProp('root', 'site', 'date_format');
 	const settings: DateSettings = getSettings();
-	const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 	const resolvedFormat = format || siteFormat || settings.formats.date;
 
