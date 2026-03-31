@@ -145,6 +145,7 @@
 		"react-autosize-textarea": {
 			"react-dom": "^18.0.0",
 			"react": "^18.0.0"
-		}
+		},
+		"minimatch": "^9.0.7"
 	}
 }
