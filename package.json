@@ -117,7 +117,7 @@
 		"@leeoniya/ufuzzy": "^1.0.14",
 		"@tanstack/react-query": "^5.52.0",
 		"@typescript-eslint/parser": "^6.21.0",
-		"@wordpress/icons": "^10.0.0",
+		"@wordpress/icons": "^11.0.0",
 		"array-move": "^4.0.0",
 		"clsx": "^2.1.1",
 		"react-window": "^1.8.10",
@@ -145,6 +145,7 @@
 		"react-autosize-textarea": {
 			"react-dom": "^18.0.0",
 			"react": "^18.0.0"
-		}
+		},
+		"minimatch": "^9.0.7"
 	}
 }
