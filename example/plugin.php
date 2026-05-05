@@ -14,56 +14,175 @@
 
 namespace HelloWorld;
 
+// Useful global constants.
+define( 'EXAMPLE_PLUGIN_TEMPLATE_URL', plugin_dir_url( __FILE__ ) );
+define( 'EXAMPLE_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
+define( 'EXAMPLE_PLUGIN_DIST_PATH', EXAMPLE_PLUGIN_PATH . 'build/' );
+define( 'EXAMPLE_PLUGIN_DIST_URL', EXAMPLE_PLUGIN_TEMPLATE_URL . '/build/' );
+define( 'EXAMPLE_PLUGIN_INC', EXAMPLE_PLUGIN_PATH . 'includes/' );
+define( 'EXAMPLE_PLUGIN_BLOCK_DIR', EXAMPLE_PLUGIN_INC . 'blocks/' );
+define( 'EXAMPLE_PLUGIN_BLOCK_DIST_DIR', EXAMPLE_PLUGIN_PATH . 'build/blocks/' );
+
 add_action( 'init', __NAMESPACE__ . '\register_block' );
 /**
  * Register the block
  */
 function register_block() {
 
-	$dir               = dirname( __FILE__ );
-	$script_asset_path = "$dir/build/index.asset.php";
-	$index_js          = 'build/index.js';
-	$script_asset      = require $script_asset_path;
-	wp_register_script(
-		'editor-script',
-		plugins_url( $index_js, __FILE__ ),
-		$script_asset['dependencies'],
-		$script_asset['version'],
-		false
+	if ( file_exists( EXAMPLE_PLUGIN_BLOCK_DIST_DIR ) ) {
+		$block_json_files = glob( EXAMPLE_PLUGIN_BLOCK_DIST_DIR . '*/block.json' );
+		foreach ( $block_json_files as $filename ) {
+			$block_folder = dirname( $filename );
+			register_block_type( $block_folder );
+		}
+	}
+}
+
+add_action( 'enqueue_block_assets', __NAMESPACE__ . '\enqueue_block_editor_scripts' );
+
+/**
+ * Enqueue Block Editor Scripts
+ */
+function enqueue_block_editor_scripts() {
+	$asset_file = include EXAMPLE_PLUGIN_DIST_PATH . 'index.asset.php';
+
+	wp_enqueue_script(
+		'example-block-editor-script',
+		EXAMPLE_PLUGIN_DIST_URL . 'index.js',
+		$asset_file['dependencies'],
+		$asset_file['version'],
+		true
+	);
+}
+
+/**
+ * Register Book Custom Post Type
+ */
+function register_book_custom_post_type() {
+	$labels = array(
+		'name'          => __( 'Books', 'tenup' ),
+		'singular_name' => __( 'Book', 'tenup' ),
+		'menu_name'     => __( 'Books', 'tenup' ),
+		'view_item'     => __( 'View book', 'tenup' ),
 	);
 
-	register_block_type(
-		'example/hello-world',
+	$args = [
+		'labels'              => $labels,
+		'menu_icon'           => 'dashicons-book',
+		'supports'            => [ 'title', 'editor', 'meta', 'custom-fields', 'revisions' ],
+		'hierarchical'        => false,
+		'public'              => true,
+		'show_ui'             => true,
+		'show_in_menu'        => true,
+		'show_in_nav_menus'   => true,
+		'show_in_admin_bar'   => true,
+		'menu_position'       => 20,
+		'can_export'          => true,
+		'has_archive'         => false,
+		'exclude_from_search' => false,
+		'publicly_queryable'  => true,
+		'template'            => [],
+		'template_lock'       => false,
+		'capability_type'     => 'post',
+		'show_in_rest'        => true,
+	];
+
+	register_post_type( 'books', $args );
+
+	register_post_meta(
+		'books',
+		'author',
 		[
-			'editor_script' => 'editor-script',
+			'type'         => 'string',
+			'single'       => true,
+			'show_in_rest' => true,
 		]
 	);
 
-	register_block_type(
-		__DIR__ . '/src/blocks/link-example',
+	register_post_meta(
+		'books',
+		'isbn',
 		[
-			'editor_script'   => 'editor-script',
-			'render_callback' => function( $attributes, $content, $block ) {
-				$title = $attributes['title'];
+			'type'         => 'string',
+			'single'       => true,
+			'show_in_rest' => true,
+		]
+	);
 
-				$link_one_url   = $attributes['url'];
-				$link_one_label = $attributes['text'];
+	register_post_meta(
+		'books',
+		'price',
+		[
+			'type'         => 'number',
+			'single'       => true,
+			'show_in_rest' => true,
+		]
+	);
 
-				$link_two_url   = $attributes['urlTwo'];
-				$link_two_label = $attributes['textTwo'];
+	register_post_meta(
+		'books',
+		'is_featured',
+		[
+			'type'         => 'boolean',
+			'single'       => true,
+			'show_in_rest' => true,
+		]
+	);
+}
 
-				$wrapper_attributes = get_block_wrapper_attributes();
+add_action( 'init', __NAMESPACE__ . '\register_book_custom_post_type' );
 
-				ob_start();
-				?>
-				<div <?php echo wp_kses_post( $wrapper_attributes ); ?>>
-					<h2><?php echo wp_kses_post( $title ); ?></h2>
-					<a href="<?php echo esc_url( $link_one_url ); ?>"><?php echo wp_kses_post( $link_one_label ); ?></a>
-					<a href="<?php echo esc_url( $link_two_url ); ?>"><?php echo wp_kses_post( $link_two_label ); ?></a>
-				</div>
-				<?php
-				return ob_get_clean();
+function add_search_result_field() {
+
+	register_rest_field(
+		'search-result',
+		'excerpt',
+		[
+			'get_callback'    => function ( $post ) {
+				return get_the_excerpt( $post['id'] );
 			},
+			'update_callback' => null,
+			'schema'          => null,
 		]
 	);
-};
+}
+
+add_action( 'rest_api_init', __NAMESPACE__ . '\add_search_result_field' );
+
+add_action(
+	'after_setup_theme',
+	function () {
+		remove_theme_support( 'core-block-patterns' );
+	}
+);
+
+add_action( 'wp_loaded', __NAMESPACE__ . '\remove_core_patterns' );
+
+/**
+ * Remove core patterns
+ */
+function remove_core_patterns() {
+	$patterns = \WP_Block_Patterns_Registry::get_instance()->get_all_registered();
+	foreach ( $patterns as $pattern ) {
+		unregister_block_pattern( $pattern['name'] );
+	}
+}
+
+/**
+ * Remove page level patterns
+ */
+function example_remove_page_level_patterns() {
+	$patterns = \WP_Block_Patterns_Registry::get_instance()->get_all_registered();
+	foreach ( $patterns as $pattern ) {
+		if (
+			! empty( $pattern['blockTypes'] ) &&
+			in_array( 'core/post-content', $pattern['blockTypes'] )
+		) {
+			unregister_block_pattern( $pattern['name'] );
+			$pattern['blockTypes'] = array_diff( $pattern['blockTypes'], array( 'core/post-content' ) );
+			register_block_pattern( $pattern['name'], $pattern );
+		}
+	}
+}
+
+add_action( 'init', __NAMESPACE__ . '\example_remove_page_level_patterns' );

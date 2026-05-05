@@ -1,24 +1,31 @@
 {
-    "name": "example",
-    "version": "0.1.0",
-    "description": "Example plugin to show the Content Picker in usage.",
-    "main": "index.js",
-    "scripts": {
-        "build": "wp-scripts build",
-        "start": "wp-scripts start",
-        "wp-env": "wp-env",
-        "import-media": "wp-env run tests-cli wp media import /var/www/html/wp-content/plugins/example/images/1920-1080.png"
-    },
-    "keywords": [],
-    "author": "",
-    "license": "ISC",
-    "devDependencies": {
-        "@wordpress/env": "^5.2.0",
-        "@wordpress/eslint-plugin": "^9.3.0",
-        "@wordpress/scripts": "^24.0.0"
-    },
-    "dependencies": {
-        "@10up/block-components": "file:../dist/index.js",
-        "@wordpress/icons": "^6.1.1"
-    }
+	"name": "example",
+	"version": "0.1.0",
+	"description": "Example plugin to show the Content Picker in usage.",
+	"main": "index.js",
+	"scripts": {
+		"build": "npm run clean-dist && wp-scripts build",
+		"start": "wp-scripts start",
+		"wp-env": "wp-env",
+		"clean-dist": "rm -rf ./dist",
+		"start-env": "wp-env start",
+		"import-media": "wp-env run tests-cli wp media import /var/www/html/wp-content/plugins/example/images/1920-1080.png"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"@wordpress/block-editor": "^12.19.9",
+		"@wordpress/blocks": "^12.28.6",
+		"@wordpress/components": "^26.0.6",
+		"@wordpress/core-data": "^6.28.9",
+		"@wordpress/data": "^9.21.1",
+		"@wordpress/env": "^9.9.0",
+		"@wordpress/eslint-plugin": "^18.0.0",
+		"@wordpress/scripts": "^27.8.0"
+	},
+	"dependencies": {
+		"@10up/block-components": "file:../dist/index.js",
+		"@wordpress/icons": "^9.48.0"
+	}
 }

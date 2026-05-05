@@ -1,17 +1,25 @@
 {
-    "name": "example/image-example",
-    "apiVersion": 2,
-    "title": "Image Example",
-    "description": "Example Block to show the Image in usage",
-    "icon": "smiley",
-    "category": "common",
-    "example": {},
-    "supports": {
-        "html": false
-    },
-    "attributes": {
-        "imageId": {
-            "type": "number"
-        }
-    }
+	"name": "example/image-example",
+	"apiVersion": 3,
+	"title": "Image Example",
+	"description": "Example Block to show the Image in usage",
+	"icon": "smiley",
+	"category": "common",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"imageId": {
+			"type": "number"
+		},
+		"focalPoint": {
+			"type": "object",
+			"default": {
+				"x": 0.5,
+				"y": 0.5
+			}
+		}
+	},
+	"editorScript": "file:./index.ts"
 }

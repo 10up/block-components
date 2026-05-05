@@ -1,0 +1,127 @@
+name: Publish to NPM
+permissions:
+  contents: write
+  packages: write
+  pull-requests: write
+  id-token: write
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Release Type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+        - patch
+        - minor
+        - major
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - 'develop'
+concurrency: 
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+jobs:
+  release_production:
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+      
+      - name: Upgrade npm to latest
+        run: npm install -g npm@latest
+      
+      - name: Verify npm version
+        run: npm --version
+      
+      - name: Configure git user name and email
+        run: |
+            git config user.name "10up Bot"
+            git config user.email "pr@10up.com"
+
+      - name: Install all npm packages
+        run: npm ci
+
+      - name: npm update version and release
+        run: |
+          npm version ${{ github.event.inputs.release_type }}
+          npm publish --provenance --access public
+      
+      - name: push release commit to repo
+        run: git push
+
+  release_next:
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'develop'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_BOT_TOKEN || secrets.GITHUB_TOKEN }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+      
+      - name: Upgrade npm to latest
+        run: npm install -g npm@latest
+      
+      - name: Install all npm packages
+        run: npm ci
+
+      - name: Build package
+        run: npm run build
+      
+      - name: Configure git user name and email
+        run: |
+            git config user.name "10up Bot"
+            git config user.email "pr@10up.com"
+
+      - name: npm update version and release
+        run: |
+          npm version prerelease --preid=next
+          npm publish --tag next --provenance --access public
+      
+      - name: push release commit to repo
+        run: git push
+
+  release_testing:
+    if: github.event_name == 'pull_request' && github.event.pull_request.merged != true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+      
+      - name: Upgrade npm to latest
+        run: npm install -g npm@latest
+      
+      - name: Configure git user name and email
+        run: |
+            git config user.name "10up Bot"
+            git config user.email "pr@10up.com"
+
+      - name: Install all npm packages
+        run: npm install
+
+      - name: npm update version and release
+        run: |
+          npm version prerelease --preid=testing-${{ github.event.number}}.${{ github.run_number}}
+          npm publish --tag testing-${{ github.event.number}} --provenance --access public
+
+      - uses: mshick/add-pr-comment@v2
+        with:
+         message: |
+           :tada: A new testing version of this package has been published to NPM. You can install it with `npm install @10up/block-components@testing-${{ github.event.number}}`

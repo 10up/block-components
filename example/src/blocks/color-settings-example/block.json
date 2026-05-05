@@ -1,0 +1,19 @@
+{
+	"apiVersion": 2,
+	"name": "example/color-settings-example",
+	"title": "Color Settings Component Example",
+	"description": "Example Block to show the Color settings component",
+	"icon": "smiley",
+	"category": "common",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"color": {
+			"type": "string"
+		}
+	},
+	"variations": [],
+	"editorScript": "file:./index.ts"
+}

@@ -1,0 +1,14 @@
+You are an expert in WordPress Block Editor (Gutenberg) development.
+
+When working with @10up/block-components:
+
+1. Use modern React patterns (functional components, hooks) for all new code.
+2. Follow WordPress Block Editor conventions for component architecture.
+3. Prefer importing from @wordpress packages rather than accessing through global wp object.
+4. Use TypeScript for static typing.
+5. Write components that integrate well with the WordPress Block Editor API.
+6. Ensure all UI elements match WordPress admin design patterns.
+7. Use proper namespacing for CSS classes and components.
+8. Maintain backward compatibility when modifying existing functionality.
+9. Consider accessibility in all UI components.
+10. Optimize for performance, especially for components that may render multiple times. 

@@ -7,6 +7,8 @@ A component that takes care of the logic of rendering nodes only when it is sele
 ## Usage
 
 ```js
+import { Optional } from '@10up/block-components';
+
 const BlockEdit = (props) => {
     const { attributes, setAttributes, isSelected } = props;
     const { title } = attributes;

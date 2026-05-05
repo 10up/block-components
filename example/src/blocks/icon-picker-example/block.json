@@ -1,20 +1,29 @@
 {
-    "name": "example/icon-picker-example",
-    "title": "Icon Picker Example",
-    "description": "Example Block to show the Icon Picker in usage",
-    "icon": "smiley",
-    "category": "common",
-    "example": {},
-    "supports": {
-        "html": false
-    },
-    "attributes": {
-        "icon": {
-            "type": "object",
-            "default": {
-                "iconSet": "example/theme",
-                "name": "cloud"
-            }
-        }
-    }
+	"apiVersion": 3,
+	"name": "example/icon-picker-example",
+	"title": "Icon Picker Example",
+	"description": "Example Block to show the Icon Picker in usage",
+	"icon": "smiley",
+	"category": "common",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"icon": {
+			"type": "object",
+			"default": {
+				"iconSet": "example/theme",
+				"name": "cloud"
+			},
+			"limitedPaletteIcon": {
+				"type": "object",
+				"default": {
+					"iconSet": "example/limited-palette",
+					"name": "brush-5"
+				}
+			}
+		}
+	},
+	"editorScript": "file:./index.ts"
 }

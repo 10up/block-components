@@ -1,15 +1,15 @@
 name: Lint Pull Request
-on:
- pull_request:
-  
-  push:
-    branches:
-      - 'develop'
+on: [push, workflow_dispatch]
+permissions:
+  contents: read
+
 jobs:
   eslint:
+    name: ESLint
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - uses: reviewdog/action-eslint@v1.0.0
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}

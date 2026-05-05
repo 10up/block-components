@@ -1,11 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`icon store | reducer adding iconSets to empty store 1`] = `
-Object {
-  "iconSets": Object {
-    "example/theme": Object {
-      "icons": Array [
-        Object {
+{
+  "iconSets": {
+    "example/theme": {
+      "icons": [
+        {
           "label": "Search",
           "name": "search",
           "source": "test-string",
@@ -19,11 +19,11 @@ Object {
 `;
 
 exports[`icon store | reducer adding iconSets to existing store 1`] = `
-Object {
-  "iconSets": Object {
-    "dashicons": Object {
-      "icons": Array [
-        Object {
+{
+  "iconSets": {
+    "dashicons": {
+      "icons": [
+        {
           "label": "Menu",
           "name": "dashicons-menu",
         },
@@ -31,9 +31,9 @@ Object {
       "label": "Dashicons",
       "name": "dashicons",
     },
-    "example/theme": Object {
-      "icons": Array [
-        Object {
+    "example/theme": {
+      "icons": [
+        {
           "label": "Search",
           "name": "search",
           "source": "test-string",
@@ -47,11 +47,11 @@ Object {
 `;
 
 exports[`icon store | reducer removing iconSets 1`] = `
-Object {
-  "iconSets": Object {
-    "theme": Object {
-      "icons": Array [
-        Object {
+{
+  "iconSets": {
+    "theme": {
+      "icons": [
+        {
           "label": "Menu",
           "name": "theme-menu",
         },

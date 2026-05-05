@@ -1,9 +1,0 @@
-{
-    "projectId": "dnr1ke",
-    "videoCompression": 15,
-    "baseUrl": "http://localhost:8889",
-    "env": {
-        "username": "admin",
-        "password": "password"
-    }
-}

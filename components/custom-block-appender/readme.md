@@ -22,6 +22,34 @@ const MyComponent = ({clientId}) => {
 }
 ```
 
+## Advanced Usage
+The following will ensure the render appender button will only show if the parent block or an inner block is currently selected.
+
+```js
+import { CustomBlockAppender, useHasSelectedInnerBlock } from '@10up/block-components';
+import { useSelect } from '@wordpress/data';
+const MyComponent = ({clientId, isSelected}) => {
+
+    const hasSelectedInnerBlock = useHasSelectedInnerBlock();
+
+    <InnerBlocks
+        renderAppender={ () => {
+            return (
+                ( isSelected || hasSelectedInnerBlock ) &&
+                <CustomBlockAppender
+                    className="custom-classname"
+                    rootClientId={clientId}
+                    icon="heavy-plus"
+                    isTertiary
+                    showTooltip
+                    label={__('Insert Accordion content', '10up-block-library')}
+                />
+            )
+        }
+    />
+}
+```
+
 ## Props
 
 | Name       | Type              | Default  |  Description                                                   |

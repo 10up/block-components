@@ -1,0 +1,18 @@
+{
+	"name": "example/custom-media-example",
+	"apiVersion": 3,
+	"title": "Custom Media Example",
+	"description": "Example Block to show the custom media toolbar in usage",
+	"icon": "smiley",
+	"category": "common",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"imageId": {
+			"type": "number"
+		}
+	},
+	"editorScript": "file:./index.ts"
+}

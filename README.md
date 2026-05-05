@@ -15,6 +15,30 @@ A collection of components built to be used in the block editor. These component
 2. Within your block editor code, import the relevant component(s) e.g. `import { ContentPicker } from '@10up/block-components';`
 3. We highly recommend you use [10up-toolkit](https://github.com/10up/10up-toolkit) to build your block files as it handles dependency extraction for you.
 
+## Importing individual modules
+
+As of [v1.20.6](https://github.com/10up/block-components/releases/tag/v1.20.6), you can now import individual modules directly to reduce bundle size.
+
+Instead of importing from the base entry point:
+```jsx
+import { ContentPicker } from '@10up/block-components';
+import { useAllTerms } from '@10up/block-components';
+import { registerBlockExtension } from '@10up/block-components';
+import { iconStore } from '@10up/block-components';
+```
+
+You can import `components`, `hooks`, `apis`, and `stores` individually from their specific paths:
+```jsx
+import { ContentPicker } from '@10up/block-components/components/content-picker';
+import { useAllTerms } from '@10up/block-components/hooks/use-all-terms';
+import { registerBlockExtension } from '@10up/block-components/api/register-block-extension';
+import { iconStore } from '@10up/block-components/stores/icons';
+```
+
+This approach offers improved tree-shaking and results in smaller bundles, especially when only using a subset of the library.
+
+The original import paths are still fully supported and will continue to work as expected.
+
 ## APIs
 
 - [registerBlockExtension](./api/register-block-extension/)
@@ -29,11 +53,29 @@ A collection of components built to be used in the block editor. These component
 - [CustomBlockAppender](./components/custom-block-appender/)
 - [IconPicker](./components/icon-picker/)
 - [Image](./components/image/)
-- [InnerBlockSlider](./components/inner-block-slider/)
+- [Link](./components/link/)
+- [InnerBlockSlider `DEPRECATED`](./components/inner-block-slider/)
 - [IsAdmin](./components//is-admin/)
 - [MediaToolbar](./components/media-toolbar/)
 - [Optional](./components/optional/)
 - [Repeater](./components/repeater/)
+- [RichTextCharacterLimit](./components/rich-text-character-limit)
+
+### Post related Components
+
+These components read/write information from the global post object or a `PostContext`.
+
+- [PostAuthor](./components/post-author/)
+- [PostCategoryList](./components/post-category-list/)
+- [PostContext](./components/post-context/)
+- [PostDate](./components/post-date)
+- [PostExcerpt](./components/post-excerpt/)
+- [PostFeaturedImage](./components/post-featured-image/)
+- [PostPrimaryCategory](./components/post-primary-category/)
+- [PostPrimaryTerm](./components/post-primary-term/)
+- [PostTermList](./components/post-term-list/)
+- [PostTitle](./components/post-title/)
+- [PostMeta](./components/post-meta/)
 
 ## Hooks
 
@@ -43,6 +85,24 @@ A collection of components built to be used in the block editor. These component
 - [useMedia](./hooks/use-media/)
 - [useRequestData](./hooks/use-request-data/)
 - [useBlockParentAttributes](./hooks/use-block-parent-attributes/)
+- [useScript](./hooks/use-script/)
+- [useIsPluginActive](./hooks/use-is-plugin-active/)
+- [usePopover](./hooks/use-popover/)
+- [useMaxInnerBlocks](./hooks/use-max-inner-blocks/)
+
+### Post related hooks
+
+These hooks read/write information from the global post object or a `PostContext`.
+
+- [useAllTerms](./hooks/use-all-terms/)
+- [useTaxonomy](./hooks/use-taxonomy/)
+- [useIsSupportedTaxonomy](./hooks/use-is-supported-taxonomy/)
+- [usePost](./hooks/use-post/)
+- [usePrimaryTerm](./hooks/use-primary-term/)
+- [useSelectedTermIds](./hooks/use-selected-term-ids/)
+- [useSelectedTerms](./hooks/use-selected-terms/)
+- [useSelectedTermsOfSavedPost](./hooks/use-selected-terms-of-saved-post/)
+- [usePostMetaValue](./hooks/use-post-meta-value/)
 
 ## Stores
 

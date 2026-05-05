@@ -1,0 +1,17 @@
+{
+	"apiVersion": 3,
+	"name": "example/post-meta",
+	"description": "Set some Metadata",
+	"title": "Post Meta",
+	"attributes": {
+		"metaKey": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"usesContext": [
+		"postId",
+		"postType"
+	],
+	"editorScript": "file:./index.ts"
+}

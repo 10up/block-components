@@ -15,7 +15,7 @@ const BlockEdit = (props) => {
 
     const blockProps = useBlockProps();
 
-    const handleTextChange = value => setAttributes({text: value});
+    const handleTextChange = value => setAttributes({linkText: value});
     const handleLinkChange = value => setAttributes({
         linkUrl: value?.url,
         opensInNewTab: value?.opensInNewTab,
@@ -37,6 +37,7 @@ const BlockEdit = (props) => {
                 onLinkRemove={ handleLinkRemove }
                 className='example-classname'
                 placeholder='Enter Link Text here...'
+                ariaLabel='Read more about our services'
             />
         </div>
     )
@@ -59,3 +60,5 @@ The `<RichText>` node will only render when BlockEdit is selected.
 |  `kind` | `string` | `""` |        Page or Post |
 |  `placeholder` | `string` | `Link text ...` |      Text visible before actual value is inserted |
 |  `className` | `string` | `undefined` |          html class to be applied to the anchor element |
+|  `ariaLabel` | `string` | `undefined` |          Custom aria-label for accessibility. Defaults to the link text (value) if not provided |
+|  `...rest` | `object` | `{}` | pass through any additional props to the RichText component used for the link element |

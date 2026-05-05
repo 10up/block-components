@@ -1,4 +1,5 @@
 {
+	"apiVersion": 3,
     "name": "example/repeater-component-example",
     "title": "Repeater component Example",
     "description": "Example Block to show the Repeater Component in usage",
@@ -18,5 +19,6 @@
                 }
             ]
         }
-    }
+    },
+	"editorScript": "file:./index.ts"
 }

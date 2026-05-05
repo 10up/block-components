@@ -60,6 +60,21 @@ Cypress.Commands.add('createPost', (options = {}) => {
 
 	cy.wait(100);
 
+	// close the Yoast SEO metabox
+	cy.get('.wpseo-metabox .handlediv').then(button => {
+		const isExpanded = button[0].getAttribute('aria-expanded') === 'true';
+		if ( isExpanded ) {
+			cy.get('.wpseo-metabox .handlediv').click();
+		}
+	});
+
+	// Disable the pre-publish sidebar
+	cy.window().then((win) => {
+		win.wp.data.dispatch('core/editor').disablePublishSidebar();
+	});
+
+	cy.wait(100);
+
 	if (title !== '') {
 		cy.get('.editor-post-title__input').type(
 			`Cypress - ${title} - ${new Date(Date.now()).toLocaleDateString()}`,
@@ -72,9 +87,14 @@ Cypress.Commands.add('savePost', () => {
 });
 
 Cypress.Commands.add('insertBlock', (blockName) => {
-	cy.get('button[aria-label="Add block"]').first().click();
-	cy.focused().type(blockName);
-	cy.get('button').contains(blockName).click();
+	cy.get('button[aria-label="Block Inserter"]').first().then($button => {
+		if ($button.attr('aria-pressed') !== 'true') {
+			cy.wrap($button).click();
+		}
+	});
+	cy.get('.components-input-control__input').first().clear();
+	cy.get('.components-input-control__input').first().type(blockName);
+	cy.get('.block-editor-block-types-list__item').contains(blockName).click();
 });
 
 Cypress.Commands.add('openSettingsSidebar', () => {

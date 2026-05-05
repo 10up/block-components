@@ -1,0 +1,14 @@
+{
+	"apiVersion": 3,
+	"name": "example/counter",
+	"title": "Counter Example",
+	"description": "Example Block to show the Counter in usage",
+	"icon": "smiley",
+	"category": "common",
+	"example": {},
+	"supports": {
+		"html": false
+	},
+	"variations": [],
+	"editorScript": "file:./index.ts"
+}

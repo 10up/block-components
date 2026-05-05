@@ -1,3 +1,7 @@
 example
 cypress
 **/*.test.js
+**/*.test.ts
+**/*.test.txs
+dist/
+cypress.config.js

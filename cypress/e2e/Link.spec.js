@@ -1,0 +1,44 @@
+/// <reference types="cypress" />
+
+context('Link', () => {
+
+	beforeEach(() => {
+		cy.loginToWordPress();
+	});
+
+	it('allows the editor to pick a link directly inline', () => {
+		cy.createPost({title: 'Link Component'});
+		cy.insertBlock('Link Example');
+
+        // create the first link
+        cy.get('[data-type="example/link-example"] .tenup-block-components-link__label').first().click();
+        cy.wait(50);
+        cy.get('[data-type="example/link-example"] .tenup-block-components-link__label').first().scrollIntoView({offset: {top: 100}}).type('First Link Label', { delay: 50, waitForAnimations: true });
+        cy.get('[data-wp-component="Popover"] .components-input-control__input').first().type('https://10up.com/{enter}', { delay: 50, waitForAnimations: true });
+        
+        // create the second link
+        cy.get('[data-type="example/link-example"] .tenup-block-components-link__label').eq(1).click();
+        cy.wait(50);
+        cy.get('[data-type="example/link-example"] .tenup-block-components-link__label').eq(1).type('Second Link Label', { delay: 50, waitForAnimations: true });
+        cy.get('[data-wp-component="Popover"] .components-input-control__input').first().type('https://10up.com/our-work/{enter}', { delay: 50, waitForAnimations: true });
+
+        cy.savePost();
+
+		// click on the View Post snackbar item
+		cy.get('[data-testid="snackbar-list"] .components-snackbar a').click();
+
+        // check that all the links have rendered correctly
+        cy.get('.wp-block-example-link-example a').first().should('contain', 'First Link Label');
+        cy.get('.wp-block-example-link-example a').first().should('have.attr', 'href', 'https://10up.com/');
+        cy.get('.wp-block-example-link-example a').eq(1).should('contain', 'Second Link Label');
+        cy.get('.wp-block-example-link-example a').eq(1).should('have.attr', 'href', 'https://10up.com/our-work/');
+
+        // go back to the editor
+        cy.get('a').contains('Edit Page').click();
+
+        // ensure both links populated correctly
+        cy.get('[data-type="example/link-example"] .tenup-block-components-link__label').first().should('contain', 'First Link Label');
+        cy.get('[data-type="example/link-example"] .tenup-block-components-link__label').eq(1).should('contain', 'Second Link Label');
+	})
+	
+})

@@ -1,0 +1,42 @@
+---
+description: 
+globs: stores/**.*
+alwaysApply: false
+---
+# Store Development Guidelines
+
+The @10up/block-components library uses data stores for state management.
+
+## Store Structure
+
+- Each store should be in its own directory under `stores/`
+- Include actions, selectors, and reducers in the store implementation
+- Follow the WordPress data store patterns
+- Use TypeScript for type safety
+
+## Implementation Guidelines
+
+- Use the WordPress data API for store creation
+- Define clear actions and action types
+- Create well-typed selectors for accessing store data
+- Implement reducers that handle state updates immutably
+- Document the store's purpose and usage
+
+## Icon Store
+
+The icon store (`iconStore`) is used for registering and accessing custom icons throughout the application.
+
+Example of using the icon store:
+
+```typescript
+import { select } from '@wordpress/data';
+import { STORE_NAME } from './constants';
+
+// Get all registered icons
+const icons = select(STORE_NAME).getIcons();
+
+// Get a specific icon
+const myIcon = select(STORE_NAME).getIcon('iconName');
+```
+
+@stores/icons/index.ts
