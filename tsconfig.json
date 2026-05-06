@@ -22,6 +22,7 @@
 		"strictBindCallApply": true,
 		"strictNullChecks": true,
 		"outDir": "./dist",
+		"rootDir": ".",
  		"checkJs": true,
  		"allowSyntheticDefaultImports": true,
  		"jsx": "preserve",
