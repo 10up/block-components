@@ -17,17 +17,19 @@ context('registerBlockExtension', () => {
 		cy.savePost();
 
 		// click on the View Post snackbar item
-		cy.get('.components-snackbar a').click();
+		cy.get('.components-snackbar a').invoke('removeAttr', 'target').click();
+		cy.wait(500);
 
         // ensure the new class names get applied in the frontend
 		cy.get('.wp-block-group').should('have.class', 'has-background-pattern');
 
-        cy.contains('Edit Page').click();
+        cy.get('a').contains('Edit Page').click();
+		cy.wait(500);
 
         // ensure the editor loads without eny deprecation errors
         cy.get('.wp-block-group').contains('This block contains unexpected or invalid content.').should('not.exist');
 	})
-	
+
     it('ensure the new settings still respect custom classnames', () => {
 		cy.createPost({title: 'Block Extension Test'});
 		cy.insertBlock('Group');
@@ -45,13 +47,15 @@ context('registerBlockExtension', () => {
 		cy.savePost();
 
 		// click on the View Post snackbar item
-		cy.get('.components-snackbar a').click();
+		cy.get('.components-snackbar a').invoke('removeAttr', 'target').click();
+		cy.wait(500);
 
         // ensure the new class names get applied in the frontend
 		cy.get('.wp-block-group').should('have.class', 'has-background-pattern');
 		cy.get('.wp-block-group').should('have.class', 'test-class');
 
-        cy.contains('Edit Page').click();
+        cy.get('a').contains('Edit Page').click();
+		cy.wait(500);
 
         // ensure the editor loads without eny deprecation errors
         cy.get('.wp-block-group').contains('This block contains unexpected or invalid content.').should('not.exist');
