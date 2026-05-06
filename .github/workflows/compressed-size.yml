@@ -20,3 +20,4 @@ jobs:
         repo-token: '${{ secrets.GITHUB_TOKEN }}'
         pattern: '{dist/**/*.js,dist/**/*.css}'
         compression: 'none'
+        install-script: 'npm install --no-audit --no-fund'
