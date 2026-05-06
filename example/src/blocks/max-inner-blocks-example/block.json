@@ -1,5 +1,6 @@
 {
     "name": "example/max-inner-blocks-example",
+    "apiVersion": 3,
     "title": "Max Inner Blocks Example",
     "description": "Example Block to show the useMaxInnerBlocks hook in usage",
     "icon": "warning",
@@ -33,5 +34,6 @@
             "type": "boolean",
             "default": false
         }
-    }
+    },
+    "editorScript": "file:./index.tsx"
 }
