@@ -12,6 +12,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"incremental": true,
 		"esModuleInterop": false,
+		"ignoreDeprecations": "6.0",
 		"target": "esnext",
  		"module": "esnext",
 		"resolveJsonModule": true,
