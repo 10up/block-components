@@ -37,7 +37,7 @@ Anything `createNotice` accepts can be passed via `noticeOptions`. The full list
 
 ### Custom icon
 
-The default icon is `info` from [`@wordpress/icons`](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-icons/). Override it with any other icon (or any React element). When using `Icon`, pass `fill="currentColor"` so the icon picks up the surrounding notice color (snackbars are dark, default notices are light):
+The default icon is `info` from [`@wordpress/icons`](https://developer.wordpress.org/block-editor/reference-guides/packages/packages-icons/). Override it with any other icon (or any React element). When using `Icon`, pass `fill="currentColor"` so the icon picks up the surrounding notice color (snackbars are dark):
 
 ```js
 import { useMaxInnerBlocks } from '@10up/block-components';
