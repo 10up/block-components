@@ -1,5 +1,6 @@
 /* eslint-disable @wordpress/no-unsafe-wp-apis */
-import { useEffect, useRef, useState } from '@wordpress/element';
+import { useState } from '@wordpress/element';
+import { useRefEffect } from '@wordpress/compose';
 import { RichText } from '@wordpress/block-editor';
 import {
 	SlotFillProvider,
@@ -31,35 +32,34 @@ export const RichTextField = ({
 	...richTextProps
 }: RichTextFieldProps) => {
 	const [isSelected, setIsSelected] = useState(false);
-	const ref = useRef<HTMLDivElement | null>(null);
 
-	useEffect(() => {
-		if (!isSelected) {
-			return undefined;
-		}
-
-		const doc = ref.current?.ownerDocument;
-		if (!doc) {
-			return undefined;
-		}
-
-		const handleMouseDown = (event: MouseEvent) => {
-			const target = event.target as HTMLElement | null;
-			if (ref.current?.contains(target)) {
-				return;
+	const ref = useRefEffect<HTMLDivElement>(
+		(node) => {
+			if (!isSelected) {
+				return undefined;
 			}
-			if (target?.closest?.('.block-editor-rich-text__inline-format-toolbar')) {
-				return;
-			}
-			if (target?.closest?.('.components-popover')) {
-				return;
-			}
-			setIsSelected(false);
-		};
 
-		doc.addEventListener('mousedown', handleMouseDown);
-		return () => doc.removeEventListener('mousedown', handleMouseDown);
-	}, [isSelected]);
+			const doc = node.ownerDocument;
+
+			const handleMouseDown = (event: MouseEvent) => {
+				const target = event.target as HTMLElement | null;
+				if (node.contains(target)) {
+					return;
+				}
+				if (target?.closest?.('.block-editor-rich-text__inline-format-toolbar')) {
+					return;
+				}
+				if (target?.closest?.('.components-popover')) {
+					return;
+				}
+				setIsSelected(false);
+			};
+
+			doc.addEventListener('mousedown', handleMouseDown);
+			return () => doc.removeEventListener('mousedown', handleMouseDown);
+		},
+		[isSelected],
+	);
 
 	return (
 		<SlotFillProvider>
