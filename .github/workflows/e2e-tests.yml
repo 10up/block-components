@@ -18,7 +18,7 @@ jobs:
       - name: Run Cypress E2E Tests
         uses: cypress-io/github-action@v5
         with:
-          build: npm run build --workspaces --if-present
+          build: npm run build-test-env
           start: npm run start-test-env
           wait-on: 'http://localhost:8888/wp-admin/index.php, http://localhost:8889'
           wait-on-timeout: 220

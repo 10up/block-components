@@ -60,6 +60,7 @@ The original import paths are still fully supported and will continue to work as
 - [Optional](./components/optional/)
 - [Repeater](./components/repeater/)
 - [RichTextCharacterLimit](./components/rich-text-character-limit)
+- [RichTextField](./components/rich-text-field)
 
 ### Post related Components
 

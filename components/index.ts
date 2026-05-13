@@ -24,4 +24,5 @@ export { PostCategoryList } from './post-category-list';
 export { PostPrimaryTerm } from './post-primary-term';
 export { PostPrimaryCategory } from './post-primary-category';
 export { RichTextCharacterLimit, getCharacterCount } from './rich-text-character-limit';
+export { RichTextField } from './rich-text-field';
 export { CircularProgressBar, Counter } from './counter';

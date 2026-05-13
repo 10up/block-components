@@ -25,7 +25,8 @@ context('Link', () => {
         cy.savePost();
 
 		// click on the View Post snackbar item
-		cy.get('[data-testid="snackbar-list"] .components-snackbar a').click();
+		cy.get('[data-testid="snackbar-list"] .components-snackbar a').invoke('removeAttr', 'target').click();
+		cy.wait(500);
 
         // check that all the links have rendered correctly
         cy.get('.wp-block-example-link-example a').first().should('contain', 'First Link Label');
