@@ -1,0 +1,39 @@
+{
+    "name": "example/max-inner-blocks-example",
+    "apiVersion": 3,
+    "title": "Max Inner Blocks Example",
+    "description": "Example Block to show the useMaxInnerBlocks hook in usage",
+    "icon": "warning",
+    "category": "common",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "max": {
+            "type": "number",
+            "default": 2
+        },
+        "noticeType": {
+            "type": "string",
+            "default": "snackbar"
+        },
+        "isDismissible": {
+            "type": "boolean",
+            "default": true
+        },
+        "explicitDismiss": {
+            "type": "boolean",
+            "default": false
+        },
+        "iconMode": {
+            "type": "string",
+            "default": "default"
+        },
+        "withUndo": {
+            "type": "boolean",
+            "default": false
+        }
+    },
+    "editorScript": "file:./index.tsx"
+}

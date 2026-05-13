@@ -89,6 +89,7 @@ These components read/write information from the global post object or a `PostCo
 - [useScript](./hooks/use-script/)
 - [useIsPluginActive](./hooks/use-is-plugin-active/)
 - [usePopover](./hooks/use-popover/)
+- [useMaxInnerBlocks](./hooks/use-max-inner-blocks/)
 
 ### Post related hooks
 

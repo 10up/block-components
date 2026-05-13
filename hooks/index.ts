@@ -19,3 +19,4 @@ export { useTaxonomy } from './use-taxonomy';
 export { useIsSupportedMetaField } from './use-is-supported-meta-value';
 export { useFlatInnerBlocks } from './use-flat-inner-blocks';
 export { useRenderAppenderWithLimit } from './use-render-appender-with-limit';
+export { useMaxInnerBlocks } from './use-max-inner-blocks';
