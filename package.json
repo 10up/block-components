@@ -70,7 +70,7 @@
 		"clean-dist": "rm -rf ./dist",
 		"start-env": "wp-env start",
 		"stop-env": "wp-env stop",
-		"build-test-env": "npm run build --workspaces --if-present",
+		"build-test-env": "npm run build && npm run build --workspaces --if-present",
 		"start-test-env": "npm run start-env -w example/ && npm run import-media -w example/",
 		"test:e2e": "cypress open",
 		"cypress:open": "cypress open --config-file ./cypress.config.js --e2e --browser chrome",
