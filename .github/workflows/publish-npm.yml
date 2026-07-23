@@ -37,8 +37,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
       
-      - name: Upgrade npm to latest
-        run: npm install -g npm@latest
+      - name: Upgrade npm to latest 11.x (newest major compatible with node 20)
+        run: npm install -g npm@11
       
       - name: Verify npm version
         run: npm --version
@@ -72,8 +72,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
       
-      - name: Upgrade npm to latest
-        run: npm install -g npm@latest
+      - name: Upgrade npm to latest 11.x (newest major compatible with node 20)
+        run: npm install -g npm@11
       
       - name: Install all npm packages
         run: npm ci
@@ -105,8 +105,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
       
-      - name: Upgrade npm to latest
-        run: npm install -g npm@latest
+      - name: Upgrade npm to latest 11.x (newest major compatible with node 20)
+        run: npm install -g npm@11
       
       - name: Configure git user name and email
         run: |

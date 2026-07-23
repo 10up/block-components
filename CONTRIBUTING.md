@@ -28,7 +28,7 @@ The `develop` branch is the development branch which means it contains the next 
 
 ## Local Environment
 
-This repository contains a local environment setup using the `@wordpress/env` package and uses npm workspaces to manage dependencies for both the root package and the `example` workspace.
+This repository contains a local environment setup using the `@wordpress/env` package. The root package and the `example/` project are separate npm packages (not npm workspaces), so each needs its own `npm install`.
 
 ### Installation
 
@@ -38,7 +38,14 @@ From the repository root, run:
 npm ci
 ```
 
-This will install all dependencies for both the root package and the `example` workspace automatically.
+Then build the main package and install the `example/` project's own dependencies (the example project depends on the built `dist/` output, so the build has to happen first):
+
+```bash
+npm run build
+npm install --prefix example
+```
+
+Alternatively, running `npm run build-test-env` from the root will build the main package, install the `example/` dependencies, and build the example project for you.
 
 ### Building
 
@@ -48,15 +55,17 @@ To build the assets, run from the repository root:
 npm run build
 ```
 
-This will build both the main package and the example workspace. Alternatively, if you want to watch for changes during development, use:
+This builds the main package only. To also build the example project, run:
+
+```bash
+npm run build --prefix example
+```
+
+If you want to watch for changes during development, use:
 
 ```bash
 npm run start
 ```
-
-You can also build workspaces individually if needed:
-- From root: `npm run build` (builds main package)
-- From example: `npm run build` (builds example workspace)
 
 ### Starting the Local Environment
 
