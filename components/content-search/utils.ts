@@ -16,6 +16,7 @@ import { decodeEntities } from '@wordpress/html-entities';
  */
 import type {
 	ContentSearchMode,
+	QueryArgs,
 	QueryFilter,
 	QueryFieldsFilter,
 	SearchResultFilter,
@@ -50,6 +51,7 @@ interface PrepareSearchQueryArgs {
 	contentTypes: Array<string>;
 	queryFilter: QueryFilter;
 	queryFieldsFilter?: QueryFieldsFilter;
+	includeEmbeds?: QueryArgs['includeEmbeds'];
 }
 
 /*
@@ -63,6 +65,7 @@ export const prepareSearchQuery = ({
 	contentTypes,
 	queryFilter,
 	queryFieldsFilter,
+	includeEmbeds = false,
 }: PrepareSearchQueryArgs): string => {
 	let searchQuery;
 
@@ -78,10 +81,20 @@ export const prepareSearchQuery = ({
 		fields = queryFieldsFilter(fields, mode);
 	}
 
+	if (includeEmbeds) {
+		if (!fields.includes('_links')) {
+			fields.push('_links');
+		}
+		if (!fields.includes('_embedded')) {
+			fields.push('_embedded');
+		}
+	}
+
 	switch (mode) {
 		case 'user':
 			searchQuery = addQueryArgs('wp/v2/users', {
 				search: keyword,
+				...(includeEmbeds ? { _embed: includeEmbeds } : {}),
 				_fields: fields,
 			});
 			break;
@@ -90,7 +103,7 @@ export const prepareSearchQuery = ({
 				search: keyword,
 				subtype: contentTypes.join(','),
 				type: mode,
-				_embed: true,
+				...(includeEmbeds ? { _embed: includeEmbeds } : {}),
 				per_page: perPage,
 				page,
 				_fields: fields,
@@ -105,6 +118,7 @@ export const prepareSearchQuery = ({
 		contentTypes,
 		mode,
 		keyword,
+		includeEmbeds,
 	});
 };
 
@@ -113,6 +127,7 @@ interface NormalizeResultsArgs {
 	results: WP_REST_API_Search_Result[] | WP_REST_API_User[];
 	excludeItems: Array<IdentifiableObject>;
 	searchResultFilter?: SearchResultFilter;
+	includeEmbeds?: QueryArgs['includeEmbeds'];
 }
 
 /**
@@ -129,7 +144,7 @@ export const toPlainTextTitle = (input: string | undefined | null): string => {
 	const doc = new DOMParser().parseFromString(String(input), 'text/html');
 	const text = doc.body.textContent ?? '';
 
-	return decodeEntities(text).replace(/\u00A0/g, ' ').trim();
+	return decodeEntities(text).replace(/ /g, ' ').trim();
 };
 
 /*
@@ -141,6 +156,7 @@ export const normalizeResults = ({
 	results,
 	excludeItems,
 	searchResultFilter,
+	includeEmbeds = false,
 }: NormalizeResultsArgs): Array<{
 	id: number;
 	subtype: ContentSearchMode | string;
@@ -148,6 +164,7 @@ export const normalizeResults = ({
 	type: ContentSearchMode | string;
 	url: string;
 	info?: string;
+	embedded?: WP_REST_API_Search_Result['_embedded'] | WP_REST_API_User['_embedded'];
 }> => {
 	const filteredResults = filterOutExcludedItems({ results, excludeItems });
 	return filteredResults.map((item) => {
@@ -158,6 +175,7 @@ export const normalizeResults = ({
 			type: ContentSearchMode | string;
 			url: string;
 			info?: string;
+			embedded?: WP_REST_API_Search_Result['_embedded'] | WP_REST_API_User['_embedded'];
 		};
 
 		switch (mode) {
@@ -169,6 +187,7 @@ export const normalizeResults = ({
 					title: toPlainTextTitle(userItem.name),
 					type: mode,
 					url: userItem.link,
+					...(includeEmbeds ? { embedded: userItem._embedded } : {}),
 				};
 				break;
 			default:
@@ -179,6 +198,7 @@ export const normalizeResults = ({
 					title: toPlainTextTitle(searchItem.title),
 					type: searchItem.type,
 					url: searchItem.url,
+					...(includeEmbeds ? { embedded: searchItem._embedded } : {}),
 				};
 				break;
 		}
@@ -203,6 +223,7 @@ interface FetchSearchResultsArgs {
 	queryFilter: QueryFilter;
 	queryFieldsFilter?: QueryFieldsFilter;
 	searchResultFilter?: SearchResultFilter;
+	includeEmbeds?: QueryArgs['includeEmbeds'];
 	excludeItems: Array<IdentifiableObject>;
 	signal?: AbortSignal;
 }
@@ -216,6 +237,7 @@ export async function fetchSearchResults({
 	queryFilter,
 	queryFieldsFilter,
 	searchResultFilter,
+	includeEmbeds,
 	excludeItems,
 	signal,
 }: FetchSearchResultsArgs) {
@@ -227,6 +249,7 @@ export async function fetchSearchResults({
 		contentTypes,
 		queryFilter,
 		queryFieldsFilter,
+		includeEmbeds,
 	});
 	const response = await apiFetch<Response>({
 		path: searchQueryString,
@@ -250,7 +273,13 @@ export async function fetchSearchResults({
 			break;
 	}
 
-	const normalizedResults = normalizeResults({ results, excludeItems, mode, searchResultFilter });
+	const normalizedResults = normalizeResults({
+		results,
+		excludeItems,
+		mode,
+		searchResultFilter,
+		includeEmbeds,
+	});
 
 	const hasNextPage = totalPages > page;
 	const hasPreviousPage = page > 1;
