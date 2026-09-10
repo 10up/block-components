@@ -22,3 +22,9 @@ function BlockEdit(props) {
 ```
 
 _Note: Instead of using the `useIcon` hook it is recommended to use the [`Icon`](../../components/icon-picker/) Component which uses the `useIcon` hook under the hood._
+
+## Core icon store
+
+On WordPress 7.1 and above both hooks also read the core icon store (the `root/icon` REST entity registered by `wp_register_icon`) and merge those icons on top of the ones registered with [`registerIcons`](../../api/register-icons/). Each core record is flattened to the same `{ source, name, label, iconSet }` shape, with its `<collection>/` prefix stripped from the name and its collection used as the `iconSet`.
+
+Merging is deduped by `iconSet` + `name`, and the internal store wins on a collision, so an explicit `registerIcons` entry overrides a core-registered icon of the same name. On WordPress below 7.1 the `root/icon` entity is absent, so the hooks fall back to the internal store alone. No configuration is required.
