@@ -1,5 +1,7 @@
 # `tenup/icons` data store
 
+This store holds the icons registered through [`registerIcons`](../../api/register-icons/). On WordPress 7.1 and above the [`useIcons`](../../hooks/use-icons/) and [`useIcon`](../../hooks/use-icons/) hooks additionally read the core icon store (the `root/icon` REST entity) and merge those icons on top of this one; the icons here win on a name collision. This store itself is unchanged by that merge and remains the source for `registerIcons` icons.
+
 The data store for `tenup/icons` stores icons in this shape:
 
 ```js
