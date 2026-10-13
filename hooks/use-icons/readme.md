@@ -4,6 +4,8 @@ The `useIcon` and `useIcons` hooks allows you to easily get any registered icons
 
 The `useIcons` hook on the other hand allows you to either get all available icons of all iconSets, or allows you to pass in the name of the iconSet you want and then only returns you an array containing all the icons within that iconSet.
 
+Both hooks also read icons from WordPress core's icon registry (WordPress 7.1+) when the site has it. Sets registered with [`registerIcons`](../../api/register-icons/) take precedence over a core collection of the same name. See [`IconPicker`](../../components/icon-picker/) for details.
+
 ## Usage
 
 ```js
