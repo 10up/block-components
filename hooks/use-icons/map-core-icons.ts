@@ -28,6 +28,25 @@ export function stripCollectionPrefix(name: string, collection: string): string 
 }
 
 /**
+ * Give a core icon's root `<svg>` a `fill="currentColor"` when it has no fill
+ * of its own.
+ *
+ * Core's icon sanitizer strips the root `fill` and leaves colour to CSS (its
+ * Icon block sets `fill: currentColor`). Outside that block the icon would
+ * render black instead of following the text colour like `registerIcons`
+ * icons do.
+ *
+ * @param {string} svg SVG markup from a core icon record.
+ *
+ * @returns {string} The markup with a root fill.
+ */
+export function withCurrentColor(svg: string): string {
+	return svg.replace(/<svg\b([^>]*)>/i, (tag, attributes: string) =>
+		/\sfill\s*=/i.test(attributes) ? tag : `<svg fill="currentColor"${attributes}>`,
+	);
+}
+
+/**
  * Map a core icon record onto the flattened shape the picker consumes.
  *
  * @param {CoreIconRecord} record A record from `getEntityRecords('root','icon')`.
@@ -36,7 +55,7 @@ export function stripCollectionPrefix(name: string, collection: string): string 
  */
 export function mapCoreIconRecord(record: CoreIconRecord): FlattenedIcon {
 	return {
-		source: record.content,
+		source: withCurrentColor(record.content),
 		name: stripCollectionPrefix(record.name, record.collection),
 		label: record.label,
 		iconSet: record.collection,

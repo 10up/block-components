@@ -2,6 +2,7 @@ import {
 	stripCollectionPrefix,
 	mapCoreIconRecord,
 	mergeIcons,
+	withCurrentColor,
 	getCoreIcons,
 	FlattenedIcon,
 } from './map-core-icons';
@@ -52,7 +53,8 @@ describe('use-icons | map-core-icons', () => {
 			};
 
 			expect(mapCoreIconRecord(record)).toEqual({
-				source: '<svg>smiley</svg>',
+				// Core strips the root fill; the mapping puts currentColor back.
+				source: '<svg fill="currentColor">smiley</svg>',
 				name: 'smiley',
 				label: 'Smiley',
 				iconSet: 'example',
@@ -145,5 +147,24 @@ describe('use-icons | map-core-icons', () => {
 		test('returns an empty array while records are still resolving (null)', () => {
 			expect(getCoreIcons(createCoreSelect(null))).toEqual([]);
 		});
+	});
+});
+
+describe('withCurrentColor', () => {
+	it('adds a fill to a root svg without one', () => {
+		expect(withCurrentColor('<svg viewBox="0 0 24 24"><path d="M0"/></svg>')).toBe(
+			'<svg fill="currentColor" viewBox="0 0 24 24"><path d="M0"/></svg>',
+		);
+	});
+
+	it('keeps a fill the root svg already has', () => {
+		const svg = '<svg fill="#c00" viewBox="0 0 24 24"><path d="M0"/></svg>';
+		expect(withCurrentColor(svg)).toBe(svg);
+	});
+
+	it('only touches the root svg', () => {
+		expect(withCurrentColor('<svg><path fill="red" d="M0"/></svg>')).toBe(
+			'<svg fill="currentColor"><path fill="red" d="M0"/></svg>',
+		);
 	});
 });

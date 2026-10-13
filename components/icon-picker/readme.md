@@ -57,6 +57,10 @@ On WordPress 7.1 and above the picker also lists icons from the core icon store
 below 7.1 only the `registerIcons` sets are shown. See the
 [`useIcons`](../../hooks/use-icons/) hook for details.
 
+Core strips the root `fill` from icon markup and leaves colour to CSS, so core
+icons get `fill="currentColor"` added to their root `<svg>` (unless they set a
+fill of their own) and follow the text colour like `registerIcons` icons.
+
 You can optionally include the `iconSet` property to the `IconPicker`,
 `InlineIconPicker`, and `IconPickerToolbarButton` to limit the icons available
 in the picker if necessary. For a core icon set the `iconSet` is its collection
