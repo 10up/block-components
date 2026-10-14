@@ -51,6 +51,17 @@ _The recommended approach for adding an icon picker to your custom block is usin
 In order to add icons to become available to the icon picker you need to use the
 [`registerIcons`](../../api/register-icons/) function.
 
+On WordPress 7.1 and above the picker also lists icons from the core icon store
+(icons registered with `wp_register_icon`) alongside any registered with
+`registerIcons`, with the internal set winning on a name collision. On WordPress
+below 7.1 only the `registerIcons` sets are shown. See the
+[`useIcons`](../../hooks/use-icons/) hook for details.
+
+Core strips the root `fill` from icon markup and leaves colour to CSS, so core
+icons get `fill="currentColor"` added to their root `<svg>` (unless they set a
+fill of their own) and follow the text colour like `registerIcons` icons.
+
 You can optionally include the `iconSet` property to the `IconPicker`,
 `InlineIconPicker`, and `IconPickerToolbarButton` to limit the icons available
-in the picker if necessary.
+in the picker if necessary. For a core icon set the `iconSet` is its collection
+slug.
