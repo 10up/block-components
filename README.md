@@ -35,9 +35,9 @@ import { registerBlockExtension } from '@10up/block-components/api/register-bloc
 import { iconStore } from '@10up/block-components/stores/icons';
 ```
 
-This approach offers improved tree-shaking and results in smaller bundles, especially when only using a subset of the library.
+The package also ships an unbundled ES module build (`dist/esm`) that bundlers pick up for `import` statements. Both styles tree-shake, so importing a single component from the base entry point only pulls in what that component needs. Shared modules such as the `PostContext` React context exist once, so root and subpath imports can be mixed freely.
 
-The original import paths are still fully supported and will continue to work as expected.
+CommonJS consumers (`require`, e.g. Jest) still get the prebuilt bundles in `dist`.
 
 ## APIs
 

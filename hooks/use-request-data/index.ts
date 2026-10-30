@@ -1,10 +1,4 @@
 /**
- * External dependencies
- */
-// eslint-disable-next-line import/no-extraneous-dependencies
-import isObject from 'lodash/isObject';
-
-/**
  * WordPress dependencies
  */
 import { store as coreStore } from '@wordpress/core-data';
@@ -20,7 +14,8 @@ import { useSelect, useDispatch } from '@wordpress/data';
  * @returns {Array} The data returned from the request.
  */
 export const useRequestData = (entity: string, kind: string, query: Record<string, any> = {}) => {
-	const functionToCall = isObject(query) ? 'getEntityRecords' : 'getEntityRecord';
+	const functionToCall =
+		typeof query === 'object' && query !== null ? 'getEntityRecords' : 'getEntityRecord';
 	const { invalidateResolution } = useDispatch('core/data');
 	const { data, isLoading } = useSelect(
 		(select) => {

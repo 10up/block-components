@@ -6,13 +6,18 @@
 	"version": "1.23.0",
 	"description": "10up Components built for the WordPress Block Editor.",
 	"main": "./dist/index.js",
+	"module": "./dist/esm/index.js",
 	"source": "index.ts",
 	"types": "./dist/index.d.ts",
+	"sideEffects": [
+		"./dist/stores/icons/index.js",
+		"./dist/esm/stores/icons/index.js"
+	],
 	"exports": {
 		".": {
 			"import": {
 				"types": "./dist/index.d.ts",
-				"default": "./dist/index.js"
+				"default": "./dist/esm/index.js"
 			},
 			"require": {
 				"types": "./dist/index.d.ts",
@@ -22,7 +27,7 @@
 		"./api/*": {
 			"import": {
 				"types": "./dist/api/*/index.d.ts",
-				"default": "./dist/api/*/index.js"
+				"default": "./dist/esm/api/*/index.js"
 			},
 			"require": {
 				"types": "./dist/api/*/index.d.ts",
@@ -32,7 +37,7 @@
 		"./components/*": {
 			"import": {
 				"types": "./dist/components/*/index.d.ts",
-				"default": "./dist/components/*/index.js"
+				"default": "./dist/esm/components/*/index.js"
 			},
 			"require": {
 				"types": "./dist/components/*/index.d.ts",
@@ -42,7 +47,7 @@
 		"./hooks/*": {
 			"import": {
 				"types": "./dist/hooks/*/index.d.ts",
-				"default": "./dist/hooks/*/index.js"
+				"default": "./dist/esm/hooks/*/index.js"
 			},
 			"require": {
 				"types": "./dist/hooks/*/index.d.ts",
@@ -52,7 +57,7 @@
 		"./stores/*": {
 			"import": {
 				"types": "./dist/stores/*/index.d.ts",
-				"default": "./dist/stores/*/index.js"
+				"default": "./dist/esm/stores/*/index.js"
 			},
 			"require": {
 				"types": "./dist/stores/*/index.d.ts",
@@ -64,7 +69,7 @@
 		"prepublishOnly": "npm run build",
 		"lint": "10up-toolkit lint-js",
 		"test": "10up-toolkit test-unit-jest",
-		"build": "npm run clean-dist && 10up-toolkit build",
+		"build": "npm run clean-dist && 10up-toolkit build && node scripts/build-esm.js",
 		"start": "10up-toolkit start",
 		"clean": "10up-toolkit clean",
 		"clean-dist": "rm -rf ./dist",
@@ -108,6 +113,7 @@
 		"@dnd-kit/modifiers": "^7.0.0",
 		"@dnd-kit/sortable": "^8.0.0",
 		"@dnd-kit/utilities": "^3.2.2",
+		"@emotion/cache": "^11.14.0",
 		"@emotion/react": "^11.11.4",
 		"@emotion/styled": "^11.11.5",
 		"@floating-ui/react-dom": "^2.1.0",
@@ -122,7 +128,9 @@
 		"wp-types": "^3.65.0"
 	},
 	"devDependencies": {
+		"@10up/babel-preset-default": "^2.1.2",
 		"@10up/cypress-wp-utils": "github:10up/cypress-wp-utils#build",
+		"@babel/core": "^7.29.7",
 		"@types/jest": "^29.5.12",
 		"@types/lodash": "^4.17.5",
 		"@types/react-window": "^1.8.8",
