@@ -78,3 +78,4 @@ function MyComponent( props ) {
 | `renderItem`          | `function` | `undefined`                          | Function to customize the rendering of each search result item. Receives `RenderItemComponentProps` and must return a JSX element. |
 | `fetchInitialResults` | `bool`     | `false`                              | Fetch initial results to present when focusing the search input                                                                  |
 | `options.inputDelay`  | `number`   | `undefined`                           | Debounce delay passed to the internal search input, defaults to 350ms                                                             |
+| `disabled`            | `bool`     | `false`                              | When true, disables the search input and prevents fetching or displaying search results                                          |
