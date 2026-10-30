@@ -88,6 +88,7 @@ export interface ContentSearchProps {
 	renderItem?: (props: RenderItemComponentProps) => JSX.Element;
 	fetchInitialResults?: boolean;
 	options?: ContentSearchOptions;
+	disabled?: boolean;
 }
 
 const ContentSearchNoResults: React.FC = () => (
@@ -114,6 +115,7 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 	renderItem: SearchResultItem = SearchItem,
 	fetchInitialResults,
 	options,
+	disabled = false,
 }) => {
 	const debounceOptions =
 		options && options.inputDelay ? { delay: options.inputDelay } : undefined;
@@ -161,6 +163,7 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 			getNextPageParam: (lastPage) => lastPage.nextPage,
 			getPreviousPageParam: (firstPage) => firstPage.previousPage,
 			initialPageParam: 1,
+			enabled: !disabled,
 		});
 
 	const searchResults = data?.pages.map((page) => page?.results).flat() || undefined;
@@ -182,12 +185,15 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 				hideLabelFromVision={hideLabelFromVision}
 				placeholder={placeholder}
 				autoComplete="off"
+				disabled={disabled}
 				onFocus={() => {
-					setIsFocused(true);
+					if (!disabled) {
+						setIsFocused(true);
+					}
 				}}
 			/>
 
-			{hasSearchString || hasInitialResults ? (
+			{!disabled && (hasSearchString || hasInitialResults) ? (
 				<>
 					<List className="tenup-content-search-list">
 						{isPending && <StyledSpinner />}
