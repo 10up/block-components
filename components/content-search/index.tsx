@@ -9,6 +9,7 @@ import { StyledComponentContext } from '../styled-components-context';
 import type {
 	ContentSearchMode,
 	IdentifiableObject,
+	QueryArgs,
 	QueryFilter,
 	QueryFieldsFilter,
 	RenderItemComponentProps,
@@ -83,6 +84,7 @@ export interface ContentSearchProps {
 	queryFilter?: QueryFilter;
 	queryFieldsFilter?: QueryFieldsFilter;
 	searchResultFilter?: SearchResultFilter;
+	includeEmbeds?: QueryArgs['includeEmbeds'];
 	excludeItems?: Array<IdentifiableObject>;
 	renderItemType?: (props: NormalizedSuggestion) => string;
 	renderItem?: (props: RenderItemComponentProps) => JSX.Element;
@@ -109,6 +111,7 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 	queryFilter = (query: string) => query,
 	queryFieldsFilter,
 	searchResultFilter,
+	includeEmbeds = false,
 	excludeItems = [],
 	renderItemType = undefined,
 	renderItem: SearchResultItem = SearchItem,
@@ -144,6 +147,7 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 				queryFilter,
 				queryFieldsFilter,
 				searchResultFilter,
+				includeEmbeds,
 			],
 			queryFn: async ({ pageParam = 1, signal }) =>
 				fetchSearchResults({
@@ -155,6 +159,7 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 					queryFilter,
 					queryFieldsFilter,
 					searchResultFilter,
+					includeEmbeds,
 					excludeItems,
 					signal,
 				}),

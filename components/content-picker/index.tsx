@@ -11,6 +11,7 @@ import { StyledComponentContext } from '../styled-components-context';
 import { defaultRenderItemType } from '../content-search/SearchItem';
 import {
 	ContentSearchMode,
+	QueryArgs,
 	QueryFilter,
 	QueryFieldsFilter,
 	RenderItemComponentProps,
@@ -64,6 +65,7 @@ export interface ContentPickerProps {
 	queryFieldsFilter?: QueryFieldsFilter;
 	searchResultFilter?: SearchResultFilter;
 	pickedItemFilter?: PickedItemFilter;
+	includeEmbeds?: QueryArgs['includeEmbeds'];
 	maxContentItems?: number;
 	isOrderable?: boolean;
 	singlePickedLabel?: string;
@@ -92,6 +94,7 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 	queryFieldsFilter,
 	searchResultFilter,
 	pickedItemFilter,
+	includeEmbeds,
 	maxContentItems = 1,
 	isOrderable = false,
 	singlePickedLabel = __('You have selected the following item:', '10up-block-components'),
@@ -173,6 +176,7 @@ export const ContentPicker: React.FC<ContentPickerProps> = ({
 						queryFilter={queryFilter}
 						queryFieldsFilter={queryFieldsFilter}
 						searchResultFilter={searchResultFilter}
+						includeEmbeds={includeEmbeds}
 						perPage={perPage}
 						fetchInitialResults={fetchInitialResults}
 						renderItemType={renderItemType}
