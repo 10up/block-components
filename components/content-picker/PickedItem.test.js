@@ -5,11 +5,10 @@ import { __experimentalTreeGrid as TreeGrid } from '@wordpress/components';
 import PickedItem from './PickedItem';
 
 describe('PickedItem', () => {
-	let container: HTMLDivElement;
-	let root: ReturnType<typeof createRoot>;
+	let container;
+	let root;
 
 	beforeAll(() => {
-		// @ts-ignore
 		global.IS_REACT_ACT_ENVIRONMENT = true;
 	});
 
@@ -39,11 +38,11 @@ describe('PickedItem', () => {
 		});
 
 		const row = container.querySelector('tr');
-		const cell = row?.firstElementChild;
+		const cell = row.firstElementChild;
 
-		expect(cell?.tagName).toBe('TD');
-		expect(cell?.getAttribute('role')).toBe('gridcell');
-		expect(cell?.textContent).toContain('First item');
+		expect(cell.tagName).toBe('TD');
+		expect(cell.getAttribute('role')).toBe('gridcell');
+		expect(cell.textContent).toContain('First item');
 
 		// @wordpress/jest-console fails the test when React logs a validateDOMNesting error.
 		expect(console).not.toHaveErrored();
