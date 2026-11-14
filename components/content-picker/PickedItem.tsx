@@ -9,6 +9,7 @@ import { close, chevronUp, chevronDown } from '@wordpress/icons';
 import {
 	Button,
 	__experimentalTreeGridRow as TreeGridRow,
+	__experimentalTreeGridCell as TreeGridCell,
 	VisuallyHidden,
 	__experimentalVStack as VStack,
 	__experimentalTruncate as Truncate,
@@ -253,74 +254,76 @@ const PickedItem: React.FC<PickedItemProps> = ({
 
 	return (
 		<TreeGridRow level={1} positionInSet={positionInSet} setSize={setSize}>
-			<PickedItemContainer
-				ref={setNodeRef}
-				style={style}
-				{...attributes}
-				{...listeners}
-				isDragging={isDragging}
-				isOrderable={isOrderable}
-				isDeleted={isDeleted}
-			>
-				{isOrderable && (
-					<DragHandleWrapper isDragging={isDragging}>
-						<DragHandle />
-					</DragHandleWrapper>
-				)}
-				<ItemContent isDragging={isDragging}>
-					{PickedItemPreviewComponent ? (
-						<PickedItemPreviewComponent item={item} />
-					) : (
-						<PickedItemPreview item={item} isDeleted={isDeleted} />
+			<TreeGridCell withoutGridItem>
+				<PickedItemContainer
+					ref={setNodeRef}
+					style={style}
+					{...attributes}
+					{...listeners}
+					isDragging={isDragging}
+					isOrderable={isOrderable}
+					isDeleted={isDeleted}
+				>
+					{isOrderable && (
+						<DragHandleWrapper isDragging={isDragging}>
+							<DragHandle />
+						</DragHandleWrapper>
 					)}
-				</ItemContent>
-				<ButtonContainer>
-					{isOrderable && !isDragging && (
-						<VStack spacing={0} className="move-buttons">
-							<MoveButton
-								disabled={isFirst}
-								icon={chevronUp}
+					<ItemContent isDragging={isDragging}>
+						{PickedItemPreviewComponent ? (
+							<PickedItemPreviewComponent item={item} />
+						) : (
+							<PickedItemPreview item={item} isDeleted={isDeleted} />
+						)}
+					</ItemContent>
+					<ButtonContainer>
+						{isOrderable && !isDragging && (
+							<VStack spacing={0} className="move-buttons">
+								<MoveButton
+									disabled={isFirst}
+									icon={chevronUp}
+									onClick={(e: React.MouseEvent) => {
+										e.stopPropagation();
+										onMoveUp?.();
+									}}
+									className="move-up-button"
+								>
+									<VisuallyHidden>
+										{__('Move item up', '10up-block-components')}
+									</VisuallyHidden>
+								</MoveButton>
+								<MoveButton
+									disabled={isLast}
+									icon={chevronDown}
+									onClick={(e: React.MouseEvent) => {
+										e.stopPropagation();
+										onMoveDown?.();
+									}}
+									className="move-down-button"
+								>
+									<VisuallyHidden>
+										{__('Move item down', '10up-block-components')}
+									</VisuallyHidden>
+								</MoveButton>
+							</VStack>
+						)}
+						{!isDragging && (
+							<RemoveButton
+								className="remove-button"
+								icon={close}
+								size="small"
+								variant="tertiary"
+								isDestructive
+								label={__('Remove item', '10up-block-components')}
 								onClick={(e: React.MouseEvent) => {
 									e.stopPropagation();
-									onMoveUp?.();
+									handleItemDelete(item);
 								}}
-								className="move-up-button"
-							>
-								<VisuallyHidden>
-									{__('Move item up', '10up-block-components')}
-								</VisuallyHidden>
-							</MoveButton>
-							<MoveButton
-								disabled={isLast}
-								icon={chevronDown}
-								onClick={(e: React.MouseEvent) => {
-									e.stopPropagation();
-									onMoveDown?.();
-								}}
-								className="move-down-button"
-							>
-								<VisuallyHidden>
-									{__('Move item down', '10up-block-components')}
-								</VisuallyHidden>
-							</MoveButton>
-						</VStack>
-					)}
-					{!isDragging && (
-						<RemoveButton
-							className="remove-button"
-							icon={close}
-							size="small"
-							variant="tertiary"
-							isDestructive
-							label={__('Remove item', '10up-block-components')}
-							onClick={(e: React.MouseEvent) => {
-								e.stopPropagation();
-								handleItemDelete(item);
-							}}
-						/>
-					)}
-				</ButtonContainer>
-			</PickedItemContainer>
+							/>
+						)}
+					</ButtonContainer>
+				</PickedItemContainer>
+			</TreeGridCell>
 		</TreeGridRow>
 	);
 };
