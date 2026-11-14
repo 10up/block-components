@@ -65,10 +65,13 @@ const SortableItem = ({ children, item = {}, setItem = null, removeItem = null, 
 				? `${repeaterItem.props.className} repeater-item--is-dragging`
 				: repeaterItem.props.className,
 		},
-		[
-			<DragHandle className="repeater-item__drag-handle" {...attributes} {...listeners} isDragging={ isDragging } />,
-			repeaterItem.props.children,
-		],
+		<DragHandle
+			className="repeater-item__drag-handle"
+			{...attributes}
+			{...listeners}
+			isDragging={isDragging}
+		/>,
+		repeaterItem.props.children,
 	);
 
 	return clonedRepeaterChild;
