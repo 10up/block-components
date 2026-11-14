@@ -96,38 +96,71 @@ const SortableList: React.FC<SortableListProps> = ({
 
 	const entityKind = getEntityKind(mode);
 
-	// Fetch all posts data at once
-	const preparedItems = useSelect(
+	const query = useMemo(() => {
+		let fields = ['link', 'type', 'id'];
+
+		if (mode === 'user') {
+			fields.push('name');
+		} else if (mode === 'post') {
+			fields.push('title');
+			fields.push('url');
+			fields.push('subtype');
+			fields.push('status'); // Include status to check for trashed posts
+		} else {
+			fields.push('name');
+			fields.push('taxonomy');
+		}
+
+		if (queryFieldsFilter) {
+			fields = queryFieldsFilter(fields, mode);
+		}
+
+		return { _fields: fields, context: 'view' as const };
+	}, [mode, queryFieldsFilter]);
+
+	/*
+	 * Read all records at once. The selector returns the records from the store as they are, so equal
+	 * state gives equal results. An item is `null` when its request finished without a record, and it
+	 * has no entry while the request runs. The memoized query keeps the filtered records from
+	 * `getEntityRecord` the same between calls.
+	 */
+	const records = useSelect(
 		(select) => {
 			// @ts-ignore-next-line - The WordPress types are missing the hasFinishedResolution method.
 			const { getEntityRecord, hasFinishedResolution } = select(coreStore);
 
-			let fields = ['link', 'type', 'id'];
+			return posts.reduce<{ [key: string]: Post | Term | User | null | undefined }>(
+				(acc, item) => {
+					const getEntityRecordParameters = [
+						entityKind,
+						item.type,
+						item.id,
+						query,
+					] as const;
+					const result = getEntityRecord<Post | Term | User>(
+						...getEntityRecordParameters,
+					);
 
-			if (mode === 'user') {
-				fields.push('name');
-			} else if (mode === 'post') {
-				fields.push('title');
-				fields.push('url');
-				fields.push('subtype');
-				fields.push('status'); // Include status to check for trashed posts
-			} else {
-				fields.push('name');
-				fields.push('taxonomy');
-			}
+					if (result) {
+						acc[item.uuid] = result;
+					} else if (
+						hasFinishedResolution('getEntityRecord', getEntityRecordParameters)
+					) {
+						acc[item.uuid] = null;
+					}
 
-			if (queryFieldsFilter) {
-				fields = queryFieldsFilter(fields, mode);
-			}
+					return acc;
+				},
+				{},
+			);
+		},
+		[posts, entityKind, query],
+	);
 
-			return posts.reduce<{ [key: string]: PickedItemType | null }>((acc, item) => {
-				const getEntityRecordParameters = [
-					entityKind,
-					item.type,
-					item.id,
-					{ _fields: fields, context: 'view' },
-				] as const;
-				const result = getEntityRecord<Post | Term | User>(...getEntityRecordParameters);
+	const preparedItems = useMemo(
+		() =>
+			posts.reduce<{ [key: string]: PickedItemType | null }>((acc, item) => {
+				const result = records[item.uuid];
 
 				if (result) {
 					let newItem: Partial<PickedItemType>;
@@ -175,14 +208,13 @@ const SortableList: React.FC<SortableListProps> = ({
 					}
 
 					acc[item.uuid] = newItem as PickedItemType;
-				} else if (hasFinishedResolution('getEntityRecord', getEntityRecordParameters)) {
+				} else if (result === null) {
 					acc[item.uuid] = null;
 				}
 
 				return acc;
-			}, {});
-		},
-		[posts, entityKind, queryFieldsFilter, pickedItemFilter, mode],
+			}, {}),
+		[posts, records, mode, pickedItemFilter],
 	);
 
 	const items = posts.map((item) => item.uuid);
