@@ -8,10 +8,11 @@ interface DragHandleProps extends HTMLAttributes<HTMLSpanElement> {
  * Renders an SVG drag handle.
  *
  * @param {object} props The prop object.
+ * @param {boolean} props.isDragging Whether the item is being dragged. It sets the cursor and is not passed to the DOM.
  * @returns {*} React JSX
  */
-export const DragHandle: React.FC<DragHandleProps> = (props) => (
-	<span {...props} style={{ cursor: props.isDragging ? 'grabbing' : 'grab' }}>
+export const DragHandle: React.FC<DragHandleProps> = ({ isDragging = false, ...props }) => (
+	<span {...props} style={{ cursor: isDragging ? 'grabbing' : 'grab' }}>
 		<svg
 			style={{ marginRight: '10px', cursor: 'grab', flexShrink: 0 }}
 			width="18"
