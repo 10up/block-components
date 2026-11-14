@@ -79,6 +79,10 @@ const StyledTreeGrid = styled(TreeGrid)`
 		max-width: 100%;
 		width: 100%;
 	}
+
+	& td {
+		padding: 0;
+	}
 `;
 
 const SortableList: React.FC<SortableListProps> = ({
